@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<meta charset="UTF-8">
+		<title>Provider Application</title>
+		
+		<link rel="stylesheet" type="text/css" href="css/registration.css" />
+		
+		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		
+		<link rel="stylesheet" href="css/form.css">
+		<link rel="stylesheet" type="text/css" href="css/signin.css" />
+		<link rel="stylesheet" type="text/css" href="css/footer.css" />
+		<link rel="stylesheet" type="text/css" href="css/dropdown.css" />
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css'>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+		
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+		<script src="js/common.js"></script>
+		<script src="js/loading4.js"></script>
+		<script src="js/quickapply.js"></script>
+
+	</head>
+	<body style="font-family:rawline;">
+	    <div class="content">
+		<div id="logo"><a href="/" style="display:none; color:#1ecd97">He!pHog</a></div>
+		<div id="loading-animation">
+			<ul id="navigation">
+    		    <li id="sign-out"><a href="/">Sign Out</a></li>
+    		    <li id="settings"><a href="settings">Settings</a></li>
+    			<li id="sign-in-nav"><a href="signin">Login</a></li>
+    			<li id="register-nav"><a href="registration">Register</a></li>
+    			<li id="apply"><a href="quickapply">Apply</a></li>
+    			<li id="track-order"><a href="tracking">Track Order</a></li>
+    			<li id="orders"><a href="orders">Orders</a></li>
+    			<li id="provider"><a href="provider">Provider Portal</a></li>
+    			<li id="contact"><a href="contact">Contact Us</a></li>
+    			<li id="about"><a href="about">About</a></li>
+    		</ul>
+		</div>
+		<br />
+		<div id="part-two" class="container2" style="display:visible; overflow:visible;">
+		<h1 id="title" style="font-family: 'Raleway', Helvetica, sans-serif; color: black; font-size: 21px; margin-bottom: 18px;">Provider Application</h1>
+		<div id="form-cover" style="overflow:visible;">
+			<div id="description">To become a Help provider/add additional services, please fill out the following form. Once submitted, we will review your application and activate your provider account. Please expect a call from our hiring team.</div>
+			<hr>
+    			<form id="survey-form" style="overflow:visible;" onsubmit="return false;">
+    				<div class="rowTab">
+    					<div class="rowTab">
+    						<div class="labels">
+    							<label id="lbdropdown" for="dropdown" style="float:left;  margin-top:10px; margin-bottom:10px;"><span class="text-danger"></span> Workfield : </label>
+    						</div>
+    						<br>
+    						<div class="rightTab">
+    							<select id="dropdown" class="combobox" style="width:100%; padding-left: 10px;"></select>
+    						</div>
+    					</div>
+    					<br>
+    					<div class="rowTab">
+    						<div class="labels">
+    							<label id="lbaddress" for="address" style="float:left;  margin-top:10px; margin-bottom:10px;"><span class="text-danger"></span>Resume (optional) : </label>
+    						</div>
+    						<div class="rightTab">
+    							<input name="resume" id="resume" type="file" class="uploadlogo" />
+    						</div>
+    					</div>
+    					<div class="rowTab">
+    						<div class="labels">
+    							<label id="lbarea" for="areatext" style="float:left;  margin-top:10px; margin-bottom:10px;"><span class="text-danger"></span> List relevant skills and experience : </label>
+    						</div>
+    						<div class="rightTab">
+    							<textarea id="aratext" name="areatext" placeholder="Please type here..." style="width:100%; max-width:100%; min-width:100%; max-height:200px; min-height:50px;" ></textarea>
+    						</div>
+    					</div>
+    					<div> 
+    					    <button type="button" style="width: 100%; margin-bottom: 18px; background-color: #1ecd97; font-family: 'Raleway', Helvetica, sans-serif" class="btn btn-primary btn-lg" id="submit" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Loading">Submit</button>
+    					</div>
+    					
+					</div>
+    			</form>
+			</div>
+		</div>
+		</div>
+		<footer class="footer">
+
+                      
+                      <ul class="footer__nav">
+                        <li class="nav__item">
+                          <h12 class="nav__title">Contact</h12>
+                        
+                        <address style="margin-top: -2px;">
+                          +1 (425) 412-7423<br>
+                              
+                          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
+                        </address>
+                        </li>
+                        <li class="nav__item">
+                          <h12 class="nav__title">Discover</h12>
+                    
+                          <ul class="nav__ul">
+                            <li>
+                              <a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
+                            </li>
+                    
+                            <li>
+                              <a href="https://helphog.com/signin">Login</a>
+                            </li>
+                                
+                            <li>
+                              <a href="https://helphog.com/about">About Us</a>
+                            </li>
+                          </ul>
+                        </li>
+                        
+                        <li class="nav__item nav__item--extra">
+                          <h12 class="nav__title">Services</h12>
+                          
+                          <ul class="nav__ul nav__ul--extra">
+                            <!--<li>-->
+                            <!--  <a href="#">Automotive</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Creative</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Education</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Household</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Labor</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Tech</a>-->
+                            <!--</li>-->
+                          </ul>
+                        </li>
+                        
+                        <li class="nav__item">
+                          <h12 class="nav__title">Legal</h12>
+                          
+                          <ul class="nav__ul">
+                            <li>
+                              <a href="#">Privacy Policy</a>
+                            </li>
+                            
+                            <li>
+                              <a href="#">Terms of Use</a>
+                            </li>
+                            
+                            <li>
+                              <a href="#">Sitemap</a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                      
+                      <div class="legal">
+                        <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
+                        
+                      </div>
+                </footer>
+                <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js'></script>
+	</body>
+</html>

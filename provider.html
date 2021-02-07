@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<meta charset="UTF-8">
+		<title>Provider Portal</title>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+		<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places" defer></script>
+		
+		<script src="js/common.js"></script>
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400'>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800'>
+		<link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
+        
+		<link rel="stylesheet" href="css/provider.css">
+		<link rel="stylesheet" href="css/tracker.css">
+		<link rel="stylesheet" href="css/dashboard.css">
+		<link rel="stylesheet" href="css/start.css">
+		<link rel="stylesheet" href="css/panel.css">
+		<link rel="stylesheet" href="css/providerfooter.css">
+				
+	</head>
+	<body>
+	    <div id="logo">He!pHog</div>
+		<div id="tracking">portal</div>
+		<div id="return">return home</div>
+	    <div class="content">
+    		
+    		<div class="container hidden" style="width: 1170px;">
+    			<form class="form" action="#" autocomplete="off" style="box-sizing:content-box;">
+    				<fieldset>
+    					<input id="first" type="text" style="width:301px" name="first" required>
+    					<label for="first" style="font-weight: 600;">email</label>
+    					<div class="after"></div>
+    				</fieldset>
+    				<fieldset>
+    					<input id="pass" type="password" style="width:301px" name="first" required>
+    					<label for="first" style="font-weight: 600;">password</label>
+    					<div class="after"></div>
+    				</fieldset>
+    			</form>
+    			<div class="row">
+    				<div class="col-xs-12 button-holder" style="padding-left: 5px;">
+    					<div class="ajax-button">
+    						<div class="fa fa-check done" style="color: #000000;"></div>
+    						<div class="fa fa-close failed" style="color: #000000;"></div>
+    						<input id="submit" class="submit" type="button" value="Login" style="border: 3px solid #000000;" />
+    					</div>
+    				</div>
+    			</div>
+    			<div class="row">
+    				<div class="col-xs-12 text-holder" style="padding-left: 5px;">
+    					<p style="color: black;font-weight: 500;">
+    						Access your provider account dashboard
+    					</p>
+    				</div>
+    			</div>
+    			<div class="panel">
+    				<div class="dashboard">
+    					<!-- Dashboard Sidebar (Block)-->
+    					<div class="dashboard-sidebar">
+    						<!-- Brand (Element)-->
+    						<div class="dashboard-sidebar__brand">Hi, <span id="name"></span></div>
+    						<!-- Dashboard Nav (Block)-->
+    						<div class="dashboard-nav">
+    							<ul>
+    								<!-- Item:Selected (Element:Modifier)        -->
+    								<li class="dashboard-nav__item dashboard-nav__item--selected "><a class="other" href="discover_places"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_discover_places.svg"/>Active Orders</a></li>
+    								<!-- Item (Element)-->
+    								<li id="special" class="dashboard-nav__item "><a class href="my_trip"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_my_trip.svg"/>Order History</a></li>
+    								<!-- Item (Element)-->
+    								<li class="dashboard-nav__item"><a class="other important import" href="notifications"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_notifications.svg"/>Availability</a></li>
+    								<!-- Item (Element)-->
+    								<li class="dashboard-nav__item"><a class="other noaddress" href="payment"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_discover_places.svg"/>Locality</a></li>
+    								<!-- Item (Element)-->
+    								<li class="dashboard-nav__item"><a class="other important" href="settings"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_settings.svg"/>Settings</a></li>
+    								</ul>
+    						</div>
+    					</div>
+    					<!-- Dashboard Content (Block)-->
+    					<div class="dashboard-content">
+    						<!-- Dashboard Header (Block)-->
+    						<!-- Dashboard Content Panel (Element)-->
+    						<div class="dashboard-content__panel" data-panel-id="home">
+    							<div class="master-wrap">
+    							</div>
+    						</div>
+    						<!-- Dashboard Content Panel (Element)-->
+    						<div class="dashboard-content__panel" id="my_trip" data-panel-id="my_trip">
+    							<!-- Dashboard List (Block) -->
+    							<p id="no-order-history">You have no completed orders</p>
+    						</div>
+    						<!-- Dashboard Content Panel (Element)-->
+    						<div class="dashboard-content__panel dashboard-content__panel--active" data-panel-id="discover_places">
+    							<p id="no-ongoing-orders">You have no ongoing orders</p>
+    							<br>
+    							 
+    							<div class="card-container">
+    								<div class="content-card">
+    	<!--							     DO NOT DELETE ****-->
+    	<!--									<div class="slider-card">-->
+    	<!--										<div class= "title">-->
+    	<!--											Landscaping-->
+    	<!--										</div>-->
+    	<!--										<div class= "date">-->
+    	<!--											Tuesday, March 25th 2019 at 2:00pm-->
+    	<!--										</div>-->
+    	<!--										<div class= "section">-->
+    	<!--											<img src="images/home.png">-->
+    	<!--											<h1>Address</h1>-->
+    	<!--											<h5>maksim_maxim@live.com <br><br>-->
+    	<!--												(206)708-0199-->
+    	<!--												<br><br>-->
+    	<!--												19427 73rd Ave W -->
+    	<!--												Lynnwood WA, 98036-->
+    	<!--											</h5>-->
+    	<!--										</div>-->
+    	<!--										<div class= "section">-->
+    	<!--											<img src="images/cash.png">-->
+    	<!--											<h1>Salary</h1>-->
+    	<!--											<h3>$24.00</h3>-->
+    	<!--											<h4>per hour</h4>-->
+    	<!--										</div>-->
+    	<!--										<div class= "section">-->
+    	<!--											<img src="images/download.png">-->
+    	<!--											<h1>Upload Documents</h1>-->
+    	<!--											<h5>If required, attach images of any receipts:</h5>-->
+    	<!--											<form class="expenditure" method="POST" action="expenditure.php" enctype="multipart/form-data">-->
+     <!--                                                 	<div class="choose-file-div">-->
+     <!--                                                 	  <input class="choose-file" type="file" name="image" style="display:none;">-->
+     <!--                                                 	</div>-->
+     <!--                                                 	<div>-->
+     <!--                                                 		<button class="expenditure-button" type="submit" name="upload">UPLOAD</button>-->
+     <!--                                                 	</div>-->
+     <!--                                               </form>-->
+     <!--           									<h5 style="color: blue">Please enter the disclosed amount (USD) from the receipt; the customer will verify your expenditures:</h5>-->
+    	<!--											<form class="expenditure" method="POST" action="expenditure.php" enctype="multipart/form-data">-->
+     <!--                                                 	<div class="field">-->
+    	<!--	 <input type="number" name="fullname" id="fullname" placeholder="Enter Spendings" style="background-color:transparent; color:black; width: 80%; margin: auto; text-align: center; font-size: 24px; border: 0; border-bottom: 1px solid #ccc; border-radius: 0; padding: 5px 0; -webkit-appearance: none;">-->
+    	<!--</div>-->
+     <!--                                                 	<div>-->
+     <!--                                                 		<button class="expenditure-button" type="submit" name="upload">SUBMIT</button>-->
+     <!--                                                 	</div>-->
+     <!--                                               </form>-->
+    	<!--										</div>-->
+    	<!--										<div class="message">-->
+    	<!--											<h1>Customer Note:</h1>-->
+    	<!--											The grass needs to be mowed and trimmed. Also, please use the left gate to get in.-->
+    	<!--										</div>-->
+    	<!--										<div class="action">-->
+    	<!--											<button style="margin-top: 14px;"></button>-->
+    	<!--											<button style="margin-top: 14px;"></button>-->
+    	<!--										</div>-->
+    	<!--									</div>-->
+    									
+    	<!--							</div>-->
+    								 
+    	<!--							<ul class='' id="">-->
+    	<!--								<li id="" class="active"></li>-->
+    	<!--								<li id=""></li>-->
+    	<!--								<li id=""></li>-->
+    	<!--							</ul>-->
+    								
+    								<!--<div class="slider-card">-->
+    								<!--			<div class= "title">-->
+    								<!--				Landscaping-->
+    								<!--			</div>-->
+    								<!--			<div class= "date">-->
+    								<!--				Tuesday, March 25th 2019 at 2:00pm-->
+    								<!--			</div>-->
+    								<!--			<div class= "section">-->
+    								<!--				<img src="images/home.png">-->
+    								<!--				<h1>Address</h1>-->
+    								<!--				<h5>maksim_maxim@live.com <br><br>-->
+    								<!--					(206)708-0199-->
+    								<!--					<br><br>-->
+    								<!--					19427 73rd Ave W -->
+    								<!--					Lynnwood WA, 98036-->
+    								<!--				</h5>-->
+    								<!--			</div>-->
+    								<!--			<div class= "section">-->
+    								<!--				<img src="images/cash.png">-->
+    								<!--				<h1>Salary</h1>-->
+    								<!--				<h3>$24.00</h3>-->
+    								<!--				<h4>per hour</h4>-->
+    								<!--			</div>-->
+    								<!--			<div class= "section">-->
+    								<!--				<img src="images/download.png">-->
+    								<!--				<h1>Upload Documents</h1>-->
+    								<!--				<h3 style="font-size:20px; padding:22px; color:blue;">See the primary provider of your group to upload task expenses/receipts. </h3>-->
+    												
+    								<!--			</div>-->
+    								<!--			<div class="message">-->
+    								<!--				<h1>Customer Note:</h1>-->
+    								<!--				The grass needs to be mowed and trimmed. Also, please use the left gate to get in.-->
+    								<!--			</div>-->
+    								<!--			<div class="action">-->
+    								<!--				<h3 style="font-size:20px; padding:15px">Only the primary provider has the ability to alter the order status. </h3>-->
+    								<!--			</div>-->
+    								<!--		</div>-->
+    									
+    								</div>
+    								 
+    								<!--<ul class='' id="">-->
+    								<!--	<li id="" class="active"></li>-->
+    								<!--	<li id=""></li>-->
+    								<!--	<li id=""></li>-->
+    								<!--</ul>-->
+    								
+    							</div>
+    						</div>
+    						<!-- Dashboard Content Panel (Element)-->
+    						<div class="dashboard-content__panel" data-panel-id="notifications">
+    						    <div class="time" style="color: black;">
+    						        <h1>Your Availability</h1>
+    						        <h2>Select desired time for when you are available to complete tasks. You can do so by clicking on the table below.</h2>
+        							<div id="timeslots"></div>
+        							
+        							<!--<button id="submit-availability">SAVE</button>-->
+    							</div>
+    							<div style="width: 300px; text-align: center; margin-left:auto; margin-right: auto; margin-bottom: 30px;">
+    							    <button id="clear-availability" style="margin-top: 0px;">Clear</button>
+    							</div>
+    							
+    						</div>
+    						
+    						<!-- Dashboard Content Panel (Element)-->
+    						<div class="dashboard-content__panel" data-panel-id="payment">
+    							
+                                <div class="settings" style="color: black;">
+    								<h1 style="color: black;">Travel Settings</h1>
+    								<h2 style="color: black;">Select your desired maximum traveling distance for your services</h2>
+    								<div class="margins">
+    									<form oninput="output.value = Math.round(range.valueAsNumber / 1000) + ' miles'" id="sliderUpdate">
+    										<div class="range">
+    											<input id="slider-input" name="range" type="range" min="0" max="100000">
+    											<div class="range-output">
+    												<output id="distance" class="output" name="output" for="range">
+    												50 miles
+    												</output>
+    											</div>
+    										</div>
+    									</form>
+    									
+    								</div>
+    								<h1 style="color: black;">Business Address</h1>
+    								<h2 style="color: black;">Address from which your are commuting to your clients</h2>
+    							    <br>
+    							<div id="master">
+    					
+    								<div id="address-container">
+    								    <div id="locationField">
+        								    <div>
+        								        <input id="autocomplete" placeholder="Enter your location" type="text"/>
+        								    </div>
+                                		</div>
+                            		    <div id="addressDisplay" class="locationDisplay">
+                                            <span id="current-address"></span>
+                                            <br class="address-spacing">
+                                            <span id="current-city"></span><span id="city-state-comma">, </span><span id="current-state"></span>
+                                            <br class="address-spacing">
+                                            <span id="current-zip"></span>
+                                            <br>
+                                        </div>
+                            		    <div>
+    								        <a class="editbutton" id="edit">Edit</a>
+    								    </div>
+    								</div>
+    								
+                            		<br>
+        <!--                    		<input id="work-phone" autocomplete="off" class="work-address" type="text" placeholder="Phone Number"><br>-->
+								<!--<input id="work-email" class="work-city" type="text" placeholder="Email">-->
+                            
+                            
+                    		<table id="address" style="display:none">
+                    			<tr>
+                    				<td class="label">Street Address</td>
+                    				<td class="slimField">
+                    					<input class="field" id="street_number" disabled="true" />
+                    				</td>
+                    				<td class="wideField" colspan="2">
+                    					<input class="field" id="route" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">City</td>
+                    				<td class="wideField" colspan="3">
+                    					<input class="field" id="locality" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">State</td>
+                    				<td class="slimField">
+                    					<input class="field" id="administrative_area_level_1" disabled="true" />
+                    				</td>
+                    				<td class="label">Zip code</td>
+                    				<td class="wideField">
+                    					<input class="field" id="postal_code" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">Country</td>
+                    				<td class="wideField" colspan="3">
+                    					<input class="field" id="country" disabled="true" />
+                    				</td>
+                    			</tr>
+                    		</table>
+								
+
+
+    								
+    								</div>
+    								<!--<div id="distance-container"><button id="distance-update"></button></div>-->
+    							</div>
+    						</div>
+    						
+    						<!-- Dashboard Content Panel (Element)-->
+    						<div class="dashboard-content__panel" data-panel-id="settings">
+    							<div class="time">
+    							     <h1 style="color: black;">Time Zone</h1>
+                                    <h2 style="color: black;">If you're traveling outside of your registered location, you can change your timezone.<br>
+                                        <select id="timezone" style="width: 300px; margin-left:0; margin-top: 23px;">
+                    						<option value="-12">[UTC - 12] Baker Island Time</option>
+                                            <option value="-11">[UTC - 11] Niue Time, Samoa Standard Time</option>
+                                            <option value="-10">[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time</option>
+                                            <option value="-9.5">[UTC - 9:30] Marquesas Islands Time</option>
+                                            <option value="-9">[UTC - 9] Alaska Standard Time, Gambier Island Time</option>
+                                            <option value="-8">[UTC - 8] Pacific Standard Time</option>
+                                            <option value="-7">[UTC - 7] Mountain Standard Time</option>
+                                            <option value="-6">[UTC - 6] Central Standard Time</option>
+                                            <option value="-5">[UTC - 5] Eastern Standard Time</option>
+                                            <option value="-4.5">[UTC - 4:30] Venezuelan Standard Time</option>
+                                            <option value="-4">[UTC - 4] Atlantic Standard Time</option>
+                                            <option value="-3.5">[UTC - 3:30] Newfoundland Standard Time</option>
+                                            <option value="-3">[UTC - 3] Amazon Standard Time, Central Greenland Time</option>
+                                            <option value="-2">[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time</option>
+                                            <option value="-1">[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time</option>
+                                            <option value="0">[UTC] Western European Time, Greenwich Mean Time</option>
+                                            <option value="1">[UTC + 1] Central European Time, West African Time</option>
+                                            <option value="2">[UTC + 2] Eastern European Time, Central African Time</option>
+                                            <option value="3">[UTC + 3] Moscow Standard Time, Eastern African Time</option>
+                                            <option value="3.5">[UTC + 3:30] Iran Standard Time</option>
+                                            <option value="4">[UTC + 4] Gulf Standard Time, Samara Standard Time</option>
+                                            <option value="4.5">[UTC + 4:30] Afghanistan Time</option>
+                                            <option value="5">[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time</option>
+                                            <option value="5.5">[UTC + 5:30] Indian Standard Time, Sri Lanka Time</option>
+                                            <option value="5.75">[UTC + 5:45] Nepal Time</option>
+                                            <option value="6">[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time</option>
+                                            <option value="6.5">[UTC + 6:30] Cocos Islands Time, Myanmar Time</option>
+                                            <option value="7">[UTC + 7] Indochina Time, Krasnoyarsk Standard Time</option>
+                                            <option value="8">[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time</option>
+                                            <option value="8.75">[UTC + 8:45] Southeastern Western Australia Standard Time</option>
+                                            <option value="9">[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time</option>
+                                            <option value="9.5">[UTC + 9:30] Australian Central Standard Time</option>
+                                            <option value="10">[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time</option>
+                                            <option value="10.5">[UTC + 10:30] Lord Howe Standard Time</option>
+                                            <option value="11">[UTC + 11] Solomon Island Time, Magadan Standard Time</option>
+                                            <option value="11.5">[UTC + 11:30] Norfolk Island Time</option>
+                                            <option value="12">[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time</option>
+                                            <option value="12.75">[UTC + 12:45] Chatham Islands Time</option>
+                                            <option value="13">[UTC + 13] Tonga Time, Phoenix Islands Time</option>
+                                            <option value="14">[UTC + 14] Line Island Time</option>
+                    					</select>
+                    				</h2>
+                    				<h1 style="margin-top:40px; color:black" class="important">Alerts</h1>
+                    				<h2 class="important" style="color: black;">Select your prefered method for receiving alerts for new tasks. <br> If you have none selected, you will not be listed as an active provider.</h2>
+                    				<div id= "checkbox-container">
+                    				    <div>
+                    				        <h2 style="font-weight:600">E-MAIL</h2>
+    						                <input type="checkbox" id="email-notification" name="email-notification" value="email">
+                    				    </div>
+                    				    <div>
+                    				        <h2 style="font-weight:600">SMS</h2>
+                                            <input type="checkbox" id="sms-notification" name="sms-notification" value="sms">
+                    				    </div>
+                    				</div>
+    						        
+    						        
+    						        
+    						        
+                                   
+    							</div>
+    							<div class="time" style="text-align: center; color: black;">
+    						        <h1>Payouts</h1>
+    						        <h2>Manage your payout settings here.</h2>
+    						        <button id="stripeportal" style="bottom: 105px; height: 43px;font-size: 17px;width: 197px;font-weight: 200;left: 672px;">Configure Payouts</button>
+    							</div>
+    						</div>
+    					</div>
+    					<!-- Dashboard Preview (Block)  -->
+    					<span id="previewer">
+    						<div class="dashboard-preview">
+    							<!-- Panel (Element)-->
+    							<div class="dashboard-preview__panel dashboard-preview__panel--active" data-panel-id="bromo">
+    								<!-- Header (Element)-->
+    								<div class="dashboard-preview__header">
+    									<h2 id="customer_email_display"></h2>
+    									<h3 id="service_display"></h3>
+    								</div>
+    								<!-- Content (Element)-->
+    								<div class="dashboard-preview__content">
+    									<section>
+    										<br>
+    										Address:<br>
+    										<div id="address_display"></div>
+    										Started:<br>
+    										<div id="start_display" style="font-weight:500; font-size: 19px;"></div>
+    										Ended:<br>
+    										<div id="end_display" style="font-weight:500; font-size: 19px;"></div>
+    										Salary:<br>
+    										<div id="price_display" ></div>
+    										Revenue:<br>
+    										<div id="revenue_display" style="font-weight:500; font-size: 19px;"></div>
+    									</section>
+    								</div>
+    							</div>
+    						</div>
+    					</span>
+    				</div>
+    			</div>
+    		</div>
+    		<script src="js/availability.js"></script>
+    		<script  src="js/provider.js"></script>
+    		<script  src="js/google.js"></script>
+    		<script  src="js/start.js"></script>
+    		<script  src="js/dashboard.js"></script>
+    		<script  src="js/slider2.js"></script>
+    		
+    		
+		</div>
+		<div class="footer-wrapper">
+		    <footer class="footer">
+
+                      
+                      <ul class="footer__nav">
+                        <li class="nav__item">
+                          <h12 class="nav__title">Contact</h12>
+                        
+                        <address style="margin-top: -2px;">
+                          +1 (425) 412-7423<br>
+                              
+                          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
+                        </address>
+                        </li>
+                        <li class="nav__item">
+                          <h12 class="nav__title">Discover</h12>
+                    
+                          <ul class="nav__ul">
+                            <li>
+                              <a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
+                            </li>
+                    
+                            <li>
+                              <a href="https://helphog.com/signin">Login</a>
+                            </li>
+                                
+                            <li>
+                              <a href="https://helphog.com/about">About Us</a>
+                            </li>
+                          </ul>
+                        </li>
+                        
+                        <li class="nav__item nav__item--extra">
+                          <h12 class="nav__title">Services</h12>
+                          
+                          <ul class="nav__ul nav__ul--extra">
+                            <!--<li>-->
+                            <!--  <a href="#">Automotive</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Creative</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Education</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Household</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Labor</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Tech</a>-->
+                            <!--</li>-->
+                          </ul>
+                        </li>
+                        
+                        <li class="nav__item">
+                          <h12 class="nav__title">Legal</h12>
+                          
+                          <ul class="nav__ul">
+                            <li>
+                              <a href="#">Privacy Policy</a>
+                            </li>
+                            
+                            <li>
+                              <a href="#">Terms of Use</a>
+                            </li>
+                            
+                            <li>
+                              <a href="#">Sitemap</a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                      
+                      <div class="legal">
+                        <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
+                        
+                      </div>
+                </footer>
+		</div>
+	</body>
+</html>

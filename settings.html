@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<meta charset="UTF-8">
+		<title>Settings</title>
+		<link rel='stylesheet prefetch' href='https://use.fontawesome.com/releases/v5.0.10/css/all.css'>
+		<link rel="stylesheet" type="text/css" href="css/settings.css" />
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places" defer></script>
+		<script src="js/common.js"></script>
+		<script src="js/settings.js"></script>
+		<script src="js/google.js"></script>
+	</head>
+	<body>
+	    <div id="logo">He!pHog</div>
+		<div id="tracking">settings</div>
+		<div id="return">return home</div>
+		<!--<a data-scroll href="/">-->
+		<!--	<div class="arrow"></div>-->
+		<!--</a>-->
+		<div class="container">
+			<div id="logo">
+				<a href="/">
+					<h1 class="logo">   </h1>
+				</a>
+			</div>
+			<div class="leftbox">
+				<nav>
+					<a id="profile"><i class="fa fa-user"></i></a>
+					<!-- <a id="subscription"><i class="fa fa-key"></i></a> -->
+					<a id="payment"><i class="fa fa-home"></i></a>
+					<!-- <a id="privacy"><i class="fa fa-tasks"></i></a> -->
+					<a id="settings"><i class="fa fa-cog"></i></a>
+				</nav>
+			</div>
+			<div class="rightbox">
+				<div class="profile">
+					<h1>Personal Info</h1>
+					<h2>Phone Number</h2>
+					<p id="phone"></p>
+					<!-- <input type="number" id="phone"/> -->
+					<br />
+					<h2>Email</h2>
+					<p id="email"></p>
+					<!-- <input autocomplete="off" type="email" id="email"/> -->
+					<br>
+					<p>Please <a href="contact">contact us</a> if you'd like to change either your phone number or email.</p>
+				</div>
+				<div class="payment">
+					<h1>Address</h1>
+						<div class="content-area">
+							
+							<div id="locationField">
+                    			<input id="autocomplete" placeholder="Enter your location" type="text"/>
+                    		</div>
+                    		<div id="addressDisplay" class="locationDisplay">
+                                <span id="current-address"></span>
+                                <br class="address-spacing">
+                                <span id="current-city"></span><span id="city-state-comma">, </span><span id="current-state"></span>
+                                <br class="address-spacing">
+                                <span id="current-zip"></span>
+                                <br>
+                                <a id="edit" style="color:#0090ff ">edit</a>
+                            </div>
+                            
+                            
+                    		<table id="address" style="display: none;">
+                    			<tr>
+                    				<td class="label">Street Address</td>
+                    				<td class="slimField">
+                    					<input class="field" id="street_number" disabled="true" />
+                    				</td>
+                    				<td class="wideField" colspan="2">
+                    					<input class="field" id="route" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">City</td>
+                    				<td class="wideField" colspan="3">
+                    					<input class="field" id="locality" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">State</td>
+                    				<td class="slimField">
+                    					<input class="field" id="administrative_area_level_1" disabled="true" />
+                    				</td>
+                    				<td class="label">Zip code</td>
+                    				<td class="wideField">
+                    					<input class="field" id="postal_code" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">Country</td>
+                    				<td class="wideField" colspan="3">
+                    					<input class="field" id="country" disabled="true" />
+                    				</td>
+                    			</tr>
+                    		</table>
+						</div>
+
+				</div>
+
+				<div class="settings">
+					<h1>General Settings</h1>
+					<!-- <h2>Notifications</h2> -->
+					<div id="policies">
+						<h2 id="delete">Delete Account</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

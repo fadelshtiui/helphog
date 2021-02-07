@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<meta charset="UTF-8">
+		<title>Order Details</title>
+		<link rel="stylesheet" href="css/time.css">
+		<link rel="stylesheet" href="css/edit.css">
+		<link rel="stylesheet" href="css/footer.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css'>
+		<link rel='stylesheet' href='https://cdn.linearicons.com/free/1.0.0/icon-font.min.css'>
+		
+		<link rel="stylesheet" href="css/popup.css">
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+		
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places" defer></script>
+
+		<link rel="stylesheet" href="css/global.css" />
+		<script src="js/common.js"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="js/edit.js" defer></script>
+        <script src="js/google.js"></script>
+	</head>
+	<body>
+	    <div style="display:none;">
+	        <p id="dow"></p>
+	        <p id="date"></p>
+	        <p id="order"></p>
+	        <p id="time"></p>
+	    </div>
+	    <div class="content">
+	    <div id="hide">
+		<div id="arrow" class="arrow"></div>
+		<div class="pure-g-r">
+			<!-- Billing & shipping address -->
+			<div class="pure-u-1-1" id="one">
+				<div class="wrapper wrapper__delta">
+					<h2 class="__alpha">Details</h2>
+					<div class="result">
+						<div class="description-left">
+							<div style="padding: 10px;">
+								<span id="bold">Service:</span><span class="service" id="first"> </span>
+								<p style="line-height: 5px;"></p>
+								<span id="bold">Description:</span><span class="description" id="second"></span>
+							</div>
+                               <div id="options">   
+                                <label for="quantity">How many providers do you need to assist you with this task?</label>
+                                <div id="quantity" include="form-input-select()">
+                                  <select id="numpeople" required>
+                                    <!--
+                                      This is how we can do "placeholder" options.
+                                      note: "required" attribute is on the select
+                                    -->
+                                    <option value="1"
+                                            hidden
+                                    >1 person</option>
+                                
+                                    <!-- normal options -->
+                                    <option value="1">1 person</option>
+                                    <option value="2">2 people</option>
+                                    <option value="3">3 people</option>
+                                    <option value="4">4 people</option>
+                                    <option value="5">5 people</option>
+                                  </select>
+                                </div>
+                                <label for="quantity2" id="hourlabel">At most how long would you need this assistance for? <b>Note: The provider cannot assist you for longer than this duration.</b></label>
+                                <div id="quantity2" include="form-input-select()">
+                                  <select id="duration" required>
+                                    <!--
+                                      This is how we can do "placeholder" options.
+                                      note: "required" attribute is on the select
+                                    -->
+                                    <option value="1"
+                                            hidden
+                                    >At most 1 hour</option>
+                                
+                                    <!-- normal options -->
+                                    <option value="1" selected>At most 1 hour</option>
+                                    <option value="2">1-2 hours</option>
+                                    <option value="3">2-3 hours</option>
+                                    <option value="4">3-4 hours</option>
+                                    <option value="5">4-5 hours</option>
+                                    <option value="6">5-6 hours</option>
+                                    <option value="7">6-7 hours</option>
+                                    <!--<option value="8" selected>Until Completion</option>-->-->
+                                  </select>
+                                </div>
+                            </div>    
+                            <br>
+                            <textarea id="message" cols="50" maxlength="1000" style="width: 642px; height: 69px; margin-left: 9px; border-radius: 6px; resize: none;" placeholder="Please describe what you need help with..."></textarea><br><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pure-u-1-4" id="location">
+				<div class="pure-u-1-1" id="two">
+					<div class="wrapper wrapper__alpha">
+						<h2 class="__alpha">Enter Address</h2>
+						<div class="content-area">
+							
+							<div id="locationField">
+                    			<input id="autocomplete" placeholder="Enter your location" type="text"/>
+                    		</div>
+                    		<div id="addressDisplay" class="locationDisplay">
+                                <span id="current-address"></span>
+                                <br class="address-spacing">
+                                <span id="current-city"></span><span id="city-state-comma">, </span><span id="current-state"></span>
+                                <br class="address-spacing">
+                                <span id="current-zip"></span>
+                                <br>
+                                
+                            </div>
+                            <div class="centering">
+                            <a class="editbutton" id="edit">Edit</a>
+                            </div>
+                    		<table id="address" style="display: none;">
+                    			<tr>
+                    				<td class="label">Street Address</td>
+                    				<td class="slimField">
+                    					<input class="field" id="street_number" disabled="true" />
+                    				</td>
+                    				<td class="wideField" colspan="2">
+                    					<input class="field" id="route" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">City</td>
+                    				<td class="wideField" colspan="3">
+                    					<input class="field" id="locality" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">State</td>
+                    				<td class="slimField">
+                    					<input class="field" id="administrative_area_level_1" disabled="true" />
+                    				</td>
+                    				<td class="label">Zip code</td>
+                    				<td class="wideField">
+                    					<input class="field" id="postal_code" disabled="true" />
+                    				</td>
+                    			</tr>
+                    			<tr>
+                    				<td class="label">Country</td>
+                    				<td class="wideField" colspan="3">
+                    					<input class="field" id="country" disabled="true" />
+                    				</td>
+                    			</tr>
+                    		</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div  class="pure-u-1-1" id="time-section">
+				<div id="choose-your-time" class="wrapper wrapper__delta">
+					<h2 class="__alpha">Choose Date</h2>
+					<div class="app-container" ng-app="dateTimeApp" ng-controller="dateTimeCtrl as ctrl" ng-cloak>
+						<div date-picker
+							datepicker-title="Select Date"
+							picktime="true"
+							pickdate="true"
+							pickpast="false"
+							mondayfirst="false"
+							custom-message="You have selected"
+							selecteddate="ctrl.selected_date"
+							updatefn="ctrl.updateDate(newdate)">
+							<div class="datepicker"
+								ng-class="{
+								'am': timeframe == 'am',
+								'pm': timeframe == 'pm',
+								'compact': compact
+								}">
+								<div class="datepicker-calendar">
+									<div class="calendar-header">
+										<div class="goback" ng-click="moveBack()" ng-if="pickdate">
+											<svg width="30" height="30">
+												<path fill="none" stroke="#0070ba" stroke-width="3" d="M19,6 l-9,9 l9,9"/>
+											</svg>
+										</div>
+										<div class="current-month-container">{{ currentViewDate.getFullYear() }} {{ currentMonthName() }}</div>
+										<div class="goforward" ng-click="moveForward()" ng-if="pickdate">
+											<svg width="30" height="30">
+												<path fill="none" stroke="#0070ba" stroke-width="3" d="M11,6 l9,9 l-9,9" />
+											</svg>
+										</div>
+									</div>
+									<div class="calendar-day-header">
+										<span ng-repeat="day in days" class="day-label">{{ day.short }}</span>
+									</div>
+									<div class="calendar-grid" ng-class="{false: 'no-hover'}[pickdate]">
+										<div
+											ng-class="{'no-hover': !day.showday}"
+											ng-repeat="day in month"
+											class="datecontainer"
+											ng-style="{'margin-left': calcOffset(day, $index)}"
+											track by $index>
+											<div class="datenumber" ng-class="{'day-selected': day.selected }" ng-click="selectDate(day)">
+												{{ day.daydate }}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="timepicker" ng-if="picktime == 'true'">
+									<div ng-class="{'am': timeframe == 'am', 'pm': timeframe == 'pm' }">
+										<div class="timepicker-container-outer" selectedtime="time" timetravel>
+											<div class="timepicker-container-inner">
+												<div class="timeline-container" ng-mousedown="timeSelectStart($event)" sm-touchstart="timeSelectStart($event)">
+													<div class="current-time">
+														<div class="actual-time">{{ time }}</div>
+													</div>
+													<div class="timeline">
+													</div>
+													<div class="hours-container">
+														<div class="hour-mark" ng-repeat="hour in getHours() track by $index"></div>
+													</div>
+												</div>
+												<div class="display-time">
+													<div class="decrement-time" ng-click="adjustTime('decrease')">
+														<svg width="24" height="24">
+															<path stroke="white" stroke-width="2" d="M8,12 h8"/>
+														</svg>
+													</div>
+													<div class="time" ng-class="{'time-active': edittime.active}">
+														<input type="text" class="time-input" ng-model="edittime.input" ng-keydown="changeInputTime($event)" ng-focus="edittime.active = true; edittime.digits = [];" ng-blur="edittime.active = false"/>
+														<div class="formatted-time">{{ edittime.formatted }}</div>
+													</div>
+													<div class="increment-time" ng-click="adjustTime('increase')">
+														<svg width="24" height="24">
+															<path stroke="white" stroke-width="2" d="M12,7 v10 M7,12 h10"/>
+														</svg>
+													</div>
+												</div>
+												<div class="am-pm-container">
+													<div id="amclicky" class="am-pm-button" ng-click="changetime('am');">am</div>
+													<div id="pmclicky" class="am-pm-button" ng-click="changetime('pm');">pm</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<script  src="js/time.js"></script>
+				</div>
+			</div>
+			<div  class="pure-u-1-1" id="time-section">
+				<div id="choose-your-time" class="wrapper wrapper__delta timePicker">
+					<h2 class="__alpha">Choose Time</h2>
+					<div class='some-page-wrapper'>
+					    <svg class="loader" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                          <circle class="internal-circle" cx="60" cy="60" r="30"></circle>
+                          <circle class="external-circle" cx="60" cy="60" r="50"></circle>
+                        </svg>
+                      <div class='row' style="margin-left:0;">
+                          <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="12:00 am" data-standardTime="00:00" data-availabilityValue="0">
+                            12:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="12:30 am" data-availabilityValue="0.5">
+                            12:30 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="1:00 am" data-availabilityValue="1">
+                            1:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="1:30 am" data-availabilityValue="1.5">
+                            1:30 am
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="2:00 am" data-availabilityValue="2">
+                            2:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="2:30 am" data-availabilityValue="2.5">
+                            2:30 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="3:00 am" data-availabilityValue="3">
+                            3:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="3:30 am" data-availabilityValue="3.5">
+                            3:30 am
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="4:00 am" data-availabilityValue="4">
+                            4:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="4:30 am" data-availabilityValue="4.5">
+                            4:30 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="5:00 am" data-availabilityValue="5">
+                            5:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="5:30 am" data-availabilityValue="5.5">
+                            5:30 am
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="6:00 am" data-availabilityValue="6">
+                            6:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="6:30 am" data-availabilityValue="6.5">
+                            6:30 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="7:00 am" data-availabilityValue="7">
+                            7:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="7:30 am" data-availabilityValue="7.5">
+                            7:30 am
+                          </button>
+                        </div>
+                      </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="8:00 am" data-availabilityValue="8">
+                            8:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="8:30 am" data-availabilityValue="8.5">
+                            8:30 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="9:00 am" data-availabilityValue="9">
+                            9:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="9:30 am" data-availabilityValue="9.5">
+                            9:30 am
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="10:00 am" data-availabilityValue="10">
+                            10:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="10:30 am" data-availabilityValue="10.5">
+                            10:30 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="11:00 am" data-availabilityValue="11">
+                            11:00 am
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="11:30 am" data-availabilityValue="11.5">
+                            11:30 am
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="12:00 pm" data-availabilityValue="12">
+                            12:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="12:30 pm" data-availabilityValue="12.5">
+                            12:30 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="1:00 pm" data-availabilityValue="13">
+                            1:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="1:30 pm" data-availabilityValue="13.5">
+                            1:30 pm
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="2:00 pm" data-availabilityValue="14">
+                            2:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="2:30 pm" data-availabilityValue="14.5">
+                            2:30 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="3:00 pm" data-availabilityValue="15">
+                            3:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="3:30 pm" data-availabilityValue="15.5">
+                            3:30 pm
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="4:00 pm" data-availabilityValue="16">
+                            4:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="4:30 pm" data-availabilityValue="16.5">
+                            4:30 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="5:00 pm" data-availabilityValue="17">
+                            5:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="5:30 pm" data-availabilityValue="17.5">
+                            5:30 pm
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="6:00 pm" data-availabilityValue="18">
+                            6:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="6:30 pm" data-availabilityValue="18.5">
+                            6:30 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="7:00 pm" data-availabilityValue="19">
+                            7:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="7:30 pm" data-availabilityValue="19.5">
+                            7:30 pm
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="8:00 pm" data-availabilityValue="20">
+                            8:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="8:30 pm" data-availabilityValue="20.5">
+                            8:30 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="9:00 pm" data-availabilityValue="21">
+                            9:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="9:30 pm" data-availabilityValue="21.5">
+                            9:30 pm
+                          </button>
+                        </div>
+                      </div>
+                      <div class='row' style="margin-left:0;">
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="10:00 pm" data-availabilityValue="22">
+                            10:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="10:30 pm" data-availabilityValue="22.5">
+                            10:30 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="11:00 pm" data-availabilityValue="23">
+                            11:00 pm
+                          </button>
+                        </div>
+                        <div class='column'>
+                          <button class='timeslot available-column' data-militaryTime="11:30 pm" data-availabilityValue="23.5">
+                            11:30 pm
+                          </button>
+                        </div>
+                      </div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="centerdiv">
+			<button class="trigger_popup_fricc button" id="button">Checkout</button>
+			<div class="box">
+	<!--<a class="button" href="#popup1">Pop up</a>-->
+</div>
+		</div>
+		<div id="popup1" class="overlay" style="overflow:auto;">
+	<div class="popup">
+		<center>
+		    
+			<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#191919 ;"
+				class="">
+				<tr>
+					<td align="center" valign="top" id="mainTable" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:24px 24px 48px;">
+						<table border="0" cellpadding="0" cellspacing="0" width="640" style="width:568px ;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#191919 ;"
+							class="templateContainer">
+
+							<tr>
+							    
+								<td align="center" valign="top" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;">
+									<a class="close" id="close" href="#">&times;</a><table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: hidden; border-radius: 15px; box-shadow:0 0 20px 0 rgba(0, 0, 0, 0.1), 0 5px 5px 0 rgba(0, 0, 0, 0.1); width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:center ;color:#191919 ;background-color:#FFFFFF;border-top:none;"
+										id="templateContent" class="text-align-center">
+										<tr>
+																						<td valign="top" id="templateHeaderCell" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;padding-top:23px;padding-right:24px;padding-bottom:23px;padding-left:24px;">
+												<table border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:center ;color:#191919 ;"
+													class="text-align-center">
+													<tr>
+														<h5 style="font-family: raleway; font-size:2.2rem; margin-top: 27px;">Checkout</h5>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td align="left" valign="top" id="contentBody" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0px 36px 0px;">
+												<table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#191919 ;">
+													<tr>
+														<td align="left" valign="top" class="sans-14-regular color-gray-dark" style="    width: 30vw;
+    min-width: 500px;
+    align-self: center;
+    box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1), 0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+    border-radius: 7px;
+    padding: 40px; -webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:400;color:#666666 ;">Please review your request  for <span id= "popupService" style="font-weight: 600;"></span> 
+															<br />
+														                          
+														    <br><br>Message:<span id="popupMessage" style="font-weight:600;"></span>
+														    <br><br>Address:<span id="popupAddress" style="font-weight:600;"></span>
+														    <br><br>Date/Time:<span id="popupDate" style="font-weight:600;"></span>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td valign="top" id="contentTable" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;padding-top:26px;padding-right:36px;padding-bottom:26px;padding-left:36px;">
+												
+												<form id="payment-form">
+												    <table border="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#191919 ;border-bottom:1px solid #CCCCCC;"
+													cellpadding="0" cellspacing="0" class="contentItemTable">
+													<tr>
+														<td id="date" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:500;"
+															class="contentItemColumn sans-14-bold"></td>
+													</tr>
+													<tr>
+														<td width="80%" class="contentItemColumn sans-14-bold text-align-left" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px;text-align:left;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:700; color: #666666;">Payment</td>
+														
+													</tr>
+													<tr>
+														<td style="height:8px;line-height:8px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;"></td>
+													</tr>
+												</table>
+												<table border="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#191919 ;border-bottom:1px solid #CCCCCC;"
+													cellpadding="0" cellspacing="0" class="contentItemTable">
+													<tr>
+													    <td width="80%" class="contentItemColumn sans-14-bold text-align-left" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px;text-align:left;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:500; color: #999999;">Providers</td>
+														<td width="20%" class="price contentItemColumn sans-14-bold text-align-right" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0; padding-top: 10px; text-align:right ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:500; color: #999999;"><span id="popupProviders"></span></td>
+													</tr>
+													<tr>
+														
+														
+													</tr>
+													<tr>
+														<td colspan="2" style="height:8px;line-height:8px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;"></td>
+													</tr>
+												</table>
+												<table border="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#999999 ;border-bottom:1px solid #CCCCCC;"
+													cellpadding="0" cellspacing="0" class="contentItemTable color-gray-medium">
+
+													<tr>
+														<td width="20%" class="contentItemColumn sans-14-bold text-align-left" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px;text-align:left;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:500;">Subtotal</td>
+														<td width="80%" class="price contentItemColumn sans-14-bold text-align-right" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px; text-align:right ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;font-weight:500;"><span id="popupSubtotal"></span></td>
+													</tr>
+													<tr>
+													</tr>
+													<tr>
+													</tr>
+													<tr>
+														<td colspan="2" style="height:8px;line-height:8px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;"></td>
+													</tr>
+												</table>
+												<table border="0" width="100%" style="margin-bottom: -19px; width:100% !important;border-bottom:none;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:left ;color:#191919 ;"
+													cellpadding="0" cellspacing="0" class="contentItemTable">
+													<tr>
+														<td colspan="2" style="height:12px;line-height:12px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;"></td>
+													</tr>
+													<tr>
+														<td width="80%" class="contentItemColumn sans-14-bold text-align-left" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;text-align:left ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 20px;line-height:20px;font-weight:500; padding-bottom:60px;">Estimated Cost*</td>
+														<td width="20%" class="contentItemColumn sans-14-bold text-align-right price" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;text-align:right ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 20px;;line-height:20px;font-weight:500; padding-bottom:60px;">$<span id="popupTotal"></span></td>
+													</tr>
+												</table>
+												
+                                                  <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+                                                  <p id="card-error" style="min-height:17px;" role="alert"></p>
+                                                  <p class="result-message hidden">
+                                                    Payment succeeded, see the result in your
+                                                    <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+                                                  </p>
+                                                  <button id="submit" class="button">
+                                                    <div class="spinner hidden" id="spinner"></div>
+                                                    <span id="button-text">Place Order</span>
+                                                  </button>
+                                                  
+                                                  
+                                                </form>
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif ;text-align:center ;color:#191919 ;"
+													class="text-align-center">
+													<tr>
+														<h5 id="terms" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:0.8rem; margin-top: 27px; color: #999999">*Estimated cost is calculated based on the amount of hours the tasks is expected to take. If your task takes less time or more time, the charge will decrease or increase respectively. You will not be charged until your order is completed. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. For automotive repair tasks, estimated cost does not include costs of replacement parts/accessories.</h5>
+													</tr>
+												</table>
+												<!--<button class="trigger_popup_fricc button" id="final-button">Place Order</button>-->
+											</td>
+											
+										</tr>
+									</table>
+									
+								</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+				<tr>
+				</tr>
+			</table>
+		</center>
+	</div>
+</div>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+		<div class="hover_bkgr_fricc">
+			<span class="helper"></span>
+			<div>
+				<div class="login-modal">
+					<div class="popupCloseButton">
+						<img src="images/x.png" id="x"/>
+					</div>
+					<div class="modal-inner">
+						<div class="modal-top">
+							<i class="material-icons">exit_to_app</i><br/>
+							<h4>How would you like to checkout?</h4>
+						</div>
+						<div class="modal-content">
+							<fieldset class="form-group">
+								<input id="username" class="form-control username" type="text" placeholder="Username" required="required"/>
+								<span id="email-error" class="error"></span>
+							</fieldset>
+							<fieldset class="form-group">
+								<input id="password" class="form-control" type="text" placeholder="Password" required="required"/>
+								<span id="password-error" class="error"></span>
+							</fieldset>
+							<button id="submit-login" class="btn btn-primary">Submit</button><span id="noaccount"><a href="form">Don't have an account?</a></span>
+							<div class="register-slide">
+								<a class="close-register" ><i class="lnr lnr-cross"></i></a>
+								<p>Click the "Create Account" checkbox to create an account during checkout.</p>
+								<a class="close-modal btn btn-primary">Begin Checkout</a>
+							</div>
+						</div>
+						<div class="modal-bottom"><a class="modal-btn" id="login">Login</a><a class="modal-btn" id="guest">Guest</a></div>
+					</div>
+				</div>
+				<div class="overlay"></div>
+				<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+				<!-- <script  src="js/popup.js"></script> -->
+			</div>
+		</div>
+		</div>
+		</div>
+		<footer class="footer">
+
+                      
+                      <ul class="footer__nav">
+                        <li class="nav__item">
+                          <h12 class="nav__title">Contact</h12>
+                        
+                        <address style="margin-top: -2px;">
+                          +1 (425) 412-7423<br>
+                              
+                          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
+                        </address>
+                        </li>
+                        <li class="nav__item">
+                          <h12 class="nav__title">Discover</h12>
+                    
+                          <ul class="nav__ul">
+                            <li>
+                              <a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
+                            </li>
+                    
+                            <li>
+                              <a href="https://helphog.com/signin">Login</a>
+                            </li>
+                                
+                            <li>
+                              <a href="https://helphog.com/about">About Us</a>
+                            </li>
+                          </ul>
+                        </li>
+                        
+                        <li class="nav__item nav__item--extra">
+                          <h12 class="nav__title">Services</h12>
+                          
+                          <ul class="nav__ul nav__ul--extra">
+                            <!--<li>-->
+                            <!--  <a href="#">Automotive</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Creative</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Education</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Household</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Labor</a>-->
+                            <!--</li>-->
+                            
+                            <!--<li>-->
+                            <!--  <a href="#">Tech</a>-->
+                            <!--</li>-->
+                          </ul>
+                        </li>
+                        
+                        <li class="nav__item">
+                          <h12 class="nav__title">Legal</h12>
+                          
+                          <ul class="nav__ul">
+                            <li>
+                              <a href="#">Privacy Policy</a>
+                            </li>
+                            
+                            <li>
+                              <a href="#">Terms of Use</a>
+                            </li>
+                            
+                            <li>
+                              <a href="#">Sitemap</a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                      
+                      <div class="legal">
+                        <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
+                        
+                      </div>
+                </footer>
+	</body>
+</html>
