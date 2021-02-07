@@ -1,0 +1,199 @@
+
+h1
+{
+  margin: 20px;
+  font-size: 2em;
+  font-family: 'Raleway', Helvetica, sans-serif;
+}
+
+#title{
+    font-family: 'Raleway', Helvetica, sans-serif;
+}
+
+#description
+{
+  /*margin-bottom: 25px;*/
+  font-weight: bold;
+}
+hr
+{
+  background-color: #cccccc;
+}
+#form-cover
+{
+  background-color: white;
+  /*max-width: 70%;*/
+  height: auto;
+  /*padding: 20px;*/
+  /*padding-top: 30px;*/
+  /*margin: 30px auto;*/
+  
+  border-radius: 5px;
+  /*box-shadow: 0 -5px 20px rgba(0,0,0,0.19), 0 5px 6px rgba(0,0,0,0.23);*/
+}
+.labels
+{
+  display: inline-block;
+  margin-top : 25px;
+  text-align: right;
+  vertical-align: top;
+  width: 22%; 
+}
+
+.blue-btn:hover,
+.blue-btn:active,
+.blue-btn:focus,
+.blue-btn {
+  background: transparent;
+  border: solid 1px #27a9e0;
+  border-radius: 3px;
+  color: #27a9e0;
+  font-size: 16px;
+  margin-bottom: 20px;
+  outline: none !important;
+  padding: 10px 20px;
+}
+
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+  height: 43px;
+  margin-top: 0;
+}
+
+.fileUpload input.uploadlogo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  width: 100%;
+  height: 42px;
+}
+
+/*Chrome fix*/
+input::-webkit-file-upload-button {
+  cursor: pointer !important;
+  height: 42px;
+  width: 100%;
+}
+
+#name-label{
+    float:left;
+}
+
+#lbphone{
+    float:left;
+}
+
+#email-label{
+    float:left;
+}
+
+#age-label{
+    float:left;
+}
+
+#lbaddress{
+    float:left;
+}
+
+#lbaddress{
+    float:left;
+}
+
+#lbaddress{
+    float:left;
+}
+
+#lbaddress{
+    float:left;
+}
+.rightTab
+{
+  display: inline-block;
+  text-align: left;
+  width: 48%;
+ margin-top: 22px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.inputType
+{
+  width: 280px;
+  margin-left: 20px;
+  height: 20px;
+  padding: 15px 5px;
+  font-style: italic;
+  border: solid 1px #c0c0c0;
+  border-radius: 2px;
+  font-size: 12px;
+}
+.combobox
+{
+  width: 200px;
+  margin-left : 20px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.userRatings{
+  float:left;
+  margin-right: 10px;
+}
+.rowTab2
+{
+  margin-top: -22px;
+  margin-bottom: -20px;
+}
+.checkbox
+{
+  margin-left:4px;
+}
+textarea
+{
+  height: 100px;
+  width: 300px;
+   margin-left: 20px;
+  font-size: 12px;
+  padding: 5px;
+  font-style: italic;
+}
+
+
+footer
+{
+  font-weight: bold;
+  margin-top: 25px;
+}
+@media  (max-width: 550px)
+{
+    .labels
+  {
+    width: 100%;
+    text-align: left;
+  }
+    .rightTab
+  {width: 80%;
+  float:left;}
+  textarea
+  {
+    width: 100%;
+    float:left;
+  }
+}
+@media (max-width: 800px)
+{
+  .inputType
+  {
+    width: 80%;
+  }
+  select
+  {
+    width:90%;
+  }
+}

@@ -1,0 +1,226 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300");
+:root {
+  font-size: 16px;
+}
+
+#noaccount {
+    margin-left: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: rawline;
+}
+
+body {
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.75);
+  height: 100%;
+  width: 100%;
+  z-index: 250;
+}
+
+.login-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  z-index: 500;
+}
+
+.modal-inner {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  border-radius: .5rem;
+}
+.modal-inner .modal-top {
+  background: #2196F3;
+  color: #fff;
+  padding: 2rem;
+  border-top-left-radius: .5rem;
+  border-top-right-radius: .5rem;
+  text-align: center;
+}
+.modal-inner .modal-top i {
+  font-size: 2.25rem;
+  margin-bottom: .25rem;
+  display: block;
+}
+.modal-inner .modal-top h4 {
+  font-weight: 200;
+  margin-bottom: 0;
+}
+.modal-inner .modal-content {
+  position: relative;
+  background: #f5f5f5;
+  border-radius: 0;
+  border: 0;
+  padding: 2rem;
+  overflow: hidden;
+  display: none;
+}
+.modal-inner .modal-bottom {
+  background: #fff;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid transparent;
+  border-bottom-left-radius: .5rem;
+  border-bottom-right-radius: .5rem;
+}
+
+.modal-btn {
+  display: inline-block;
+  border: 1px solid #ddd;
+  padding: .75rem 2.25rem;
+  border-radius: 5px;
+  color: #424242;
+  margin: .5rem;
+}
+.modal-btn:hover, .modal-btn:focus {
+  text-decoration: none;
+  color: #2196F3;
+}
+
+.register-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  padding: 2rem;
+  transition: 600ms ease;
+  -webkit-transform: translateX(25vw);
+          transform: translateX(25vw);
+}
+@media (max-width: 1600px) {
+  .register-slide {
+    -webkit-transform: translateX(100vw);
+            transform: translateX(100vw);
+  }
+}
+
+.active-register {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+}
+
+.login-form {
+  transition: 600ms ease;
+}
+
+.move-form {
+  -webkit-transform: translateX(-25vw);
+          transform: translateX(-25vw);
+}
+@media (max-width: 1600px) {
+  .move-form {
+    -webkit-transform: translateX(-100vw);
+            transform: translateX(-100vw);
+  }
+}
+
+.register-link {
+  position: relative;
+  left: 1rem;
+  top: 1px;
+}
+
+.close-register {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #999;
+}
+.close-register:hover, .close-register:focus {
+  color: #999;
+  text-decoration: none;
+}
+
+
+.hover_bkgr_fricc{
+    background:rgba(0,0,0,.4);
+    cursor:pointer;
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+    z-index:10000;
+}
+.hover_bkgr_fricc .helper{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+/*
+.hover_bkgr_fricc > div {
+    background-color: #fff;
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    max-width: 551px;
+    min-height: 100px;
+    vertical-align: middle;
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    padding: 15px 5%;
+}
+*/
+
+.hidden {
+     display: none;
+}
+.popupCloseButton {
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 40px;
+    height: 30px;
+    text-align: center;
+}
+
+#x {
+     width: 30px;
+     height: 30px;
+     border-radius: 50%;
+}
+
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+    font-weight: bold;
+    outline: none;
+    width:100%;
+}
+
+button:focus {
+    outline: none;
+}
+
+#submit {
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+    font-weight: bold;
+    outline: none;
+    width:100%;
+}
+

@@ -1,0 +1,105 @@
+'@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+@import url('https://fonts.googleapis.com/css?family=Exo');
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
+
+html {
+  background: url(../images/background4.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow-y: hidden;
+}
+
+#loading-animation {
+    display: none;
+}
+
+
+h1 {
+  text-align: center;
+  color: #626262;
+  padding: 10px;
+  border-bottom: 1px solid;
+  width: 250px;
+  margin: 0 auto 25px;
+  margin-top: 30px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 200;
+}
+
+.toggles {
+  padding-top: 40px;
+  width: 800px;
+  margin: auto;
+  display: block;
+  clear: both;
+  overflow: hidden;
+}
+
+.toggles button {
+  border: 0px solid Black;
+  border-radius: 2px;
+  color: #000000;
+  display: block;
+  float: left;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 168px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Raleway', sans-serif;
+  /*box-shadow: 0 0 0px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);*/
+}
+
+/*
+.posts {
+  width: 830px;
+  margin: 2em auto;
+}
+.posts div {
+  font: 18px/250px Arial;
+  font-family: 'Raleway', sans-serif;
+  width: 245px;
+  height: 250px;
+  float: left;
+  margin: 15px;
+  text-align: center;
+  background: #eee;
+  color: black;
+  border-radius: 10%;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  display: flex;
+  flex-direction: column;
+}
+
+
+i {
+    display: inline;
+    margin-top: -40%;
+}
+
+.posts div:hover {
+  background: #1ECD97;
+  color: white;
+  cursor: pointer;
+}
+*/
+
+.toggles button:hover {
+    background-color: #1ECD97;
+    color: white;
+}
+
+.toggles button:active {
+    background-color: #1ECD97;
+    color: white;
+}
+
+.toggles button:focus {
+    background-color: #1ECD97;
+    color: white;
+    outline: none;
+}

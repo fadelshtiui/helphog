@@ -1,0 +1,413 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+@import 'https://cdn.rawgit.com/h-ibaldo/Raleway_Fixed_Numerals/master/css/rawline.css';
+
+
+::-webkit-input-placeholder { transition : opacity 0.5s; }
+::-moz-placeholder { transition : opacity 0.5s; }
+:-ms-input-placeholder { transition : opacity 0.5s; }
+.fade::-webkit-input-placeholder { opacity : 0; }
+.fade::-moz-placeholder { opacity : 0; }
+.fade:-ms-input-placeholder { opacity : 0; }
+
+/* General styles */
+body {
+  text-align: center;
+  /*padding-top: 30px;*/
+  font-size: 14px;
+  margin: 0px;
+      -webkit-font-feature-settings: "lnum";
+    -moz-font-feature-settings: "lnum";
+    font-feature-settings: "lnum";
+}
+
+html {
+    margin: 0px;
+    min-width: 1050px;
+    background-color: white;
+}
+
+#location{
+    height: 18px;
+    width: 10px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#loading-animation {
+    display: none;
+}
+
+#logo{
+   font-size: 4em;
+   color: #1ecd97;
+   margin-bottom: -10px;
+   font-family: 'Fredoka One', cursive;
+   position: absolute;
+   top: 0.15em;
+   left: 0.50em;
+   line-height: 1;
+}
+
+#infovid{
+    width: 800px;
+    margin-top:20px;
+    border-radius: 5px;
+}
+
+h5 {
+  font-size: 6em;
+  color: #1ECD97;
+  margin-top: 5%;
+  margin-bottom: 0px;
+  font-family: 'Fredoka One', cursive;
+}
+
+#slogan {
+  padding-top: 10px;
+  font-size: 14px;
+  color: black;
+  font-family: "Raleway", Arial, sans-serif;
+}
+
+button {
+     border: none;
+     background-color:#b1bbb81f;
+}
+
+.hidden {
+  display: none;
+}
+
+a {
+     text-decoration: none;
+     color: #1ecd97;
+     line-height: 1;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+a:focus {
+    text-decoration: none;
+}
+
+
+/* navigation Bar */
+
+#navigation {
+     list-style-type: none;
+     box-sizing: content-box;
+     margin-top: 16px;
+    max-width: 80%;
+    float: right;
+}
+
+#navigation li {
+     /* display: inline; */
+     float: right;
+     padding-left: 3em;
+     padding-right: 3em;
+     opacity: 0.5;
+     font-family: "Raleway", Arial, sans-serif;
+}
+
+#navigation li a {
+     color: black;
+     font-weight: bold;
+}
+
+#registration, #sign-in, #about {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+#navigation li:hover {
+   opacity: 1.0;
+}
+
+/* Search Bar */
+
+.search-container {
+  margin-top: 1.5em;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'rawline', sans-serif; 
+  display: inline-flex;
+}
+
+.search-box {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: white;
+  height: 40px;
+  position: relative;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0px 0px 1px 0px rgba(0, 0, 0, 0.28);
+  margin-right: 7px;
+}
+
+/*.search-icon {*/
+/*  position: absolute;*/
+/*  left: 349px;*/
+/*  top: 7px;*/
+/*  width: 32px;*/
+/*  height: 40px;*/
+/*  color: #999;*/
+/*  font-size: 1.3em;*/
+/*  padding: 7px 15px;*/
+/*}*/
+
+.search-input {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 500px;
+  height: 40px;
+  float: right;
+  background-color: transparent;
+  border: 0px;
+  padding-right: 60px;
+  letter-spacing: 0.5px;
+  font-size: 1em;
+  position: relative;
+  outline: 0px;
+  font-family: 'rawline', sans-serif; 
+}
+
+#zipcode{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 40px;
+  float: right;
+  background-color: transparent;
+  border: 0px;
+  padding: 10px;
+  letter-spacing: 0.5px;
+  font-size: 1em;
+  position: relative;
+  outline: 0px;
+  font-family: 'rawline', sans-serif; 
+  width: 84px;
+}
+
+#location{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+@-webkit-keyframes fadeInTop {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-1.334em) translateZ(0);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeInTop {
+  0% {
+    opacity: 0;
+    -moz-transform: translateY(-1.334em) translateZ(0);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeInTop {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-1.334em) translateZ(0);
+    -moz-transform: translateY(-1.334em) translateZ(0);
+    -ms-transform: translateY(-1.334em) translateZ(0);
+    -o-transform: translateY(-1.334em) translateZ(0);
+    transform: translateY(-1.334em) translateZ(0);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.search-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  overflow: hidden;
+  z-index: 999;
+  width: 100%;
+  max-height: 200px;
+  top: 40px;
+  text-align: left;
+}
+.search-results li {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  height: 40px;
+  background-color: #1ecd97;
+  color: white;
+  font-weight: bold;
+  /* ANIMATION */
+  /* remove this part if you dont like the animation */
+  /* END OF ANIMATION */
+}
+.search-results li:hover {
+  background-color: #519c75;
+  cursor: pointer;
+}
+.search-results li:nth-child(1) {
+  /* Animation */
+  -webkit-animation: fadeInTop 0.4s 0s forwards;
+  animation: fadeInTop 0.4s 0s forwards;
+  opacity: 0;
+}
+.search-results li:nth-child(2) {
+  /* Animation */
+  -webkit-animation: fadeInTop 0.4s 0.1s forwards;
+  animation: fadeInTop 0.4s 0.1s forwards;
+  opacity: 0;
+}
+.search-results li:nth-child(3) {
+  /* Animation */
+  -webkit-animation: fadeInTop 0.4s 0.2s forwards;
+  animation: fadeInTop 0.4s 0.2s forwards;
+  opacity: 0;
+}
+.search-results li:nth-child(4) {
+  /* Animation */
+  -webkit-animation: fadeInTop 0.4s 0.3s forwards;
+  animation: fadeInTop 0.4s 0.3s forwards;
+  opacity: 0;
+}
+.search-results li:nth-child(5) {
+  /* Animation */
+  -webkit-animation: fadeInTop 0.4s 0.4s forwards;
+  animation: fadeInTop 0.4s 0.4s forwards;
+  opacity: 0;
+}
+
+#category {
+    margin-top: 21px;
+    font-family: "Raleway", Arial, sans-serif;
+    color: #2196f3;
+    cursor: pointer;
+    text-align: center;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#search-image {
+    width: 30px;
+    height: 30px;
+    margin-left: 6px;
+    margin-top: -3px;
+}
+
+.search-icon {
+    position: absolute;
+    float: right;
+    width: 57px;
+    height: 57px;
+    top: -9px;
+    right: -9px;
+    cursor: pointer;
+}
+
+#search-image:hover {
+    cursor: pointer;
+}
+
+#search-btn:active, #search-btn:focus {
+    outline: none;
+}
+
+/* Place Holder CSS */
+::-webkit-input-placeholder {
+  color: #000;
+  opacity: 0.5;
+  -webkit-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:-moz-placeholder {
+  color: #000;
+  opacity: 0.5;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+::-moz-placeholder {
+  color: #000;
+  opacity: 0.5;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:-ms-input-placeholder {  
+  color: #000;
+  opacity: 0.5;
+  -ms-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+
+/* Place Holder CSS for Focus */
+:hover::-webkit-input-placeholder {
+  opacity: 0.75;
+  -webkit-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:hover:-moz-placeholder {
+  opacity: 0.75;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:hover::-moz-placeholder {
+  opacity: 0.75;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:hover:-ms-input-placeholder {  
+  opacity: 0.75;
+  -ms-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+
+/* Place Holder CSS for Focus */
+:focus::-webkit-input-placeholder {
+  opacity: 0;
+  -webkit-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:focus:-moz-placeholder {
+  opacity: 0;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:focus::-moz-placeholder {
+  opacity: 0;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:focus:-ms-input-placeholder {  
+  opacity: 0;
+  -ms-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+
+.fade::-webkit-input-placeholder { opacity : 0; }
+.fade::-moz-placeholder { opacity : 0; }
+.fade:-ms-input-placeholder { opacity : 0; }
+::-webkit-input-placeholder { transition : opacity 0.75s; }
+::-moz-placeholder { transition : opacity 0.75s; }
+:-ms-input-placeholder { transition : opacity 0.75s; }

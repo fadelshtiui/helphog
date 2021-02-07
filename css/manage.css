@@ -1,0 +1,299 @@
+.table-editable {
+  position: relative;
+}
+
+.table-editable .glyphicon {
+  font-size: 20px;
+}
+
+.table-remove {
+  color: #700;
+  cursor: pointer;
+}
+
+.table-remove:hover {
+  color: #f00;
+}
+
+.table-up,
+.table-down {
+  color: #007;
+  cursor: pointer;
+}
+
+.table-up:hover,
+.table-down:hover {
+  color: #00f;
+}
+
+.table-add {
+  color: #070;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 0;
+}
+
+.table-add:hover {
+  color: #0b0;
+}
+
+.mdl-layout {
+    align-items: center;
+    justify-content: center;
+}
+.mdl-layout__content {
+    padding: 24px;
+    flex: none;
+}
+.mdl-textfield__error {
+    width: 100%;
+    left: 0;
+ text-align: left;
+}
+
+.pure-material-textfield-standard {
+    position: relative;
+    display: inline-block;
+    font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
+    font-size: 16px;
+    line-height: 1.5;
+    overflow: hidden;
+}
+
+/* Input, Textarea */
+.pure-material-textfield-standard > input,
+.pure-material-textfield-standard > textarea {
+    display: block;
+    box-sizing: border-box;
+    margin: 0;
+    border: none;
+    border-top: solid 27px transparent;
+    border-bottom: solid 1px rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.6);
+    padding: 0 0 4px;
+    width: 100%;
+    height: inherit;
+    color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.87);
+    background-color: transparent;
+    box-shadow: none; /* Firefox */
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    caret-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+    transition: border-bottom 0.2s, background-color 0.2s;
+}
+
+/* Span */
+.pure-material-textfield-standard > input + span,
+.pure-material-textfield-standard > textarea + span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    box-sizing: border-box;
+    padding: 7px 0 0;
+    color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.6);
+    font-size: 75%;
+    line-height: 18px;
+    pointer-events: none;
+    transition: color 0.2s, font-size 0.2s, line-height 0.2s;
+}
+
+/* Underline */
+.pure-material-textfield-standard > input + span::after,
+.pure-material-textfield-standard > textarea + span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+    transform-origin: bottom center;
+    transform: scaleX(0);
+    transition: transform 0.2s;
+}
+
+/* Hover */
+.pure-material-textfield-standard > input:hover,
+.pure-material-textfield-standard > textarea:hover {
+    border-bottom-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.87);
+}
+
+/* Placeholder-shown */
+.pure-material-textfield-standard > input:not(:focus):placeholder-shown + span,
+.pure-material-textfield-standard > textarea:not(:focus):placeholder-shown + span {
+    font-size: inherit;
+    line-height: 56px;
+}
+
+/* Focus */
+.pure-material-textfield-standard > input:focus,
+.pure-material-textfield-standard > textarea:focus {
+    outline: none;
+}
+
+.pure-material-textfield-standard > input:focus + span,
+.pure-material-textfield-standard > textarea:focus + span {
+    color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+}
+
+.pure-material-textfield-standard > input:focus + span::before,
+.pure-material-textfield-standard > textarea:focus + span::before {
+    opacity: 0.12;
+}
+
+.pure-material-textfield-standard > input:focus + span::after,
+.pure-material-textfield-standard > textarea:focus + span::after {
+    transform: scale(1);
+}
+
+/* Disabled */
+.pure-material-textfield-standard > input:disabled,
+.pure-material-textfield-standard > textarea:disabled {
+    border-bottom-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
+    color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
+}
+
+.pure-material-textfield-standard > input:disabled + span,
+.pure-material-textfield-standard > textarea:disabled + span {
+    color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
+}
+
+/* Faster transition in Safari for less noticable fractional font-size issue */
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) {
+        .pure-material-textfield-standard > input,
+        .pure-material-textfield-standard > input + span,
+        .pure-material-textfield-standard > input + span::after,
+        .pure-material-textfield-standard > textarea,
+        .pure-material-textfield-standard > textarea + span,
+        .pure-material-textfield-standard > textarea + span::after {
+            transition-duration: 0.1s;
+        }
+    }
+}
+
+.btn-primary {
+  background: #00a9e7;
+  color: #fff;
+  border-color: #0096ce;
+}
+.btn-primary:hover {
+  background: #1bc2ff;
+  color: #000;
+  border-color: #00a9e7;
+}
+
+.btn-secondary {
+  background: #09e3fe;
+  color: #000;
+  border-color: #01d3ed;
+}
+.btn-secondary:hover {
+  background: #3ce9fe;
+  color: #000;
+  border-color: #09e3fe;
+}
+
+.btn-success {
+  background: #37ff3b;
+  color: #000;
+  border-color: #1eff22;
+}
+.btn-success:hover {
+  background: #6aff6d;
+  color: #000;
+  border-color: #37ff3b;
+}
+
+.btn-danger {
+  background: #ee3426;
+  color: #000;
+  border-color: #e82112;
+}
+.btn-danger:hover {
+  background: #f26055;
+  color: #000;
+  border-color: #ee3426;
+}
+
+.btn-warning {
+  background: #e4de33;
+  color: #000;
+  border-color: #e0d91e;
+}
+.btn-warning:hover {
+  background: #eae560;
+  color: #000;
+  border-color: #e4de33;
+}
+
+.btn-info {
+  background: #00a9e7;
+  color: #fff;
+  border-color: #0096ce;
+}
+.btn-info:hover {
+  background: #1bc2ff;
+  color: #000;
+  border-color: #00a9e7;
+}
+
+.btn-light {
+  background: #eee;
+  color: #000;
+  border-color: #e1e1e1;
+}
+.btn-light:hover {
+  background: white;
+  color: #000;
+  border-color: #eee;
+}
+
+.btn-dark {
+  background: #444;
+  color: #fff;
+  border-color: #373737;
+}
+.btn-dark:hover {
+  background: #5e5e5e;
+  color: #fff;
+  border-color: #444;
+}
+
+.btn-brand-primary {
+  background: #420dab;
+  color: #fff;
+  border-color: #390b93;
+}
+.btn-brand-primary:hover {
+  background: #5411da;
+  color: #fff;
+  border-color: #420dab;
+}
+
+.btn-brand-secondary {
+  background: #36418c;
+  color: #fff;
+  border-color: #2f387a;
+}
+.btn-brand-secondary:hover {
+  background: #4452b1;
+  color: #fff;
+  border-color: #36418c;
+}
+
+.btn-brand-tertiary {
+  background: #c0d6e4;
+  color: #000;
+  border-color: #aecadc;
+}
+.btn-brand-tertiary:hover {
+  background: #e4edf3;
+  color: #000;
+  border-color: #c0d6e4;
+}

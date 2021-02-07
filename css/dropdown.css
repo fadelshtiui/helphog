@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+
+#contact-us:active, #sign-out:active {
+    outline: none;
+}
+
+#contact-us:focus, #sign-out:focus {
+    outline: none;
+}
+
+#header {
+    height: 0px;
+    background-color: #1976D2;
+    padding-right: 10px;
+    position: relative;
+}
+
+.hidden {
+     display: none;
+}
+
+#nav-bar {
+    float: right;
+    height: 35px;
+    margin-top: -22px;
+}
+/*
+img {
+    height: 17px;
+}
+*/
+
+.menu {
+    padding-top: 10px;
+    float: left;
+    margin-right: 20px;
+}
+
+#notifications {
+    position: relative;
+}
+
+#notification-bullet {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    left: 7px;
+    top: 7px;
+}
+
+.outer {
+    -webkit-border-radius:5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: #8E7BBE;
+    animation-name: pulse_animation;
+    animation-duration: 2;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pulse_animation {
+    from {
+        width: 10px;
+        height: 10px;
+    }
+
+    to {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.inner {
+    -webkit-border-radius:5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 4px;
+    height: 4px;
+    background-color: #FF80AB;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+}
+
+.account-btn {
+    line-height: 35px;
+    display: inline-block;
+    color: black;
+    padding-right: 25px;
+    padding-left: 10px;
+    position: relative;
+    cursor: pointer;
+
+}
+
+.account-btn p {
+     opacity: 0.5;
+     font-weight: bold;
+    color: black;
+    font-family: "Raleway", Arial, sans-serif;
+    margin-top: 13px;
+    margin-bottom: 0;
+    margin-left: 1em;
+    height: 15px;
+}
+
+
+.account-btn p:hover {
+    opacity: 1.0;
+}
+
+.account-img {
+    height: 7px;
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+
+#account-panel {
+    z-index: 1;
+    width: 319px;
+    height: 195px;
+    background-color: #F5F7F8;
+    border-radius: 7px;
+    float: right;
+    position: absolute;
+    right: 17px;
+    top: 50px;
+    -webkit-box-shadow: 0px 8px 31px -2px rgba(25,118,210,0.28);
+    -moz-box-shadow: 0px 8px 31px -2px rgba(25,118,210,0.28);
+    box-shadow: 0px 8px 31px -2px rgba(25,118,210,0.28);
+    display: none;
+    font-family: 'Raleway', sans-serif;
+}
+
+.account-header {
+    background-color: white;
+    height: 120px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+
+}
+
+#profile-details {
+    width: 220px;
+    float: right;
+    height: 100px;
+    margin-left: 20px;
+    margin-top: 35px;
+}
+
+h3 {
+    font-size: 30px;
+    margin-top: 0;
+    padding-top: 15px;
+}
+
+h4 {
+    font-size: 15px;
+}
+
+#profile-buttons {
+    font-size: 12px;
+}
+
+#profile-buttons a:visited {
+     color: black;
+}
+
+.view-profile {
+    padding: 5px 15px;
+    color: black;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-left: 0;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.view-profile:hover{
+    background-color: #1ecd97;
+    -webkit-transition: background-color 0.5s linear;
+    -ms-transition: background-color 0.5s linear;
+    transition: background-color 0.5s linear;
+    -webkit-box-shadow: 0px 8px 31px -2px rgba(25,118,210,0.28);
+    -moz-box-shadow: 0px 8px 31px -2px rgba(25,118,210,0.28);
+    box-shadow: 0px 8px 31px -2px rgba(25,118,210,0.28);
+}
+
+.add-account {
+    display: inline-block;
+    color: black;
+    cursor: pointer;
+    padding: 5px 15px;
+}
+
+.add-account a {
+     color: black;
+}
+
+.add-account a:visited {
+     color: black;
+}
+
+.add-account:hover {
+    background-color: #1ecd97;
+    padding: 5px 15px;
+    border-radius: 10px;
+    -webkit-transition: background-color 0.5s linear;
+    -ms-transition: background-color 0.5s linear;
+    transition: background-color 0.5s linear;
+}
+
+.add-account:not( :hover ) {
+    -webkit-transition: background-color 0.5s linear;
+    -ms-transition: background-color 0.5s linear;
+    transition: background-color 0.5s linear;
+    border-radius: 10px;
+}
+
+.account-menu {
+     height: 120px;
+}
+
+.account-menu-list {
+    list-style-type: none;
+    display: inline;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    display: inline;
+}
+
+.account-menu-list li {
+    cursor: pointer;
+    padding-left: 0;
+    padding-right: 0;
+
+    padding-top: 23.5px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.account-menu-list li:hover {
+    background-color: #1ecd97;
+    -webkit-transition: background-color 0.5s linear;
+    -ms-transition: background-color 0.5s linear;
+    transition: background-color 0.5s linear;
+
+}
+
+.account-menu-list li:not (:hover) {
+    /*background-color: #e4f4fc;*/
+    -webkit-transition: background-color 0.5s linear;
+    -ms-transition: background-color 0.5s linear;
+    transition: background-color 0.5s linear;
+}
+
+span {
+    /*color: #EA356E;*/
+    /*text-transform: uppercase;*/
+    font-weight: 600;
+}
