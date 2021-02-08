@@ -221,7 +221,7 @@ h2 {
 .empty {
   width: 118px;
   height: 19px;
-  background-image: url(https://vintageking.com/skin/frontend/HE/VintageKing/images/all-icons-sprite.png);
+  /* background-image: url(https://vintageking.com/skin/frontend/HE/VintageKing/images/all-icons-sprite.png); */
   background-position: -122px -81px;
   background-size: 500%;
 }

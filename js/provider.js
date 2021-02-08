@@ -487,7 +487,7 @@ let preloaded = false;
 					section1.classList.add("section");
 
 					let image = document.createElement("img");
-					image.src = "images/home.png";
+					image.src = "assets/images/home.png";
 
 					let h1 = document.createElement("h1");
 					h1.textContent = "Address";
@@ -522,7 +522,7 @@ let preloaded = false;
 					section2.classList.add("section");
 
 					let image2 = document.createElement("img");
-					image2.src = "images/cash.png";
+					image2.src = "assets/images/cash.png";
 
 					let salary = document.createElement("h1");
 					salary.textContent = "Salary";
@@ -548,7 +548,7 @@ let preloaded = false;
 					section3.classList.add("section");
 
 					let image3 = document.createElement("img");
-					image3.src = "images/download.png";
+					image3.src = "assets/images/download.png";
 
 					let documents = document.createElement("h1");
 					documents.textContent = "Upload Documents";

@@ -55,7 +55,6 @@ foreach($stmnt->fetchAll() as $row) {
     $entry->service = $service;
     $entry->description = $row["description"];
     $entry->cost = $row["cost"];
-    $entry->img = $row["img"];
     $entry->wage = $row["wage"];
     $entry->remote = $row["remote"];
     

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Planner-Dashboard" transform="translate(-120.000000, -382.000000)">
+            <g id="Dashboard" transform="translate(85.000000, 96.000000)">
+                <g id="Sidebar" transform="translate(34.000000, 105.000000)">
+                    <g id="Notif" transform="translate(2.000000, 182.000000)">
+                        <rect id="Rectangle-37-Copy-3" stroke="#BFC7CD" stroke-linecap="round" stroke-linejoin="round" fill="#E7EEF2" x="0.877801009" y="0" width="8.24439798" height="8.93527579"></rect>
+                        <path d="M0,3.87055159 L5,6 L10,3.87055159 L10,10 L0,10 L0,3.87055159 Z" id="Rectangle-37" stroke="#BFC7CD" stroke-linecap="round" stroke-linejoin="round" fill="#FFFFFF"></path>
+                        <rect id="Rectangle-28" fill="#FFFFFF" x="2" y="1" width="5" height="1" rx="6"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
