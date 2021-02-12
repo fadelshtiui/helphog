@@ -8,7 +8,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         error_log($info);
         if ($info == "jpg" || $info == "png" || $info == "pdf" || $info == "jpeg") {
             $order_number = $_POST["ordernumber"];
-            $target = "../assets/images/receipts/" . $order_number;
+            $target = "../../uploads/receipts/" . $order_number;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target . '.' . $info)) {
                 $sql = "UPDATE orders SET uploaded = ? WHERE order_number = ?";
                 $stmt = $db->prepare($sql);

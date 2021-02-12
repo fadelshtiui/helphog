@@ -98,7 +98,7 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
 function upload_resume() {
     $info = strtolower(pathinfo($_FILES['resume']['name'])["extension"]);
     if ($info == "jpg" || $info == "png" || $info == "pdf" || $info == "docx" || $info == "doc") {
-      	$target = "../assets/documents/". $email;
+      	$target = "../../uploads/resumes/". $email;
         move_uploaded_file($_FILES['resume']['tmp_name'], $target . '.' . $info);
     } else {
         echo "Please upload PNG, JPG, PDF, DOCX files only";
