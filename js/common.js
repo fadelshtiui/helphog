@@ -71,6 +71,12 @@ function updateNav(response) {
 	
 }
 
+/**
+ * returns the DOM element associated with the given id
+ * 
+ * @param {string} id - id of html element
+ * @returns {Object} DOM element associated with the given id
+ */
 function id(id) {
     return document.getElementById(id);
 }
