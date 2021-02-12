@@ -270,7 +270,7 @@
 				imageContainer.classList.add('profile__image')
 				
 				let image = document.createElement('img')
-				image.src = 'https://helphog.com/' + service.service.toLowerCase().replace(' ', '-');
+				image.src = 'https://helphog.com/assets/images' + service.service.replace(' ', '-').toLowerCase();
 				
 				imageContainer.appendChild(image)
 				
