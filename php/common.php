@@ -470,6 +470,14 @@
         $stmt->execute($params);
     }
     
+	/**
+	 * adds the given provider to the given order
+	 * 
+	 * @param {string} email - email of provider
+	 * @param {number} order_number - order number of order to be claimed
+	 * @param {string} accept_key - secret key generated during checkout process
+	 * @return {string} JS script tag that redirects the page to appropriate outcome
+	 */
     function claim_order($email, $order_number, $accept_key) {
         
         $db = establish_database();
