@@ -163,7 +163,7 @@ var v = new Vue({
             	.then(res => res.text())
             	.then(function(response) {
             	    if (response == "jpg" || response == "jpeg" || response == "pdf" || response == "png") {
-            	        window.open("https://helphog.com/assets/images/receipts/" + props.number + "." + response);
+            	        window.open("../tmp/receipts" + props.number + "." + response);
             	    }
             	})
             	.catch(console.log);
