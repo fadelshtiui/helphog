@@ -41,7 +41,7 @@ foreach ($result as $row) {
         $schedule = $utc->format('F j, Y, g:i a');
     
         $needsToBeCancelled = false;
-        if (minutes_until($schedule) < 30) {
+        if (minutes_until($row["schedule"]) < 30) {
             if ($client_email == "") {
                 $needsToBeCancelled = true;
             } else if ($people > 1) {
