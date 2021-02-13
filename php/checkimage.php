@@ -17,7 +17,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         if ($uploaded == 'n') {
             echo "false";
         } else if ($uploaded == 'pdf' || $uploaded == 'jpg' || $uploaded == 'jpeg' || $uploaded == 'png') {
-            $destination = '../tmp/' . $order . '.' . $uploaded;
+            $destination = '../tmp/receipts' . $order . '.' . $uploaded;
             if (!is_file($destination)) {
                 $source = '../../uploads/receipts/' . $order . '.' . $uploaded;
                 copy($source, $destination);
