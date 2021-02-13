@@ -16,12 +16,6 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
     if (check_session($session)) {
         
         $db = establish_database();
-    
-        if (isset($_FILES['resume'])) {
-            
-            upload_resume();
-        
-        }
         
         $email = "";
         $zip = "";
@@ -32,8 +26,11 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
             $zip = $row['zip'];
         }
         
-        error_log('email ' . $email);
-        error_log('zip' . $zip);
+        if (isset($_FILES['resume'])) {
+            
+            upload_resume($email);
+        
+        }
         
         $_SESSION['email'] = $email;
         $_SESSION['radius'] = $radius;
@@ -77,7 +74,7 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
         
         if (isset($_FILES['resume'])) {
         
-            upload_resume();
+            upload_resume($email);
             
         }
         
@@ -95,10 +92,10 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
     echo 'missing parameters';
 }
 
-function upload_resume() {
+function upload_resume($email) {
     $info = strtolower(pathinfo($_FILES['resume']['name'])["extension"]);
     if ($info == "jpg" || $info == "png" || $info == "pdf" || $info == "docx" || $info == "doc") {
-      	$target = "../../uploads/resumes/". $email;
+      	$target = "../../uploads/resumes/" . $email;
         move_uploaded_file($_FILES['resume']['tmp_name'], $target . '.' . $info);
     } else {
         echo "Please upload PNG, JPG, PDF, DOCX files only";
