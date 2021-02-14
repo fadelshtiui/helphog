@@ -12,10 +12,10 @@ $(window).on('load', function () {
     $('h2').delay( 500 ).fadeIn(900);
     $('#app').css('display', 'none');
     $('#app').delay( 600 ).fadeIn(900);
-    
+
     let tz = jstz.determine();
     let timezone = tz.name();
-    
+
     data = new FormData();
     data.append("session", getSession());
     data.append("tz", timezone);
@@ -26,7 +26,7 @@ $(window).on('load', function () {
     	.then(updateOrders)
     	.catch(console.log);
 });
- 
+
 
 function updateOrders(response) {
 	v.orders = response.orders;
@@ -34,7 +34,7 @@ function updateOrders(response) {
 
 var v = new Vue({
 	el: '#app',
-	
+
 	data() {
 		return {
 			expand: false,
@@ -95,13 +95,13 @@ var v = new Vue({
 			showModal: false,
 			showCancel: false,
 			selectedItem: null,
-			
+
 		};
 	},
-	
+
 	methods: {
 	    markCompleted(itemSelected) {
-	       
+
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
 	       data.append("rating", this.rating);
@@ -110,15 +110,15 @@ var v = new Vue({
     	   fetch(url, { method: "POST", body: data })
 	       itemSelected.status = "sa";
 	       this.showModal = false;
-	       
+
 		},
 		setRating(rating) {
 			this.rating = rating
 		},
-	    
+
 	    async markIncompleted(itemSelected) {
-		   
-			id('loading').classList.add('hidden')
+
+			id('loading').classList.remove('hidden')
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
 	       data.append("session", getSession())
@@ -126,17 +126,17 @@ var v = new Vue({
     	   let response = await fetch(url, { method: "POST", body: data })
     	   await checkStatus(response)
     	   response = await response.json()
-    	   id('loading').classList.remove('hidden')
+    	   id('loading').classList.add('hidden')
     	   this.showModal = false;
     	   if (response.result == 'successful') {
 	           itemSelected.status = "di";
 	       } else {
 	           alert('Sorry, orders may only be disputed within 24 hours of completion.')
 	       }
-       
-	       
+
+
 	    },
-	    
+
 	    viewImage(props) {
 
 	        let data = new FormData();
@@ -155,15 +155,15 @@ var v = new Vue({
 	    },
 	    status(review) {
             this.showModal = true;
-	     
+
 	    },
-	    
+
 	    status2(review) {
             this.showCancel = true;
-	     
+
 	    },
 	    async cancel(itemSelected) {
-            
+
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
 	       data.append('session', getSession());
@@ -171,17 +171,17 @@ var v = new Vue({
     	   let response = await fetch(url, { method: "POST", body: data })
     	   await checkStatus(response)
     	   response = await response.text();
-    	   
+
     	   window.location = '/' + response
-    	   
+
     	   if (response == 'ordererror') {
     	       alert('You cannot cancel an order that is already in progress.');
     	   } else {
     	       this.showCancel = false;
     	       itemSelected.review = "Order Canceled";
     	   }
-	       
-    	  
+
+
 	    },
 	    undo() {
 	        this.showModal = false;
@@ -189,7 +189,7 @@ var v = new Vue({
 	    undo2() {
 	        this.showCancel = false;
 	    }
-	    
+
 	}
 });
 
