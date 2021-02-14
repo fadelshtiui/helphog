@@ -185,7 +185,7 @@ var v = new Vue({
 	        this.showModal = false;
 	    },
 	    undo2() {
-	        this.showCancell = false;
+	        this.showCancel = false;
 	    }
 	    
 	}
