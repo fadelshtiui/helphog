@@ -31,26 +31,6 @@ function updateOrders(response) {
 	v.orders = response.orders;
 }
 
-Vue.component('loading-modal', {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false } },
-
-
-  template:
-  `<transition name="fade">
-		<div class="pax-loading-modal" v-if="visible">
-			<div class="pax-loading-modal__spinner"></div>	
-	 	</div>
-	</transition>` });
-
-
-new Vue({
-  el: '#root',
-  data: {
-    isLoading: true } });
-
 var v = new Vue({
 	el: '#app',
 	
@@ -119,18 +99,21 @@ var v = new Vue({
 	},
 	
 	methods: {
-	    markCompleted(itemSelected, rating) {
+	    markCompleted(itemSelected) {
 	       
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
-	       data.append("rating", rating);
+	       data.append("rating", this.rating);
 	       data.append('session', getSession())
 	       let url = "php/rating.php";
     	   fetch(url, { method: "POST", body: data })
 	       itemSelected.status = "sa";
 	       this.showModal = false;
 	       
-	    },
+		},
+		setRating(rating) {
+			this.rating = rating
+		},
 	    
 	    async markIncompleted(itemSelected) {
 	       

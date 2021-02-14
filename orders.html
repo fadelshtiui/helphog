@@ -91,15 +91,14 @@
 											<p style="font-size: 16px;">If your order has been successfully completed please review {{ selectedItem.provider }}'s performance as your {{ selectedItem.name }} provider and mark the order completed. If you have any questions/concerns please contact us.</p>
 											
                                             <div class="rating rating2">
-                                            	<a @click="markCompleted(selectedItem, 1)" href="#5" title="Give 5 stars">★</a>
-                                            	<a @click="markCompleted(selectedItem, 2)" href="#4" title="Give 4 stars">★</a>
-                                            	<a @click="markCompleted(selectedItem, 3)" href="#3" title="Give 3 stars">★</a>
-                                            	<a @click="markCompleted(selectedItem, 4)" href="#2" title="Give 2 stars">★</a>
-                                            	<a @click="markCompleted(selectedItem, 5)" href="#1" title="Give 1 star">★</a>
+                                            	<a @click="setRating(5)" href="#5" title="Give 5 stars">★</a>
+                                            	<a @click="setRating(4)" href="#4" title="Give 4 stars">★</a>
+                                            	<a @click="setRating(3)" href="#3" title="Give 3 stars">★</a>
+                                            	<a @click="setRating(2)" href="#2" title="Give 2 stars">★</a>
+                                            	<a @click="setRating(1)" href="#1" title="Give 1 star">★</a>
                                             </div>
 											
 											<br><br>
-											<!--<v-btn @click="showModal = false" class="Submit">Mark Completed</v-btn>-->
 											<v-btn @click="markCompleted(selectedItem)" class="Submit" style="color:#1ecd27;">Mark Completed</v-btn>
 											<v-btn @click="markIncompleted(selectedItem)" class="Submit" style="color:red;">Dispute Order</v-btn>
 											<div id="root" class="container">
