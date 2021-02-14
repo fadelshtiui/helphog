@@ -16,31 +16,31 @@ let preloaded = false;
 	});
 
 	$(document).ready(function () {
-	    
+
 	    id('locationField').classList.add('hidden')
-	    
+
 	    id('edit').addEventListener('click', toggleAddressDisplay)
-	    
+
 	    var checkbox1 = document.querySelector("input[name=email-notification]");
 
         checkbox1.addEventListener( 'change', function() {
             checkbox();
         });
-        
+
         var checkbox2 = document.querySelector("input[name=sms-notification]");
-        
+
         checkbox2.addEventListener( 'change', function() {
             checkbox();
         });
-        
+
         id('clear-availability').addEventListener('click', clearAvailability)
-        
+
         id('addressDisplay').addEventListener('click', toggleAddressDisplay)
-        
+
         id('sliderUpdate').addEventListener("mouseup", updateDistance);
-        
+
         var timezoneSelector = document.querySelector("#timezone")
-        
+
         timezoneSelector.addEventListener("change", updateTimezone);
 
 		id("return").onclick = function () {
@@ -52,7 +52,7 @@ let preloaded = false;
 		id("logo").onclick = function () {
 			window.location.href = "/";
 		};
-		
+
 		let tz = jstz.determine();
         let timezone = tz.name();
 
@@ -74,11 +74,11 @@ let preloaded = false;
 				id("submit").click();
 			}
 		});
-		
+
 		const inputElement = id('work-phone');
 
 	});
-	
+
 	function clearAvailability() {
 	    let rows = document.querySelectorAll(".time-slot")
 	    rows.forEach(row => {
@@ -87,7 +87,7 @@ let preloaded = false;
 	    document.querySelector('.import').style.color = "red";
 	    submit();
 	}
-	
+
 	function toggleAddressDisplay() {
 	   // if (id('current-city').innerText != "Please enter your address here"){
 	   //     id('current-city').style.color = 'black'
@@ -96,7 +96,7 @@ let preloaded = false;
 	    id('edit').classList.add('hidden')
 	    id('locationField').classList.remove('hidden')
 	    id('autocomplete').classList.remove('hidden')
-	    window.addEventListener('click', function(e){   
+	    window.addEventListener('click', function(e){
           if (!id('autocomplete').contains(e.target) && !id('addressDisplay').contains(e.target) && !id('edit').contains(e.target) && id('current-city').innerText != "Please enter your address here"){
             id('addressDisplay').classList.remove('hidden')
 	        id('locationField').classList.add('hidden')
@@ -108,7 +108,7 @@ let preloaded = false;
           }
         });
 	}
-	
+
 	function enterstripe(){
 	    let session = "";
 	    let cookies = document.cookie.split(";");
@@ -131,7 +131,7 @@ let preloaded = false;
 			.then(res=>res.text())
 			.then(redirect);
 	}
-	
+
 	function redirect(response){
 	    window.location.href = response;
 	}
@@ -146,17 +146,17 @@ let preloaded = false;
 				session = key[1];
 		    }
 		}
-		
-	    
+
+
 		let data = new FormData();
 		let ordernumber = this.dataset.ordernumber;
 		let upload = this.parentElement.previousElementSibling.firstElementChild.files[0];
-		
+
 		if (upload){
     		this.innerText = "RE-UPLOAD";
     		this.parentElement.parentElement.previousElementSibling.innerText = "Your receipt is currently being uploaded. Please do not leave the page.";
     		this.parentElement.parentElement.previousElementSibling.classList.add('upload-loading')
-    		
+
     		data.append("ordernumber", ordernumber);
     		data.append('image', upload, upload.name);
     		data.append('session', session);
@@ -167,8 +167,8 @@ let preloaded = false;
     		response = await response.text();
     		this.parentElement.parentElement.previousElementSibling.classList.remove('upload-loading')
     		this.parentElement.parentElement.previousElementSibling.classList.add('done-loading')
-    		uploading = false;	
-    	    
+    		uploading = false;
+
     	    let messageBox = document.querySelector(".attach-message");
     	    if (response.startsWith("amount")) {
     	        this.parentElement.parentElement.previousElementSibling.innerText = "We have processed your extra expenditures for a total of $" + response.substring(6)
@@ -178,7 +178,7 @@ let preloaded = false;
 		}else{
 		    this.parentElement.previousElementSibling.firstElementChild.style.color ='red';
 		}
-		
+
 	}
 
 	function checkSignedIn(response) {
@@ -205,9 +205,9 @@ let preloaded = false;
 					opacity: 0,
 					x: -15
 				}, 0.4);
-				
+
 			displayResults(response);
-			
+
 		} else {
 			document.querySelector(".container").classList.remove("hidden");
 		}
@@ -218,7 +218,7 @@ let preloaded = false;
 	        alert('Please enter your full address and select it from the dropdown below');
 	        return;
 	    }
-	    
+
 		let data = new FormData();
 // 		let phone = id("work-phone").placeholder;
 // 		if (id("work-phone").value) {
@@ -228,7 +228,7 @@ let preloaded = false;
 // 		if (id("work-email").value) {
 // 			workemail = id("work-email").value;
 // 		}
-		
+
 		let distance = parseInt(id("distance").value);
 // 		data.append("phone", phone.replace(/\D/g,''));
 // 		data.append("work_email", workemail);
@@ -245,7 +245,7 @@ let preloaded = false;
 			.then(handleResponseContact)
 			.catch(console.log);
 	}
-	
+
 	async function handleResponseContact(response){
 	    if (await response.text() !=''){
 	        alert(await response.text());
@@ -258,10 +258,10 @@ let preloaded = false;
 		let password = document.getElementById("pass").value;
 		data.append("email", email);
 		data.append("password", password);
-		
+
 		let tz = jstz.determine();
         let timezone = tz.name();
-        
+
 		data.append('tz', timezone)
 		let url = "php/provider.php";
 		fetch(url, { method: "POST", body: data })
@@ -293,9 +293,9 @@ let preloaded = false;
 			}, 5000);
 
 		} else {
-		    
+
 			document.cookie = "session=" + response.session + ";";
-			
+
 			setTimeout(function () {
 				$(".submit").addClass("hide-loading");
 				$(".done").addClass("finish");
@@ -324,9 +324,9 @@ let preloaded = false;
 						x: -15
 					}, 0.4);
 			}, 2500);
-			
+
 			displayResults(response);
-			
+
 		}
 	}
 
@@ -338,7 +338,7 @@ let preloaded = false;
                 break;
             }
         }
-	    
+
 	    let size = 24;
 	    if (!response.availability.includes("1")){
 	        var alls = document.getElementsByClassName('import');
@@ -349,18 +349,18 @@ let preloaded = false;
 
         const numChunks = response.availability.length / size;
         const chunks = new Array(numChunks)
-        
+
         for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
             chunks[i] = response.availability.substr(o, size)
         }
-        
+
         for (let i = 0; i < 7; i++) {
             let rows = document.querySelectorAll(".time-slot")
             for (let j = 0; j < rows.length; j++) {
                 let entry = rows[j];
                 let time = parseInt(entry.getAttribute('data-time'))
                 let day = entry.getAttribute('data-day')
-                
+
                 if (i == day) {
                     if (chunks[i].charAt(time) == '1') {
                         entry.setAttribute('data-selected', 'selected')
@@ -368,7 +368,7 @@ let preloaded = false;
                 }
             }
         }
-    
+
         if (response.alerts == "both"){
 	        document.getElementById("sms-notification").checked = true;
 	        document.getElementById("email-notification").checked = true;
@@ -382,7 +382,7 @@ let preloaded = false;
               all[i].style.color = 'red';
             }
 	    }
-	    
+
 	    let percentage = response.radius * 3 - 12 + 'px'
 	    document.querySelector('.rangeslider-fill-lower').style.width = percentage;
 	    document.querySelector('.rangeslider-thumb').style.left = percentage;
@@ -392,7 +392,7 @@ let preloaded = false;
 
 // 		id("work-phone").value = response.workphone;
 // 		id("work-email").value = response.workemail;
-		
+
 		if (response.workaddress == '' || response.workcity == '') {
 		    id('city-state-comma').classList.add('hidden')
 		    id('current-city').innerText = 'Please enter your address here'
@@ -406,15 +406,15 @@ let preloaded = false;
             id("current-state").innerText = response.workstate;
             console.log("black in displayResults")
 		}
-    		
+
         if (!preloaded){
             preloaded = true;
 		let orders = response.orders;
 		let counter = 0;
 		if (orders && orders.length > 0) {
 			for (let i = 0; i < orders.length; i++) {
-			    
-			    
+
+
 			    let order = orders[i];
 
 				if (order.status == 'mc' || order.status == 're' || order.status == 'ac' || order.status == 'pc' || order.status == 'cc') {
@@ -428,7 +428,7 @@ let preloaded = false;
 					block.appendChild(element);
 					let service = document.createElement("h2");
 					service.innerText = "#" + order.order_number + ": " + order.service;
-					
+
 					let customer = document.createElement("h2");
 					customer.innerText = order.customer_email;
 					let span = document.createElement("span");
@@ -458,9 +458,9 @@ let preloaded = false;
 					} else {
 					    block.dataset.revenue = order.revenue;
 					}
-					
+
 					block.dataset.wage = order.wage;
-					
+
 					id("my_trip").appendChild(block);
 					if (counter == 1) {
 						block.click();
@@ -473,7 +473,7 @@ let preloaded = false;
 					let title = document.createElement("div");
 					title.classList.add("title");
 					title.textContent = "#" + order.order_number + ": " + order.service;
-					
+
 					if (order.status == 'di') {
 					    title.style.color = 'red';
 					    title.textContent = title.textContent + " (Disputed)"
@@ -496,12 +496,12 @@ let preloaded = false;
 					h51.style.color = 'black';
 					h51.style.fontWeight = "400";
 					h51.textContent = order.customer_email;
-					
+
 					let h52 = document.createElement("h5");
 					h52.style.color = 'black';
 					h52.style.fontWeight = "400";
 					h52.textContent = order.customer_phone;
-					
+
 					let h53 = document.createElement("h5");
 					h53.style.color = 'black';
 					h53.style.fontWeight = "400";
@@ -544,6 +544,18 @@ let preloaded = false;
 					section2.appendChild(price);
 					section2.appendChild(wageType);
 
+					if (order.secondary_providers_string !== ''){
+					    let coworkers = document.createElement("h1");
+    					coworkers.textContent = "Co-workers";
+    					section2.appendChild(coworkers);
+
+    					for (let i = 0; i < order.secondary_providers_string.length; i++) {
+        					let coworkersContact = document.createElement("h5");
+        					coworkersContact.textContent = order.secondary_providers_string[i];
+        					section2.appendChild(coworkersContact);
+    					}
+					}
+
 					let section3 = document.createElement("div");
 					section3.classList.add("section");
 
@@ -557,9 +569,9 @@ let preloaded = false;
 					attach.classList.add("attach-message")
 
                     attach.textContent = "Attach receipt(s) of any additional expenditures spent on the task:";
-                    
+
                     if (order.expenditure > 0) { // have already uploaded***
-                        
+
                     }
 
 					let form = document.createElement("div");
@@ -619,7 +631,7 @@ let preloaded = false;
                         form.appendChild(choosefilediv);
 					    form.appendChild(expenditurediv);
                     }
-					
+
 
 					section3.appendChild(image3);
 					section3.appendChild(documents);
@@ -634,8 +646,8 @@ let preloaded = false;
 					    notifyMessage.innerText = "See the primary provider of your group to upload task expenses/receipts.";
 					    section3.appendChild(notifyMessage);
 					}
-					
-					
+
+
 
 					let message = document.createElement("div");
 					message.classList.add("message");
@@ -698,7 +710,7 @@ let preloaded = false;
                         header3.innerText = "Only the primary provider has the ability to alter the order status.";
                         action.appendChild(header3);
                     }
-					
+
 
 					container.appendChild(title);
 					container.appendChild(date);
@@ -720,7 +732,7 @@ let preloaded = false;
 
 	function markCompleted() {
 		if (confirm("Please verify that all necessary receipts are attached of any additional expenditures.")) {
-		    
+
 			let data = new FormData();
 			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
@@ -736,9 +748,9 @@ let preloaded = false;
 	}
 
 	function refund() {
-	    
+
 		if (confirm("Are you sure that you would like to refund the customer?")) {
-    	
+
 			let data = new FormData();
 			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
@@ -754,7 +766,7 @@ let preloaded = false;
 	}
 
 	function cancel() {
-	    
+
 		if (this.innerText == "CANCEL") {
 			if (confirm("Are you sure that you would like to cancel the task? Please only cancel under extenuating circumstances.")) {
 				let data = new FormData();
@@ -775,7 +787,7 @@ let preloaded = false;
 			if (type == "RESUME") {
 				url = "php/resume.php"
 			}
-			
+
 			let data = new FormData();
 			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
@@ -796,15 +808,15 @@ let preloaded = false;
 	}
 
 	function toggle() {
-    	
+
     	let data = new FormData();
     	let ordernumber = this.dataset.ordernumber;
 		data.append("ordernumber", ordernumber);
 		data.append("session", getSession())
-    	
+
 		if (this.innerText == "START") {
 			if (confirm("Are you sure you would like to start?")) {
-			    
+
 				this.classList.add("started");
 				this.innerText = "STOP";
 				this.nextElementSibling.innerText = "PAUSE";
@@ -812,7 +824,7 @@ let preloaded = false;
 			}
 		} else {
 			if (confirm("Are you sure you would like to stop?")) {
-			    
+
 				this.classList.remove("started");
 				this.innerText = "MARK COMPLETED";
 				this.removeEventListener("click", toggle);
@@ -826,7 +838,7 @@ let preloaded = false;
 
 			}
 		}
-		
+
 		let url = "php/startstop.php";
 		fetch(url, { method: "POST", body: data })
 		.then(checkStatus)
@@ -844,7 +856,7 @@ let preloaded = false;
 	}
 
 	function update() {
-		
+
 		id("price_display").innerText = "$" + this.dataset.price;
 		id("start_display").innerText = this.dataset.start;
 		id("end_display").innerText = this.dataset.end;
@@ -853,20 +865,20 @@ let preloaded = false;
 		} else {
 		    id("revenue_display").innerText = "$" + this.dataset.revenue;
 		}
-		
-		
+
+
 		let revenue = '' + this.dataset.revenue
-		
+
 		if (revenue.indexOf(".") != -1) {
             if (revenue.substring(revenue.indexOf(".") + 1).length < 2) {
                 id("revenue_display").innerText += '0';
             }
         }
-		
+
 		if (this.dataset.wage == "hour") {
 			id("price_display").innerText += "/hr";
-		}	
-		
+		}
+
 		id("customer_email_display").innerText = this.dataset.customer_email;
 		id("service_display").innerText = this.dataset.service;
 		id("address_display").innerText = this.dataset.address;
@@ -876,15 +888,15 @@ let preloaded = false;
 		}
 		this.firstElementChild.classList.add("dashboard-list__item--active");
 	}
-	
-	
+
+
 	function checkbox(){
-    		
+
 	    let alerts;;
-	    
+
 	    var x = $("#email-notification").is(":checked");
 	    var y = $("#sms-notification").is(":checked");
-	    
+
 	    if (x && y) {
 	        alerts = "both";
 	    } else if (x === true && y === false) {
@@ -895,7 +907,7 @@ let preloaded = false;
 	        alerts = "none"
 	        clearAvailability();
 	    }
-	    
+
 	    if (alerts == "none") {
 	        var all = document.getElementsByClassName('important');
                 for (var i = 0; i < all.length; i++) {
@@ -907,7 +919,7 @@ let preloaded = false;
                 all[i].style.color = '#5f6876';
             }
 	    }
-	    
+
 	    let data = new FormData();
 	    data.append("session", getSession());
 		data.append("alerts", alerts);
@@ -918,7 +930,7 @@ let preloaded = false;
 			.catch(console.log);
 		;
 	}
-	
+
 	function updateTimezone(){
 
 	    if (id("timezone").value) {
@@ -930,9 +942,9 @@ let preloaded = false;
 			fetch(url, { method: "POST", body: data })
 		}
 	}
-	
+
 	function reload(){
-	    
+
 	    let data = new FormData();
 	    let tz = jstz.determine();
         let timezone = tz.name();

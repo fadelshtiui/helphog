@@ -9,15 +9,15 @@ $validated = false;
 $params = array();
 
 if (isset($_POST['tz'])) {
-    
+
     $tz = trim($_POST['tz']);
-    
+
     if (isset($_POST["email"]) && isset($_POST["password"])) {
-        
+
         $email_error = "";
         $password_error = "";
-        
-        
+
+
         $email = trim($_POST["email"]);
         $found = false;
         $result = $db->query("SELECT email FROM login WHERE type='Business';");
@@ -26,15 +26,15 @@ if (isset($_POST['tz'])) {
                 $found = true;
             }
         }
-        
+
         if ($email == "") {
             $email_error = "empty";
         } else if (!$found) {
             $email_error = "true";
         } else {
-            
+
             $password = trim($_POST["password"]);
-            
+
             $found = false;
             $stmnt = $db->prepare("SELECT password FROM login WHERE email = ?;");
             $stmnt->execute(array($email));
@@ -43,7 +43,7 @@ if (isset($_POST['tz'])) {
                     $found = true;
                 }
             }
-            
+
             if ($password == "") {
                 $password_error = "empty";
             } else if (!$found) {
@@ -54,44 +54,44 @@ if (isset($_POST['tz'])) {
                 $stmt = $db->prepare($sql);
                 $params = array($session, $_POST["email"]);
                 $stmt->execute($params);
-                
+
                 $account_sql = "SELECT * FROM login WHERE email = ?;";
                 $params = array($email);
                 $validated = true;
             }
         }
-        
+
         $response->emailerror = $email_error;
         $response->passworderror = $password_error;
     }
-    
+
     if (isset($_POST['session'])) {
         $session = trim($_POST["session"]);
         $session_error = "";
         if (check_session($session)) {
-            
+
             $account_sql = "SELECT * FROM login WHERE session = ?;";
             $validated = true;
             $params = array($session);
-    
+
         } else {
             $session_error = "true";
         }
-        
+
         $response->sessionerror = $session_error;
     }
-    
+
 }
-            
+
 if ($validated) {
-    
+
     $orders_array = array();
     $email = "";
-    
+
     $stmnt = $db->prepare($account_sql);
     $stmnt->execute($params);
     foreach($stmnt->fetchAll() as $row) {
-        
+
         $response->firstname = $row["firstname"];
         $response->lastname = $row["lastname"];
         $response->type = $row["type"];
@@ -111,7 +111,8 @@ if ($validated) {
         $response->workphone = $row["work_phone"];
         $response->workemail = $row["work_email"];
         $response->alerts = $row["alerts"];
-        
+        $response->client_email = $row["client_email"];
+
         $utc_time_zone = new DateTimeZone('UTC');
         $local_time_zone = new DateTimeZone($tz);
         $utc = new DateTime("now", $utc_time_zone);
@@ -119,28 +120,56 @@ if ($validated) {
         $offset = $local_time_zone->getOffset($utc) / 3600;
         $offset = $offset * -1;
         $response->availability = substr($row['availability'], $offset) . substr($row['availability'], 0, $offset);
-        
+
         $time = new DateTimeZone($row['timezone']);
         $response->offset = $time->getOffset($utc) / 3600;
-        
+
         $response->session = $session;
 
         $email = $row["email"];
     }
-    
+
     $stmnt = $db->prepare("SELECT * FROM orders WHERE client_email = ? OR secondary_providers LIKE ?;");
-    
+
     $stmnt->execute(array($email, '%' . $email . '%'));
     foreach($stmnt->fetchAll() as $row) {
-        
+
         $entry = new \stdClass();
-        
+
         if ($email == $row['client_email']) {
             $entry->role = "primary";
         } else {
             $entry->role = "secondary";
         }
-        
+
+        $entry->secondary_providers_string = array();
+
+        $providers = array();
+        $secondary_providers_string = array();
+        $initialproviders = explode("," , $row["secondary_providers"]);
+
+        if ($row["people"] > 1 && $row["secondary_providers"] != ''){
+
+            for ($j = 0; $j < sizeof($initialproviders); $j++){
+                if ($initialproviders[$j] != $email){
+                    array_push($providers, $initialproviders[$j]);
+                }
+            }
+            if ($row["client_email"] != $email){
+                    array_push($providers, $row["client_email"]);
+            }
+            for ($i = 0; $i < sizeof($providers); $i++){
+                $stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+                $stmnt->execute(array($providers[$i]));
+                foreach($stmnt->fetchAll() as $row2) {
+                    $string = $row2["firstname"] . ": " . preg_replace("/^1?(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row2["phone"]);
+                    array_push($secondary_providers_string, $string);
+                }
+            }
+
+        $entry ->secondary_providers_string = $secondary_providers_string;
+        }
+
         $entry->order_number = $row["order_number"];
         $entry->customer_email = $row["customer_email"];
         $entry->message = $row["message"];
@@ -155,29 +184,29 @@ if ($validated) {
         $entry->customer_phone = $row["customer_phone"];
         $entry->satisfied = $row["satisfied"];
         $entry->rating = $row["rating"];
-        
+
         $local_start = new DateTime(date('Y-m-d H:i:s', strtotime($row["start"])), new DateTimeZone('UTC'));
         $local_start->setTimezone(new DateTimeZone($tz));
         $entry->start = $local_start->format("g:i a");
-        
+
         $local_end = new DateTime(date('Y-m-d H:i:s', strtotime($row["end"])), new DateTimeZone('UTC'));
         $local_end->setTimezone(new DateTimeZone($tz));
         $entry->end = $local_end->format("g:i a");
-        
+
         $entry->uploaded = $row["uploaded"];
         $entry->expenditure = $row["expenditure"];
         $entry->currently_paused = $row["currently_paused"];
         $entry->status = get_order_status($row["order_number"]);
-        
+
         $payment_info = payment($row["order_number"]);
-        
+
         $entry->revenue = $payment_info->revenue;
-        
+
         array_push($orders_array, $entry);
     }
-    
+
     $response->orders = $orders_array;
-    
+
 }
 
 header('Content-type: application/json');
