@@ -12,6 +12,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         
         if (!start_stop_order($order)) {
             $response->error = 'This order has not been fully claimed. Secondary providers must first claim this order.';
+        } else {
+            $response->error = "";
         }
         
     }

@@ -45,7 +45,7 @@ foreach($stmnt->fetchAll() as $row) {
         
         $sql = "UPDATE orders SET reminded = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
-        $params = array('y', $order_number); // change this
+        $params = array('y', $order_number);
         $stmt->execute($params);
     }
 }
