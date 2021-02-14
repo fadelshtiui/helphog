@@ -1,4 +1,5 @@
 $(window).on('load', function () {
+	id('loading').classList.add('hidden')
 	$('#loading-animation').css('display', 'none');
     $('#loading-animation').fadeIn(900);
     $('a').css('display', 'none');
@@ -116,7 +117,8 @@ var v = new Vue({
 		},
 	    
 	    async markIncompleted(itemSelected) {
-	       
+		   
+			id('loading').classList.add('hidden')
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
 	       data.append("session", getSession())
@@ -124,7 +126,7 @@ var v = new Vue({
     	   let response = await fetch(url, { method: "POST", body: data })
     	   await checkStatus(response)
     	   response = await response.json()
-    	   
+    	   id('loading').classList.remove('hidden')
     	   this.showModal = false;
     	   if (response.result == 'successful') {
 	           itemSelected.status = "di";
