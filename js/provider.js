@@ -551,6 +551,8 @@ let preloaded = false;
 
     					for (let i = 0; i < order.secondary_providers_string.length; i++) {
         					let coworkersContact = document.createElement("h5");
+									coworkersContact.style.color = 'black';
+        					coworkersContact.style.fontWeight = "400";
         					coworkersContact.textContent = order.secondary_providers_string[i];
         					section2.appendChild(coworkersContact);
     					}
@@ -681,7 +683,7 @@ let preloaded = false;
 					button2.innerText = "CANCEL";
 
 					button2.dataset.ordernumber = order.order_number;
-					
+
 					if (order.currently_paused == 'y') {
 						button2.innerText = "RESUME";
 					} else if (order.status == "st") {
@@ -715,7 +717,7 @@ let preloaded = false;
                             header3.innerText = "Only the primary provider has the ability to alter the order status.";
                             action.appendChild(header3);
                         }
-                        
+
                     }
 
 
