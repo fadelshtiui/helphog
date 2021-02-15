@@ -243,9 +243,9 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
         foreach ($available_providers as $provider) {
             
-            send_new_task_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION["address"], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service'], $SESSION['message']);
+            send_new_task_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION["address"], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service'], $_SESSION['message']);
             
-            send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $_SESSION["message"], $duration, $accept_key, $provider->tz, $people, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION['address'], $SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service']);
+            send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $_SESSION["message"], $duration, $accept_key, $provider->tz, $people, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION['address'], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service']);
         }
         
         $response->ordernumber = $order_number;
