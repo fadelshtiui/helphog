@@ -681,7 +681,7 @@ let preloaded = false;
 					button2.innerText = "CANCEL";
 
 					button2.dataset.ordernumber = order.order_number;
-
+					
 					if (order.currently_paused == 'y') {
 						button2.innerText = "RESUME";
 					} else if (order.status == "st") {
@@ -701,14 +701,21 @@ let preloaded = false;
 					button2.style.marginTop = "14px";
 
                     if (order.role == "primary") {
+                        button2.dataset.role = 'primary';
                         action.appendChild(button);
 					    action.appendChild(button2);
                     } else {
-                        let header3 = document.createElement("h3");
-                        header3.style.fontSize = "20px";
-                        header3.style.padding = "15px";
-                        header3.innerText = "Only the primary provider has the ability to alter the order status.";
-                        action.appendChild(header3);
+                        if (button2.innerText == 'CANCEL') {
+                            button2.dataset.role = 'secondary';
+                            action.appendChild(button2);
+                        } else {
+                            let header3 = document.createElement("h3");
+                            header3.style.fontSize = "20px";
+                            header3.style.padding = "15px";
+                            header3.innerText = "Only the primary provider has the ability to alter the order status.";
+                            action.appendChild(header3);
+                        }
+                        
                     }
 
 
@@ -771,14 +778,17 @@ let preloaded = false;
 			if (confirm("Are you sure that you would like to cancel the task? Please only cancel under extenuating circumstances.")) {
 				let data = new FormData();
 				let ordernumber = this.dataset.ordernumber;
+				let role = this.dataset.role
 				let tz = jstz.determine();
                 let timezone = tz.name();
 				data.append("ordernumber", ordernumber);
 				data.append("session", getSession());
 				data.append("tzoffset", timezone);
+				data.append('role', role)
 				let url = "php/providercancel.php";
 				fetch(url, { method: "POST", body: data })
 					.then(checkStatus)
+					.then(res => res.text())
 					.then(function (response) {
 						location.reload();
 					})

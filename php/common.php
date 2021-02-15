@@ -276,17 +276,33 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $db = establish_database();
         
         $client_email = "";
-        $stmnt = $db->prepare("SELECT client_email FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT client_email, secondary_providers FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order)); 
         foreach($stmnt->fetchAll() as $row) {
             $client_email = $row['client_email'];
+            $secondary_providers = $row['secondary_providers'];
+            
+            $all_providers = array();
+            if ($client_email != "") {
+                array_push($all_providers, $client_email);
+            }
+            
+            $secondary_providers_array = explode(',', $secondary_providers);
+            foreach($secondary_providers_array as $secondary_provider) {
+                if ($secondary_provider != "") {
+                    array_push($all_providers, $secondary_provider);
+                }
+            }
+            
         }
         
-        $stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
-        $stmnt->execute(array($client_email)); 
-        foreach($stmnt->fetchAll() as $row) {
-            if (hash_equals($row['session'], $session)) {
-                return true;
+        foreach ($all_providers as $provider) {
+            $stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
+            $stmnt->execute(array($provider)); 
+            foreach($stmnt->fetchAll() as $row) {
+                if (hash_equals($row['session'], $session)) {
+                    return true;
+                }
             }
         }
         

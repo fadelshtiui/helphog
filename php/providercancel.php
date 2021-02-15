@@ -11,10 +11,11 @@ $stripe = new \Stripe\StripeClient(
   'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
 );
 
-if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tzoffset'])) {
+if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tzoffset']) && isset($_POST['role'])) {
     $order_number = trim($_POST["ordernumber"]);
     $session = trim($_POST['session']);
     $tzoffset = trim($_POST['tzoffset']);
+    $role = trim($_POST['role']);
     
     if (validate_provider($order_number, $session)) {
 
@@ -35,6 +36,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
         $city = "";
         $state = "";
         $zip = "";
+        $secondary_providers = "";
         $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order_number));
         foreach($stmnt->fetchAll() as $row) {
@@ -53,6 +55,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             $city = $row['city'];
             $state = $row['state'];
             $zip = $row['zip'];
+            $secondary_providers = $row['secondary_providers'];
         }
         
         if ($wage == "hour" ){
@@ -62,21 +65,28 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             $duration = "No time limit";
         }
         
+        $cancelling_provider = "";
+        $stmnt = $db->prepare("SELECT email FROM login WHERE session = ?;");
+        $stmnt->execute(array($session));
+        foreach($stmnt->fetchAll() as $row) {
+            $cancelling_provider = $row['email'];
+        }
+        
         $cancels = 0;
         $stmnt = $db->prepare("SELECT cancels FROM login WHERE email = ?;");
-        $stmnt->execute(array($client_email));
+        $stmnt->execute(array($cancelling_provider));
         foreach($stmnt->fetchAll() as $row) {
             $cancels = $row['cancels'];
         }
         
         $cancels = $cancels + 1;
         if ($cancels > 1){
-            banning($cancels, $client_email);
+            banning($cancels, $cancelling_provider);
         }
         
         $sql = "UPDATE login SET cancels = ? WHERE email = ?;";
         $stmt = $db->prepare($sql);
-        $params = array($cancels, $client_email);
+        $params = array($cancels, $cancelling_provider);
         $stmt->execute($params);
         
         if (minutes_until($schedule) < 15){
@@ -129,13 +139,11 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
                 $providerWage = "$" . $price;
             }
             
-            error_log('clicked: ' . $clicked);
-            
             $re_notify_list = explode(',', $clicked);
             $contact = array();
             foreach ($re_notify_list as $email) {
                 
-                if ($email != "" && $email != $client_email) {
+                if ($email != "" && $email != $cancelling_provider) {
                     $stmnt = $db->prepare("SELECT phone, timezone FROM login WHERE email = ?;");
                     $stmnt->execute(array($email));
                     foreach($stmnt->fetchAll() as $row) {
@@ -148,11 +156,6 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
                 }
                 
             }
-            
-            error_log('re-notifying these providers:');
-            error_log(print_r($contact, true));
-            
-            // come back and fix this once secondary providers can cancel
             
             if (strtotime($schedule) - 3600000 < $t){
                 $departureTime = $t;
@@ -168,14 +171,45 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
                 }
             }
             
-            $sql = "UPDATE orders SET client_email = ?, status = ? WHERE order_number = ?;";
-            $stmt = $db->prepare($sql);
-            $params = array("", "pe", $order_number);
-            $stmt->execute($params);
+            if ($role == "primary") {
+                $sql = "UPDATE orders SET client_email = ?, status = ? WHERE order_number = ?;";
+                $stmt = $db->prepare($sql);
+                $params = array("", "pe", $order_number);
+                $stmt->execute($params);
+            } else {
+                
+                echo 'cancelling as secondary...';
+                
+                $secondary_providers_array = explode(",", $secondary_providers);
+            
+                $array_without_cancelling_provider = array_diff($secondary_providers_array, array($cancelling_provider));
+                
+                $updated_string = "";
+                if (count($array_without_cancelling_provider) > 0) {
+                    $updated_string = $array_without_cancelling_provider[1];
+                }
+                for ($i = 1; $i < count($array_without_cancelling_provider); $i++) {
+                    $updated_string.= ",";
+                    $updated_string.= $array_without_cancelling_provider[$i];
+                }
+                if ($updated_string == ",") {
+                    $updated_string = "";
+                }
+                
+                $sql = "UPDATE orders SET secondary_providers = ?, status = ? WHERE order_number = ?";
+                $stmt = $db->prepare($sql);
+                $params = array($updated_string, 'pe', $order_number);
+                $stmt->execute($params);
+            
+            }
+            
+            
             
             echo 'reactivated task';
             
         }
+    } else {
+        echo 'access denied';
     }
 } else {
     echo 'missing parameters';
