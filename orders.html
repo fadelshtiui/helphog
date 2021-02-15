@@ -28,14 +28,13 @@
 
 	</head>
 	<body>
-		<div id="loading" class="loading">
+		<div id="loading" class="loading hidden">
 			<div>
 			  <div class="c1"></div>
 			  <div class="c2"></div>
 			  <div class="c3"></div>
 			  <div class="c4"></div>
 			</div>
-			<span>loading</span>
 		</div>
 	    <div class="content">
 		<div id="logo"><a href="/" style="display:none;">He!pHog</a></div>
@@ -82,13 +81,18 @@
 						<template v-slot:items="props">
 
 							<tr>
-								<td style='font-weight:400;' @click="props.expanded = !props.expanded">{{ props.item.number }}</td>
+								<td style='font-weight:400;' class="text-xs-left" @click="props.expanded = !props.expanded">{{ props.item.number }}</td>
 								<td class="text-xs-left" style='font-weight:400;' @click="props.expanded = !props.expanded">{{ props.item.name }}</td>
 								<td class="text-xs-left" style='font-weight:400;' @click="props.expanded = !props.expanded">{{ props.item.date }}</td>
 								<td class="text-xs-left" style='font-weight:400;' @click="props.expanded = !props.expanded">{{ props.item.time }}</td>
 								<td class="text-xs-left" style='font-weight:400;' @click="props.expanded = !props.expanded">{{ props.item.provider }}</td>
-								<td class="text-xs-left" style='font-weight:400;' @click="props.expanded = !props.expanded">${{ props.item.amount }}{{ props.item.labor }}</td>
-								<td class="text-xs-left" style='font-weight:300;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+								<td class="text-xs-left" style='font-weight:400;' @click="props.expanded = !props.expanded">${{ props.item.amount }}</td>
+								<td v-if="props.item.status == 'ac' || props.item.status == 'cc' || props.item.status == 'pc' || props.item.status == 'pe'" class="text-xs-left" style='font-weight:500;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+								<td v-if="props.item.status == 'cl' || props.item.status == 'st' || props.item.status == 'en'" class="text-xs-left" style='font-weight:500; color:blue;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+								<td v-if="props.item.status == 'di'" class="text-xs-left" style='font-weight:500; color:red;'>Disputed</td>
+								<td v-if="props.item.status == 're'" class="text-xs-left" style='font-weight:500; color:#3f51b5;'>Refunded</td>
+								<td v-if="props.item.status == 'pd'" class="text-xs-left" style='font-weight:500; color:#795548;'>Paid</td>
+								<td v-if="props.item.status == 'mc'" class="text-xs-left" style='font-weight:500; color:#3f8242;'>Task Completed</td>
 								<td v-if="props.item.status == 'mc' && props.item.rating == '0'" class="text-xs-left" style='font-weight:400;'>
 									<v-btn @click="status(); selectedItem = props.item; " class="dark">Review Order</v-btn>
 									<transition name="fade" appear>
@@ -159,10 +163,21 @@
 									<td width="10%" class="text-xs-left" style='font-weight:300;'>Work Started: <br>{{ props.item.began }}</td>
 									<td width="10%" class="text-xs-left" style='font-weight:300;'>Work Ended: <br>{{ props.item.ended }}</td>
 									<td @click="viewImage(props.item)" width="10%" class="text-xs-left" style='font-weight:300;'>Receipts:<br><a>{{ props.item.receipt }}</a></td>
-									<td v-if="props.item.type == 'hour'" width="15%" class="text-xs-left" style='font-weight:300;'>{{ props.item.hours == 0 ? "&#60;1" : props.item.hours }} hour(s) at ${{ props.item.wage }} per hour + additional expenses</td>
-									<td v-if="props.item.type == 'per'" width="15%" class="text-xs-left" style='font-weight:300;'>${{ props.item.wage }} + additional expenses</td>
-									<td width="15%" class="text-xs-left" style='font-weight:300;'>{{ props.item.tracking }}</td>
-									<td width="15%" class="text-xs-left" style='font-weight:300;'></td>
+									<td v-if="props.item.type == 'hour'" width="15%" class="text-xs-left" style='font-weight:300;'>{{ props.item.hours == 0 ? "&#60;1" : props.item.hours }} hour(s) at ${{ props.item.wage }} per hour <span v-if="props.item.expenditure != 0">+ ${{ props.item.expenditure }} for parts/supplies</span></td>
+									<td v-if="props.item.type == 'per'" width="15%" class="text-xs-left" style='font-weight:300;'>${{ props.item.wage }} <span v-if="props.item.expenditure != 0">+ ${{ props.item.expenditure }} for parts/supplies</span></td>
+
+									<td v-if="props.item.status == 'ac'" width="30%" class="text-xs-left" style='font-weight:300;'>Not enough providers were located for your order. The refund will appear in your bank statement within 5-10 business days from your order date.</td>
+									<td v-if="props.item.status == 'cc'" width="30%" class="text-xs-left" style='font-weight:300;'>You canceled this order. The refund will appear in your bank statement within 5-10 business days of your cancellation date.</td>
+									<td v-if="props.item.status == 'pc'" width="30%" class="text-xs-left" style='font-weight:300;'>You canceled this order. The refund will appear in your bank statement within 5-10 business days of the cancellation date.</td>
+									<td v-if="props.item.status == 'di'" width="30%" class="text-xs-left" style='font-weight:300;'>You have disputed this order. You will not be charged until the dispute is resolved.</td>
+									<td v-if="props.item.status == 're'" width="30%" class="text-xs-left" style='font-weight:300;'>The provider has issued a refund for your order. The refund will appear in your bank statement within 5-10 business of the issued date.</td>
+									<td v-if="props.item.status == 'pe'" width="30%" class="text-xs-left" style='font-weight:300;'>Your order has been dispatched to local providers.</td>
+									<td v-if="props.item.status == 'cl'" width="30%" class="text-xs-left" style='font-weight:300;'>Your order has been claimed by provider(s). The provider will keep in contact with you.</td>
+									<td v-if="props.item.status == 'st'" width="30%" class="text-xs-left" style='font-weight:300;'>The provider(s) started working on your task.</td>
+									<td v-if="props.item.status == 'en'" width="30%" class="text-xs-left" style='font-weight:300;'>The provider(s) finished working on your task.</td>
+									<td v-if="props.item.status == 'mc'" width="30%" class="text-xs-left" style='font-weight:300;'>Your order has been marked as completed.</td>
+									<td v-if="props.item.status == 'pd'" width="30%" class="text-xs-left" style='font-weight:300;'>Payment has been processed for this order.</td>
+
 								</tr>
 								</template>
 							</v-data-table>

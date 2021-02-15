@@ -108,7 +108,7 @@ var v = new Vue({
 	       data.append('session', getSession())
 	       let url = "php/rating.php";
     	   fetch(url, { method: "POST", body: data })
-	       itemSelected.status = "sa";
+	       itemSelected.status = "pd";
 	       this.showModal = false;
 
 		},
@@ -118,7 +118,7 @@ var v = new Vue({
 
 	    async markIncompleted(itemSelected) {
 
-			id('loading').classList.remove('hidden')
+		  id('loading').classList.remove('hidden')
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
 	       data.append("session", getSession())
@@ -163,7 +163,7 @@ var v = new Vue({
 
 	    },
 	    async cancel(itemSelected) {
-
+           id('loading').classList.remove('hidden')
 	       let data = new FormData();
 	       data.append("ordernumber", itemSelected.number);
 	       data.append('session', getSession());
@@ -171,14 +171,13 @@ var v = new Vue({
     	   let response = await fetch(url, { method: "POST", body: data })
     	   await checkStatus(response)
     	   response = await response.text();
-
-    	   window.location = '/' + response
+    	   id('loading').classList.add('hidden')
 
     	   if (response == 'ordererror') {
     	       alert('You cannot cancel an order that is already in progress.');
     	   } else {
     	       this.showCancel = false;
-    	       itemSelected.review = "Order Canceled";
+    	       itemSelected.status = "cc";
     	   }
 
 
