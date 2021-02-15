@@ -28,7 +28,6 @@ foreach ($result as $row) {
         
         if ($payment_info->customerPayment < 0.50){
             sendNoChargeEmail($service, $order_number, $schedule);
-            error_log($payment_info->intent);
             
             $stripe->paymentIntents->cancel(
               trim($payment_info->intent),

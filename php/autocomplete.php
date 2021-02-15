@@ -40,10 +40,6 @@ foreach ($result as $row) {
     $schedule = $utc->format('F j, Y, g:i a');
     
     $local_start = new DateTime(date('Y-m-d H:i:s', strtotime($start)), new DateTimeZone('UTC'));
-
-    error_log(minutes_since($row['schedule']));
-    
-
     
     $message = $service . ' (' . $order . ') on ' . $schedule . ' has been marked completed by our system. If the support provided by the provider was inadequate you can dispute the transaction by texting back DISPUTE to this number.';
     
@@ -57,7 +53,6 @@ foreach ($result as $row) {
         }else if ($status == 'en' && minutes_since($row['schedule']) > 1435) {
             mark_completed($order, $message);
         }else if ($status == 'st' && minutes_since($row['schedule']) > 1435) {
-            error_log("Started Logic");
             start_stop_order($order);
             mark_completed($order, $message);
         }

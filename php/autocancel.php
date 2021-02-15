@@ -56,9 +56,7 @@ foreach ($result as $row) {
         
         if ($needsToBeCancelled) {
             $payment_info = payment($order_number);
-        
-            error_log($payment_info->intent);
-            
+                    
             $stripe->paymentIntents->cancel(
               trim($payment_info->intent),
               []
