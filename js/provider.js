@@ -544,7 +544,7 @@ let preloaded = false;
 					section2.appendChild(price);
 					section2.appendChild(wageType);
 
-					if (order.secondary_providers_string !== ''){
+					if (order.secondary_providers_string.length != 0){
 					    let coworkers = document.createElement("h1");
     					coworkers.textContent = "Co-workers";
     					section2.appendChild(coworkers);
@@ -771,8 +771,11 @@ let preloaded = false;
 			if (confirm("Are you sure that you would like to cancel the task? Please only cancel under extenuating circumstances.")) {
 				let data = new FormData();
 				let ordernumber = this.dataset.ordernumber;
+				let tz = jstz.determine();
+                let timezone = tz.name();
 				data.append("ordernumber", ordernumber);
 				data.append("session", getSession());
+				data.append("tzoffset", timezone);
 				let url = "php/providercancel.php";
 				fetch(url, { method: "POST", body: data })
 					.then(checkStatus)
