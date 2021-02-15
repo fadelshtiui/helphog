@@ -243,9 +243,9 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
         foreach ($available_providers as $provider) {
             
-            send_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz);
+            send_new_task_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION["address"], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service'], $SESSION['message']);
             
-            send_text($provider->phone, $provider->email, $order_number, $providerWage, $_SESSION["message"], $duration, $accept_key, $provider->tz, $people);
+            send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $_SESSION["message"], $duration, $accept_key, $provider->tz, $people, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION['address'], $SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service']);
         }
         
         $response->ordernumber = $order_number;
@@ -263,108 +263,4 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
 echo json_encode($response);
 
-function send_email($client, $price, $ordernumber, $duration, $secret_key, $tz) {
-    $db = establish_database();
-    $name = "";
-    $alerts = "";
-    $stmnt = $db->prepare("SELECT firstname, alerts FROM login WHERE email = ?;");
-    $stmnt->execute(array($client));
-    foreach($stmnt->fetchAll() as $row) {
-        $name = $row['firstname'];
-        $alerts = $row['alerts'];
-    }
-    
-    if ($alerts == "email" || $alerts == "both"){
-    
-        $mail = new PHPMailer;
-        
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($client, 'To');
-        
-        $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($_SESSION["schedule"])), new DateTimeZone($_SESSION['tzoffset']));
-        $local_time->setTimezone(new DateTimeZone($tz));
-        
-        $mail->Subject = "HelpHog - New Task Available";
-        
-        if ($_SESSION["address"] == "Remote (online)"){
-            $location = $_SESSION["address"];
-        }else{
-            $location = ucfirst($_SESSION["city"]). ', ' . $_SESSION["state"] . ' ' .$_SESSION["zip"];
-        }
-        $mail->Body    = get_claim_email($_SESSION["service"], $local_time->format("F j, Y, g:i a"), $location , $client, $ordernumber, $price, $_SESSION["message"], $name, $duration, $secret_key);
-        $mail->IsHTML(true); 
-        
-        $mail->send();
-        $mail->ClearAllRecipients();
-    }
-}
-    
-function send_text($phonenumber, $email, $ordernumber, $price, $message, $duration, $secret_key, $tz, $people) {
-    
-    $db = establish_database();
-    
-    $alerts="";
-    $stmnt = $db->prepare("SELECT alerts FROM login WHERE email = ?;");
-    $stmnt->execute(array($email));
-    foreach($stmnt->fetchAll() as $row) {
-        $alerts = $row['alerts'];
-    }
-    
-    $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($_SESSION["schedule"])), new DateTimeZone($_SESSION['tzoffset']));
-    $local_time->setTimezone(new DateTimeZone($tz));
-    $t = time();
-    
-    if ($_SESSION["address"] == "Remote (online)"){
-        $location = $_SESSION["address"];
-        $commute = "";
-    }else{
-        $location = ucfirst($_SESSION["city"]) . ', ' . $_SESSION["state"];
-        $address = str_replace(' ', '+', $_SESSION["address"]. '+' . $_SESSION["city"]. '+' . $_SESSION["state"] . '+' .$_SESSION["zip"]);
-        if (strtotime($_SESSION["schedule"]) - 3600000 < $t){
-            $departureTime = $t;
-        }else{
-            $departureTime = $departureTime - 3600000;  
-        }
-        $matrix = address_works_for_provider($address, $email, $departureTime);
-        $commute = "Estimated commute: " . ceil(($matrix -> traffic)/60) . " minutes";
-    }
-    
-    $partners = "";
-    
-    if ($people > 1){
-        $partners = "Task requires cordinating with " . $people . " other provider(s)";
-    }
-    
-    if ($alerts == "sms" || $alerts == "both"){
-    
-    $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-    $token = '18a458337ffdfd10617571e495314311';
-    $client = new Client($sid, $token);
-    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'There\'s a new service request in your area!
-
-Service: ' . $_SESSION["service"] . '
-Order Number: ' . $ordernumber . '
-Date: ' . $local_time->format("F j, Y, g:i a") . '
-Max duration: ' . $duration . '
-' . $commute . '
-Location: ' . $location . '
-Pay: ' . $price . '
-' . $partners . '
-
-Message: ' . $message . '
-
-Tap on the following link to obtain this job:
-
-https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key));
-}
-}
 ?>

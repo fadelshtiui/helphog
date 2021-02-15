@@ -19,6 +19,112 @@
     error_reporting(E_ALL);
     error_reporting(E_ERROR | E_PARSE);
     
+    function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message) {
+        $db = establish_database();
+        $name = "";
+        $alerts = "";
+        $stmnt = $db->prepare("SELECT firstname, alerts FROM login WHERE email = ?;");
+        $stmnt->execute(array($client));
+        foreach($stmnt->fetchAll() as $row) {
+            $name = $row['firstname'];
+            $alerts = $row['alerts'];
+        }
+        
+        if ($alerts == "email" || $alerts == "both"){
+        
+            $mail = new PHPMailer;
+            
+            $mail->isSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->Debugoutput = 'html';
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 587;
+            $mail->SMTPSecure = 'tls';
+            $mail->SMTPAuth = true;
+            $mail->Username = "admin@helphog.com";
+            $mail->Password = "Monkeybanana";
+            $mail->setFrom('no-reply@helphog.com', 'HelpHog');
+            $mail->addAddress($client, 'To');
+            
+            $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
+            $local_time->setTimezone(new DateTimeZone($tz));
+            
+            $mail->Subject = "HelpHog - New Task Available";
+            
+            if ($address == "Remote (online)"){
+                $location = $address;
+            } else {
+                $location = ucfirst($city). ', ' . $state . ' ' . $zip;
+            }
+            $mail->Body    = get_claim_email($service, $local_time->format("F j, Y, g:i a"), $location , $client, $ordernumber, $price, $message, $name, $duration, $secret_key);
+            $mail->IsHTML(true); 
+            
+            $mail->send();
+            $mail->ClearAllRecipients();
+        }
+    }
+    
+    function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message, $duration, $secret_key, $tz, $people, $schedule, $tzoffset, $address, $city, $state, $zip, $service) {
+    
+        $db = establish_database();
+        
+        $alerts="";
+        $stmnt = $db->prepare("SELECT alerts FROM login WHERE email = ?;");
+        $stmnt->execute(array($email));
+        foreach($stmnt->fetchAll() as $row) {
+            $alerts = $row['alerts'];
+        }
+        
+        $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
+        $local_time->setTimezone(new DateTimeZone($tz));
+        $t = time();
+        
+        if ($address == "Remote (online)"){
+            $location = $address;
+            $commute = "";
+        }else{
+            $location = ucfirst($city) . ', ' . $state;
+            $address = str_replace(' ', '+', $address . '+' . $city . '+' . $state . '+' . $zip);
+            if (strtotime($schedule) - 3600000 < $t){
+                $departureTime = $t;
+            }else{
+                $departureTime = $departureTime - 3600000;  
+            }
+            $matrix = address_works_for_provider($address, $email, $departureTime);
+            $commute = "Estimated commute: " . ceil(($matrix -> traffic)/60) . " minutes";
+        }
+        
+        $partners = "";
+        
+        if ($people > 1){
+            $partners = "Task requires cordinating with " . $people . " other provider(s)";
+        }
+        
+        if ($alerts == "sms" || $alerts == "both"){
+    
+            $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
+            $token = '18a458337ffdfd10617571e495314311';
+            $client = new Client($sid, $token);
+            $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'There\'s a new service request in your area!
+
+Service: ' . $service . '
+Order Number: ' . $ordernumber . '
+Date: ' . $local_time->format("F j, Y, g:i a") . '
+Max duration: ' . $duration . '
+' . $commute . '
+Location: ' . $location . '
+Pay: ' . $price . '
+' . $partners . '
+
+Message: ' . $message . '
+
+Tap on the following link to obtain this job:
+
+https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key));
+        }
+    }
+
+    
     function cancel_order() {
         $name = "";
         $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
