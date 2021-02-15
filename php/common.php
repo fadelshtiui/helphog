@@ -588,11 +588,12 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         
         $db = establish_database();
         
+        $clicked = '';
         $found = false;
         $cancelled = true;
         $wage = '';
         $db_duration;
-        $stmnt = $db->prepare("SELECT wage, duration, accept_key, status FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT wage, duration, accept_key, status, clicked FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order_number));
         foreach($stmnt->fetchAll() as $row) {
             if ($row['accept_key'] === $accept_key) {
@@ -603,7 +604,33 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             }
             $duration = $row['duration'];
             $wage = $row['wage'];
+            $clicked = $row['clicked'];
         }
+        
+        $new_clicked = "";
+        $already_clicked = false;
+        if ($clicked == "") {
+            $new_clicked = $email;
+        } else {
+            $re_notify_list = explode(',', $clicked);
+            
+            foreach ($re_notify_list as $clicked_email) {
+                if ($email == $clicked_email) {
+                    $already_clicked = true;
+                    break;
+                }
+            }
+            if (!$already_clicked) {
+                $new_clicked = $clicked . ',' . $email;
+            } else {
+                $new_clicked = $clicked;
+            }
+        }
+        
+        $sql = "UPDATE orders SET clicked = ? WHERE order_number = ?";
+        $stmt = $db->prepare($sql);
+        $params = array($new_clicked, $order_number);
+        $stmt->execute($params);
         
         if ($found && !$cancelled) {
         
