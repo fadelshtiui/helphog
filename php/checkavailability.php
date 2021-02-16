@@ -28,24 +28,15 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
     $utc->setTimezone(new DateTimeZone('UTC'));
     $t = time();
     
-    // check if day is 7 days in the future
-    // $now = gmdate('Y-m-d H:i:s');
-    // $mintotal = abs(strtotime($now) - strtotime($utc));
-    
-    // $years = floor($mintotal / (365*60*60*24));  
-  
-    // $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));  
-      
-    // $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24)); 
-    
-    // if ($days > 7) {
-    //     $result = "";
-    //     for ($i = 0; $i < 24; $i++) {
-    //         $result .= '0';
-    //     }
-    //     echo $result;
-    //     return;
-    // }
+    // check if day is more than 6 days in the future
+    if (minutes_until($utc->format('Y-m-d')) > (1440 * 6)) {
+        $result = "";
+        for ($i = 0; $i < 24; $i++) {
+            $result .= '0';
+        }
+        echo $result;
+        return;
+    }
     
     $db = establish_database();
 
