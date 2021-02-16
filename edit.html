@@ -67,6 +67,7 @@
                                     <option value="5">5 people</option>
                                   </select>
                                 </div>
+                                <br>
                                 <label for="quantity2" id="hourlabel">At most how long would you need this assistance for? <b>Note: The provider cannot assist you for longer than this duration.</b></label>
                                 <div id="quantity2" include="form-input-select()">
                                   <select id="duration" required>
@@ -86,6 +87,30 @@
                                     <option value="5">4-5 hours</option>
                                     <option value="6">5-6 hours</option>
                                     <option value="7">6-7 hours</option>
+                                    <!--<option value="8" selected>Until Completion</option>-->-->
+                                  </select>
+                                </div>
+                                <br>
+                                <label for="quantity3" id="cancelbufferlabel">In the rare case your order is not claimed, how many hours before the order time would you like to be notified?</label>
+                                <div id="quantity3" include="form-input-select()">
+                                  <select id="cancelbuffer" required>
+                                    <!--
+                                      This is how we can do "placeholder" options.
+                                      note: "required" attribute is on the select
+                                    -->
+                                    <option value="60"
+                                            hidden
+                                    >1 hour</option>
+                                
+                                    <!-- normal options -->
+                                    <option value="60">1 hour</option>
+                                    <option value="120" selected>2 hours</option>
+                                    <option value="240">4 hours</option>
+                                    <option value="480">8 hours</option>
+                                    <option value="720">12 hours</option>
+                                    <option value="1440">24 hours</option>
+                                    <option value="2880">48 hours</option>
+                                    <option value="4320">72 hours</option>
                                     <!--<option value="8" selected>Until Completion</option>-->-->
                                   </select>
                                 </div>

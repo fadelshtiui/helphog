@@ -586,7 +586,8 @@ async function stripe(service, duration, people){
             city: id('current-city').innerText,
             state: id('current-state').innerText,
             people: id('numpeople').value,
-            duration: id('duration').value
+            duration: id('duration').value,
+            cancelbuffer: id('cancelbuffer').value
         }
     };
     

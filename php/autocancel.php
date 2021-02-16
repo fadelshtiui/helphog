@@ -33,6 +33,7 @@ foreach ($result as $row) {
     $secondary_providers = $row["secondary_providers"];
     $status = $row["status"];
     $timezone = $row["timezone"];
+    $cancel_buffer = $row['cancel_buffer'];
     
     if ($status == "pe") {
         
@@ -41,7 +42,7 @@ foreach ($result as $row) {
         $schedule = $utc->format('F j, Y, g:i a');
     
         $needsToBeCancelled = false;
-        if (minutes_until($row["schedule"]) < 30) {
+        if (minutes_until($row["schedule"]) < $cancel_buffer) {
             if ($client_email == "") {
                 $needsToBeCancelled = true;
             } else if ($people > 1) {

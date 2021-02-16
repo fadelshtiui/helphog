@@ -89,6 +89,7 @@ function createOrder($paymentIntent, $order_info, array $items){
     $_SESSION['day'] = $order_info->day;
     $_SESSION['order'] = $order_info->order;
     $_SESSION['tzoffset'] = $order_info->tzoffset;
+    $_SESSION['cancel_buffer'] = $order_info->cancelbuffer;
     
     $_SESSION['ordernumber'] = $order_number;
     $_SESSION['intent'] = $paymentIntent->id;
