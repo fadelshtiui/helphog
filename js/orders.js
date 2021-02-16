@@ -137,21 +137,10 @@ var v = new Vue({
 
 	    },
 
-	    viewImage(props) {
+	    async viewImage(props) {
+	        
+            window.open("php/viewreceipt.php?ordernumber=" + props.number + "&image_key=" + props.imagekey);
 
-	        let data = new FormData();
-            data.append("ordernumber", props.number);
-            data.append("session", getSession());
-            let url = "php/checkimage.php";
-            fetch(url, { method: "POST", body: data })
-            	.then(checkStatus)
-            	.then(res => res.text())
-            	.then(function(response) {
-            	    if (response == "jpg" || response == "jpeg" || response == "pdf" || response == "png") {
-            	        window.open("../tmp/receipts/" + props.number + "." + response);
-            	    }
-            	})
-            	.catch(console.log);
 	    },
 	    status(review) {
             this.showModal = true;

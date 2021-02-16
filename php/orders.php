@@ -87,10 +87,11 @@ if (isset($_POST["session"])) {
             if ($row["uploaded"] == 'n') {
                 $entry->receipt = "none";
             } else {
-                $entry->receipt = "view here";
+                $entry->receipt = "download";
             }
+            
+            $entry->imagekey = $row['image_key'];
 
-            $now = date('m-d-y H:i:s');
             $mintotal = minutes_until($row['schedule']);
 
             if ($mintotal < 1440) {
