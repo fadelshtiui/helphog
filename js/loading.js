@@ -1,4 +1,4 @@
-$(window).on('load', function () {
+window.addEventListener('load', function () {
 
     $('#loading-animation').css('display', 'none');
     $('#loading-animation').fadeIn(900);
