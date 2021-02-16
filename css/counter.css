@@ -368,7 +368,7 @@ footer p strong {
   height: 100px; 
   width: 35px;
   bottom: 0;
-  background: url(https://helphog.com/svg/tree.svg) no-repeat;
+  background: url(https://helphog.com/assets/images/tree.svg) no-repeat;
 }
 .rock {
   margin-top: -17%;
@@ -389,7 +389,7 @@ footer p strong {
   background: #eee;
 }
 .truck {
-  background: url(https://helphog.com/svg/truck.svg) no-repeat;
+  background: url(https://helphog.com/assets/images/svg/truck.svg) no-repeat;
   background-size: contain;
   height: 60px;
 }
@@ -399,7 +399,7 @@ footer p strong {
   width: 25px;
 }
 .wheels {
-  background: url(https://helphog.com/svg/wheels.svg) no-repeat;
+  background: url(https://helphog.com/assets/images/wheels.svg) no-repeat;
   height: 15px;
   margin-bottom: 0;
 }
