@@ -11,10 +11,7 @@ if (isset($_POST["timezone"]) && isset($_POST["session"])) {
         $stmt = $db->prepare($sql);
         $params = array(tzOffsetToName($timezone), $session);
         $stmt->execute($params);
-    }else{
-        error_log($timezone);
     }
-    
 
 }
 

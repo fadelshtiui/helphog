@@ -24,9 +24,7 @@ if (isset($_POST["email"])) {
         }
     } else {
         $random_hash = "" . bin2hex(openssl_random_pseudo_bytes(128));
-        
-        error_log($random_hash);
-        
+                
         $sql = "UPDATE login SET forgot = ? WHERE email = ?";
         $stmt = $db->prepare($sql);
         $params = array($random_hash, $email);

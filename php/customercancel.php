@@ -56,7 +56,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
-            error_log(print_r($row, true));
             $service = $row["service"];
             $schedule = $row["schedule"];
             $status = $row["status"]; 
@@ -72,9 +71,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         foreach($stmnt->fetchAll() as $row) {
             $customerName = $row['firstname'];
         }
-        
-        error_log('provider email: ' . $providerEmail);
-        
+                
         $tz = "";
         $providerName = "";
         $stmnt = $db->prepare("SELECT firstname, timezone FROM login WHERE email = ?;");
@@ -83,9 +80,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $providerName = $row['firstname'];
             $tz = $row['timezone'];
         }
-        
-        error_log("provider timezone: " . $tz);
-        
+                
         if ($status == "cc" || $status == "pc" || $status == "ac") {
             
             if ($is_post_request) {
@@ -139,7 +134,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             } else {
                 $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ')  has been canceled by the customer. We apologize for the inconvience.';
                 $customerMessage = 'Your service request for ' . $service . ' (' . $order .') has been canceled. The full refund will appear in your bank statement within 5-10 business days.';
-                error_log($payment_info->intent);
                 $stripe->paymentIntents->cancel(
                   trim($payment_info->intent),
                   []

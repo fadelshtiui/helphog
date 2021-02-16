@@ -141,8 +141,6 @@ try {
       $output = [
         'clientSecret' => $paymentIntent->client_secret,
       ];
-      error_log('processing payment...');
-      error_log(print_r($_SESSION, true));
       echo json_encode($output);
   }else{
       echo json_encode(['error' => "fail"]);

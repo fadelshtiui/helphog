@@ -5,7 +5,6 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     if (validate_provider($_POST['ordernumber'], $_POST['session'])) {
         $db = establish_database();
         $info = strtolower(pathinfo($_FILES['image']['name']) ["extension"]);
-        error_log($info);
         if ($info == "jpg" || $info == "png" || $info == "pdf" || $info == "jpeg") {
             $order_number = $_POST["ordernumber"];
             $target = "../../uploads/receipts/" . $order_number;
@@ -49,7 +48,6 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
                 $body = json_decode($body);
 
                 $confidence = $body->totalAmount->confidenceLevel;
-                error_log(print_r($body->totalAmount, true));
                 if (floatval($confidence) < 0.75){
                     echo "Receipt image quality was too poor, please upload a clearer picture of the receipt";
                 }else{

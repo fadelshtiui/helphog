@@ -4,8 +4,6 @@ include 'common.php';
 session_start();
 $db = establish_database();
 
-error_log(print_r($_SESSION, true));
-
 if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SESSION['email']) && isset($_SESSION['password']) && isset($_SESSION['zip']) && isset($_SESSION['phone']) && isset($_SESSION['radius']) && isset($_SESSION['workfield']) && isset($_SESSION['experience']) && isset($_SESSION['stripe']) && isset($_SESSION['tz'])) { // regular apply
 
     $firstname = $_SESSION['firstname'];

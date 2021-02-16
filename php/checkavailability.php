@@ -38,7 +38,6 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
       
     // $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24)); 
     
-    // error_log($days);
     // if ($days > 7) {
     //     $result = "";
     //     for ($i = 0; $i < 24; $i++) {
