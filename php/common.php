@@ -97,7 +97,7 @@
         $partners = "";
         
         if ($people > 1){
-            $partners = "Task requires cordinating with " . $people . " other provider(s)";
+            $partners = "Task requires cordinating with " . ($people - 1) . " other provider(s)";
         }
         
         if ($alerts == "sms" || $alerts == "both"){
