@@ -4,6 +4,10 @@ include 'common.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+$stripe = new \Stripe\StripeClient(
+  'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
+);
+
 if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['session'])) {
     $db = establish_database();
     $order = trim($_POST["ordernumber"]);
@@ -11,6 +15,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
     $session = trim($_POST['session']);
     
     if (validate_customer($order, $session)) {
+        
+        pay_provider($order);
     
         $service = "";
         $client_email = "";
@@ -18,7 +24,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $service = $row['service'];
-            $client_email = $column['client_email'];
+            $client_email = $row['client_email'];
         }
         
         $name = "";
@@ -38,7 +44,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
         $mail->SMTPSecure = 'tls';
         $mail->SMTPAuth = true;
         $mail->Username = "admin@helphog.com";
-        $mail->Password = "FMB123456789!";
+        $mail->Password = "Monkeybanana";
         $mail->setFrom('no-reply@helphog.com', 'HelpHog');
         $mail->addAddress($client_email, 'To');
         
@@ -52,9 +58,21 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
         
         $sql = "UPDATE orders SET rating = ?, status = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
-        $params = array($rating, 'mc', $order);
+        $params = array($rating, 'pd', $order);
         $stmt->execute($params);
+        
+        echo 'success';
+        
+    } else {
+        
+        echo 'invalid session';
+        
     }
+    
+    
+} else {
+    
+    echo 'missing parameters';
     
 }
 ?>

@@ -19,6 +19,126 @@
     error_reporting(E_ALL);
     error_reporting(E_ERROR | E_PARSE);
     
+    function &payment($order) {
+        $db = establish_database();
+        $result = new \stdClass();
+        $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+        $stmnt->execute(array($order));
+        foreach($stmnt->fetchAll() as $row) {
+            
+            $result->wage = $row['wage'];
+            $result->duration = $row['duration'];
+            $result->intent = $row['intent'];
+            $earnings;
+            if ($row["wage"] == "hour") {
+                $ts1 = strtotime($row["start"]);
+                $ts2 = strtotime($row["end"]);
+                $seconds_diff = $ts2 - $ts1;
+                $seconds_diff -= $row["paused_time"];
+                $time = ($seconds_diff / 3600);
+                $result->worked_time == $time;
+                $earnings = $time * $row["cost"];
+                $result->maxWithdrawl = $row["duration"] * $row["cost"] * $row["people"];
+            } else {
+                $earnings = $row["cost"];
+                $result->maxWithdrawl = $row["cost"] * $row["people"];
+            }
+            $revenue_actual = round($earnings, 2);
+            $result->revenue = $revenue_actual;
+            
+            if($row["prorated"] == "n" && $time < 1 && $row["wage"] == "hour"){
+                $result->customerPayment = $row["cost"] * $row["people"];
+                $result->providerPayout = $row["cost"] * 0.9;
+            }else{
+                $result->customerPayment = $revenue_actual * $row["people"];
+                $result->providerPayout = $revenue_actual * 0.9;
+            }
+            
+            if ($result->customerPayment > $result->maxWithdrawl){
+                $result->customerPayment = $result->maxWithdrawl;
+            }
+        }
+        return $result;
+    }
+    
+    function pay_provider($order_number) {
+        
+        $stripe = new \Stripe\StripeClient(
+          'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
+        );
+    
+        $db = establish_database();
+        
+        $service = "";
+        $people = "";
+        $secondary_providers = "";
+        $schedule = "";
+        $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+        $stmnt->execute(array($order_number));
+        foreach($stmnt->fetchAll() as $row) {
+            $service = $row["service"];
+            $people = $row["people"];
+            $secondary_providers = $row["secondary_providers"];
+            $schedule = $row["schedule"];
+        }
+    
+        $payment_info = payment($order_number);
+        
+        if ($payment_info->customerPayment < 0.50){
+            sendNoChargeEmail($service, $order_number, $schedule);
+            
+            $stripe->paymentIntents->cancel(
+              trim($payment_info->intent),
+              []
+            );
+            
+        } else {
+            $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
+            $intent->capture(['amount_to_capture' => ceil($payment_info->customerPayment * 100)]);
+            
+            $stripe_acc = "";
+            $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
+            $stmnt->execute(array($row["client_email"]));
+            foreach($stmnt->fetchAll() as $row) {
+                $stripe_acc = $row['stripe_acc'];
+            }
+            
+            $transfer = \Stripe\Transfer::create([
+              "amount" => ceil($payment_info->providerPayout * 100),
+              "currency" => "usd",
+              "destination" => $stripe_acc,
+              "description" => $service . " (" . $order_number . ")",
+              "transfer_group" => '{' . $order_number . '}',
+            ]);
+            
+            if (intval($people) > 1){
+                $providers = explode("," , $secondary_providers);
+                foreach ($providers as $provider){
+                    
+                    $secondary_stripe_acc = "";
+                    $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
+                    $stmnt->execute(array($provider));
+                    foreach($stmnt->fetchAll() as $row) {
+                        
+                        $secondary_stripe_acc = $row["stripe_acc"];
+                        $transfer = \Stripe\Transfer::create([
+                          "amount" => ceil($payment_info->providerPayout * 100),
+                          "currency" => "usd",
+                          "destination" => $secondary_stripe_acc,
+                          "description" => $service . " (" . $order_number . ")",
+                          "transfer_group" => '{' . $order_number . '}',
+                        ]); 
+                    }
+                }
+            }
+            
+            $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+            $stmt = $db->prepare($sql);
+            $params = array('pd', $order_number);
+            $stmt->execute($params);
+        }
+    }
+    
     function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message) {
         $db = establish_database();
         $name = "";
@@ -1007,48 +1127,6 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             }
         }
         return $order_status;
-    }
-    
-    function &payment($order) {
-        $db = establish_database();
-        $result = new \stdClass();
-        $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
-        $stmnt->execute(array($order));
-        foreach($stmnt->fetchAll() as $row) {
-            
-            $entry->wage = $row['wage'];
-            $entry->duration = $row['duration'];
-            $entry->intent = $row['intent'];
-            $earnings;
-            if ($row["wage"] == "hour") {
-                $ts1 = strtotime($row["start"]);
-                $ts2 = strtotime($row["end"]);
-                $seconds_diff = $ts2 - $ts1;
-                $seconds_diff -= $row["paused_time"];
-                $time = ($seconds_diff / 3600);
-                $entry->worked_time == $time;
-                $earnings = $time * $row["cost"];
-                $entry->maxWithdrawl = $row["duration"] * $row["cost"] * $row["people"];
-            } else {
-                $earnings = $row["cost"];
-                $entry->maxWithdrawl = $row["cost"] * $row["people"];
-            }
-            $revenue_actual = round($earnings, 2);
-            $entry->revenue = $revenue_actual;
-            
-            if($row["prorated"] == "n" && $time < 1 && $row["wage"] == "hour"){
-                $entry->customerPayment = $row["cost"] * $row["people"];
-                $entry->providerPayout = $row["cost"] * 0.9;
-            }else{
-                $entry->customerPayment = $revenue_actual * $row["people"];
-                $entry->providerPayout = $revenue_actual * 0.9;
-            }
-            
-            if ($entry->customerPayment > $entry->maxWithdrawl){
-                $entry->customerPayment = $entry->maxWithdrawl;
-            }
-        }
-        return $entry;
     }
     
     function send_claimed_notification($order_number, $email, $type, $db, $duration) {

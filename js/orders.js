@@ -91,7 +91,7 @@ var v = new Vue({
 			],
 
 			orders: [],
-			rating: null,
+			rating: 0,
 			showModal: false,
 			showCancel: false,
 			selectedItem: null,
