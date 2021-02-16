@@ -177,11 +177,15 @@
 										<td width="15%" style='font-weight:300; text-align:left!important;'>Message: {{
 											props.item.message }}</td>
 										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work Started:
-											<br>{{ props.item.began }}</td>
+											<br>{{ props.item.began }}
+										</td>
 										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work Ended: <br>{{
 											props.item.ended }}</td>
-										<td @click="viewImage(props.item)" width="10%" class="text-xs-left"
-											style='font-weight:300;'>Receipts:<br><a>{{ props.item.receipt }}</a></td>
+										<td v-if="props.item.receipt == 'download'" @click="viewImage(props.item)"
+											width="10%" class="text-xs-left" style='font-weight:300;'>Receipts:<br><a>{{
+												props.item.receipt }}</a></td>
+										<td v-else width="10%" class="text-xs-left"
+											style='font-weight:300; color: black;'>Receipts:<br>none</td>
 										<td v-if="props.item.type == 'hour'" width="15%" class="text-xs-left"
 											style='font-weight:300;'>{{ props.item.hours == 0 ? "&#60;1" :
 											props.item.hours }} hour(s) at ${{ props.item.wage }} per hour <span
