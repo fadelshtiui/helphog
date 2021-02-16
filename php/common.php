@@ -541,55 +541,66 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $service = "";
         $customer_email = "";
         $customer_phone = "";
+        $disputes = 0;
         $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $service = $row['service'];
             $customer_email = $row['customer_email'];
             $customer_phone = $row['customer_phone'];
+            $disputes = $row['disputes'];
         }
         
-        $name = "";
-        $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
-        $stmnt->execute(array($customer_email));
-        foreach($stmnt->fetchAll() as $row) {
-            $name = $row['firstname'];
+        if ($disputes < 3) {
+            $name = "";
+            $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+            $stmnt->execute(array($customer_email));
+            foreach($stmnt->fetchAll() as $row) {
+                $name = $row['firstname'];
+            }
+            
+            $mail = new PHPMailer;
+            
+            $mail->isSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->Debugoutput = 'html';
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 587;
+            $mail->SMTPSecure = 'tls';
+            $mail->SMTPAuth = true;
+            $mail->Username = "admin@helphog.com";
+            $mail->Password = "Monkeybanana";
+            $mail->setFrom('no-reply@helphog.com', 'HelpHog');
+            $mail->addAddress($customer_email, 'To');
+            
+            $mail->Subject = "HelpHog - Task Completed";
+            $mail->Body    = get_marked_completed_email($name, $service);
+            $mail->IsHTML(true);
+            
+            $mail->send();
+            
+            $mail->ClearAllRecipients();
+            
+            if ($message != "") {
+                $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
+                $token = '18a458337ffdfd10617571e495314311';
+                $client = new Client($sid, $token);
+                $client->messages->create('+1' . $customer_phone, array('from' => '+12532593451', 'body' => $message));
+            }
+            
+            
+            $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+            $stmt = $db->prepare($sql);
+            $params = array('mc', $order);
+            $stmt->execute($params);
+            
+            return true;
+            
+        } else {
+            
+            return false;
+            
         }
-        
-        $mail = new PHPMailer;
-        
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($customer_email, 'To');
-        
-        $mail->Subject = "HelpHog - Task Completed";
-        $mail->Body    = get_marked_completed_email($name, $service);
-        $mail->IsHTML(true);
-        
-        $mail->send();
-        
-        $mail->ClearAllRecipients();
-        
-        if ($message != "") {
-            $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-            $token = '18a458337ffdfd10617571e495314311';
-            $client = new Client($sid, $token);
-            $client->messages->create('+1' . $customer_phone, array('from' => '+12532593451', 'body' => $message));
-        }
-        
-        
-        $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
-        $stmt = $db->prepare($sql);
-        $params = array('mc', $order);
-        $stmt->execute($params);
     }
     
 	/**
@@ -792,6 +803,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $customer_email = "";
         $customer_phone = "";
         $been_disputed = "";
+        $order_disputes = 0;
         $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order_number));
         foreach($stmnt->fetchAll() as $row) {
@@ -802,6 +814,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $secondary_providers = $row['secondary_providers'];
             $customer_phone = $row['customer_phone'];
             $been_disputed = $row['been_disputed'];
+            $order_disputes = $row['disputes'];
         }
         
         if (minutes_since($end_time) <= 1440) {
@@ -863,10 +876,33 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 
             }
             
-            $sql = "UPDATE orders SET status = ?, been_disputed = 'y' WHERE order_number = ?";
+            $order_disputes += 1;
+            $sql = "UPDATE orders SET status = ?, been_disputed = 'y', disputes = ? WHERE order_number = ?";
             $stmt = $db->prepare($sql);
-            $params = array('di', $order_number);
+            $params = array('di', $order_disputes, $order_number);
             $stmt->execute($params);
+            
+            if ($order_disputes == 3) {
+                $mail = new PHPMailer;
+        
+                $mail->isSMTP();
+                $mail->SMTPDebug = 0;
+                $mail->Debugoutput = 'html';
+                $mail->Host = "smtp.gmail.com";
+                $mail->Port = 587;
+                $mail->SMTPSecure = 'tls';
+                $mail->SMTPAuth = true;
+                $mail->Username = "admin@helphog.com";
+                $mail->Password = "Monkeybanana";
+                $mail->setFrom('admin@helphog.com', 'HelpHog');
+                $mail->addAddress("admin@helphog.com", 'To');
+        
+                $message = 'Order Number: ' . $order_number;
+                
+                $mail->Subject = "HelpHog - Mediation Required";
+                $mail->Body    = $message;
+                $mail->send();
+            }
             
             $all_emails = array();
             array_push($all_emails, $client_email);

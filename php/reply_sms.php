@@ -182,12 +182,19 @@ if (trim(strtolower($body)) == 'dispute') {
         
     } else {
         
-        mark_completed($order_number, '');
+        $success = mark_completed($order_number, '');
         
-        $response->message("Task completed.");
-    }
+        if ($success) {
             
-    
+            $response->message("Since this order has been disputed several times, our staff will now reach out to both you and the customer to resolve any issues.");
+            
+        } else {
+            
+            $response->message("Task completed.");
+            
+        }
+        
+    }
             
 } else if (strpos(strtolower($body), 'completed') !== false && $type == "Business") {
     
@@ -222,8 +229,17 @@ if (trim(strtolower($body)) == 'dispute') {
         
                 if (validate_provider_email($pieces[1], $email)) {
                     
-                    mark_completed($pieces[1], '');
-                    $response->message("Task completed.");
+                    $success = mark_completed($pieces[1], '');
+                    
+                    if ($success) {
+                        
+                        $response->message("Task completed.");
+                        
+                    } else {
+                        
+                        $response->message("Since this order has been disputed several times, our staff will now reach out to both you and the customer to resolve any issues.");
+                        
+                    }
                     
                 } else {
                     

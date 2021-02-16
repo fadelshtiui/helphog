@@ -104,7 +104,6 @@ let preloaded = false;
 	        id('current-city').style.color = 'black'
 	        document.querySelector('.noaddress').style.color = '#5f6876';
 	        updateDistance();
-	        console.log("black in toggleaddressdisplay")
           }
         });
 	}
@@ -404,7 +403,6 @@ let preloaded = false;
     		id("current-city").innerText = response.workcity;
     		id("current-zip").innerText = response.workzip;
             id("current-state").innerText = response.workstate;
-            console.log("black in displayResults")
 		}
 
         if (!preloaded){
@@ -749,8 +747,14 @@ let preloaded = false;
 			let url = "php/markcompleted.php";
 			fetch(url, { method: "POST", body: data })
 				.then(checkStatus)
+				.then(res => res.json())
 				.then(function (response) {
-					location.reload();
+				    if (response.error == "") {
+				        location.reload();
+				    } else {
+				        alert(response.error);
+				    }
+					
 				})
 				.catch(console.log);
 		}
