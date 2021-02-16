@@ -1,54 +1,58 @@
 <!DOCTYPE html>
-<html lang="en" >
-	<head>
-		<meta charset="UTF-8">
-		<title>Admin</title>
-		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-		<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
-		<link rel="stylesheet" href="css/manage.css">
-	</head>
-	<body>
-		<div class="container">
-			<br><br>
-			
-			<label class="pure-material-textfield-standard">
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Admin</title>
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+	<link rel='stylesheet'
+		href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
+	<link rel="stylesheet" href="css/manage.css">
+</head>
+
+<body>
+	<div class="container">
+		<br><br>
+
+		<label class="pure-material-textfield-standard">
 			<input id="email" placeholder=" " style="width:199px;">
 			<span>Provider's email address</span>
-			</label>
-			<label class="pure-material-textfield-standard">
+		</label>
+		<label class="pure-material-textfield-standard">
 			<input id="password" type="password" placeholder=" " style="width:199px;">
 			<span>Password</span>
-			</label>
-			<button id="load" class="btn btn-dark" style="margin-bottom:45px;">Load Data</button>
-			<button id="add" class="btn btn-success" style="margin-bottom:45px;">Add Provider Privleges</button>
-			<button id="remove" class="btn btn-danger" style="margin-bottom:45px;">Remove Provider Privleges</button>
-			<div id="table" class="table-editable">
-				<span class="table-add glyphicon glyphicon-plus"></span>
-				<table class="table">
-					<tr>
-						<!--<th>Index</th>-->
-						<th>Service</th>
-						<!--<th>Value</th>-->
-						<!--<th>Required</th>-->
-						<!--<th>Unique</th>-->
-						<th data-attr-ignore>Remove</th>
-					</tr>
-					<!-- This is our clonable table line -->
-					<tr class="hide">
-						<td contenteditable="true">Enter Service</td>
-						<td>
-							<span class="table-remove glyphicon glyphicon-remove"></span>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<button id="export-btn" class="btn btn-primary">Update Services</button>
-			<p id="export"></p>
+		</label>
+		<button id="load" class="btn btn-dark" style="margin-bottom:45px;">Load Data</button>
+		<button id="add" class="btn btn-success" style="margin-bottom:45px;">Add Provider Privleges</button>
+		<button id="remove" class="btn btn-danger" style="margin-bottom:45px;">Remove Provider Privleges</button>
+		<div id="table" class="table-editable">
+			<span class="table-add glyphicon glyphicon-plus"></span>
+			<table class="table">
+				<tr>
+					<!--<th>Index</th>-->
+					<th>Service</th>
+					<!--<th>Value</th>-->
+					<!--<th>Required</th>-->
+					<!--<th>Unique</th>-->
+					<th data-attr-ignore>Remove</th>
+				</tr>
+				<!-- This is our clonable table line -->
+				<tr class="hide">
+					<td contenteditable="true">Enter Service</td>
+					<td>
+						<span class="table-remove glyphicon glyphicon-remove"></span>
+					</td>
+				</tr>
+			</table>
 		</div>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-		<script src='https://storage.googleapis.com/code.getmdl.io/1.0.1/material.min.js'></script>
-		<script src="js/common.js"></script>
-		<script  src="js/admin.js"></script>
-	</body>
+		<button id="export-btn" class="btn btn-primary">Update Services</button>
+		<p id="export"></p>
+	</div>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script src='https://storage.googleapis.com/code.getmdl.io/1.0.1/material.min.js'></script>
+	<script src="js/common.js"></script>
+	<script src="js/admin.js"></script>
+</body>
+
 </html>

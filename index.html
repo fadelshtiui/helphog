@@ -1,137 +1,144 @@
 <!DOCTYPE html>
-<html lang="en" >
-	<head>
-		<meta charset="UTF-8">
-		<title>Home</title>
-		
-		
-		<link rel="stylesheet" href="css/category.css">
-		
-		<link rel="stylesheet" href="css/style.css" type="text/css">
-		<link rel="stylesheet" href="css/background.css" type="text/css">
-		<link rel="stylesheet" href="css/footer.css" type="text/css">
+<html lang="en">
 
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-		
-		<script src="js/common.js"></script>
-		<script src="js/search.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<title>Home</title>
 
-	</head>
-	<body>
-        <div class="content">
-        	    <div id="loading-animation">
-            		<ul id="navigation">
-            		    <li id="sign-out"><a href="/">Sign Out</a></li>
-            		    <li id="settings"><a href="settings">Settings</a></li>
-            			<li id="sign-in-nav"><a href="signin">Login</a></li>
-            			<li id="register-nav"><a href="registration">Register</a></li>
-            			<li id="apply"><a href="quickapply">Apply</a></li>
-            			<li id="track-order"><a href="tracking">Track Order</a></li>
-            			<li id="orders"><a href="orders">Orders</a></li>
-            			<li id="provider"><a href="provider">Provider Portal</a></li>
-            			<li id="contact"><a href="contact">Contact Us</a></li>
-            			<li id="about"><a href="about">About</a></li>
-            		</ul>
-        		<br>
-        		<main>
-        			<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css"/>
-        			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        			<h5><a href="/" style="display:none;">He!pHog</a></h5>
-        			<div id="slogan" type="text" style="display:none;">Premium Services On Demand</div>
-        			<div class="search-container" style="display:none;">
-        				<!--<div class="search-box">-->
-        				<!--	<div id="form">-->
-        				<!--		<img id="location" src="images/pin-map-icon.png">-->
-        						<input id="zipcode" type="number" v-model="zip" min="10000" max="99999" placeholder="Zipcode"  class="hidden"/>
-        				<!--	</div>-->
-        				<!--</div>-->
-        				<div class="search-box">
-        					<input class="search-input" id="search" type="text" placeholder="What do you need help with today?"/>
-        					<ul class="search-results" id="results"></ul>
-        					<!--<div class="search-icon"><button id="search-btn"><img id="search-image" src="images/search-icon.png"></button></div>-->
-        					<button id="search-btn" style="background-color: transparent;"><img class="search-icon" src="assets/images/search-icon.png"></button>
-        					<ul class="search-results" id="results"></ul>
-        				</div>
-        			</div>
-        			<div id="categories" class="toggles" style="display:none; width: 540px;">
-        				<button id="automotive">Automotive</button>
-        				<button id="creative">Creative</button>
-        				<button id="education">Education</button>
-        				<button id="household">Household</button>
-        				<button id="labor">Labor</button>
-        				<button id="tech">Tech</button>
-        			</div>
-        			<!--<video id="infovid" autoplay loop muted>-->
-           <!--           <source src="images/helphog4.mp4" type="video/mp4">-->
-           <!--         Your browser does not support the video tag.-->
-           <!--         </video>-->
-        			<script src="js/index.js"></script>
-        			<script src="js/loading.js"></script>
-        		</main>
-        		</div>
-        		</div>
-        		<footer class="footer">
 
-                      
-                      <ul class="footer__nav">
-                        <li class="nav__item">
-                          <h12 class="nav__title">Contact</h12>
-                        
-                        <address style="margin-top: -2px;">
-                          +1 (425) 412-7423<br>
-                              
-                          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
-                        </address>
-                        </li>
-                        <li class="nav__item">
-                          <h12 class="nav__title">Discover</h12>
-                    
-                          <ul class="nav__ul">
-                            <li>
-                              <a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
-                            </li>
-                    
-                            <li>
-                              <a href="https://helphog.com/signin">Login</a>
-                            </li>
-                                
-                            <li>
-                              <a href="https://helphog.com/about">About Us</a>
-                            </li>
-                          </ul>
-                        </li>
-                        
-                        <li class="nav__item nav__item--extra">
-                          <h12 class="nav__title">Services</h12>
-                          
-                          <ul class="nav__ul nav__ul--extra">
-                            
-                          </ul>
-                        </li>
-                        
-                        <li class="nav__item">
-                          <h12 class="nav__title">Legal</h12>
-                          
-                          <ul class="nav__ul">
-                            <li>
-                              <a href="#">Privacy Policy</a>
-                            </li>
-                            
-                            <li>
-                              <a href="#">Terms of Use</a>
-                            </li>
-                            
-                            <li>
-                              <a href="#">Sitemap</a>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                      
-                      <div class="legal">
-                        <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
-                        
-                      </div>
-                </footer>
-	</body>
+	<link rel="stylesheet" href="css/category.css">
+
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/background.css" type="text/css">
+	<link rel="stylesheet" href="css/footer.css" type="text/css">
+
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+
+	<script src="js/common.js"></script>
+	<script src="js/search.js"></script>
+
+</head>
+
+<body>
+	<div class="content">
+		<div id="loading-animation">
+			<ul id="navigation">
+				<li id="sign-out"><a href="/">Sign Out</a></li>
+				<li id="settings"><a href="settings">Settings</a></li>
+				<li id="sign-in-nav"><a href="signin">Login</a></li>
+				<li id="register-nav"><a href="registration">Register</a></li>
+				<li id="apply"><a href="quickapply">Apply</a></li>
+				<li id="track-order"><a href="tracking">Track Order</a></li>
+				<li id="orders"><a href="orders">Orders</a></li>
+				<li id="provider"><a href="provider">Provider Portal</a></li>
+				<li id="contact"><a href="contact">Contact Us</a></li>
+				<li id="about"><a href="about">About</a></li>
+			</ul>
+			<br>
+			<main>
+				<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+				<link rel="stylesheet"
+					href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+				<h5><a href="/" style="display:none;">He!pHog</a></h5>
+				<div id="slogan" type="text" style="display:none;">Premium Services On Demand</div>
+				<div class="search-container" style="display:none;">
+					<!--<div class="search-box">-->
+					<!--	<div id="form">-->
+					<!--		<img id="location" src="images/pin-map-icon.png">-->
+					<input id="zipcode" type="number" v-model="zip" min="10000" max="99999" placeholder="Zipcode"
+						class="hidden" />
+					<!--	</div>-->
+					<!--</div>-->
+					<div class="search-box">
+						<input class="search-input" id="search" type="text"
+							placeholder="What do you need help with today?" />
+						<ul class="search-results" id="results"></ul>
+						<!--<div class="search-icon"><button id="search-btn"><img id="search-image" src="images/search-icon.png"></button></div>-->
+						<button id="search-btn" style="background-color: transparent;"><img class="search-icon"
+								src="assets/images/search-icon.png"></button>
+						<ul class="search-results" id="results"></ul>
+					</div>
+				</div>
+				<div id="categories" class="toggles" style="display:none; width: 540px;">
+					<button id="automotive">Automotive</button>
+					<button id="creative">Creative</button>
+					<button id="education">Education</button>
+					<button id="household">Household</button>
+					<button id="labor">Labor</button>
+					<button id="tech">Tech</button>
+				</div>
+				<!--<video id="infovid" autoplay loop muted>-->
+				<!--           <source src="images/helphog4.mp4" type="video/mp4">-->
+				<!--         Your browser does not support the video tag.-->
+				<!--         </video>-->
+				<script src="js/index.js"></script>
+				<script src="js/loading.js"></script>
+			</main>
+		</div>
+	</div>
+	<footer class="footer">
+
+
+		<ul class="footer__nav">
+			<li class="nav__item">
+				<h12 class="nav__title">Contact</h12>
+
+				<address style="margin-top: -2px;">
+					+1 (425) 412-7423<br>
+
+					<a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
+				</address>
+			</li>
+			<li class="nav__item">
+				<h12 class="nav__title">Discover</h12>
+
+				<ul class="nav__ul">
+					<li>
+						<a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
+					</li>
+
+					<li>
+						<a href="https://helphog.com/signin">Login</a>
+					</li>
+
+					<li>
+						<a href="https://helphog.com/about">About Us</a>
+					</li>
+				</ul>
+			</li>
+
+			<li class="nav__item nav__item--extra">
+				<h12 class="nav__title">Services</h12>
+
+				<ul class="nav__ul nav__ul--extra">
+
+				</ul>
+			</li>
+
+			<li class="nav__item">
+				<h12 class="nav__title">Legal</h12>
+
+				<ul class="nav__ul">
+					<li>
+						<a href="#">Privacy Policy</a>
+					</li>
+
+					<li>
+						<a href="#">Terms of Use</a>
+					</li>
+
+					<li>
+						<a href="#">Sitemap</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+		<div class="legal">
+			<p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
+
+		</div>
+	</footer>
+</body>
+
 </html>

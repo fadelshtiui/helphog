@@ -1,178 +1,182 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Tracking</title>
-		<link rel="stylesheet" href="css/contact.css" type="text/css">
-		<link rel="stylesheet" href="css/style.css" type="text/css">
-		<link rel="stylesheet" href="css/footer.css" type="text/css">
-		<link rel="stylesheet" href="css/tracking.css">
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-		<script src="js/common.js"></script>
-		<script src="js/loading.js"></script>
-		<script src="js/tracking.js"></script>
 
-	</head>
-	<body style="text-align: inherit;">
-	    <div class="content">
+<head>
+	<meta charset="utf-8">
+	<title>Tracking</title>
+	<link rel="stylesheet" href="css/contact.css" type="text/css">
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/footer.css" type="text/css">
+	<link rel="stylesheet" href="css/tracking.css">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+	<script src="js/common.js"></script>
+	<script src="js/loading.js"></script>
+	<script src="js/tracking.js"></script>
+
+</head>
+
+<body style="text-align: inherit;">
+	<div class="content">
 		<div id="logo"><a href="/">He!pHog</a></div>
 		<div id="loading-animation" style="display:none;">
-    		<ul id="navigation">
-    		    <li id="sign-out"><a href="/">Sign Out</a></li>
-    		    <li id="settings"><a href="settings">Settings</a></li>
-    			<li id="sign-in-nav"><a href="signin">Login</a></li>
-    			<li id="register-nav"><a href="registration">Register</a></li>
-    			<li id="apply"><a href="quickapply">Apply</a></li>
-    			<li id="track-order"><a href="tracking">Track Order</a></li>
-    			<li id="orders"><a href="orders">Orders</a></li>
-    			<li id="provider"><a href="provider">Provider Portal</a></li>
-    			<li id="contact"><a href="contact">Contact Us</a></li>
-    			<li id="about"><a href="about">About</a></li>
-    		</ul>
+			<ul id="navigation">
+				<li id="sign-out"><a href="/">Sign Out</a></li>
+				<li id="settings"><a href="settings">Settings</a></li>
+				<li id="sign-in-nav"><a href="signin">Login</a></li>
+				<li id="register-nav"><a href="registration">Register</a></li>
+				<li id="apply"><a href="quickapply">Apply</a></li>
+				<li id="track-order"><a href="tracking">Track Order</a></li>
+				<li id="orders"><a href="orders">Orders</a></li>
+				<li id="provider"><a href="provider">Provider Portal</a></li>
+				<li id="contact"><a href="contact">Contact Us</a></li>
+				<li id="about"><a href="about">About</a></li>
+			</ul>
 		</div>
 		<br>
 		<main>
-					<div class="container">
-			<form class="form" action="#" autocomplete="off">
-				<fieldset>
-					<input id="first" type="text" name="first" required>
-					<label for="first">Order Number</label>
-					<div class="after"></div>
-				</fieldset>
-				<fieldset>
-					<input id="second" type="text" name="second" required>
-					<label for="second">Email</label>
-					<div class="after"></div>
-				</fieldset>
-			</form>
-			<div class="row">
-				<div class="col-xs-12 button-holder">
-					<div class="ajax-button">
-						<div class="fa fa-check done"></div>
-						<div class="fa fa-close failed"></div>
-						<input id="submit" class="submit" type="button" value="Track" />
+			<div class="container">
+				<form class="form" action="#" autocomplete="off">
+					<fieldset>
+						<input id="first" type="text" name="first" required>
+						<label for="first">Order Number</label>
+						<div class="after"></div>
+					</fieldset>
+					<fieldset>
+						<input id="second" type="text" name="second" required>
+						<label for="second">Email</label>
+						<div class="after"></div>
+					</fieldset>
+				</form>
+				<div class="row">
+					<div class="col-xs-12 button-holder">
+						<div class="ajax-button">
+							<div class="fa fa-check done"></div>
+							<div class="fa fa-close failed"></div>
+							<input id="submit" class="submit" type="button" value="Track" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 text-holder">
+						<p id="message" style="color: black;">
+							Track the status of your order using your order number
+						</p>
+					</div>
+				</div>
+				<div class="panel">
+					<div class="title">
+						<div class="heading">Tracking Details<span id="canceled" style="color:red; display:none">(Order
+								Canceled)</span></div>
+						<div class="tracking-id">Order for: <span id="service"></span></div>
+						<div class="icon"><i class="fa fa-truck fa-2x"></i></div>
+					</div>
+					<div class="items">
+						<div class="item" data-state="label-created">
+							<div class="title">Order Processing</div>
+							<div class="datestamp">Your order has been dispatched to local providers.</div>
+						</div>
+						<div class="item" data-state="picked-up">
+							<div class="title">Provider Assigned</div>
+							<div class="datestamp">A provider has been assigned to you.</div>
+						</div>
+						<div class="item" data-state="transit">
+							<div class="title">Work Started</div>
+							<div class="datestamp">The provider has begun working on your order.</div>
+						</div>
+						<div class="item" data-state="delivered">
+							<div class="title">Work Completed</div>
+							<div class="datestamp">Your order has been completed.</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-12 text-holder">
-					<p id="message" style="color: black;">
-						Track the status of your order using your order number
-					</p>
-				</div>
-			</div>
-			<div class="panel">
-				<div class="title">
-					<div class="heading">Tracking Details<span id="canceled" style="color:red; display:none">(Order Canceled)</span></div>
-					<div class="tracking-id">Order for: <span id="service"></span></div>
-					<div class="icon"><i class="fa fa-truck fa-2x"></i></div>
-				</div>
-				<div class="items">
-					<div class="item" data-state="label-created">
-						<div class="title">Order Processing</div>
-						<div class="datestamp">Your order has been dispatched to local providers.</div>
-					</div>
-					<div class="item" data-state="picked-up">
-						<div class="title">Provider Assigned</div>
-						<div class="datestamp">A provider has been assigned to you.</div>
-					</div>
-					<div class="item" data-state="transit">
-						<div class="title">Work Started</div>
-						<div class="datestamp">The provider has begun working on your order.</div>
-					</div>
-					<div class="item" data-state="delivered">
-						<div class="title">Work Completed</div>
-						<div class="datestamp">Your order has been completed.</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		</main>
-		</div>
-		<footer class="footer">
+	</div>
+	<footer class="footer">
 
-                      
-                      <ul class="footer__nav">
-                        <li class="nav__item">
-                          <h12 class="nav__title">Contact</h12>
-                        
-                        <address style="margin-top: -2px;">
-                          +1 (425) 412-7423<br>
-                              
-                          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
-                        </address>
-                        </li>
-                        <li class="nav__item">
-                          <h12 class="nav__title">Discover</h12>
-                    
-                          <ul class="nav__ul">
-                            <li>
-                              <a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
-                            </li>
-                    
-                            <li>
-                              <a href="https://helphog.com/signin">Login</a>
-                            </li>
-                                
-                            <li>
-                              <a href="https://helphog.com/about">About Us</a>
-                            </li>
-                          </ul>
-                        </li>
-                        
-                        <li class="nav__item nav__item--extra">
-                          <h12 class="nav__title">Services</h12>
-                          
-                          <ul class="nav__ul nav__ul--extra">
-                            <!--<li>-->
-                            <!--  <a href="#">Automotive</a>-->
-                            <!--</li>-->
-                            
-                            <!--<li>-->
-                            <!--  <a href="#">Creative</a>-->
-                            <!--</li>-->
-                            
-                            <!--<li>-->
-                            <!--  <a href="#">Education</a>-->
-                            <!--</li>-->
-                            
-                            <!--<li>-->
-                            <!--  <a href="#">Household</a>-->
-                            <!--</li>-->
-                            
-                            <!--<li>-->
-                            <!--  <a href="#">Labor</a>-->
-                            <!--</li>-->
-                            
-                            <!--<li>-->
-                            <!--  <a href="#">Tech</a>-->
-                            <!--</li>-->
-                          </ul>
-                        </li>
-                        
-                        <li class="nav__item">
-                          <h12 class="nav__title">Legal</h12>
-                          
-                          <ul class="nav__ul">
-                            <li>
-                              <a href="#">Privacy Policy</a>
-                            </li>
-                            
-                            <li>
-                              <a href="#">Terms of Use</a>
-                            </li>
-                            
-                            <li>
-                              <a href="#">Sitemap</a>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                      
-                      <div class="legal">
-                        <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
-                        
-                      </div>
-                </footer>
-	</body>
+
+		<ul class="footer__nav">
+			<li class="nav__item">
+				<h12 class="nav__title">Contact</h12>
+
+				<address style="margin-top: -2px;">
+					+1 (425) 412-7423<br>
+
+					<a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
+				</address>
+			</li>
+			<li class="nav__item">
+				<h12 class="nav__title">Discover</h12>
+
+				<ul class="nav__ul">
+					<li>
+						<a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
+					</li>
+
+					<li>
+						<a href="https://helphog.com/signin">Login</a>
+					</li>
+
+					<li>
+						<a href="https://helphog.com/about">About Us</a>
+					</li>
+				</ul>
+			</li>
+
+			<li class="nav__item nav__item--extra">
+				<h12 class="nav__title">Services</h12>
+
+				<ul class="nav__ul nav__ul--extra">
+					<!--<li>-->
+					<!--  <a href="#">Automotive</a>-->
+					<!--</li>-->
+
+					<!--<li>-->
+					<!--  <a href="#">Creative</a>-->
+					<!--</li>-->
+
+					<!--<li>-->
+					<!--  <a href="#">Education</a>-->
+					<!--</li>-->
+
+					<!--<li>-->
+					<!--  <a href="#">Household</a>-->
+					<!--</li>-->
+
+					<!--<li>-->
+					<!--  <a href="#">Labor</a>-->
+					<!--</li>-->
+
+					<!--<li>-->
+					<!--  <a href="#">Tech</a>-->
+					<!--</li>-->
+				</ul>
+			</li>
+
+			<li class="nav__item">
+				<h12 class="nav__title">Legal</h12>
+
+				<ul class="nav__ul">
+					<li>
+						<a href="#">Privacy Policy</a>
+					</li>
+
+					<li>
+						<a href="#">Terms of Use</a>
+					</li>
+
+					<li>
+						<a href="#">Sitemap</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+		<div class="legal">
+			<p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
+
+		</div>
+	</footer>
+</body>
+
 </html>
