@@ -2,98 +2,98 @@ let guestOpen = false;
 let loginOpen = false;
 
 window.addEventListener('load', function () {
-    
+
     id('city-state-comma').classList.add('hidden')
     document.querySelector(".loader").classList.add("hidden");
-    
+
     $('#guest, .close-modal').on('click', function () {
-	    
+
 	    id("username").value = "";
 		id("password").value = "";
-			
+
 	    if (!loginOpen) {
 	        $('.modal-content').slideToggle();
 	    }
-	    
+
 	    guestOpen = true;
 	    loginOpen = false;
 	});
 
 
 	$('#login').on('click', function () {
-	    
+
 	    id("username").value = "";
 		id("password").value = "";
-		
+
 	    if (!guestOpen) {
 	        $('.modal-content').slideToggle();
 	    }
-	    
+
 	    loginOpen = true;
 		guestOpen = false;
 	});
-    
+
     $('.popupCloseButton').click(function () {
 		$('.hover_bkgr_fricc').hide();
 	});
-    
+
     id("close").onclick = function() {
         document.documentElement.style.overflow = "overlay";
         document.querySelector("button").disabled = false;
     }
-    
+
     id('locationField').classList.add('hidden')
-    
+
     id('edit').addEventListener('click', editAddress)
     id('addressDisplay').addEventListener('click', editAddress)
-    
+
     const urlParams = new URLSearchParams(window.location.search)
-    
+
     let today = new Date();
     let now = today.getHours() + ":" + today.getMinutes()
-    
+
     id('arrow').addEventListener('click', navigateBack)
 
     let dom = today.toUTCString().substring(4, 7)
     let month = today.toUTCString().substring(8, 11)
     let year = today.toUTCString().substring(12, 16)
-    
+
     let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    
+
     id('dow').value = today.toDateString().substring(0, 3)
-	id('date').value = today.toDateString().substring(4, 15) 
+	id('date').value = today.toDateString().substring(4, 15)
 
     let timeslots = document.querySelectorAll('.timeslot')
     for (let i = 0; i < timeslots.length; i++) {
         let slot = timeslots[i];
         slot.onclick = updateTime;
     }
-    
+
     initTextFields();
-    
+
     id('duration').onchange = function() {
         checkAvailability('false', updateTimePicker);
     }
     id('numpeople').onchange = function() {
         checkAvailability('false', updateTimePicker);
     }
-    
+
     checkAvailability('false', updateTimePicker);
-    
+
 	id("submit-login").onclick = submitLogin;
-	
+
 	id("guest").onclick = function () {
 	    id("email-error").innerText = "";
 	    id("password-error").innerText = "";
-	    
+
         const inputElement = id('username');
-        
+
         inputElement.addEventListener('keydown',enforceFormat);
         inputElement.addEventListener('keyup',formatToPhone);
-        
+
 	    id("username").value = "";
 		id("password").value = "";
-		
+
 		id("username").placeholder = "Phone Number";
 		id("password").placeholder = "Email";
 		id("password").setAttribute("type", "text");
@@ -102,19 +102,19 @@ window.addEventListener('load', function () {
 		id("noaccount").classList.add("hidden");
 		id("submit-login").onclick = guestLogin;
 	};
-	
+
 	id("login").onclick = function () {
 	    id("email-error").innerText = "";
 	    id("password-error").innerText = "";
-	    
+
 	    const inputElement = id('username');
-	    
+
 	    id("username").value = "";
 		id("password").value = "";
-		
+
 		inputElement.removeEventListener('keydown', enforceFormat);
         inputElement.removeEventListener('keyup', formatToPhone);
-		
+
 		id("username").placeholder = "Email";
 		id("password").placeholder = "Password";
 		id("password").setAttribute("type", "password");
@@ -122,19 +122,19 @@ window.addEventListener('load', function () {
 		id("noaccount").classList.remove("hidden");
 		id("submit-login").onclick = submitLogin;
 	};
-	
+
 	id("guest").click();
-	
+
 	let wage = urlParams.get('wage')
-	
+
 	if (wage == "per"){
 	    id("hourlabel").style.display = "none";
 	    id("quantity2").style.display = "none";
 	}
-	
+
 	id('button').addEventListener('click', validateInput);
-	
-	
+
+
 	if(id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == ''){
 	  editAddress();
 	}
@@ -157,30 +157,30 @@ function initTextFields() {
 
 	service.innerText = service.innerText + "" + urlParams.get('service');
 	description.innerText = description.innerText + "" + urlParams.get('description');
-	
+
 	id('duration').value = 1
     id('numpeople').value = 1
-	
+
 	if (urlParams.get('address')) {
         id('current-address').innerText = urlParams.get('address')
     }
-    
+
     if (urlParams.get('city')) {
         id('current-city').innerText = urlParams.get('city')
     }
-    
+
     if (urlParams.get('state')) {
         id('current-state').innerText = urlParams.get('state')
     }
-    
+
     if (urlParams.get('zip')) {
         id('current-zip').innerText = urlParams.get('zip')
     }
-    
+
     if (urlParams.get('city') && urlParams.get('state')) {
         id('city-state-comma').classList.remove('hidden')
     }
-    
+
     if (urlParams.get('remote') == "y"){
         id("location").classList.add('hidden')
         id("current-address").value = "Online (remote)";
@@ -192,9 +192,9 @@ function initTextFields() {
 }
 
 function navigateBack() {
-    
+
 	const urlParams = new URLSearchParams(window.location.search)
-	
+
     let back = urlParams.get('back')
     let url = back + '?';
     if (urlParams.get('zip')) {
@@ -209,28 +209,28 @@ function navigateBack() {
             url += '&category=' + urlParams.get('category')
         }
     }
-    
+
     if (urlParams.get('address')) {
         url += '&address=' + urlParams.get('address')
     }
-    
+
     if (urlParams.get('city')) {
         url += '&city=' + urlParams.get('city')
     }
-    
+
     if (urlParams.get('state')) {
         url += '&state=' + urlParams.get('state')
     }
-    
+
     window.location = url
 }
 
 async function checkAvailability(updatecontactlist, callback) {
-    
+
     id('button').disabled = true;
-    
+
 	const urlParams = new URLSearchParams(window.location.search)
-	
+
 	let service = urlParams.get('service')
 	let schedule = "";
 	if (updatecontactlist == 'true') {
@@ -238,14 +238,14 @@ async function checkAvailability(updatecontactlist, callback) {
 	} else {
 	    schedule = id('date').value
 	}
-    
+
     let numpeople = id('numpeople').value
     let duration = id('duration').value
     let remote = urlParams.get('remote')
-    
+
     let tz = jstz.determine();
     let timezone = tz.name();
-    
+
     let fullAddress = (id('current-address').innerText + '+' + id('current-city').innerText + '+' + id('current-state').innerText + '+' + id('current-zip').innerText).replace(/ /gi, '+')
 
     let data = new FormData();
@@ -277,19 +277,19 @@ function removeLoader(){
 }
 
 function updateTimePicker(response) {
-    
+
     let slots = document.querySelectorAll(".timeslot")
-    
+
     for (let i = 0; i < slots.length; i++) {
-        
+
         let slot = slots[i]
         let slotVal = Math.floor(slot.getAttribute('data-availabilityValue'));
-        
+
         let upperBound = slotVal;
         if (slot.getAttribute('data-availabilityValue') % 1 != 0) { // decimal number
             upperBound = Math.ceil(slot.getAttribute('data-availabilityValue'))
         }
-        
+
         if (response[slotVal] == '0' || response[upperBound] == '0') {
             slot.classList.remove('available-column');
             slot.classList.add('unavailable-column');
@@ -300,18 +300,18 @@ function updateTimePicker(response) {
             slot.classList.add('available-column');
         }
     }
-	
+
     let today = new Date();
     let newdate = new Date(id('date').value)
-	
+
     if (newdate.getFullYear() == today.getFullYear() && newdate.getMonth() == today.getMonth() && newdate.getDate() == today.getDate()) {
         let currentHour = today.getHours();
         let slots = document.querySelectorAll(".timeslot")
         for (let i = 0; i < slots.length; i++) {
-            
+
             let slot = slots[i]
             let slotVal = Math.floor(slot.getAttribute('data-availabilityValue'));
-            
+
             if (slotVal <= currentHour) {
                 slot.classList.remove('available-column');
                 slot.classList.add('unavailable-column');
@@ -320,41 +320,41 @@ function updateTimePicker(response) {
             }
         }
     }
-    
+
     id('button').disabled = false;
 }
 
 function updateTime() {
     const urlParams = new URLSearchParams(window.location.search)
-    
+
     if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
         if (this.classList.contains("available-column")) {
-        
+
     		let timeslots = document.querySelectorAll('.timeslot')
     		for (let i = 0; i < timeslots.length; i++) {
     	        let slot = timeslots[i];
     	        slot.classList.remove("time-selected");
     	    }
-    	    
+
     	    this.classList.add("time-selected")
-    	    
+
     		id('time').value = this.getAttribute('data-militaryTime')
         }
     } else {
         alert("Please select a full address.");
     }
-    
+
 }
 
 async function validateInput() {
-    
+
     const urlParams = new URLSearchParams(window.location.search)
-    
+
     if((id("current-address").innerText == "" || id("current-city").innerText == "" || id("current-state").innerText == "" || id("current-zip").innerText == "") && urlParams.get('remote') == 'n') {
         alert('Please select a full address')
         return;
     }
-    
+
     let timeSelected = false;
 	let timeslots = document.querySelectorAll('.timeslot')
     for (let i = 0; i < timeslots.length; i++) {
@@ -367,24 +367,24 @@ async function validateInput() {
 	    alert('Please select a time for your order.')
 	    return
 	}
-    
+
     let data = new FormData();
 	data.append("session", getSession());
 	let url = "php/session.php";
 	let response = await fetch(url, { method: "POST", body: data })
 	await checkStatus(response)
 	response = await response.json();
-	    
+
     if (response.validated == "false") {
-    
+
         $('.hover_bkgr_fricc').show();
-    
+
     } else {
-        
+
         initModal();
-    		
+
     }
-    
+
 }
 
 function submitLogin() {
@@ -421,9 +421,9 @@ function submitLoginHelper(response) {
 	if (response.verified == "n") {
 		alert("Your account has not yet been verified. Please check your email for a verification email.");
 	} else if (response.emailerror == "" && response.passworderror == "") {
-	    
+
 	    $('.hover_bkgr_fricc').hide();
-	    
+
 		document.cookie = "session=" + response.session + ";";
 		initModal();
 	}
@@ -440,7 +440,7 @@ function guestLogin() {
 		.then(res => res.json())
 		.then(guestLoginHelper)
 		.catch(console.log);
-		
+
 }
 
 function guestLoginHelper(response){
@@ -449,16 +449,16 @@ function guestLoginHelper(response){
     }
     if (response.phoneerror != "") {
         id("password-error").innerText = response.phoneerror;
-    } 
-    
+    }
+
     if (response.emailerror == "" && response.phoneerror == "") {
 	    $('.hover_bkgr_fricc').hide();
 	    id("email-error").innerText = "";
 	    id("password-error").innerText = "";
-	    
+
 	    initModal();
 	 }
-	 
+
 }
 
 function generateOrderNumber() {
@@ -469,10 +469,10 @@ function generateOrderNumber() {
 
 function initModal() {
     id('order').value = generateOrderNumber()
-    
+
     document.documentElement.style.overflow = "hidden";
 	const urlParams = new URLSearchParams(window.location.search)
-	
+
 	let cost = urlParams.get('price')
 	let estimate;
 	if (urlParams.get('wage') == 'per') {
@@ -480,64 +480,64 @@ function initModal() {
 	} else {
         estimate = id("numpeople").value * cost * ((id("duration").value) - 1) + "-$" + id("numpeople").value * cost * id("duration").value;
 	}
-	
+
     let time = id('time').value
-    
+
     let message = "(No message)"
     if (id("message").value != ""){
         message = id("message").value;
     }
-    
+
     let people = "provider"
     if (id("numpeople").value > 1) {
         people = "providers"
     }
-    
+
     id("terms").innerText = "You will not be charged until your order is completed. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. For automotive repair tasks, estimated cost does include costs of replacement parts/accessories."
-    
+
     id("popupService").innerText = id("first").innerText;
     id("popupMessage").innerText = " " + message;
     id("popupDate").innerText = " " + formatDate(id('date').innerText) + " " + time;
     id("popupProviders").innerText = id("numpeople").value;
     id("popupTotal").innerText = estimate;
-    
+
     if (urlParams.get('remote') == "y"){
         id("popupAddress").innerText = " Remote (Online)"
     } else {
         id("popupAddress").innerText = " " +  id("current-address").innerText + " " + id("current-city").innerText.charAt(0).toUpperCase() + id("current-city").innerText.slice(1)  + ", " + id("current-state").innerText.toUpperCase() + " " + id("current-zip").innerText;
     }
-    
+
     window.location = window.location.href.replace('#', '') + "#popup1";
-    
+
     if (urlParams.get('wage') == "per"){
-	    
+
 	    id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost;
-	    
-	    stripe(id("first").innerText, "Until Completion", id("numpeople").value); 
+
+	    stripe(id("first").innerText, "Until Completion", id("numpeople").value);
 	} else{
 
         let durationText = id("duration").options[id("duration").selectedIndex].text;
         let durationCalc = id("duration").value;
-    
+
         id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost + "/hr " + "(" + durationText + ")"
-        
-        stripe(id("first").innerText, durationCalc, id("numpeople").value); 
+
+        stripe(id("first").innerText, durationCalc, id("numpeople").value);
 	}
-    
+
 }
 
 async function stripe(service, duration, people){
-	
+
 	let data = new FormData();
     data.append("session", getSession())
     let url = "php/session.php"
     let response = await fetch(url, {method: "POST", body: data })
     await checkStatus(response);
     response = await response.json()
-    
+
     let email = "";
     let phone = "";
-    
+
     if (response.validated == "true") {
         email = response.account.email
         phone = response.account.phone
@@ -545,14 +545,14 @@ async function stripe(service, duration, people){
         email = id("password").value
 		phone = id("username").value.replace(/\D/g,'')
     }
-    
+
     let message = "N/A"
     if (id('message').value) {
         message = id('message').value
     }
-    
+
     await checkAvailability('true', console.log);
-    
+
     let tz = jstz.determine();
     let timezone = tz.name();
 
@@ -590,7 +590,7 @@ async function stripe(service, duration, people){
             cancelbuffer: id('cancelbuffer').value
         }
     };
-    
+
     document.querySelector("button").disabled = true;
     fetch("php/payment.php", {
         method: "POST",
@@ -625,6 +625,7 @@ async function stripe(service, duration, people){
           document.querySelector("button").disabled = event.empty;
           document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
         });
+        id("taxRate").innerText = " + tax (" + data.taxRate + ")";
         var form = id("payment-form");
         form.addEventListener("submit", function(event) {
           event.preventDefault();
@@ -701,15 +702,15 @@ function formatDate(date) {
     h = 12;
     }
     m = m < 10 ? "0" + m : m;
-    
+
     s = s < 10 ? "0" + s : s;
-    
+
     h = h<10?"0"+h:h;
-    
+
     var pattern = new RegExp("0?" + hh + ":" + m + ":" + s);
-    
+
     var replacement = h + ":" + m;
     replacement += " " + dd;
-    
+
     return date.replace(pattern, replacement);
 }
