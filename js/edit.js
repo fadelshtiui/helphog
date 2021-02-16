@@ -8,36 +8,36 @@ window.addEventListener('load', function () {
 
     $('#guest, .close-modal').on('click', function () {
 
-	    id("username").value = "";
-		id("password").value = "";
+        id("username").value = "";
+        id("password").value = "";
 
-	    if (!loginOpen) {
-	        $('.modal-content').slideToggle();
-	    }
+        if (!loginOpen) {
+            $('.modal-content').slideToggle();
+        }
 
-	    guestOpen = true;
-	    loginOpen = false;
-	});
+        guestOpen = true;
+        loginOpen = false;
+    });
 
 
-	$('#login').on('click', function () {
+    $('#login').on('click', function () {
 
-	    id("username").value = "";
-		id("password").value = "";
+        id("username").value = "";
+        id("password").value = "";
 
-	    if (!guestOpen) {
-	        $('.modal-content').slideToggle();
-	    }
+        if (!guestOpen) {
+            $('.modal-content').slideToggle();
+        }
 
-	    loginOpen = true;
-		guestOpen = false;
-	});
+        loginOpen = true;
+        guestOpen = false;
+    });
 
     $('.popupCloseButton').click(function () {
-		$('.hover_bkgr_fricc').hide();
-	});
+        $('.hover_bkgr_fricc').hide();
+    });
 
-    id("close").onclick = function() {
+    id("close").onclick = function () {
         document.documentElement.style.overflow = "overlay";
         document.querySelector("button").disabled = false;
     }
@@ -61,7 +61,7 @@ window.addEventListener('load', function () {
     let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
     id('dow').value = today.toDateString().substring(0, 3)
-	id('date').value = today.toDateString().substring(4, 15)
+    id('date').value = today.toDateString().substring(4, 15)
 
     let timeslots = document.querySelectorAll('.timeslot')
     for (let i = 0; i < timeslots.length; i++) {
@@ -71,73 +71,73 @@ window.addEventListener('load', function () {
 
     initTextFields();
 
-    id('duration').onchange = function() {
+    id('duration').onchange = function () {
         checkAvailability('false', updateTimePicker);
     }
-    id('numpeople').onchange = function() {
+    id('numpeople').onchange = function () {
         checkAvailability('false', updateTimePicker);
     }
 
     checkAvailability('false', updateTimePicker);
 
-	id("submit-login").onclick = submitLogin;
+    id("submit-login").onclick = submitLogin;
 
-	id("guest").onclick = function () {
-	    id("email-error").innerText = "";
-	    id("password-error").innerText = "";
+    id("guest").onclick = function () {
+        id("email-error").innerText = "";
+        id("password-error").innerText = "";
 
         const inputElement = id('username');
 
-        inputElement.addEventListener('keydown',enforceFormat);
-        inputElement.addEventListener('keyup',formatToPhone);
+        inputElement.addEventListener('keydown', enforceFormat);
+        inputElement.addEventListener('keyup', formatToPhone);
 
-	    id("username").value = "";
-		id("password").value = "";
+        id("username").value = "";
+        id("password").value = "";
 
-		id("username").placeholder = "Phone Number";
-		id("password").placeholder = "Email";
-		id("password").setAttribute("type", "text");
-		id("password").innerText = "";
-		id("password").innerText = "";
-		id("noaccount").classList.add("hidden");
-		id("submit-login").onclick = guestLogin;
-	};
+        id("username").placeholder = "Phone Number";
+        id("password").placeholder = "Email";
+        id("password").setAttribute("type", "text");
+        id("password").innerText = "";
+        id("password").innerText = "";
+        id("noaccount").classList.add("hidden");
+        id("submit-login").onclick = guestLogin;
+    };
 
-	id("login").onclick = function () {
-	    id("email-error").innerText = "";
-	    id("password-error").innerText = "";
+    id("login").onclick = function () {
+        id("email-error").innerText = "";
+        id("password-error").innerText = "";
 
-	    const inputElement = id('username');
+        const inputElement = id('username');
 
-	    id("username").value = "";
-		id("password").value = "";
+        id("username").value = "";
+        id("password").value = "";
 
-		inputElement.removeEventListener('keydown', enforceFormat);
+        inputElement.removeEventListener('keydown', enforceFormat);
         inputElement.removeEventListener('keyup', formatToPhone);
 
-		id("username").placeholder = "Email";
-		id("password").placeholder = "Password";
-		id("password").setAttribute("type", "password");
-		guest = false;
-		id("noaccount").classList.remove("hidden");
-		id("submit-login").onclick = submitLogin;
-	};
+        id("username").placeholder = "Email";
+        id("password").placeholder = "Password";
+        id("password").setAttribute("type", "password");
+        guest = false;
+        id("noaccount").classList.remove("hidden");
+        id("submit-login").onclick = submitLogin;
+    };
 
-	id("guest").click();
+    id("guest").click();
 
-	let wage = urlParams.get('wage')
+    let wage = urlParams.get('wage')
 
-	if (wage == "per"){
-	    id("hourlabel").style.display = "none";
-	    id("quantity2").style.display = "none";
-	}
+    if (wage == "per") {
+        id("hourlabel").style.display = "none";
+        id("quantity2").style.display = "none";
+    }
 
-	id('button').addEventListener('click', validateInput);
+    id('button').addEventListener('click', validateInput);
 
 
-	if(id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == ''){
-	  editAddress();
-	}
+    if (id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == '') {
+        editAddress();
+    }
 
 });
 
@@ -149,19 +149,19 @@ function editAddress() {
 }
 
 function initTextFields() {
-	let service = document.querySelector(".service");
-	let description = document.querySelector(".description");
+    let service = document.querySelector(".service");
+    let description = document.querySelector(".description");
 
-	let queryString = window.location.search
-	const urlParams = new URLSearchParams(queryString)
+    let queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
 
-	service.innerText = service.innerText + "" + urlParams.get('service');
-	description.innerText = description.innerText + "" + urlParams.get('description');
+    service.innerText = service.innerText + "" + urlParams.get('service');
+    description.innerText = description.innerText + "" + urlParams.get('description');
 
-	id('duration').value = 1
+    id('duration').value = 1
     id('numpeople').value = 1
 
-	if (urlParams.get('address')) {
+    if (urlParams.get('address')) {
         id('current-address').innerText = urlParams.get('address')
     }
 
@@ -181,7 +181,7 @@ function initTextFields() {
         id('city-state-comma').classList.remove('hidden')
     }
 
-    if (urlParams.get('remote') == "y"){
+    if (urlParams.get('remote') == "y") {
         id("location").classList.add('hidden')
         id("current-address").value = "Online (remote)";
         id("current-city").value = " ";
@@ -193,7 +193,7 @@ function initTextFields() {
 
 function navigateBack() {
 
-	const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new URLSearchParams(window.location.search)
 
     let back = urlParams.get('back')
     let url = back + '?';
@@ -229,15 +229,15 @@ async function checkAvailability(updatecontactlist, callback) {
 
     id('button').disabled = true;
 
-	const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new URLSearchParams(window.location.search)
 
-	let service = urlParams.get('service')
-	let schedule = "";
-	if (updatecontactlist == 'true') {
-	    schedule = id('date').value + ' ' + id('time').value;
-	} else {
-	    schedule = id('date').value
-	}
+    let service = urlParams.get('service')
+    let schedule = "";
+    if (updatecontactlist == 'true') {
+        schedule = id('date').value + ' ' + id('time').value;
+    } else {
+        schedule = id('date').value
+    }
 
     let numpeople = id('numpeople').value
     let duration = id('duration').value
@@ -251,27 +251,27 @@ async function checkAvailability(updatecontactlist, callback) {
     let data = new FormData();
     data.append('address', fullAddress)
     data.append('tz', timezone);
-	data.append("service", service);
-	data.append("numpeople", numpeople);
-	data.append("schedule", schedule);
-	data.append("duration", duration);
-	data.append("remote", remote);
-	data.append('updatecontactlist', updatecontactlist);
-	let url = "php/checkavailability.php";
-	addLoader();
-	let response = await fetch(url, { method: "POST", body: data })
-	await checkStatus(response);
-	response = await response.text();
-	callback(response);
-	removeLoader();
+    data.append("service", service);
+    data.append("numpeople", numpeople);
+    data.append("schedule", schedule);
+    data.append("duration", duration);
+    data.append("remote", remote);
+    data.append('updatecontactlist', updatecontactlist);
+    let url = "php/checkavailability.php";
+    addLoader();
+    let response = await fetch(url, { method: "POST", body: data })
+    await checkStatus(response);
+    response = await response.text();
+    callback(response);
+    removeLoader();
 }
 
-function addLoader(){
+function addLoader() {
     document.querySelector(".loader").classList.remove("hidden");
     document.querySelector(".timePicker").classList.add("darked");
 }
 
-function removeLoader(){
+function removeLoader() {
     document.querySelector(".loader").classList.add("hidden");
     document.querySelector(".timePicker").classList.remove("darked");
 }
@@ -330,15 +330,15 @@ function updateTime() {
     if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
         if (this.classList.contains("available-column")) {
 
-    		let timeslots = document.querySelectorAll('.timeslot')
-    		for (let i = 0; i < timeslots.length; i++) {
-    	        let slot = timeslots[i];
-    	        slot.classList.remove("time-selected");
-    	    }
+            let timeslots = document.querySelectorAll('.timeslot')
+            for (let i = 0; i < timeslots.length; i++) {
+                let slot = timeslots[i];
+                slot.classList.remove("time-selected");
+            }
 
-    	    this.classList.add("time-selected")
+            this.classList.add("time-selected")
 
-    		id('time').value = this.getAttribute('data-militaryTime')
+            id('time').value = this.getAttribute('data-militaryTime')
         }
     } else {
         alert("Please select a full address.");
@@ -350,30 +350,30 @@ async function validateInput() {
 
     const urlParams = new URLSearchParams(window.location.search)
 
-    if((id("current-address").innerText == "" || id("current-city").innerText == "" || id("current-state").innerText == "" || id("current-zip").innerText == "") && urlParams.get('remote') == 'n') {
+    if ((id("current-address").innerText == "" || id("current-city").innerText == "" || id("current-state").innerText == "" || id("current-zip").innerText == "") && urlParams.get('remote') == 'n') {
         alert('Please select a full address')
         return;
     }
 
     let timeSelected = false;
-	let timeslots = document.querySelectorAll('.timeslot')
+    let timeslots = document.querySelectorAll('.timeslot')
     for (let i = 0; i < timeslots.length; i++) {
         let slot = timeslots[i];
         if (slot.classList.contains("time-selected")) {
             timeSelected = true;
         }
     }
-	if (!timeSelected) {
-	    alert('Please select a time for your order.')
-	    return
-	}
+    if (!timeSelected) {
+        alert('Please select a time for your order.')
+        return
+    }
 
     let data = new FormData();
-	data.append("session", getSession());
-	let url = "php/session.php";
-	let response = await fetch(url, { method: "POST", body: data })
-	await checkStatus(response)
-	response = await response.json();
+    data.append("session", getSession());
+    let url = "php/session.php";
+    let response = await fetch(url, { method: "POST", body: data })
+    await checkStatus(response)
+    response = await response.json();
 
     if (response.validated == "false") {
 
@@ -388,62 +388,62 @@ async function validateInput() {
 }
 
 function submitLogin() {
-	let data = new FormData();
-	let email = id("username").value.toLowerCase();
-	let password = id("password").value;
-	data.append("email", email);
-	data.append("password", password);
-	let url = "php/signin.php";
-	fetch(url, { method: "POST", body: data })
-		.then(checkStatus)
-		.then(res => res.json())
-		.then(submitLoginHelper)
-		.catch(console.log);
+    let data = new FormData();
+    let email = id("username").value.toLowerCase();
+    let password = id("password").value;
+    data.append("email", email);
+    data.append("password", password);
+    let url = "php/signin.php";
+    fetch(url, { method: "POST", body: data })
+        .then(checkStatus)
+        .then(res => res.json())
+        .then(submitLoginHelper)
+        .catch(console.log);
 }
 
 function submitLoginHelper(response) {
-	if (response.emailerror == "true") {
-		id("email-error").innerText = "*Email not found.";
-	} else if (response.emailerror == "empty") {
-		id("email-error").innerText = "*Required field";
-	} else {
-		id("email-error").innerText = "";
-	}
+    if (response.emailerror == "true") {
+        id("email-error").innerText = "*Email not found.";
+    } else if (response.emailerror == "empty") {
+        id("email-error").innerText = "*Required field";
+    } else {
+        id("email-error").innerText = "";
+    }
 
-	if (response.passworderror == "true") {
-		id("password-error").innerText = "*Incorrect Password.";
-	} else if (response.passworderror == "empty") {
-		id("password-error").innerText = "*Required field";
-	} else {
-		id("password-error").innerText = "";
-	}
+    if (response.passworderror == "true") {
+        id("password-error").innerText = "*Incorrect Password.";
+    } else if (response.passworderror == "empty") {
+        id("password-error").innerText = "*Required field";
+    } else {
+        id("password-error").innerText = "";
+    }
 
-	if (response.verified == "n") {
-		alert("Your account has not yet been verified. Please check your email for a verification email.");
-	} else if (response.emailerror == "" && response.passworderror == "") {
+    if (response.verified == "n") {
+        alert("Your account has not yet been verified. Please check your email for a verification email.");
+    } else if (response.emailerror == "" && response.passworderror == "") {
 
-	    $('.hover_bkgr_fricc').hide();
+        $('.hover_bkgr_fricc').hide();
 
-		document.cookie = "session=" + response.session + ";";
-		initModal();
-	}
+        document.cookie = "session=" + response.session + ";";
+        initModal();
+    }
 }
 
 function guestLogin() {
 
     let data = new FormData();
-	data.append("email", id("password").value);
-	data.append("phone", id("username").value.replace(/\D/g,''));
-	let url = "php/checkguest.php";
-	fetch(url, { method: "POST", body: data })
-		.then(checkStatus)
-		.then(res => res.json())
-		.then(guestLoginHelper)
-		.catch(console.log);
+    data.append("email", id("password").value);
+    data.append("phone", id("username").value.replace(/\D/g, ''));
+    let url = "php/checkguest.php";
+    fetch(url, { method: "POST", body: data })
+        .then(checkStatus)
+        .then(res => res.json())
+        .then(guestLoginHelper)
+        .catch(console.log);
 
 }
 
-function guestLoginHelper(response){
+function guestLoginHelper(response) {
     if (response.emailerror != "") {
         id("email-error").innerText = response.emailerror;
     }
@@ -452,39 +452,39 @@ function guestLoginHelper(response){
     }
 
     if (response.emailerror == "" && response.phoneerror == "") {
-	    $('.hover_bkgr_fricc').hide();
-	    id("email-error").innerText = "";
-	    id("password-error").innerText = "";
+        $('.hover_bkgr_fricc').hide();
+        id("email-error").innerText = "";
+        id("password-error").innerText = "";
 
-	    initModal();
-	 }
+        initModal();
+    }
 
 }
 
 function generateOrderNumber() {
-	let dateString = Math.floor(Date.now() / 1000).toString();
-	let now = dateString + Math.floor(1000 + Math.random() * 9000);
-	return [now.slice(0, 4), now.slice(4, 10), now.slice(10, 14)].join('-');
+    let dateString = Math.floor(Date.now() / 1000).toString();
+    let now = dateString + Math.floor(1000 + Math.random() * 9000);
+    return [now.slice(0, 4), now.slice(4, 10), now.slice(10, 14)].join('-');
 }
 
 function initModal() {
     id('order').value = generateOrderNumber()
 
     document.documentElement.style.overflow = "hidden";
-	const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new URLSearchParams(window.location.search)
 
-	let cost = urlParams.get('price')
-	let estimate;
-	if (urlParams.get('wage') == 'per') {
-	    estimate = id("numpeople").value * cost;
-	} else {
+    let cost = urlParams.get('price')
+    let estimate;
+    if (urlParams.get('wage') == 'per') {
+        estimate = id("numpeople").value * cost;
+    } else {
         estimate = id("numpeople").value * cost * ((id("duration").value) - 1) + "-$" + id("numpeople").value * cost * id("duration").value;
-	}
+    }
 
     let time = id('time').value
 
     let message = "(No message)"
-    if (id("message").value != ""){
+    if (id("message").value != "") {
         message = id("message").value;
     }
 
@@ -501,20 +501,20 @@ function initModal() {
     id("popupProviders").innerText = id("numpeople").value;
     id("popupTotal").innerText = estimate;
 
-    if (urlParams.get('remote') == "y"){
+    if (urlParams.get('remote') == "y") {
         id("popupAddress").innerText = " Remote (Online)"
     } else {
-        id("popupAddress").innerText = " " +  id("current-address").innerText + " " + id("current-city").innerText.charAt(0).toUpperCase() + id("current-city").innerText.slice(1)  + ", " + id("current-state").innerText.toUpperCase() + " " + id("current-zip").innerText;
+        id("popupAddress").innerText = " " + id("current-address").innerText + " " + id("current-city").innerText.charAt(0).toUpperCase() + id("current-city").innerText.slice(1) + ", " + id("current-state").innerText.toUpperCase() + " " + id("current-zip").innerText;
     }
 
     window.location = window.location.href.replace('#', '') + "#popup1";
 
-    if (urlParams.get('wage') == "per"){
+    if (urlParams.get('wage') == "per") {
 
-	    id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost;
+        id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost;
 
-	    stripe(id("first").innerText, "Until Completion", id("numpeople").value);
-	} else{
+        stripe(id("first").innerText, "Until Completion", id("numpeople").value);
+    } else {
 
         let durationText = id("duration").options[id("duration").selectedIndex].text;
         let durationCalc = id("duration").value;
@@ -522,16 +522,16 @@ function initModal() {
         id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost + "/hr " + "(" + durationText + ")"
 
         stripe(id("first").innerText, durationCalc, id("numpeople").value);
-	}
+    }
 
 }
 
-async function stripe(service, duration, people){
+async function stripe(service, duration, people) {
 
-	let data = new FormData();
+    let data = new FormData();
     data.append("session", getSession())
     let url = "php/session.php"
-    let response = await fetch(url, {method: "POST", body: data })
+    let response = await fetch(url, { method: "POST", body: data })
     await checkStatus(response);
     response = await response.json()
 
@@ -543,7 +543,7 @@ async function stripe(service, duration, people){
         phone = response.account.phone
     } else {
         email = id("password").value
-		phone = id("username").value.replace(/\D/g,'')
+        phone = id("username").value.replace(/\D/g, '')
     }
 
     let message = "N/A"
@@ -560,17 +560,17 @@ async function stripe(service, duration, people){
     // The items the customer wants to buy
     var purchase = {
         items: [
-        {
-            service: document.querySelector(".service").innerText,
-            duration: id('duration').value,
-            people: id('numpeople').value
-        }
+            {
+                service: document.querySelector(".service").innerText,
+                duration: id('duration').value,
+                people: id('numpeople').value
+            }
         ],
         creds: [
-        {
-            phone: phone,
-            email: email
-        }
+            {
+                phone: phone,
+                email: email
+            }
         ],
         checkout: {
             tzoffset: timezone,
@@ -595,95 +595,95 @@ async function stripe(service, duration, people){
     fetch("php/payment.php", {
         method: "POST",
         headers: {
-        "Content-Type": "application/json"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(purchase)
     })
-      .then(checkStatus)
-      .then(res => res.json())
-      .then(function(data) {
-        var elements = stripe.elements();
-        var style = {
-          base: {
-            color: "#32325d",
-            fontFamily: 'Roboto, sans-serif',
-            fontSmoothing: "antialiased",
-            fontSize: "16px",
-            "::placeholder": {
-              color: "#32325d"
-            }
-          },
-          invalid: {
-            fontFamily: 'Roboto, sans-serif',
-            color: "#fa755a",
-            iconColor: "#fa755a"
-          }
-        };
-        var card = elements.create("card", { style: style });
-        card.mount("#card-element");
-        card.on("change", function (event) {
-          document.querySelector("button").disabled = event.empty;
-          document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+        .then(checkStatus)
+        .then(res => res.json())
+        .then(function (data) {
+            var elements = stripe.elements();
+            var style = {
+                base: {
+                    color: "#32325d",
+                    fontFamily: 'Roboto, sans-serif',
+                    fontSmoothing: "antialiased",
+                    fontSize: "16px",
+                    "::placeholder": {
+                        color: "#32325d"
+                    }
+                },
+                invalid: {
+                    fontFamily: 'Roboto, sans-serif',
+                    color: "#fa755a",
+                    iconColor: "#fa755a"
+                }
+            };
+            var card = elements.create("card", { style: style });
+            card.mount("#card-element");
+            card.on("change", function (event) {
+                document.querySelector("button").disabled = event.empty;
+                document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+            });
+            id("taxRate").innerText = " + tax (" + data.taxRate + ")";
+            var form = id("payment-form");
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                payWithCard(stripe, card, data.clientSecret);
+            });
         });
-        id("taxRate").innerText = " + tax (" + data.taxRate + ")";
-        var form = id("payment-form");
-        form.addEventListener("submit", function(event) {
-          event.preventDefault();
-          payWithCard(stripe, card, data.clientSecret);
-        });
-      });
-    var payWithCard = function(stripe, card, clientSecret) {
-      loading(true);
-      stripe
-        .confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: card
-          }
-        })
-        .then(function(result) {
-          if (result.error) {
-            showError(result.error.message);
-          } else {
-            orderComplete(result.paymentIntent.id);
-            $('#hide').fadeOut(500);
-    	    setTimeout(function(){ window.location = "confirmation"; }, 500);
-          }
-        });
+    var payWithCard = function (stripe, card, clientSecret) {
+        loading(true);
+        stripe
+            .confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: card
+                }
+            })
+            .then(function (result) {
+                if (result.error) {
+                    showError(result.error.message);
+                } else {
+                    orderComplete(result.paymentIntent.id);
+                    $('#hide').fadeOut(500);
+                    setTimeout(function () { window.location = "confirmation"; }, 500);
+                }
+            });
     };
     /* ------- UI helpers ------- */
     // Shows a success message when the payment is complete
-    var orderComplete = function(paymentIntentId) {
-      loading(false);
-      document
-        .querySelector(".result-message a")
-        .setAttribute(
-          "href",
-          "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-        );
-      document.querySelector(".result-message").classList.remove("hidden");
-      document.querySelector("button").disabled = true;
+    var orderComplete = function (paymentIntentId) {
+        loading(false);
+        document
+            .querySelector(".result-message a")
+            .setAttribute(
+                "href",
+                "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+            );
+        document.querySelector(".result-message").classList.remove("hidden");
+        document.querySelector("button").disabled = true;
     };
     // Show the customer the error from Stripe if their card fails to charge
-    var showError = function(errorMsgText) {
-      loading(false);
-      var errorMsg = document.querySelector("#card-error");
-      errorMsg.textContent = errorMsgText;
-      setTimeout(function() {
-        errorMsg.textContent = "";
-      }, 4000);
+    var showError = function (errorMsgText) {
+        loading(false);
+        var errorMsg = document.querySelector("#card-error");
+        errorMsg.textContent = errorMsgText;
+        setTimeout(function () {
+            errorMsg.textContent = "";
+        }, 4000);
     };
     // Show a spinner on payment submission
-    var loading = function(isLoading) {
-      if (isLoading) {
-        // Disable the button and show a spinner
-        document.querySelector("button").disabled = true;
-        document.querySelector("#spinner").classList.remove("hidden");
-        document.querySelector("#button-text").classList.add("hidden");
-      } else {
-        document.querySelector("button").disabled = false;
-        document.querySelector("#spinner").classList.add("hidden");
-        document.querySelector("#button-text").classList.remove("hidden");
-      }
+    var loading = function (isLoading) {
+        if (isLoading) {
+            // Disable the button and show a spinner
+            document.querySelector("button").disabled = true;
+            document.querySelector("#spinner").classList.remove("hidden");
+            document.querySelector("#button-text").classList.add("hidden");
+        } else {
+            document.querySelector("button").disabled = false;
+            document.querySelector("#spinner").classList.add("hidden");
+            document.querySelector("#button-text").classList.remove("hidden");
+        }
     };
 }
 
@@ -695,17 +695,17 @@ function formatDate(date) {
     var dd = "AM";
     var h = hh;
     if (h >= 12) {
-    h = hh - 12;
-    dd = "PM";
+        h = hh - 12;
+        dd = "PM";
     }
     if (h == 0) {
-    h = 12;
+        h = 12;
     }
     m = m < 10 ? "0" + m : m;
 
     s = s < 10 ? "0" + s : s;
 
-    h = h<10?"0"+h:h;
+    h = h < 10 ? "0" + h : h;
 
     var pattern = new RegExp("0?" + hh + ":" + m + ":" + s);
 

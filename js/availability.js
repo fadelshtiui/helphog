@@ -11,17 +11,17 @@
   }
 
   DayScheduleSelector.DEFAULTS = {
-    days        : [0, 1, 2, 3, 4, 5, 6],  // Sun - Sat
-    startTime   : '08:00',                // HH:mm format
-    endTime     : '20:00',                // HH:mm format
-    interval    : 60,                     // minutes
-    stringDays  : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-    template    : '<div class="day-schedule-selector">'         +
-                    '<table class="schedule-table">'            +
-                      '<thead class="schedule-header"></thead>' +
-                      '<tbody class="schedule-rows"></tbody>'   +
-                    '</table>'                                  +
-                  '<div>'
+    days: [0, 1, 2, 3, 4, 5, 6],  // Sun - Sat
+    startTime: '08:00',                // HH:mm format
+    endTime: '20:00',                // HH:mm format
+    interval: 60,                     // minutes
+    stringDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    template: '<div class="day-schedule-selector">' +
+      '<table class="schedule-table">' +
+      '<thead class="schedule-header"></thead>' +
+      '<tbody class="schedule-rows"></tbody>' +
+      '</table>' +
+      '<div>'
   };
 
   /**
@@ -89,7 +89,7 @@
   function getSelection(plugin, $a, $b) {
     var $slots, small, large, temp;
     if (!$a.hasClass('time-slot') || !$b.hasClass('time-slot') ||
-        ($a.data('day') != $b.data('day'))) { return []; }
+      ($a.data('day') != $b.data('day'))) { return []; }
     $slots = plugin.$el.find('.time-slot[data-day="' + $a.data('day') + '"]');
     small = $slots.index($a); large = $slots.index($b);
     if (small > large) { temp = small; small = large; large = temp; }
@@ -111,7 +111,7 @@
           plugin.$el.find('.time-slot').attr('data-disabled', 'disabled');
           plugin.$el.find('.time-slot[data-day="' + day + '"]').removeAttr('data-disabled');
         }
-        
+
       } else {  // if we are in selecting mode
         if (day == plugin.$selectingStart.data('day')) {  // if clicking on the same day column
           // then end of selection
@@ -181,7 +181,7 @@
       });
     })
     return selections;
-    
+
   };
 
   /**
@@ -199,9 +199,9 @@
    */
   DayScheduleSelector.prototype.deserialize = function (schedule) {
     var plugin = this, i;
-    $.each(schedule, function(d, ds) {
+    $.each(schedule, function (d, ds) {
       var $slots = plugin.$el.find('.time-slot[data-day="' + d + '"]');
-      $.each(ds, function(_, s) {
+      $.each(ds, function (_, s) {
         for (i = 0; i < $slots.length; i++) {
           if ($slots.eq(i).data('time') >= s[1]) { break; }
           if ($slots.eq(i).data('time') >= s[0]) { plugin.select($slots.eq(i)); }
@@ -214,9 +214,9 @@
   // =====================================
 
   function Plugin(option) {
-    return this.each(function (){
-      var $this   = $(this)
-        , data    = $this.data('artsy.dayScheduleSelector')
+    return this.each(function () {
+      var $this = $(this)
+        , data = $this.data('artsy.dayScheduleSelector')
         , options = typeof option == 'object' && option;
 
       if (!data) {
@@ -250,7 +250,7 @@
   function timeDiff(start, end) {   // time in HH:mm format
     // need a dummy date to utilize the Date object
     return (new Date(2000, 0, 1, end.split(':')[0], end.split(':')[1]).getTime() -
-            new Date(2000, 0, 1, start.split(':')[0], start.split(':')[1]).getTime()) / 60000;
+      new Date(2000, 0, 1, start.split(':')[0], start.split(':')[1]).getTime()) / 60000;
   }
 
   /**
@@ -289,7 +289,7 @@
   function secondsSinceMidnightToHhmm(seconds) {
     var minutes = Math.floor(seconds / 60);
     return ('0' + Math.floor(minutes / 60)).slice(-2) + ':' +
-           ('0' + (minutes % 60)).slice(-2);
+      ('0' + (minutes % 60)).slice(-2);
   }
 
   // Expose some utility functions
@@ -303,58 +303,58 @@
 
 
 (function ($) {
-      $("#timeslots").dayScheduleSelector({
-        interval: 60,
-        startTime: "00:00",
-        endTime: "24:00",
-      });
-      $("#day-schedule").on('selected.artsy.dayScheduleSelector', function (e, selected) {
-        console.log(selected);
-        submit();
-      })
-      
-    })($);
-    
+  $("#timeslots").dayScheduleSelector({
+    interval: 60,
+    startTime: "00:00",
+    endTime: "24:00",
+  });
+  $("#day-schedule").on('selected.artsy.dayScheduleSelector', function (e, selected) {
+    console.log(selected);
+    submit();
+  })
 
-    
+})($);
+
+
+
 function submit() {
-    let data = new FormData();
-    
-    let session = getSession()
-    
-    let result = "";
-    
-    for (let i = 0; i < 7; i++) {
-        let rows = document.querySelectorAll(".time-slot")
-        for (let j = 0; j < rows.length; j++) {
-            let entry = rows[j];
-            let time = parseInt(entry.getAttribute('data-time'))
-            let day = entry.getAttribute('data-day')
-            
-            if (i == day) {
-                if (entry.getAttribute('data-selected') == 'selected') {
-                    result += '1';
-                } else {
-                    result += '0'
-                }
-            }
+  let data = new FormData();
+
+  let session = getSession()
+
+  let result = "";
+
+  for (let i = 0; i < 7; i++) {
+    let rows = document.querySelectorAll(".time-slot")
+    for (let j = 0; j < rows.length; j++) {
+      let entry = rows[j];
+      let time = parseInt(entry.getAttribute('data-time'))
+      let day = entry.getAttribute('data-day')
+
+      if (i == day) {
+        if (entry.getAttribute('data-selected') == 'selected') {
+          result += '1';
+        } else {
+          result += '0'
         }
+      }
     }
-    
-    if (result.includes("1")){
-        var all = document.getElementsByClassName('import');
-        for (var i = 0; i < all.length; i++) {
-            all[i].style.color = '#000000b3';
-        }
+  }
+
+  if (result.includes("1")) {
+    var all = document.getElementsByClassName('import');
+    for (var i = 0; i < all.length; i++) {
+      all[i].style.color = '#000000b3';
     }
-    
-    let tz = jstz.determine();
-    let timezone = tz.name();
-    
-    data.append("session", session);
-    data.append("availability", result);
-    data.append("tz", timezone);
-    let url = "php/availability.php"
-    fetch(url, {method: "POST", body: data})
-    
+  }
+
+  let tz = jstz.determine();
+  let timezone = tz.name();
+
+  data.append("session", session);
+  data.append("availability", result);
+  data.append("tz", timezone);
+  let url = "php/availability.php"
+  fetch(url, { method: "POST", body: data })
+
 }

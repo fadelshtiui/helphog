@@ -12,11 +12,11 @@ const componentForm = {
 
 
 function initAutocomplete() {
-    var options = {
-      types: ['address'],
-      componentRestrictions: {country: "us"}
-     };
-    
+  var options = {
+    types: ['address'],
+    componentRestrictions: { country: "us" }
+  };
+
   // Create the autocomplete object, restricting the search predictions to
   // geographical location types.
   autocomplete = new google.maps.places.Autocomplete(
@@ -49,60 +49,60 @@ function fillInAddress() {
       document.getElementById(addressType).value = val;
     }
   }
-  
+
   id('addressDisplay').classList.remove('hidden')
   id('autocomplete').classList.add('hidden')
   id('edit').classList.remove('hidden')
-  
+
   id('current-address').innerText = id('street_number').value + ' ' + id('route').value;
   id('current-city').innerText = id('locality').value
   id('current-state').innerText = id('administrative_area_level_1').value
-  id('current-zip').innerText = id('postal_code').value 
+  id('current-zip').innerText = id('postal_code').value
   id('city-state-comma').classList.remove('hidden')
 
   if (window.location.pathname == '/results' || window.location.pathname == '/details') {
-      reloadResults();
+    reloadResults();
   }
-  if (window.location.pathname == '/edit'){
-      checkAvailability(false, updateTimePicker);
-      console.log("dad")
+  if (window.location.pathname == '/edit') {
+    checkAvailability(false, updateTimePicker);
+    console.log("dad")
   }
-  if (window.location.pathname == '/settings'){
-      id('city-state-comma').classList.remove('hidden')
-      addressUpdate();
+  if (window.location.pathname == '/settings') {
+    id('city-state-comma').classList.remove('hidden')
+    addressUpdate();
   }
-  if (window.location.pathname == '/provider'){
-      id('addressDisplay').classList.remove('hidden')
-        id('locationField').classList.add('hidden')
-        id('edit').classList.remove('hidden')
-        id('current-city').style.color = 'black'
-        document.querySelector('.noaddress').style.color = '#5f6876';
+  if (window.location.pathname == '/provider') {
+    id('addressDisplay').classList.remove('hidden')
+    id('locationField').classList.add('hidden')
+    id('edit').classList.remove('hidden')
+    id('current-city').style.color = 'black'
+    document.querySelector('.noaddress').style.color = '#5f6876';
   }
 }
 
 function reloadResults() {
-    let url = window.location.pathname + '?';
+  let url = window.location.pathname + '?';
 
-    let queryString = window.location.search
-	const urlParams = new URLSearchParams(queryString)
-	
-	if (window.location.pathname == '/results') {
-	    if (urlParams.get('category')) {
-	    url += 'category=' + urlParams.get('category')
-    	} else {
-    	    url += 'search=' + urlParams.get('search')
-    	}
-	} else {
-	    url += 'service=' + urlParams.get('service')
-	}
-	
+  let queryString = window.location.search
+  const urlParams = new URLSearchParams(queryString)
 
-    url += '&address=' + id('street_number').value + ' ' + id('route').value;
-    url += '&city=' + id('locality').value
-    url += '&state=' + id('administrative_area_level_1').value
-    url += '&zip=' + id('postal_code').value
-    
-    window.location = url;
+  if (window.location.pathname == '/results') {
+    if (urlParams.get('category')) {
+      url += 'category=' + urlParams.get('category')
+    } else {
+      url += 'search=' + urlParams.get('search')
+    }
+  } else {
+    url += 'service=' + urlParams.get('service')
+  }
+
+
+  url += '&address=' + id('street_number').value + ' ' + id('route').value;
+  url += '&city=' + id('locality').value
+  url += '&state=' + id('administrative_area_level_1').value
+  url += '&zip=' + id('postal_code').value
+
+  window.location = url;
 }
 
 

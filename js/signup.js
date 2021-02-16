@@ -2,51 +2,51 @@
 
 "use strict";
 
-(function() {
+(function () {
 
-     window.onload = function() {
-            
-        const inputElement = id('phone');
-        inputElement.addEventListener('keydown',enforceFormat);
-        inputElement.addEventListener('keyup',formatToPhone);
-        
-        $('.btn').on('click', signUp);
-            
+     window.onload = function () {
+
+          const inputElement = id('phone');
+          inputElement.addEventListener('keydown', enforceFormat);
+          inputElement.addEventListener('keyup', formatToPhone);
+
+          $('.btn').on('click', signUp);
+
      };
-    
+
      function isCaptchaChecked() {
-        return grecaptcha && grecaptcha.getResponse().length !== 0;
+          return grecaptcha && grecaptcha.getResponse().length !== 0;
      }
-     
+
      function signUp() {
-        if (isCaptchaChecked()) {
-           $('.btn').button('loading');
-           let data = new FormData();
-           let firstName = id("first-name").value;
-           let lastName = id("last-name").value;
-           let email = id("email").value.toLowerCase();
-           let phone = id("phone").value.replace(/\D/g,'');
-           let zip = id("zip").value;
-           let password = id("password").value;
-           let confirm = id("confirm-password").value;
-           data.append("zip", zip);
-           data.append("firstname", firstName);
-           data.append("lastname", lastName);
-           data.append("email", email);
-           data.append("password", password);
-           data.append("phone", phone);
-           data.append("confirm", confirm);
-           data.append("sendemail", true)
-           data.append("createaccount", true)
-           let url = "php/signup.php";
-           fetch(url, {method: "POST", body: data, mode:'cors', credentials:'include'})
-                .then(checkStatus)
-                .then(res => res.json())
-                .then(handleResponse)
-                .catch(console.log);
-        } else {
-            alert("Please check the reCAPTCHA box.");
-        }
+          if (isCaptchaChecked()) {
+               $('.btn').button('loading');
+               let data = new FormData();
+               let firstName = id("first-name").value;
+               let lastName = id("last-name").value;
+               let email = id("email").value.toLowerCase();
+               let phone = id("phone").value.replace(/\D/g, '');
+               let zip = id("zip").value;
+               let password = id("password").value;
+               let confirm = id("confirm-password").value;
+               data.append("zip", zip);
+               data.append("firstname", firstName);
+               data.append("lastname", lastName);
+               data.append("email", email);
+               data.append("password", password);
+               data.append("phone", phone);
+               data.append("confirm", confirm);
+               data.append("sendemail", true)
+               data.append("createaccount", true)
+               let url = "php/signup.php";
+               fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
+                    .then(checkStatus)
+                    .then(res => res.json())
+                    .then(handleResponse)
+                    .catch(console.log);
+          } else {
+               alert("Please check the reCAPTCHA box.");
+          }
      }
 
      function handleResponse(response) {
@@ -83,7 +83,7 @@
           } else {
                id("password-error").innerText = "";
           }
-          
+
           if (response.confirmerror == "true") {
                id("confirm-password-error").innerText = "*Passwords do not match.";
           } else if (response.confirmerror == "empty") {
@@ -102,7 +102,7 @@
           } else {
                id("phone-error").innerText = "";
           }
-          
+
           if (response.ziperror == "true") {
                id("zip-error").innerText = "*Please enter a 5 digit zip code.";
           } else if (response.ziperror == "empty") {
@@ -110,14 +110,14 @@
           } else {
                id("zip-error").innerText = "";
           }
-          
-          if (response.firstnameerror == "" && response.lastnameerror == "" && response.emailerror == "" && 
-                response.passworderror == ""  && response.phoneerror == "" && response.ziperror == "" && response.confirmerror == "") {
-                  window.location = "verify?message=Before+you+can+use+your+account%2C+please+verify+your+account+through+the+link+we+sent+to+your+email+address.+If+you+dont+see+our+email+check+your+junk+folder.";
+
+          if (response.firstnameerror == "" && response.lastnameerror == "" && response.emailerror == "" &&
+               response.passworderror == "" && response.phoneerror == "" && response.ziperror == "" && response.confirmerror == "") {
+               window.location = "verify?message=Before+you+can+use+your+account%2C+please+verify+your+account+through+the+link+we+sent+to+your+email+address.+If+you+dont+see+our+email+check+your+junk+folder.";
           } else {
-              $('.btn').button('reset');
+               $('.btn').button('reset');
           }
-          
+
      }
 
 })();

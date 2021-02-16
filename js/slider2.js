@@ -24,9 +24,9 @@ class RangeInput {
 			onInit: function () {
 				const pluginInstance = this;
 				$(pluginInstance.$element).
-				parents('.range').
-				find('.range-output').
-				appendTo(pluginInstance.$handle);
+					parents('.range').
+					find('.range-output').
+					appendTo(pluginInstance.$handle);
 			}
 		});
 

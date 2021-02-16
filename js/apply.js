@@ -1,19 +1,19 @@
-$(window).on('load', function() {
-	
+$(window).on('load', function () {
+
 	const inputElement = id('phone');
 	inputElement.addEventListener('keydown', enforceFormat);
 	inputElement.addEventListener('keyup', formatToPhone);
-	
+
 	let url = "php/info.php?type=categories";
 	fetch(url, {
-			credentials: 'include'
-		})
+		credentials: 'include'
+	})
 		.then(checkStatus)
 		.then(res => res.json())
 		.then(populateCategories)
 		.catch(console.log);
-	
-	$("#sign-up").click(function() {
+
+	$("#sign-up").click(function () {
 		$('.btn').button('loading');
 		let data = new FormData();
 		let firstName = id("first-name").value;
@@ -40,7 +40,7 @@ $(window).on('load', function() {
 			.catch(console.log);
 	});
 
-	$("#submit").click(function() {
+	$("#submit").click(function () {
 		if (isCaptchaChecked()) {
 			$('.btn').button('loading');
 			let data = new FormData();
@@ -48,14 +48,14 @@ $(window).on('load', function() {
 			let workfield = id("dropdown").value;
 			let experience = id("aratext").value;
 			let radius = '0';
-            let resume = id('resume').files[0];
-			
+			let resume = id('resume').files[0];
+
 			let url = "php/apply.php";
 
 			let tz = jstz.determine();
-            let timezone = tz.name();
+			let timezone = tz.name();
 
-            if (resume) {
+			if (resume) {
 				data.append('resume', resume, resume.name);
 			}
 			data.append("radius", radius);
@@ -73,9 +73,9 @@ $(window).on('load', function() {
 			alert("Please check the reCAPTCHA box.");
 		}
 
-    });
+	});
 
-    function populateCategories(response) {
+	function populateCategories(response) {
 		let dropdown = id("dropdown");
 		for (let i = 0; i < response.length; i++) {
 			let option = document.createElement("option");
@@ -84,7 +84,7 @@ $(window).on('load', function() {
 			dropdown.append(option);
 		}
 	}
-	
+
 	function checkFormErrors(response) {
 		$('.btn').button('reset');
 		if (response.firstnameerror == "true") {
@@ -155,28 +155,28 @@ $(window).on('load', function() {
 		}
 
 	}
-	
+
 	function redirectToStripe(response) {
-	    
+
 		if (response == "Please upload PNG, JPG, PDF, DOCX files only" || response == 'Error: an account with this email already exists') {
-		    
+
 			alert(response)
 			$('.btn').button('reset');
-			
+
 		} else {
-		    
-		    window.location.href = response;
-		    
+
+			window.location.href = response;
+
 		}
 	}
-	
+
 	function isCaptchaChecked() {
 		return grecaptcha && grecaptcha.getResponse().length !== 0;
 	}
-	
+
 
 	function fader() {
 		$("#part-two").fadeIn();
 	}
-	
+
 });

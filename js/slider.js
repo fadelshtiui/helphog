@@ -57,9 +57,9 @@ var
 
 					//Move the range-output inside the handle so we can do all the stuff in css
 					$(pluginInstance.$element).
-					parents('.range').
-					find('.range-output').
-					appendTo(pluginInstance.$handle);
+						parents('.range').
+						find('.range-output').
+						appendTo(pluginInstance.$handle);
 				}
 			});
 

@@ -8,7 +8,7 @@ var cardholderName = document.getElementById('cardholder-name');
 var cardButton = document.getElementById('card-button');
 var clientSecret = cardButton.dataset.secret;
 
-cardButton.addEventListener('click', function(ev) {
+cardButton.addEventListener('click', function (ev) {
 
   stripe.confirmCardSetup(
     clientSecret,
@@ -20,7 +20,7 @@ cardButton.addEventListener('click', function(ev) {
         },
       },
     }
-  ).then(function(result) {
+  ).then(function (result) {
     if (result.error) {
       // Display error.message in your UI.
     } else {

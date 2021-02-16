@@ -4,12 +4,12 @@
 
 (function () {
 	$(document).ready(function () {
-	    $("#logo").click(function() {
-	        window.location.href = "/";
-	    })
-	   $("#return").click(function() {
-	        window.location.href = "/";
-	    })
+		$("#logo").click(function () {
+			window.location.href = "/";
+		})
+		$("#return").click(function () {
+			window.location.href = "/";
+		})
 		$(".panel").hide();
 		$(".submit").click(function () {
 			$(".submit").addClass("loading");
@@ -32,9 +32,9 @@
 	}
 
 	function handleResponse(response) {
-	    
-	    
-	    
+
+
+
 		if (response.emailerror == "true" || response['status'] == "nf") {
 			setTimeout(function () {
 				$(".submit").addClass("hide-loading");
@@ -47,9 +47,9 @@
 				$(".done").removeClass("finish");
 				$(".failed").removeClass("finish");
 				document.getElementById('message').innerText = "Incorrect order number."
-				
+
 				if (response.emailerror == "true") {
-				    document.getElementById('message').innerText = "Email not found."
+					document.getElementById('message').innerText = "Email not found."
 				}
 			}, 1000);
 		} else {
@@ -74,8 +74,8 @@
 		console.log(response.service)
 		id('service').innerText = response.service
 		if (response.cancelled == "true") {
-	        id("canceled").style.display = "block";
-	    } else if (response['status'] == "pe") {
+			id("canceled").style.display = "block";
+		} else if (response['status'] == "pe") {
 			$('*[data-state="picked-up"]').hide();
 			$('*[data-state="transit"]').hide();
 			$('*[data-state="delivered"]').hide();
