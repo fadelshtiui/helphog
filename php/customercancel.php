@@ -65,6 +65,8 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $people = $row["people"];
         }
         
+        
+        
         $customerName = "";
         $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
         $stmnt->execute(array($customerEmail));
@@ -74,12 +76,17 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 
         $tz = "";
         $providerName = "";
-        $stmnt = $db->prepare("SELECT firstname, timezone FROM login WHERE email = ?;");
+        $phone = "";
+        $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM login WHERE email = ?;");
         $stmnt->execute(array($providerEmail));
         foreach($stmnt->fetchAll() as $row) {
             $providerName = $row['firstname'];
             $tz = $row['timezone'];
+            $phone = $row['phone'];
         }
+        
+        $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+        $local_date->setTimezone(new DateTimeZone($tz));
                 
         if ($status == "cc" || $status == "pc" || $status == "ac") {
             
@@ -103,8 +110,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $amount = 0;
             $payment_info = payment($order);
             if (minutes_until($schedule) < 1440) { // within 24 hours
-                // $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-                // $local_date->setTimezone(new DateTimeZone($tz));
                 $amount = 15;
                 $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
                 $intent->capture(['amount_to_capture' => $amount * 100]);
@@ -141,11 +146,22 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             }
             if ($providerEmail != ""){
                 providerEmail($providerEmail, $providerMessage, $service, $providerName);
+                
+                
+                sendTextProvider($service, $order, $phone, $local_date->format("F j, Y, g:i a"));
             }
             if ($secondary_providers != ""){
                 $providers = explode("," , $secondary_providers);
                 foreach ($providers as $provider){
-                    providerEmail($providerEmail, $providerMessage, $service, $providerName);
+                    providerEmail($provider, $providerMessage, $service, $providerName);
+                    
+                    $phonenumber = "";
+                    $stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
+                    $stmnt->execute(array($provider));
+                    foreach($stmnt->fetchAll() as $row) {
+                        $phonenumber = $row['phone'];
+                    }
+                    sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
                 }
             }
             customerEmail($customerEmail, $customerMessage, $service, $customerName);
@@ -219,6 +235,12 @@ function customerEmail($customerEmail, $customerMessage, $service, $customerName
     $mail->ClearAllRecipients();
 }
 
+function sendTextProvider($service, $order, $phonenumber, $schedule){
+    $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
+    $token = '18a458337ffdfd10617571e495314311';
+    $client = new Client($sid, $token);
+    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . ' was canceled by the customer.'));
+}
 
    
 ?>
