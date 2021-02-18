@@ -740,6 +740,7 @@ let preloaded = false;
 	function markCompleted() {
 		if (confirm("Please verify that all necessary receipts are attached of any additional expenditures.")) {
 
+            id('loading').classList.remove('hidden')
 			let data = new FormData();
 			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
