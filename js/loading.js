@@ -67,5 +67,8 @@ window.addEventListener('load', function () {
         $('.overlay').css('display', 'none');
         $('.overlay').delay(1800).fadeIn(900);
     }
-
+    if (AOS) {
+        AOS.init();
+        setTimeout(AOS.refresh, 500);
+    }
 });
