@@ -2,26 +2,48 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Admin</title>
-	<script src="js/common.js"></script>
-	<script src="js/admin.js"></script>
+     <meta charset="UTF-8">
+     <title>Admin</title>
+
+     <link href="css/admin.css" rel="stylesheet">
+
+     <script src="js/common.js"></script>
+     <script src="js/admin.js"></script>
 </head>
 
 <body>
-	<h1>Provider Services:</h1>
-	<ul id='provider-services'>
-	</ul>
-	<br>
-	<h1>All Services:</h1>
-	<select id='all-services'></select>
-	<button id='update'>Update</button>
-	<button id="add"></button>
-	<button id="remove"></button>
-	<button id="load"></button>
-	<br>
-	<input id="email">
-	<input id="password">
+     <div>
+          <h1>Credentials</h1>
+          <label>Password:</label>
+          <input id="password" type="password">
+     </div>
+     <div>
+          <h1>Provider Dashboard</h1>
+          <div>
+               <label>Provider Email:</label>
+               <input id="email" type="email">
+          </div>
+          <div>
+               <h2>Manage Services</h2>
+               <button id="load">Load Provider Services</button>
+               <br>
+               <label>All Services:</label>
+               <select id='all-services'></select>
+               <button id="add">Add Service</button>
+               <div>
+                    <h3>Provider Services:</h3>
+                    <ul id='provider-services'>
+                    </ul>
+               </div>
+
+               <button id='update'>Update Services</button>
+          </div>
+          <div>
+               <h2>Manage Provider Status</h2>
+               <button id="grant">Grant Provider Priveleges</button>
+               <button id="revoke">Remove Provider Status</button>
+          </div>
+     </div>
 </body>
 
 </html>
