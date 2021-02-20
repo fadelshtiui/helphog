@@ -625,7 +625,9 @@ async function stripe(service, duration, people) {
                 document.querySelector("button").disabled = event.empty;
                 document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
             });
-            id("taxRate").innerText = " + tax (" + data.taxRate + ")";
+            if (data.taxRate != ''){
+               id("taxRate").innerText = " + tax (" + data.taxRate + ")";
+            }
             var form = id("payment-form");
             form.addEventListener("submit", function (event) {
                 event.preventDefault();

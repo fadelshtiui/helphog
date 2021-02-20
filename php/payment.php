@@ -10,15 +10,12 @@ $price = 0;
 
 function calculateTax($price, $taxCode, $order_info): array{
 
+    if($taxCode == ''){
+        return array(0, 0);
+    }
 
     $client = TaxJar\Client::withApiKey('df954bdfd0ea6232e873d357d71afa52');
     $order_taxes = $client->taxForOrder([
-      'from_country' => 'US',
-      'from_zip' => '98036',
-      'from_state' => 'WA',
-      'from_city' => 'Lynnwood',
-      'from_street' => '19427 73rd ave w',
-      'to_country' => 'US',
       'to_zip' => $order_info->zip,
       'to_state' => $order_info->state,
       'to_city' => $order_info->city,
@@ -30,11 +27,13 @@ function calculateTax($price, $taxCode, $order_info): array{
           'id' => '1',
           'quantity' => 1,
           'product_tax_code' => $taxCode,
-          'unit_price' => 15.0,
+          'unit_price' => $price,
           'discount' => 0
         ]
       ]
     ]);
+
+    error_log("taxcode:" . $taxCode . " " . $order_taxes->amount_to_collect . " "  . $order_taxes->rate);
 
     $taxParameters = array($order_taxes->amount_to_collect, $order_taxes->rate);
 
@@ -84,7 +83,7 @@ function taxCode(array $items): string{
     return $taxCode;
 }
 
-function createOrder($paymentIntent, $order_info, array $items){
+function createOrder($paymentIntent, $order_info, array $items, $taxRate){
     global $db;
     $entry = $items[0];
 
@@ -124,6 +123,7 @@ function createOrder($paymentIntent, $order_info, array $items){
     $_SESSION['order'] = $order_info->order;
     $_SESSION['phone'] = $order_info->phone;
     $_SESSION['message'] = $order_info->message;
+    $_SESSION['taxrate'] = $taxRate;
     if ($remote == "y"){
         $_SESSION['zip'] = "";
         $_SESSION['address'] = "Remote (online)";
@@ -189,10 +189,15 @@ try {
         'currency' => 'usd',
         'capture_method' => 'manual',
       ]);
-      createOrder($paymentIntent, $order_info, $json_obj->items);
+      if ($taxParameters[1] == 0){
+          $taxRate = "";
+      }else{
+          $taxRate = $taxParameters[1] * 100 . "%";
+      }
+      createOrder($paymentIntent, $order_info, $json_obj->items, $taxRate);
       $output = [
         'clientSecret' => $paymentIntent->client_secret,
-        'taxRate' => $taxParameters[1] * 100 . "%",
+        'taxRate' => $taxRate,
       ];
       echo json_encode($output);
   }else{

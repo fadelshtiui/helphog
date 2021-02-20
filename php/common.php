@@ -906,7 +906,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
 
                 send_claimed_notification($order_number, $email, "primary", $db, $duration);
                 if ($mobile){
-                    return 'https://helphog.com/mobileclaimed';
+                    return '<script>window.location.href = "https://helphog.com/mobileclaimed";</script>';
                 }
                 return '<script>window.location.href = "https://helphog.com/claimed";</script>';
             }

@@ -42,6 +42,10 @@ function handle(response) {
         hour(response.cost, response.people, response.duration);
     }
 
+    if (response.taxrate != ''){
+       id("taxRate").innerText = " + tax (" + response.taxrate + ")";
+    }
+
     $('#load').fadeOut(500);
     $('#notLoading').delay(500).fadeIn(500);
 
