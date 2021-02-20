@@ -112,7 +112,7 @@
 		response = fullResponse.services[0];
 
 		id('service').innerText = response.service
-		id('image').src = '../assets/images/' + response.service.trim().replace(/ /g, "-").toLowerCase() + '.jpg';
+		id('image').src = response.src;
 		id('description').innerText = response.description
 		id('price').innerText = '$' + response.cost
 		if (response.wage == 'per') {

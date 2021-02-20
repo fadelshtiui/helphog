@@ -49,8 +49,14 @@ foreach($stmnt->fetchAll() as $row) {
     $entry = new \stdClass();
     
     $service = $row["service"];
-    
     $remote = $row['remote'];
+    
+    $entry->src = '../assets/images/default.jpg';
+    $image_name = '../assets/images/' . str_replace(' ', '-', strtolower($service)) . '.jpg';
+    error_log($image_name);
+    if (is_file($image_name)) {
+        $entry->src = $image_name;
+    }
     
     $entry->service = $service;
     $entry->description = $row["description"];
