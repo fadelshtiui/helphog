@@ -75,11 +75,11 @@ foreach($stmnt->fetchAll() as $row) {
     foreach($stmnt->fetchAll() as $row) {
         array_push($all_emails, $row["email"]);
     }
+    
+    $full_address = "";
         
     if (isset($_POST['city']) || isset($_POST['state']) || isset($_POST['address']) || isset($_POST['zip'])) { // manual address
     
-        $address_array = array();
-        
         $city = trim($_POST['city']);
         $address = trim($_POST['address']);
         $state = trim($_POST['state']);
@@ -101,21 +101,6 @@ foreach($stmnt->fetchAll() as $row) {
         
         if ($zip != "") {
             $response->zip = $zip;
-        }
-        
-        if ($remote == 'y') {
-            $available = 1;
-            $num_available++;
-        } else {
-            $available = 0;
-            foreach ($all_emails as $email) {
-                $google_response = address_works_for_provider($full_address, $email, time());
-                if ($google_response ->within) {
-                    $available = 1;
-                    $num_available++;
-                    break;
-                }
-            }
         }
         
     } else if (isset($_POST['session'])) { // logged in
@@ -152,32 +137,24 @@ foreach($stmnt->fetchAll() as $row) {
         }
         
         $full_address = str_replace(' ', '+', $address . '+' . $city . '+' . $state . '+' . $zip);
-        
-        if ($remote == 'y') {
-            $available = 1;
-            $num_available++;
-        } else {
-            $available = 0;
-            foreach ($all_emails as $email) {
-                $google_response = address_works_for_provider($full_address, $email, time());
-                if ($google_response ->within) {
-                    $available = 1;
-                    $num_available++;
-                    break;
-                }
-            }
-        }
-        
     
     } else if (isset($_POST['zip'])) { // guest
         
         $zip = trim($_POST['zip']);
         
+        $response->zip = $zip;
         
+        $full_address = $zip;
+        
+    }
+    
+    if (sizeof($all_emails) == 0) {
+        $available = 0;
+    } else {
         if ($remote == 'y') {
             $available = 1;
             $num_available++;
-        } else {
+        } else if ($full_address != "") {
             $available = 0;
             foreach ($all_emails as $email) {
                 $google_response = address_works_for_provider($full_address, $email, time());
@@ -188,16 +165,8 @@ foreach($stmnt->fetchAll() as $row) {
                 }
             }
         }
-        
-        
-        $response->zip = $zip;
-        
-    } else {
-        if (count($all_emails) > 0 && $remote == 'y') {
-            $available = 1;
-            $num_available++;
-        }
     }
+    
     
     $entry->available = $available;
     
@@ -211,5 +180,3 @@ $response->counts = $category_count;
 
 header('Content-type: application/json');
 print json_encode($response);
-
-?>
