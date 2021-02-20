@@ -445,6 +445,7 @@
                          link.innerText = 'Click to check availability'
 
                          buttonContainer.onclick = function () {
+                              id('scroll-to-zip').click();
                               var element = id("highlight");
                               element.classList.add("highlightEffect");
                               var profile = document.querySelectorAll('.profile')
