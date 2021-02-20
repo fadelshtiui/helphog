@@ -4,13 +4,13 @@
     // This is your real test secret API key.
     \Stripe\Stripe::setApiKey('sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p');
     require __DIR__ . '/twilio-php-master/src/Twilio/autoload.php';
-    
+
     use Twilio\TwiML\MessagingResponse;
     use Twilio\Rest\Client;
-    
+
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    
+
     require 'PHPMailer-master/src/Exception.php';
     require 'PHPMailer-master/src/PHPMailer.php';
     require 'PHPMailer-master/src/SMTP.php';
@@ -18,14 +18,14 @@
     ini_set('display_errors', 'On');
     error_reporting(E_ALL);
     error_reporting(E_ERROR | E_PARSE);
-    
+
     function &payment($order) {
         $db = establish_database();
         $result = new \stdClass();
         $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
-            
+
             $result->wage = $row['wage'];
             $result->duration = $row['duration'];
             $result->intent = $row['intent'];
@@ -45,7 +45,7 @@
             }
             $revenue_actual = round($earnings, 2);
             $result->revenue = $revenue_actual;
-            
+
             if($row["prorated"] == "n" && $time < 1 && $row["wage"] == "hour"){
                 $result->customerPayment = $row["cost"] * $row["people"];
                 $result->providerPayout = $row["cost"] * 0.9;
@@ -53,22 +53,22 @@
                 $result->customerPayment = $revenue_actual * $row["people"];
                 $result->providerPayout = $revenue_actual * 0.9;
             }
-            
+
             if ($result->customerPayment > $result->maxWithdrawl){
                 $result->customerPayment = $result->maxWithdrawl;
             }
         }
         return $result;
     }
-    
+
     function pay_provider($order_number) {
-        
+
         $stripe = new \Stripe\StripeClient(
           'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
         );
-    
+
         $db = establish_database();
-        
+
         $service = "";
         $people = "";
         $secondary_providers = "";
@@ -81,28 +81,28 @@
             $secondary_providers = $row["secondary_providers"];
             $schedule = $row["schedule"];
         }
-    
+
         $payment_info = payment($order_number);
-        
+
         if ($payment_info->customerPayment < 0.50){
             sendNoChargeEmail($service, $order_number, $schedule);
-            
+
             $stripe->paymentIntents->cancel(
               trim($payment_info->intent),
               []
             );
-            
+
         } else {
             $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
             $intent->capture(['amount_to_capture' => ceil($payment_info->customerPayment * 100)]);
-            
+
             $stripe_acc = "";
             $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
             $stmnt->execute(array($row["client_email"]));
             foreach($stmnt->fetchAll() as $row) {
                 $stripe_acc = $row['stripe_acc'];
             }
-            
+
             $transfer = \Stripe\Transfer::create([
               "amount" => ceil($payment_info->providerPayout * 100),
               "currency" => "usd",
@@ -110,16 +110,16 @@
               "description" => $service . " (" . $order_number . ")",
               "transfer_group" => '{' . $order_number . '}',
             ]);
-            
+
             if (intval($people) > 1){
                 $providers = explode("," , $secondary_providers);
                 foreach ($providers as $provider){
-                    
+
                     $secondary_stripe_acc = "";
                     $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
                     $stmnt->execute(array($provider));
                     foreach($stmnt->fetchAll() as $row) {
-                        
+
                         $secondary_stripe_acc = $row["stripe_acc"];
                         $transfer = \Stripe\Transfer::create([
                           "amount" => ceil($payment_info->providerPayout * 100),
@@ -127,18 +127,18 @@
                           "destination" => $secondary_stripe_acc,
                           "description" => $service . " (" . $order_number . ")",
                           "transfer_group" => '{' . $order_number . '}',
-                        ]); 
+                        ]);
                     }
                 }
             }
-            
+
             $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
             $stmt = $db->prepare($sql);
             $params = array('pd', $order_number);
             $stmt->execute($params);
         }
     }
-    
+
     function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message) {
         $db = establish_database();
         $name = "";
@@ -149,11 +149,11 @@
             $name = $row['firstname'];
             $alerts = $row['alerts'];
         }
-        
+
         if ($alerts == "email" || $alerts == "both"){
-        
+
             $mail = new PHPMailer;
-            
+
             $mail->isSMTP();
             $mail->SMTPDebug = 0;
             $mail->Debugoutput = 'html';
@@ -165,40 +165,40 @@
             $mail->Password = "Monkeybanana";
             $mail->setFrom('no-reply@helphog.com', 'HelpHog');
             $mail->addAddress($client, 'To');
-            
+
             $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
             $local_time->setTimezone(new DateTimeZone($tz));
-            
+
             $mail->Subject = "HelpHog - New Task Available";
-            
+
             if ($address == "Remote (online)"){
                 $location = $address;
             } else {
                 $location = ucfirst($city). ', ' . $state . ' ' . $zip;
             }
             $mail->Body    = get_claim_email($service, $local_time->format("F j, Y, g:i a"), $location , $client, $ordernumber, $price, $message, $name, $duration, $secret_key);
-            $mail->IsHTML(true); 
-            
+            $mail->IsHTML(true);
+
             $mail->send();
             $mail->ClearAllRecipients();
         }
     }
-    
+
     function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message, $duration, $secret_key, $tz, $people, $schedule, $tzoffset, $address, $city, $state, $zip, $service) {
-    
+
         $db = establish_database();
-        
+
         $alerts="";
         $stmnt = $db->prepare("SELECT alerts FROM login WHERE email = ?;");
         $stmnt->execute(array($email));
         foreach($stmnt->fetchAll() as $row) {
             $alerts = $row['alerts'];
         }
-        
+
         $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
         $local_time->setTimezone(new DateTimeZone($tz));
         $t = time();
-        
+
         if ($address == "Remote (online)"){
             $location = $address;
             $commute = "";
@@ -208,20 +208,20 @@
             if (strtotime($schedule) - 3600000 < $t){
                 $departureTime = $t;
             }else{
-                $departureTime = $departureTime - 3600000;  
+                $departureTime = $departureTime - 3600000;
             }
             $matrix = address_works_for_provider($address, $email, $departureTime);
             $commute = "Estimated commute: " . ceil(($matrix -> traffic)/60) . " minutes";
         }
-        
+
         $partners = "";
-        
+
         if ($people > 1){
             $partners = "Task requires cordinating with " . ($people - 1) . " other provider(s)";
         }
-        
+
         if ($alerts == "sms" || $alerts == "both"){
-    
+
             $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
             $token = '18a458337ffdfd10617571e495314311';
             $client = new Client($sid, $token);
@@ -244,7 +244,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         }
     }
 
-    
+
     function cancel_order() {
         $name = "";
         $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
@@ -252,14 +252,14 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         foreach($stmnt->fetchAll() as $row) {
             $name = $row['firstname'];
         }
-        
+
         $sql = "UPDATE orders SET client_email = ?, secondary_providers = ?, status = ? WHERE order_number = ?;";
         $stmt = $db->prepare($sql);
         $params = array("", "", "ac", $order_number);
         $stmt->execute($params);
-        
+
         $mail = new PHPMailer;
-            
+
         $mail->isSMTP();
         $mail->SMTPDebug = 0;
         $mail->Debugoutput = 'html';
@@ -271,69 +271,69 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $mail->Password = "Monkeybanana";
         $mail->setFrom('admin@helphog.com', 'HelpHog');
         $mail->addAddress($customer_email, 'To');
-        $mail->IsHTML(true); 
-        
+        $mail->IsHTML(true);
+
         $mail->Subject = "HelpHog - Task Cancelled";
         $mail->Body    = noProviderFound($service, $order_number);
         $mail->send();
     }
-    
+
     function minutes_until($time) {
         $then = new DateTime(date('Y-m-d H:i:s', strtotime($time)), new DateTimeZone('UTC'));
         $now = new DateTime(gmdate('Y-m-d H:i:s'));
-        
+
         $diff = strtotime($then->format('Y-m-d H:i:s')) - strtotime($now->format('Y-m-d H:i:s'));
-        
+
         return $diff / 60;
     }
-    
+
     function minutes_since($time) {
         $then = new DateTime(date('Y-m-d H:i:s', strtotime($time)), new DateTimeZone('UTC'));
         $now = new DateTime(gmdate('Y-m-d H:i:s'));
-        
+
         $diff = strtotime($now->format('Y-m-d H:i:s')) - strtotime($then->format('Y-m-d H:i:s'));
-        
+
         return $diff / 60;
     }
-    
-    
+
+
     function validate_customer($order, $session) {
         $db = establish_database();
-        
+
         $customer_email = "";
         $stmnt = $db->prepare("SELECT customer_email FROM orders WHERE order_number = ?;");
-        $stmnt->execute(array($order)); 
+        $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $customer_email = $row['customer_email'];
         }
-        
+
         $stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
-        $stmnt->execute(array($customer_email)); 
+        $stmnt->execute(array($customer_email));
         foreach($stmnt->fetchAll() as $row) {
             if (hash_equals($row['session'], $session)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     function validate_customer_phone($order, $phone) {
         $db = establish_database();
-        
+
         $customer_phone = "";
         $stmnt = $db->prepare("SELECT customer_phone FROM orders WHERE order_number = ?;");
-        $stmnt->execute(array($order)); 
+        $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             if (hash_equals($row['customer_phone'], $phone)) {
                 return true;
             }
         }
-        
+
         return false;
-        
+
     }
-    
+
     function address_works_for_provider($address, $email, $orderTime) {
 
         $db = establish_database();
@@ -352,99 +352,99 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $work_city = $row["work_city"];
             $work_zip = $row["work_zip"];
         }
-        
+
         $start = str_replace(' ', '+', $work_address . '+' . $work_city . '+' . $work_state . '+' . $work_zip);
-        
+
         $url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial";
         $url .= "&traffic_model=best_guess";
         $url .= "&departure_time=" . $orderTime;
         $url .= "&origins=" . $start;
         $url .= "&destinations=" . $address;
         $url .= "&key=AIzaSyBLOFTNoq2ypQGRX_CgCMSUkBhFlmPYWCg";
-        
+
         $response = file_get_contents($url);
         $json = json_decode($response);
-        
+
         $distance = intval($json->rows[0]->elements[0]->distance->value) / 1609;
         $duration = intval($json->rows[0]->elements[0]->duration->value);
         $traffic = intval($json->rows[0]->elements[0]->duration_in_traffic->value);
-        
+
         $distanceMatrix->within = $distance <= $radius;
         $distanceMatrix->duration = $duration;
         $distanceMatrix->traffic = $traffic;
-        
+
         return $distanceMatrix;
-        
+
     }
-    
+
     function validate_provider_email($order, $email) {
         $db = establish_database();
-        
+
         $stmnt = $db->prepare("SELECT client_email FROM orders WHERE order_number = ?;");
-        $stmnt->execute(array($order)); 
+        $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             if (hash_equals($row['client_email'], $email)) {
                 return true;
             }
         }
-        
+
         return false;
-        
+
     }
-    
+
     function validate_provider($order, $session) {
         $db = establish_database();
-        
+
         $client_email = "";
         $stmnt = $db->prepare("SELECT client_email, secondary_providers FROM orders WHERE order_number = ?;");
-        $stmnt->execute(array($order)); 
+        $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $client_email = $row['client_email'];
             $secondary_providers = $row['secondary_providers'];
-            
+
             $all_providers = array();
             if ($client_email != "") {
                 array_push($all_providers, $client_email);
             }
-            
+
             $secondary_providers_array = explode(',', $secondary_providers);
             foreach($secondary_providers_array as $secondary_provider) {
                 if ($secondary_provider != "") {
                     array_push($all_providers, $secondary_provider);
                 }
             }
-            
+
         }
-        
+
         foreach ($all_providers as $provider) {
             $stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
-            $stmnt->execute(array($provider)); 
+            $stmnt->execute(array($provider));
             foreach($stmnt->fetchAll() as $row) {
                 if (hash_equals($row['session'], $session)) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     function validate_user($email, $session) {
         $customer_email = "";
         $stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
-        $stmnt->execute(array($email)); 
+        $stmnt->execute(array($email));
         foreach($stmnt->fetchAll() as $row) {
             if (hash_equals($row['session'], $session)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     function send_new_applicant_email($firstname, $email, $workfield, $experience, $phone) {
         $mail = new PHPMailer;
-        
+
         $mail->isSMTP();
         $mail->SMTPDebug = 0;
         $mail->Debugoutput = 'html';
@@ -462,16 +462,16 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $message .= 'Email: ' . $email . "\n\n";
         $message .= 'Workfield: ' . $workfield . "\n\n";
         $message .= 'Experience: ' . $experience . "\n\n";
-        
+
         $mail->Subject = "Help - New Applicant";
         $mail->Body    = $message;
         $mail->send();
     }
-    
+
     function send_verification_email($firstname, $email, $secret_key) {
-        
+
         $mail = new PHPMailer;
-    
+
         $mail->isSMTP();
         $mail->SMTPDebug = 0;
         $mail->Debugoutput = 'html';
@@ -483,19 +483,19 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $mail->Password = "Monkeybanana";
         $mail->setFrom('no-reply@helphog.com', 'HelpHog');
         $mail->addAddress($email, 'To');
-        
+
         $mail->Subject = "HelpHog - Account Confirmation";
         $mail->Body    = get_signup_email($email, $firstname, $secret_key);
         $mail->IsHTML(true);
-        
+
         $mail->send();
-        
+
         $mail->ClearAllRecipients();
     }
-    
+
     function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm, $phone) {
         $db = establish_database();
-        
+
         $first_name_error = "";
         $last_name_error = "";
         $email_error = "";
@@ -503,21 +503,21 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $phone_error = "";
         $zip_error = "";
         $confirm_error = "";
-    
+
         if (!preg_match("/^[A-Za-z]+$/", $firstname)) {
             $first_name_error = "true";
         }
         if ($firstname == "") {
             $first_name_error = "empty";
         }
-        
+
         if (!preg_match("/^[A-Za-z]+$/", $lastname)) {
             $last_name_error = "true";
         }
         if ($lastname == "") {
             $last_name_error = "empty";
         }
-        
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $email_error = "true";
         }
@@ -530,28 +530,28 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 $email_error = "found";
             }
         }
-        
+
         if (!preg_match("/^\S{6,}$/", $password)) {
             $password_error = "true";
         }
         if ($password == "") {
             $password_error = "empty";
         }
-        
+
         if (!preg_match("/^[0-9]{5}$/", $zip)) {
             $zip_error = "true";
         }
         if ($zip == "") {
             $zip_error = "empty";
         }
-    
+
         if ($confirm !== $password) {
             $confirm_error = "true";
         }
         if ($confirm == "") {
             $confirm_error = "empty";
         }
-        
+
         if (!preg_match("/^[0-9]{10}$/", $phone)) {
             $phone_error = "true";
         }
@@ -564,7 +564,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 $phone_error = "found";
             }
         }
-        
+
         $errors = new \stdClass();
         $errors->firstnameerror = $first_name_error;
         $errors->lastnameerror = $last_name_error;
@@ -573,30 +573,30 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $errors->confirmerror = $confirm_error;
         $errors->phoneerror = $phone_error;
         $errors->ziperror = $zip_error;
-        
+
         return $errors;
     }
-    
+
     function pause_order($order) {
-        
+
         $db = establish_database();
-        
+
         $time = gmdate('y-m-d H:i:s');
         $sql = "UPDATE orders SET pause = ?, currently_paused = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array($time, 'y', $order);
         $stmt->execute($params);
     }
-    
+
     function resume_order($order) {
         $db = establish_database();
-        
+
         $time = gmdate('y-m-d H:i:s');
         $sql = "UPDATE orders SET resume = ?, currently_paused = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array($time, 'n', $order);
         $stmt->execute($params);
-        
+
         $start_actual = "";
         $end_actual = "";
         $stmnt = $db->prepare("SELECT pause, resume FROM orders WHERE order_number = ?;");
@@ -605,46 +605,46 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $start_actual = $row['pause'];
             $end_actual = $row['resume'];
         }
-        
+
         $ts1 = strtotime($start_actual);
         $ts2 = strtotime($end_actual);
         $seconds_diff = $ts2 - $ts1;
-        
+
         $oldtimeactual = "";
         $stmnt = $db->prepare("SELECT paused_time FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $oldtimeactual = $row['paused_time'];
         }
-        
+
         $new_time = $seconds_diff + $oldtimeactual;
-        
+
         $sql = "UPDATE orders SET paused_time = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array($new_time, $order);
         $stmt->execute($params);
-        
+
     }
-    
+
     function start_stop_order($order) {
-        
+
         $db = establish_database();
         $time = gmdate('y-m-d H:i:s');
-        
+
         $status = "";
         $stmnt = $db->prepare("SELECT status FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $status = $row['status'];
         }
-        
+
         $sql = "";
         if ($status == "st") {
             $sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
         } else if ($status == "cl") {
             $sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
         }
-        
+
         if ($sql != "") {
             $stmt = $db->prepare($sql);
             $params = array($time, $order);
@@ -654,10 +654,10 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             return false;
         }
     }
-    
+
     function mark_completed($order, $message) {
         $db = establish_database();
-        
+
         $service = "";
         $customer_email = "";
         $customer_phone = "";
@@ -670,7 +670,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $customer_phone = $row['customer_phone'];
             $disputes = $row['disputes'];
         }
-        
+
         if ($disputes < 3) {
             $name = "";
             $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
@@ -678,9 +678,9 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             foreach($stmnt->fetchAll() as $row) {
                 $name = $row['firstname'];
             }
-            
+
             $mail = new PHPMailer;
-            
+
             $mail->isSMTP();
             $mail->SMTPDebug = 0;
             $mail->Debugoutput = 'html';
@@ -692,49 +692,49 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $mail->Password = "Monkeybanana";
             $mail->setFrom('no-reply@helphog.com', 'HelpHog');
             $mail->addAddress($customer_email, 'To');
-            
+
             $mail->Subject = "HelpHog - Task Completed";
             $mail->Body    = get_marked_completed_email($name, $service);
             $mail->IsHTML(true);
-            
+
             $mail->send();
-            
+
             $mail->ClearAllRecipients();
-            
+
             if ($message != "") {
                 $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
                 $token = '18a458337ffdfd10617571e495314311';
                 $client = new Client($sid, $token);
                 $client->messages->create('+1' . $customer_phone, array('from' => '+12532593451', 'body' => $message));
             }
-            
-            
+
+
             $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
             $stmt = $db->prepare($sql);
             $params = array('mc', $order);
             $stmt->execute($params);
-            
+
             return true;
-            
+
         } else {
-            
+
             return false;
-            
+
         }
     }
-    
+
 	/**
 	 * adds the given provider to the given order
-	 * 
+	 *
 	 * @param {string} email - email of provider
 	 * @param {number} order_number - order number of order to be claimed
 	 * @param {string} accept_key - secret key generated during checkout process
 	 * @return {string} JS script tag that redirects the page to appropriate outcome
 	 */
-    function claim_order($email, $order_number, $accept_key) {
-        
+    function claim_order($email, $order_number, $accept_key, $mobile) {
+
         $db = establish_database();
-        
+
         $clicked = '';
         $found = false;
         $cancelled = true;
@@ -753,14 +753,14 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $wage = $row['wage'];
             $clicked = $row['clicked'];
         }
-        
+
         $new_clicked = "";
         $already_clicked = false;
         if ($clicked == "") {
             $new_clicked = $email;
         } else {
             $re_notify_list = explode(',', $clicked);
-            
+
             foreach ($re_notify_list as $clicked_email) {
                 if ($email == $clicked_email) {
                     $already_clicked = true;
@@ -773,93 +773,93 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 $new_clicked = $clicked;
             }
         }
-        
+
         $sql = "UPDATE orders SET clicked = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array($new_clicked, $order_number);
         $stmt->execute($params);
-        
+
         if ($found && !$cancelled) {
-        
+
             if ($wage == "hour" ){
                 $duration = $duration . " hour(s)";
             } else {
                 $duration = "No time limit";
             }
-            
+
             $client_email = "";
             $stmnt = $db->prepare("SELECT client_email FROM orders WHERE order_number = ?;");
             $stmnt->execute(array($order_number));
             foreach($stmnt->fetchAll() as $row) {
                 $client_email = $row['client_email'];
             }
-            
+
             $client_phone = "";
             $stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
             $stmnt->execute(array($client_email));
             foreach($stmnt->fetchAll() as $row) {
                 $client_phone = $row['phone'];
             }
-            
+
             $first_provider = ($client_email == "");
-            
+
             $people = 1;
             $stmnt = $db->prepare("SELECT people FROM orders WHERE order_number = ?;");
             $stmnt->execute(array($order_number));
             foreach($stmnt->fetchAll() as $row) {
                 $people = $row['people'];
             }
-            
+
             if ($email == $client_email) {
                 return '<script>window.location.href = "https://helphog.com/decline";</script>';
             }
-            
+
             if (!$first_provider) {
-                
+
                 if ($people == 1) {
                     return '<script>window.location.href = "https://helphog.com/decline";</script>';
                 } else {
-                    
+
                     $secondary_providers = "";
                     $stmnt = $db->prepare("SELECT secondary_providers FROM orders WHERE order_number = ?;");
                     $stmnt->execute(array($order_number));
                     foreach($stmnt->fetchAll() as $row) {
                         $secondary_providers = $row['secondary_providers'];
                     }
-                    
+
                     if (strpos($secondary_providers, $email) !== false) {
                         return '<script>window.location.href = "https://helphog.com/decline";</script>';
                     }
-                    
+
                     $num_secondary;
                     if ($secondary_providers == "") {
                         $num_secondary = 0;
                     } else {
                         $num_secondary = count(explode(',', $secondary_providers));
                     }
-                    
+
                     if ($num_secondary + 1 >= $people) {
                         return '<script>window.location.href = "https://helphog.com/decline";</script>';
                     } else {
-                        
+
                         $new_secondary;
                         if ($secondary_providers == "") {
                             $new_secondary = $email;
                         } else {
                             $new_secondary = $secondary_providers . ',' . $email;
                         }
-                        
+
                         if ($num_secondary + 2 == $people) { // plus 1 for primary, and 1 for person currently claiming
-                        
+
                             $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
                             $stmt = $db->prepare($sql);
                             $params = array("cl", $order_number);
                             $stmt->execute($params);
-                        
+
                             $secondary_providers_array = explode(',', $new_secondary);
                             $message = "Here are the providers you will be working with:\n";
                             foreach ($secondary_providers_array as $curr_email) {
-                                
+
                                 $name = "";
                                 $phone = "";
                                 $stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
@@ -868,54 +868,59 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                                     $name = $row['firstname'];
                                     $phone = $row['phone'];
                                 }
-                                
+
                                 $message .= $name . " (" . $phone . ")\n";
                             }
-                            
+
                             $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
                             $token = '18a458337ffdfd10617571e495314311';
                             $client = new Client($sid, $token);
                             $client_phone = '+1' . $client_phone;
-                            $client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message)); 
-                            
+                            $client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+
                         }
-                        
+
                         $sql = "UPDATE orders SET secondary_providers = ?  WHERE order_number = ?";
                         $stmt = $db->prepare($sql);
                         $params = array($new_secondary, $order_number);
                         $stmt->execute($params);
-                        
+
                         send_claimed_notification($order_number, $email, "secondary", $db, $duration);
                         return '<script>window.location.href = "https://helphog.com/claimedsecondary";</script>';
                     }
                 }
-                
+
             } else { // first provider
-            
+
                 if ($people == 1) {
                     $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
                     $stmt = $db->prepare($sql);
                     $params = array("cl", $order_number);
                     $stmt->execute($params);
                 }
-                
+
                 $sql = "UPDATE orders SET client_email = ? WHERE order_number = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($email, $order_number);
                 $stmt->execute($params);
-                
+
                 send_claimed_notification($order_number, $email, "primary", $db, $duration);
+                if ($mobile){
+                    return 'https://helphog.com/mobileclaimed';
+                }
                 return '<script>window.location.href = "https://helphog.com/claimed";</script>';
             }
         }
-        
+        if ($mobile){
+            return '<script>window.location.href = "https://helphog.com/mobiledecline";</script>';
+        }
         return '<script>window.location.href = "https://helphog.com/decline";</script>';
-        
+
     }
-    
+
     function dispute_order($order_number) {
         $db = establish_database();
-    
+
         $service = "";
         $client_email = "";
         $end_time = "";
@@ -936,9 +941,9 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $been_disputed = $row['been_disputed'];
             $order_disputes = $row['disputes'];
         }
-        
+
         if (minutes_since($end_time) <= 1440) {
-        
+
             $email_found = false;
             $disputes = 0;
             $result = $db->query("SELECT email, disputes FROM login;");
@@ -948,7 +953,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                     $disputes = $row['disputes'];
                 }
             }
-            
+
             $table = "login";
             if (!$email_found){
                 $result = $db->query("SELECT phone, disputes FROM guests;");
@@ -959,15 +964,15 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 }
                 $table = "guests";
             }
-            
+
             if ($been_disputed == 'n') {
-                
+
                 $disputes += 1;
                 $sql = "UPDATE " . $table . " SET disputes = ? WHERE phone = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($disputes, $customer_phone);
                 $stmt->execute($params);
-            
+
                 //banning
                 $num_orders = 0;
                 $orders = $db->query("SELECT * FROM orders;");
@@ -976,7 +981,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                         $num_orders++;
                     }
                 }
-                
+
                 if ($num_orders >= 4){
                     // bans users if more that 50% of their orders are disputed
                     if ($disputes / $num_orders > 0.5) {
@@ -993,18 +998,18 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                         }
                     }
                 }
-                
+
             }
-            
+
             $order_disputes += 1;
             $sql = "UPDATE orders SET status = ?, been_disputed = 'y', disputes = ? WHERE order_number = ?";
             $stmt = $db->prepare($sql);
             $params = array('di', $order_disputes, $order_number);
             $stmt->execute($params);
-            
+
             if ($order_disputes == 3) {
                 $mail = new PHPMailer;
-        
+
                 $mail->isSMTP();
                 $mail->SMTPDebug = 0;
                 $mail->Debugoutput = 'html';
@@ -1016,24 +1021,24 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 $mail->Password = "Monkeybanana";
                 $mail->setFrom('admin@helphog.com', 'HelpHog');
                 $mail->addAddress("admin@helphog.com", 'To');
-        
+
                 $message = 'Order Number: ' . $order_number;
-                
+
                 $mail->Subject = "HelpHog - Mediation Required";
                 $mail->Body    = $message;
                 $mail->send();
             }
-            
+
             $all_emails = array();
             array_push($all_emails, $client_email);
             $secondary_emails = explode(',', $secondary_providers);
-            
+
             for ($i = 0; $i < count($secondary_emails); $i++) {
                 if ($secondary_emails[$i] != "") {
                     array_push($all_emails, $secondary_emails[$i]);
                 }
             }
-            
+
             for ($i = 0; $i < count($all_emails); $i++) {
                 send_dispute_email($all_emails[$i], $service, $db);
             }
@@ -1042,18 +1047,18 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         } else {
             return false;
         }
-        
+
     }
-    
+
     function send_dispute_email($client_email, $service, $db) {
-    
+
         $name = "";
         $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
         $stmnt->execute(array($client_email));
         foreach($stmnt->fetchAll() as $row) {
             $name = $row['firstname'];
         }
-        
+
         $mail = new PHPMailer;
         $mail->isSMTP();
         $mail->SMTPDebug = 0;
@@ -1066,7 +1071,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $mail->Password = "Monkeybanana";
         $mail->setFrom('no-reply@helphog.com', 'HelpHog');
         $mail->addAddress($client_email, 'To');
-        
+
         $mail->Subject = "HelpHog - Task Disputed";
         $mail->Body    = get_dispute_email($name, $service);
         $mail->IsHTML(true);
@@ -1081,7 +1086,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $user = 'regiuzkk_help';
         $password = '3ZY1v^}T,9]b';
         $ds = "mysql:host={$host};dbname={$dbname};charset=utf8";
-    
+
         try {
             $db = new PDO($ds, $user, $password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -1094,7 +1099,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         }
         return $db;
     }
-    
+
     function check_session($post_session) {
         $db = establish_database();
         $found = false;
@@ -1108,7 +1113,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         }
         return $found;
     }
-    
+
     function get_order_status($order) {
         $db = establish_database();
         $order_status = "nf";
@@ -1128,9 +1133,9 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         }
         return $order_status;
     }
-    
+
     function send_claimed_notification($order_number, $email, $type, $db, $duration) {
-    
+
         $wage = "";
         $customer_message = "";
         $service = "";
@@ -1152,13 +1157,13 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $price = "$" . $row['cost'];
             $wage = $row['wage'];
         }
-        
-        
-        
+
+
+
         if ($wage == "hour") {
             $price.= "/hr";
         }
-        
+
         $name = "";
         $client_phone = "";
         $alerts = "";
@@ -1170,12 +1175,12 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $alerts = $row['alerts'];
             $tz = $row['timezone'];
         }
-        
+
         $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
         $local_date->setTimezone(new DateTimeZone($tz));
-        
+
         $mail = new PHPMailer;
-        
+
         $mail->isSMTP();
         $mail->SMTPDebug = 0;
         $mail->Debugoutput = 'html';
@@ -1187,21 +1192,21 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $mail->Password = "Monkeybanana";
         $mail->setFrom('no-reply@helphog.com', 'HelpHog');
         $mail->addAddress($email, 'To');
-        
+
         $mail->Subject = "HelpHog - Claimed Task";
         $mail->Body    = get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration);
         $mail->IsHTML(true);
-        
+
         $mail->send();
         $mail->ClearAllRecipients();
-        
+
 
         $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
         $token = '18a458337ffdfd10617571e495314311';
         $client = new Client($sid, $token);
         $client_phone = '+1' . $client_phone;
-        $client->messages->create($client_phone, array('from' => '+12532593451', 'body' => 'Please contact the customer immediately to follow up on their order. Here are the order details: 
-            
+        $client->messages->create($client_phone, array('from' => '+12532593451', 'body' => 'Please contact the customer immediately to follow up on their order. Here are the order details:
+
 Customer Contact:
 Email: ' . $customer_email . '
 Phone: ' . $customer_phone . '
@@ -1210,12 +1215,12 @@ Order: ' . $order_number . '
 Service: ' . $service . '
 Date: ' . $local_date->format("F j, Y, g:i a") . '
 Max duration: ' . $duration . '
-Location: ' . $address . ' 
+Location: ' . $address . '
 Pay: ' . $price . '
 
 Message from Customer: ' . $customer_message));
 }
-    
+
     function get_confirmation_email($order_number, $cost, $service, $name, $schedule, $customer_message, $address, $providers, $subtotal, $cancel_key) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1330,7 +1335,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_signup_email($email, $firstname, $secret_key) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1437,7 +1442,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_reset_email($email, $random_hash, $name) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1544,7 +1549,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_claimed_email($customer_message, $service, $schedule, $address, $price, $customer_email, $customer_phone, $name, $duration) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1657,7 +1662,7 @@ Message from Customer: ' . $customer_message));
 
 ';
     }
-    
+
     function get_claim_email($service, $schedule, $location, $client, $order_number, $price, $customer_message, $name, $duration, $secret_key) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1770,7 +1775,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_address_email($to_send, $name) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1874,7 +1879,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_cancel_email($name, $service) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1977,7 +1982,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function noProviderFound($service, $order, $schedule) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2080,7 +2085,7 @@ Message from Customer: ' . $customer_message));
         </body>
 >';
     }
-    
+
     function noPartnersFound($service, $order, $schedule) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2182,7 +2187,7 @@ Message from Customer: ' . $customer_message));
         	</div>
         </body>';
     }
-    
+
     function customer_cancel($message, $name) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2285,7 +2290,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_refund_email($name, $service) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2387,7 +2392,7 @@ Message from Customer: ' . $customer_message));
         	</div>
         </body>';
     }
-    
+
     function sendNoChargeEmail($service, $order_number, $schedule) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2489,7 +2494,7 @@ Message from Customer: ' . $customer_message));
         	</div>
         </body>';
     }
-    
+
     function get_notice_email($name, $message) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2592,7 +2597,7 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-    
+
     function get_completed_email($service, $name) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2694,7 +2699,7 @@ Message from Customer: ' . $customer_message));
         	</div>
         </body>';
     }
-    
+
     function get_dispute_email($name, $service) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2796,7 +2801,7 @@ Message from Customer: ' . $customer_message));
         	</div>
         </body>';
     }
-    
+
     function get_marked_completed_email($name, $service) {
         return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
