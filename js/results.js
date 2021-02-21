@@ -6,7 +6,7 @@
 
      window.onload = function () {
 
-        id('loading').classList.remove('hidden');
+          id('loading').classList.remove('hidden');
           let availabilityFilters = document.querySelectorAll('#availability-filters input')
           for (let i = 0; i < availabilityFilters.length; i++) {
                availabilityFilters[i].onchange = filterAvailability;
@@ -25,6 +25,13 @@
           id('update').addEventListener('click', removeSpotlight)
 
           $('input').attr('autocomplete', 'off')
+
+          id('zip-input').addEventListener("keyup", function (event) {
+               event.preventDefault();
+               if (event.keyCode === 13) {
+                    id('update').click();
+               }
+          });
 
 
      };
@@ -473,8 +480,8 @@
 
                }
 
-                id('loading').classList.add('hidden');
-                id('main').classList.remove('hidden');
+               id('loading').classList.add('hidden');
+               id('main').classList.remove('hidden');
 
           }
      }
