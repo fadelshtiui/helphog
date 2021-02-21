@@ -10,7 +10,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     
     if (validate_provider($order, $session)) {
         
-        if (!start_stop_order($order)) {
+        $success = start_stop_order($order);
+        if ($success == false) {
             $response->error = 'This order has not been fully claimed. Secondary providers must first claim this order.';
         } else {
             $response->error = "";
@@ -24,4 +25,3 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
 
 header('Content-type: application/json');
 print json_encode($response);
-?>
