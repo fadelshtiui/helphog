@@ -480,7 +480,12 @@ function initModal() {
      if (urlParams.get('wage') == 'per') {
           estimate = id("numpeople").value * cost;
      } else {
-          estimate = id("numpeople").value * cost * ((id("duration").value) - 1) + "-$" + id("numpeople").value * cost * id("duration").value;
+          let lowerBound = id("numpeople").value * cost * ((id("duration").value) - 1);
+          if (((id("duration").value) - 1) == "0") {
+               lowerBound = id("numpeople").value * cost;
+          }
+          estimate = lowerbound + "-$" + id("numpeople").value * cost * id("duration").value;
+
      }
 
      let time = id('time').value
