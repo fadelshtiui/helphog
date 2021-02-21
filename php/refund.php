@@ -56,29 +56,6 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         $params = array('re', $order);
         $stmt->execute($params);
         
-        $mail = new PHPMailer;
-        
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress("admin@helphog.com", 'To');
-        
-        $mail->Subject = "REFUND ORDER";
-        $mail->Body    = "Full refund on order:" . $order . " with payment intent: " . $intent;
-        $mail->IsHTML(true);
-        
-        $mail->send();
-        
-        $mail->ClearAllRecipients();
-        
     }
     
 }
-?>
