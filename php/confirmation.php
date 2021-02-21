@@ -49,7 +49,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
         $state = $_SESSION["state"];
         $customer_phone = $_SESSION["phone"];
         $people = $_SESSION["people"];
-        $taxRate = $_SESSION["taxrate"];
+        $sales_tax_percent = $_SESSION["taxrate"];
 
         $address = $street_address . " " . $city . " " . $state . " " . $zip;
 
@@ -59,7 +59,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
         $response->zip = $zip;
         $response->schedule = $schedule;
         $response->service = $service;
-        $response->taxrate = $taxRate;
+        $response->taxrate = $sales_tax_percent;
 
         $response->duration = $_SESSION['duration'];
 
@@ -145,14 +145,14 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
         $cancel_key = '' . bin2hex(openssl_random_pseudo_bytes(128));
         $image_key = '' . bin2hex(openssl_random_pseudo_bytes(128));
 
-        $sql = "INSERT INTO orders (order_number, customer_email, timestamp, schedule, address, service, message, cost, customer_phone, client_email, wage, order_cookie, duration, people, intent, status, prorated, accept_key, cancel_key, timezone, cancel_buffer, image_key) VALUES (:order_number, :customer_email, :timestamp, :schedule, :address, :service, :message, :price, :customer_phone, :client_email, :wage, :order_cookie, :duration, :people, :intent, :status, :prorated, :accept_key, :cancel_key, :timezone, :cancel_buffer, :image_key);";
+        $sql = "INSERT INTO orders (order_number, customer_email, timestamp, schedule, address, service, message, cost, customer_phone, client_email, wage, order_cookie, duration, people, intent, status, prorated, accept_key, cancel_key, timezone, cancel_buffer, image_key, sales_tax_percent) VALUES (:order_number, :customer_email, :timestamp, :schedule, :address, :service, :message, :price, :customer_phone, :client_email, :wage, :order_cookie, :duration, :people, :intent, :status, :prorated, :accept_key, :cancel_key, :timezone, :cancel_buffer, :image_key, :sales_tax_percent);";
 
         $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($_SESSION['tzoffset']));
         $utc->setTimezone(new DateTimeZone('UTC'));
 
         $time = date('m-d-y H:i:s');
         $stmt = $db->prepare($sql);
-        $params = array("order_number" => $order_number, "customer_email" => $customer_email, "timestamp" => $time, "schedule" => $utc->format('Y-m-d H:i:s'), "address" => $address, "service" => $service, "message" => $message, "price" => $price, "customer_phone" => $customer_phone, "client_email" => "", "wage" => $wage, "order_cookie" => $order, "duration" => $durationTemp, "people" => $people, "intent" => $intent, "status" => "pe", "prorated" => $prorated, "accept_key" => $accept_key, "cancel_key" => $cancel_key, "timezone" => $_SESSION['tzoffset'], "cancel_buffer" => $_SESSION['cancel_buffer'], "image_key" => $image_key);
+        $params = array("order_number" => $order_number, "customer_email" => $customer_email, "timestamp" => $time, "schedule" => $utc->format('Y-m-d H:i:s'), "address" => $address, "service" => $service, "message" => $message, "price" => $price, "customer_phone" => $customer_phone, "client_email" => "", "wage" => $wage, "order_cookie" => $order, "duration" => $durationTemp, "people" => $people, "intent" => $intent, "status" => "pe", "prorated" => $prorated, "accept_key" => $accept_key, "cancel_key" => $cancel_key, "timezone" => $_SESSION['tzoffset'], "cancel_buffer" => $_SESSION['cancel_buffer'], "image_key" => $image_key, "sales_tax_percent" => doubleval($sales_tax_percent));
         $stmt->execute($params);
 
         $orig_price = $price;
@@ -265,5 +265,3 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 }
 
 echo json_encode($response);
-
-?>
