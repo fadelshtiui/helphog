@@ -156,10 +156,10 @@ input:focus + label {
   transition: inherit;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /*end*/
@@ -477,6 +477,18 @@ input:focus ~ .after {
 .submit:hover{
   background-color:#222222;
 }
+
+#loading{
+    width: 2000px;
+    height: 2000px;
+    background-color: #00000087 !important;
+    opacity: 0.9;
+    position: absolute;
+    z-index: 10000;
+    margin-top: -692px;
+    margin-left: -635px;
+}
+
 .loading{
   font-size:0;
   width:30px;
@@ -1037,5 +1049,3 @@ th{
         display:none;
     }
 }
-
-

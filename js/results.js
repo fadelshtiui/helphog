@@ -6,7 +6,7 @@
 
      window.onload = function () {
 
-          id('loading').classList.remove('hidden');
+        id('loading').classList.remove('hidden');
           let availabilityFilters = document.querySelectorAll('#availability-filters input')
           for (let i = 0; i < availabilityFilters.length; i++) {
                availabilityFilters[i].onchange = filterAvailability;
@@ -237,7 +237,7 @@
                     id('zip-updater').classList.remove('hidden')
                     if (response.zip) {
                          id('zip-input').value = response.zip
-                         // id('current-zip-guest').innerText = 
+                         // id('current-zip-guest').innerText =
                     }
                }
 
@@ -473,7 +473,8 @@
 
                }
 
-               id('loading').classList.add('hidden');
+                id('loading').classList.add('hidden');
+                id('main').classList.remove('hidden');
 
           }
      }
