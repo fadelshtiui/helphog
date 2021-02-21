@@ -58,7 +58,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
         
         $sql = "UPDATE orders SET rating = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
-        $params = array($rating, 'pd', $order);
+        $params = array($rating, $order);
         $stmt->execute($params);
         
         echo 'success';
