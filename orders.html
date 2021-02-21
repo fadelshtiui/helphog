@@ -93,17 +93,9 @@
 								<td class="text-xs-left" style='font-weight:400;'
 									@click="props.expanded = !props.expanded">${{ props.item.amount }}</td>
 								<td v-if="props.item.status == 'ac' || props.item.status == 'cc' || props.item.status == 'pc' || props.item.status == 'pe'"
-									class="text-xs-left" style='font-weight:500;'>{{ (props.item.status == 'pe' ?
-									"Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In
-									Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ?
-									"Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ?
-									"Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+									class="text-xs-left" style='font-weight:500;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
 								<td v-if="props.item.status == 'cl' || props.item.status == 'st' || props.item.status == 'en'"
-									class="text-xs-left" style='font-weight:500; color:blue;'>{{ (props.item.status ==
-									'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st'
-									? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ?
-									"Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ?
-									"Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+									class="text-xs-left" style='font-weight:500; color:blue;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
 								<td v-if="props.item.status == 'di'" class="text-xs-left"
 									style='font-weight:500; color:red;'>Disputed</td>
 								<td v-if="props.item.status == 're'" class="text-xs-left"
