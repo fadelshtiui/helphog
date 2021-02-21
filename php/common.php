@@ -36,27 +36,14 @@
                 $seconds_diff = $ts2 - $ts1;
                 $seconds_diff -= $row["paused_time"];
                 $time = ($seconds_diff / 3600);
-                $result->worked_time == $time;
+                $result->worked_time = $time;
                 $earnings = $time * $row["cost"];
-                $result->maxWithdrawl = $row["duration"] * $row["cost"] * $row["people"];
             } else {
                 $earnings = $row["cost"];
-                $result->maxWithdrawl = $row["cost"] * $row["people"];
             }
-            $revenue_actual = round($earnings, 2);
+            $revenue_actual = round($earnings * 0.9, 2);
             $result->revenue = $revenue_actual;
 
-            if($row["prorated"] == "n" && $time < 1 && $row["wage"] == "hour"){
-                $result->customerPayment = $row["cost"] * $row["people"];
-                $result->providerPayout = $row["cost"] * 0.9;
-            }else{
-                $result->customerPayment = $revenue_actual * $row["people"];
-                $result->providerPayout = $revenue_actual * 0.9;
-            }
-
-            if ($result->customerPayment > $result->maxWithdrawl){
-                $result->customerPayment = $result->maxWithdrawl;
-            }
         }
         return $result;
     }
@@ -64,65 +51,105 @@
     function pay_provider($order_number) {
 
         $stripe = new \Stripe\StripeClient(
-          'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
+           'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
         );
-
+        
         $db = establish_database();
-
+        
+        $sales_tax_percent = 0;
         $service = "";
         $people = "";
         $secondary_providers = "";
         $schedule = "";
+        $duration = 0;
+        $cost = 0;
+        $people = 0;
+        $wage = "";
+        $prorated = "";
         $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order_number));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             $service = $row["service"];
             $people = $row["people"];
             $secondary_providers = $row["secondary_providers"];
             $schedule = $row["schedule"];
+            $sales_tax_percent = $row['sales_tax_percent'];
+            $duration = $row['duration'];
+            $cost = $row['cost'];
+            $people = $row['people'];
+            $wage = $row['wage'];
+            $prorated = $row['prorated'];
         }
-
+        
         $payment_info = payment($order_number);
-
-        if ($payment_info->customerPayment < 0.50){
+        
+        $customer_payment = 0;
+        $provider_payout = 0;
+        
+        $decimal_percent = $sales_tax_percent / 100.0;
+        $time_worked = $payment_info->worked_time;
+        $max_withdraw = 0;
+        $tax_collected = 0;
+        if ($wage == "hour") {
+            $max_payment_before_tax = $duration * $cost * $people;
+        } else {
+            $max_payment_before_tax = $cost * $people;
+        }
+        $tax_collected = round($max_payment_before_tax * $decimal_percent, 2);
+        $max_withdraw = round($max_payment_before_tax + $tax_collected, 2);
+        
+        if ($wage == "hour") {
+            if ($time_worked < 1 && $prorated == "n") { // round up non prorated tasks up to cost of 1 hour
+                $time_worked = 1;
+            }
+            $total_before_tax = $time_worked * $cost * $people;
+            $tax_collected = round($total_before_tax * $decimal_percent, 2);
+            $customer_payment = round($total_before_tax + $tax_collected, 2);
+            $provider_payout = $time_worked * $cost * 0.9;
+        } else {
+            $customer_payment = $max_withdraw;
+            $provider_payout = $cost * 0.9;
+        }
+        
+        if ($customer_payment < 0.50){
             sendNoChargeEmail($service, $order_number, $schedule);
-
+        
             $stripe->paymentIntents->cancel(
               trim($payment_info->intent),
               []
             );
-
+        
         } else {
             $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-            $intent->capture(['amount_to_capture' => ceil($payment_info->customerPayment * 100)]);
-
+            $intent->capture(['amount_to_capture' => ceil($customer_payment * 100)]);
+        
             $stripe_acc = "";
             $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
             $stmnt->execute(array($row["client_email"]));
             foreach($stmnt->fetchAll() as $row) {
                 $stripe_acc = $row['stripe_acc'];
             }
-
+        
             $transfer = \Stripe\Transfer::create([
-              "amount" => ceil($payment_info->providerPayout * 100),
+              "amount" => ceil($provider_payout * 100),
               "currency" => "usd",
               "destination" => $stripe_acc,
               "description" => $service . " (" . $order_number . ")",
               "transfer_group" => '{' . $order_number . '}',
             ]);
-
+        
             if (intval($people) > 1){
                 $providers = explode("," , $secondary_providers);
                 foreach ($providers as $provider){
-
+        
                     $secondary_stripe_acc = "";
                     $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
                     $stmnt->execute(array($provider));
                     foreach($stmnt->fetchAll() as $row) {
-
+        
                         $secondary_stripe_acc = $row["stripe_acc"];
                         $transfer = \Stripe\Transfer::create([
-                          "amount" => ceil($payment_info->providerPayout * 100),
+                          "amount" => ceil($provider_payout * 100),
                           "currency" => "usd",
                           "destination" => $secondary_stripe_acc,
                           "description" => $service . " (" . $order_number . ")",
@@ -131,10 +158,10 @@
                     }
                 }
             }
-
-            $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+        
+            $sql = "UPDATE orders SET status = ?, tax_collected = ? WHERE order_number = ?";
             $stmt = $db->prepare($sql);
-            $params = array('pd', $order_number);
+            $params = array('pd', $tax_collected * 100, $order_number);
             $stmt->execute($params);
         }
     }
@@ -397,6 +424,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
     }
 
     function validate_user($email, $session) {
+         $db = establish_database();
         $customer_email = "";
         $stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
         $stmnt->execute(array($email));
@@ -706,7 +734,6 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $found = false;
         $cancelled = true;
         $wage = '';
-        $db_duration;
         $stmnt = $db->prepare("SELECT wage, duration, accept_key, status, clicked FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order_number));
         foreach($stmnt->fetchAll() as $row) {
@@ -798,7 +825,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                         return '<script>window.location.href = "https://helphog.com/decline";</script>';
                     }
 
-                    $num_secondary;
+                    $num_secondary = 0;
                     if ($secondary_providers == "") {
                         $num_secondary = 0;
                     } else {
@@ -809,7 +836,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                         return '<script>window.location.href = "https://helphog.com/decline";</script>';
                     } else {
 
-                        $new_secondary;
+                        $new_secondary = "";
                         if ($secondary_providers == "") {
                             $new_secondary = $email;
                         } else {
@@ -2871,4 +2898,3 @@ Message from Customer: ' . $customer_message));
         </body>
 ';
     }
-?>
