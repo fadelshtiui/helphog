@@ -322,7 +322,7 @@
                          } else if (zip) {
                               url += '&zip=' + zip
                          }
-                         url += "&back=results";
+                         url += "&origin=results";
                          url += '&search=' + urlParams.get('search')
 
                          window.location = url;

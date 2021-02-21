@@ -4,7 +4,7 @@
 
      window.addEventListener('load', function () {
           const urlParams = new URLSearchParams(window.location.search)
-          if (urlParams.get('back') == "search") {
+          if (urlParams.get('origin') == "search") {
                id('back').innerText = '< back to search'
           }
 
@@ -153,6 +153,7 @@
                     url += '&description=' + response.description
                     url += "&price=" + response.cost
                     url += "&wage=" + response.wage
+                    url += "&origin=" + urlParams.get('origin')
 
                     if (zip) {
                          url += "&zip=" + zip
@@ -191,15 +192,17 @@
 
      }
 
-     function navigateBack() {
+     function navigateBack(e) {
 
           const urlParams = new URLSearchParams(window.location.search)
 
-          let back = urlParams.get('back')
+          let url = '';
+          let back = urlParams.get('origin')
           if (back == 'search') {
-               window.location.href = '/'
+               window.location = '/'
+               return;
           } else {
-               let url = back + "?"
+               url += back + "?"
                if (urlParams.get('search')) {
                     url += '&search=' + urlParams.get('search')
                } else {
@@ -235,7 +238,8 @@
                id('availability').innerText = 'Unavailable'
                id('button').innerText = 'Unavailable in ' + newZip
           } else if (response.available == 1) {
-               window.location = "edit?service=" + response.service + "&description=" + response.description + "&price=" + response.cost + "&wage=" + response.wage + "&zip=" + newZip + "&remote=" + response.remote + '&back=details';
+               const urlParams = new URLSearchParams(window.location.search)
+               window.location = "edit?service=" + response.service + "&description=" + response.description + "&price=" + response.cost + "&wage=" + response.wage + "&zip=" + newZip + "&remote=" + response.remote + '&back=details' + '&origin=' + urlParams.get('origin');
           } else {
                id('availability').innerText = 'Uncertain'
                id('button').innerText = 'Click to check availability'
