@@ -9,20 +9,17 @@ use PHPMailer\PHPMailer\Exception;
 
 $db = establish_database();
 
-$utc = new DateTime(gmdate('Y-m-d h:i:s'), new DateTimeZone('UTC'));
-$today = $utc->format('Y-m-d');
+$result = $db->query("SELECT * FROM orders");
 
-$stmnt = $db->prepare("SELECT * FROM orders WHERE schedule LIKE ?");
-$stmnt->execute(array('%' . $today . '%'));
-
-foreach($stmnt->fetchAll() as $row) {
+foreach($result as $row) {
 
     $order_number = $row["order_number"];
     $service = $row["service"];
     $email = $row["customer_email"];
     $schedule = $row['schedule'];
 
-    if (minutes_until($row["schedule"]) < 45.0 && $row["reminded"] == "n" && $row["status"] == "cl") {
+    $minutes_until = minutes_until($row["schedule"]);
+    if ($minutes_until < 45.0 && $row["reminded"] == "n" && $row["status"] == "cl") {
         
         $phone = "";
         $tz = "";
@@ -41,7 +38,7 @@ foreach($stmnt->fetchAll() as $row) {
         $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
         $token = '18a458337ffdfd10617571e495314311';
         $client = new Client($sid, $token);
-        $client->messages->create('+1' . $phone, array('from' => '+12532593451', 'body' => 'Reminder: You have ' . $service  . ' today at ' . $time .''));
+        $client->messages->create('+1' . $phone, array('from' => '+12532593451', 'body' => 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minute(s).'));
         
         $sql = "UPDATE orders SET reminded = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
@@ -49,6 +46,3 @@ foreach($stmnt->fetchAll() as $row) {
         $stmt->execute($params);
     }
 }
-
-
-?>
