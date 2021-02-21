@@ -40,6 +40,13 @@ window.addEventListener('load', function () {
      id("close").onclick = function () {
           document.documentElement.style.overflow = "overlay";
           document.querySelector("button").disabled = false;
+          var tdtag = document.querySelectorAll('.trtag')
+               tdtag.forEach(el => {
+                   el.classList.remove('visibility');
+                   el.classList.add('notvisible');
+
+          })
+
      }
 
      id('locationField').classList.add('hidden')
@@ -480,12 +487,7 @@ function initModal() {
      if (urlParams.get('wage') == 'per') {
           estimate = id("numpeople").value * cost;
      } else {
-          let lowerBound = id("numpeople").value * cost * ((id("duration").value) - 1);
-          if (((id("duration").value) - 1) == "0") {
-               lowerBound = id("numpeople").value * cost;
-          }
-          estimate = lowerbound + "-$" + id("numpeople").value * cost * id("duration").value;
-
+          estimate = id("numpeople").value * cost * ((id("duration").value) - 1) + "-$" + id("numpeople").value * cost * id("duration").value;
      }
 
      let time = id('time').value
@@ -520,7 +522,7 @@ function initModal() {
 
           id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost;
 
-          stripe(id("first").innerText, "Until Completion", id("numpeople").value);
+          stripe(id("first").innerText, "Until Completion", id("numpeople").value, cost);
      } else {
 
           let durationText = id("duration").options[id("duration").selectedIndex].text;
@@ -528,13 +530,12 @@ function initModal() {
 
           id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost + "/hr " + "(" + durationText + ")"
 
-          stripe(id("first").innerText, durationCalc, id("numpeople").value);
+          stripe(id("first").innerText, durationCalc, id("numpeople").value, cost);
      }
 
 }
 
-async function stripe(service, duration, people) {
-
+async function stripe(service, duration, people, cost) {
      let data = new FormData();
      data.append("session", getSession())
      let url = "php/session.php"
@@ -635,7 +636,16 @@ async function stripe(service, duration, people) {
                if (data.taxRate != '') {
                     id("taxRate").innerText = " + tax (" + data.taxRate + ")";
                }
+               if (data.prorated == 'n' && (id("numpeople").value * cost * ((id("duration").value) - 1)) == 0) {
+                    id("popupTotal").innerText = id("numpeople").value * cost * id("duration").value;
+               }
                var form = id("payment-form");
+               var tdtag = document.querySelectorAll('.trtag')
+               tdtag.forEach(el => {
+                   el.classList.add('visibility');
+                   el.classList.remove('notvisible');
+
+               })
                form.addEventListener("submit", function (event) {
                     event.preventDefault();
                     payWithCard(stripe, card, data.clientSecret);
