@@ -880,7 +880,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                         $stmt->execute($params);
 
                         send_claimed_notification($order_number, $email, "secondary", $db, $duration);
-                        return '<script>window.location.href = "https://helphog.com/claimedsecondary";</script>';
+                        return '<script>window.location.href = "https://helphog.com/success?You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
                     }
                 }
 
@@ -902,7 +902,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 if ($mobile){
                     return '<script>window.location.href = "https://helphog.com/mobileclaimed";</script>';
                 }
-                return '<script>window.location.href = "https://helphog.com/claimed";</script>';
+                return '<script>window.location.href = "https://helphog.com/success?message=You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
             }
         }
         if ($mobile){
