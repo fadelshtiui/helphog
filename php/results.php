@@ -51,7 +51,7 @@ foreach($stmnt->fetchAll() as $row) {
     $service = $row["service"];
     $remote = $row['remote'];
     
-    $entry->src = '../assets/images/default.jpg';
+    $entry->src = '../assets/images/service-placeholder.jpg';
     $image_name = '../assets/images/' . str_replace(' ', '-', strtolower($service)) . '.jpg';
     error_log($image_name);
     if (is_file($image_name)) {
