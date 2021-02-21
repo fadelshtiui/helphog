@@ -56,7 +56,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
         
         $mail->ClearAllRecipients();
         
-        $sql = "UPDATE orders SET rating = ?, status = ? WHERE order_number = ?";
+        $sql = "UPDATE orders SET rating = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array($rating, 'pd', $order);
         $stmt->execute($params);
@@ -75,4 +75,3 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
     echo 'missing parameters';
     
 }
-?>
