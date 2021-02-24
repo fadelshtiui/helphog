@@ -883,13 +883,13 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             }
 
             if ($email == $client_email) {
-                return '<script>window.location.href = "https://helphog.com/decline";</script>';
+                return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
             }
 
             if (!$first_provider) {
 
                 if ($people == 1) {
-                    return '<script>window.location.href = "https://helphog.com/decline";</script>';
+                  return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
                 } else {
 
                     $secondary_providers = "";
@@ -900,7 +900,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                     }
 
                     if (strpos($secondary_providers, $email) !== false) {
-                        return '<script>window.location.href = "https://helphog.com/decline";</script>';
+                      return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
                     }
 
                     $num_secondary = 0;
@@ -911,7 +911,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                     }
 
                     if ($num_secondary + 1 >= $people) {
-                        return '<script>window.location.href = "https://helphog.com/decline";</script>';
+                      return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
                     } else {
 
                         $new_secondary = "";
@@ -986,7 +986,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         if ($mobile){
             return '<script>window.location.href = "https://helphog.com/mobiledecline";</script>';
         }
-        return '<script>window.location.href = "https://helphog.com/decline";</script>';
+        return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 
     }
 
