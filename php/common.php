@@ -19,6 +19,38 @@
     error_reporting(E_ALL);
     error_reporting(E_ERROR | E_PARSE);
 
+    function send_email($to, $from, $subject, $message) {
+      $mail = new PHPMailer;
+
+      $mail->isSMTP();
+      $mail->SMTPDebug = 0;
+      $mail->Debugoutput = 'html';
+      $mail->Host = "smtp.gmail.com";
+      $mail->Port = 587;
+      $mail->SMTPSecure = 'tls';
+      $mail->SMTPAuth = true;
+      $mail->Username = "admin@helphog.com";
+      $mail->Password = "Monkeybanana";
+      $mail->setFrom($from, 'HelpHog');
+      $mail->addAddress($to, 'To');
+
+      $mail->Subject = $subject;
+      $mail->Body    = $message;
+      $mail->IsHTML(true);
+
+      $mail->send();
+
+      $mail->ClearAllRecipients();
+    
+    }
+
+    function send_text($phonenumber, $message) {
+      $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
+      $token = '18a458337ffdfd10617571e495314311';
+      $client = new Client($sid, $token);
+      $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => $message));
+    }
+
     function &payment($order) {
         $db = establish_database();
         $result = new \stdClass();
