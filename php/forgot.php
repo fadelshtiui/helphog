@@ -1,9 +1,6 @@
 <?php
 include 'common.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 if (isset($_POST["email"])) {
     $db = establish_database();
     $email_error = "";
@@ -30,27 +27,7 @@ if (isset($_POST["email"])) {
         $params = array($random_hash, $email);
         $stmt->execute($params);
         
-        $mail = new PHPMailer;
-    
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($email, 'To');
-        
-        $mail->Subject = "HelpHog - Password Reset";
-        $mail->Body    = get_reset_email($email, $random_hash, $name);
-        $mail->IsHTML(true);
-        
-        $mail->send();
-        
-        $mail->ClearAllRecipients();
+        send_email($email, "no-reply@helphog.com", "HelpHog - Password Reset", get_reset_email($email, $random_hash, $name));
         
     }
     $errors = new \stdClass();

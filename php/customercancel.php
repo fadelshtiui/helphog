@@ -4,9 +4,6 @@ include 'common.php';
 use Twilio\TwiML\MessagingResponse;
 use Twilio\Rest\Client;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $stripe = new \Stripe\StripeClient(
   'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
 );
@@ -145,7 +142,8 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 );
             }
             if ($providerEmail != ""){
-                providerEmail($providerEmail, $providerMessage, $service, $providerName);
+                
+                send_email($providerEmail, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($providerMessage, $providerName));
                 
                 
                 sendTextProvider($service, $order, $phone, $local_date->format("F j, Y, g:i a"));
@@ -153,18 +151,21 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($secondary_providers != ""){
                 $providers = explode("," , $secondary_providers);
                 foreach ($providers as $provider){
-                    providerEmail($provider, $providerMessage, $service, $providerName);
                     
                     $phonenumber = "";
-                    $stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
+                    $name = "";
+                    $stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
                     $stmnt->execute(array($provider));
                     foreach($stmnt->fetchAll() as $row) {
                         $phonenumber = $row['phone'];
+                        $name = $row['firstname'];
                     }
+                    send_email($provider, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($providerMessage, $name));
                     sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
                 }
             }
-            customerEmail($customerEmail, $customerMessage, $service, $customerName);
+
+            send_email($customerEmail, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($customerMessage, $customerName));
             
             $sql = "UPDATE orders SET status = 'cc' WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
@@ -184,55 +185,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
     }
 } else {
     echo 'missing parameters';
-}
-
-function providerEmail($providerEmail, $providerMessage, $service, $providerName){
-    $mail = new PHPMailer;
-    
-    $mail->isSMTP();
-    $mail->SMTPDebug = 0;
-    $mail->Debugoutput = 'html';
-    $mail->Host = "smtp.gmail.com";
-    $mail->Port = 587;
-    $mail->SMTPSecure = 'tls';
-    $mail->SMTPAuth = true;
-    $mail->Username = "admin@helphog.com";
-    $mail->Password = "Monkeybanana";
-    $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-    $mail->addAddress($providerEmail, 'To');
-    
-    $mail->Subject = $service . " Canceled";
-    $mail->Body    = customer_cancel($providerMessage, $providerName);
-    $mail->IsHTML(true);
-    
-    $mail->send();
-    
-    $mail->ClearAllRecipients();
-}
-
-function customerEmail($customerEmail, $customerMessage, $service, $customerName){
-    
-    $mail = new PHPMailer;
-    
-    $mail->isSMTP();
-    $mail->SMTPDebug = 0;
-    $mail->Debugoutput = 'html';
-    $mail->Host = "smtp.gmail.com";
-    $mail->Port = 587;
-    $mail->SMTPSecure = 'tls';
-    $mail->SMTPAuth = true;
-    $mail->Username = "admin@helphog.com";
-    $mail->Password = "Monkeybanana";
-    $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-    $mail->addAddress($customerEmail, 'To');
-    
-    $mail->Subject = $service . " Canceled";
-    $mail->Body    = customer_cancel($customerMessage, $customerName);
-    $mail->IsHTML(true);
-    
-    $mail->send();
-    
-    $mail->ClearAllRecipients();
 }
 
 function sendTextProvider($service, $order, $phonenumber, $schedule){

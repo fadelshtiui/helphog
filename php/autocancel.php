@@ -4,9 +4,6 @@ include 'common.php';
 use Twilio\TwiML\MessagingResponse;
 use Twilio\Rest\Client;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $stripe = new \Stripe\StripeClient(
   'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
 );
@@ -71,7 +68,7 @@ foreach ($result as $row) {
                     $primary_work_phone = $row['work_phone'];
                 }
                 
-                sendPrimary($client_email, $service, $order_number, $schedule);
+                send_email($client_email, "admin@helphog.com", "HelpHog - Task Cancelled", noPartnersFound($service, $order_number, $schedule));
                 sendTextProvider($service, $order_number, $primary_work_phone, $schedule);
                 
             }
@@ -86,7 +83,7 @@ foreach ($result as $row) {
                         $work_phone = $row['work_phone'];
                     }
                     sendTextProvider($service, $order_number, $work_phone, $schedule);
-                    sendPrimary($email, $service, $order_number, $schedule);
+                    send_email($$email, "admin@helphog.com", "HelpHog - Task Cancelled", noPartnersFound($service, $order_number, $schedule));
                 }
             }
             
@@ -104,55 +101,13 @@ foreach ($result as $row) {
             
             sendTextCustomer($service, $order_number, $customer_phone, $schedule);
             
-            
-            $mail = new PHPMailer;
-                
-            $mail->isSMTP();
-            $mail->SMTPDebug = 0;
-            $mail->Debugoutput = 'html';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 587;
-            $mail->SMTPSecure = 'tls';
-            $mail->SMTPAuth = true;
-            $mail->Username = "admin@helphog.com";
-            $mail->Password = "Monkeybanana";
-            $mail->setFrom('admin@helphog.com', 'HelpHog');
-            $mail->addAddress($customer_email, 'To');
-            $mail->IsHTML(true); 
-            
-            $mail->Subject = "HelpHog - Task Cancelled";
-            $mail->Body    = noProviderFound($service, $order_number, $schedule);
-            $mail->send();
-            
+            send_email($customer_email, "admin@helphog.com", "HelpHog - Task Cancelled", noProviderFound($service, $order_number, $schedule));
             
         }
         
     }
         
 }
-
-function sendPrimary($customer_email, $service, $order_number){
-    $mail = new PHPMailer;
-        
-    $mail->isSMTP();
-    $mail->SMTPDebug = 0;
-    $mail->Debugoutput = 'html';
-    $mail->Host = "smtp.gmail.com";
-    $mail->Port = 587;
-    $mail->SMTPSecure = 'tls';
-    $mail->SMTPAuth = true;
-    $mail->Username = "admin@helphog.com";
-    $mail->Password = "Monkeybanana";
-    $mail->setFrom('admin@helphog.com', 'HelpHog');
-    $mail->addAddress($customer_email, 'To');
-    $mail->IsHTML(true); 
-    
-    $mail->Subject = "HelpHog - Task Cancelled";
-    $mail->Body    = noPartnersFound($service, $order_number, $schedule);
-    $mail->send();
-}
-    
-
 
 function sendTextCustomer($service, $order, $phonenumber, $schedule){
     $sid = 'ACc66538a897dd4c177a17f4e9439854b5';

@@ -1,9 +1,6 @@
 <?php
 include 'common.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $stripe = new \Stripe\StripeClient(
      'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
 );
@@ -34,27 +31,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
                $name = $row['firstname'];
           }
 
-          $mail = new PHPMailer;
-
-          $mail->isSMTP();
-          $mail->SMTPDebug = 0;
-          $mail->Debugoutput = 'html';
-          $mail->Host = "smtp.gmail.com";
-          $mail->Port = 587;
-          $mail->SMTPSecure = 'tls';
-          $mail->SMTPAuth = true;
-          $mail->Username = "admin@helphog.com";
-          $mail->Password = "Monkeybanana";
-          $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-          $mail->addAddress($client_email, 'To');
-
-          $mail->Subject = "HelpHog - Order Verified";
-          $mail->Body    = get_completed_email($service, $name);
-          $mail->IsHTML(true);
-
-          $mail->send();
-
-          $mail->ClearAllRecipients();
+          send_email($client_email, "no-reply@helphog.com", "HelpHog - Order Verified", get_completed_email($service, $name));
 
           $sql = "UPDATE orders SET rating = ?, status = ? WHERE order_number = ?";
           $stmt = $db->prepare($sql);

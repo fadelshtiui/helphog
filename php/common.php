@@ -251,28 +251,7 @@
             $amount = $cost;
         }
 
-        $mail = new PHPMailer;
-
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('support@helphog.com', 'HelpHog');
-        $mail->addAddress($customer_email, 'To');
-
-        $mail->Subject = "HelpHog - Receipt for " . $service;
-        $mail->Body    = get_receipt($name, $service, $order_number, $schedule, $subtotal, $amount, $tax_collected, $customer_payment);
-        $mail->IsHTML(true);
-
-        $mail->send();
-
-        $mail->ClearAllRecipients();
-
+        send_email($customer_email, "support@helphog.com", "HelpHog - Receipt for " . $service, get_receipt($name, $service, $order_number, $schedule, $subtotal, $amount, $tax_collected, $customer_payment));
 
     }
 
@@ -289,35 +268,16 @@
 
         if ($alerts == "email" || $alerts == "both"){
 
-            $mail = new PHPMailer;
-
-            $mail->isSMTP();
-            $mail->SMTPDebug = 0;
-            $mail->Debugoutput = 'html';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 587;
-            $mail->SMTPSecure = 'tls';
-            $mail->SMTPAuth = true;
-            $mail->Username = "admin@helphog.com";
-            $mail->Password = "Monkeybanana";
-            $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-            $mail->addAddress($client, 'To');
-
             $local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
             $local_time->setTimezone(new DateTimeZone($tz));
 
-            $mail->Subject = "HelpHog - New Task Available";
-
-            if ($address == "Remote (online)"){
-                $location = $address;
+            if ($address == "Remote (online)") {
+              $location = $address;
             } else {
-                $location = ucfirst($city). ', ' . $state . ' ' . $zip;
+              $location = ucfirst($city) . ', ' . $state . ' ' . $zip;
             }
-            $mail->Body    = get_claim_email($service, $local_time->format("F j, Y, g:i a"), $location , $client, $ordernumber, $price, $message, $name, $duration, $secret_key);
-            $mail->IsHTML(true);
 
-            $mail->send();
-            $mail->ClearAllRecipients();
+            send_email($client, "no-reply@helphog.com", "HelpHog - New Task Available", get_claim_email($service, $local_time->format("F j, Y, g:i a"), $location, $client, $ordernumber, $price, $message, $name, $duration, $secret_key));
         }
     }
 
@@ -547,57 +507,6 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         return false;
     }
 
-    function send_new_applicant_email($firstname, $email, $workfield, $experience, $phone) {
-        $mail = new PHPMailer;
-
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('admin@helphog.com', 'HelpHog');
-        $mail->addAddress("admin@helphog.com", 'To');
-
-        $message = 'Name: ' . $firstname . "\n\n";
-        $message .= 'Phone: ' . $phone . "\n\n";
-        $message .= 'Email: ' . $email . "\n\n";
-        $message .= 'Workfield: ' . $workfield . "\n\n";
-        $message .= 'Experience: ' . $experience . "\n\n";
-
-        $mail->Subject = "Help - New Applicant";
-        $mail->Body    = $message;
-        $mail->send();
-    }
-
-    function send_verification_email($firstname, $email, $secret_key) {
-
-        $mail = new PHPMailer;
-
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($email, 'To');
-
-        $mail->Subject = "HelpHog - Account Confirmation";
-        $mail->Body    = get_signup_email($email, $firstname, $secret_key);
-        $mail->IsHTML(true);
-
-        $mail->send();
-
-        $mail->ClearAllRecipients();
-    }
-
     function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm, $phone) {
         $db = establish_database();
 
@@ -784,27 +693,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
                 $name = $row['firstname'];
             }
 
-            $mail = new PHPMailer;
-
-            $mail->isSMTP();
-            $mail->SMTPDebug = 0;
-            $mail->Debugoutput = 'html';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 587;
-            $mail->SMTPSecure = 'tls';
-            $mail->SMTPAuth = true;
-            $mail->Username = "admin@helphog.com";
-            $mail->Password = "Monkeybanana";
-            $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-            $mail->addAddress($customer_email, 'To');
-
-            $mail->Subject = "HelpHog - Task Completed";
-            $mail->Body    = get_marked_completed_email($name, $service);
-            $mail->IsHTML(true);
-
-            $mail->send();
-
-            $mail->ClearAllRecipients();
+            send_email($customer_email, "no-reply@helphog.com", "HelpHog - Task Completed", get_marked_completed_email($name, $service));
 
             if ($message != "") {
                 $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
@@ -1112,25 +1001,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             $stmt->execute($params);
 
             if ($order_disputes == 3) {
-                $mail = new PHPMailer;
-
-                $mail->isSMTP();
-                $mail->SMTPDebug = 0;
-                $mail->Debugoutput = 'html';
-                $mail->Host = "smtp.gmail.com";
-                $mail->Port = 587;
-                $mail->SMTPSecure = 'tls';
-                $mail->SMTPAuth = true;
-                $mail->Username = "admin@helphog.com";
-                $mail->Password = "Monkeybanana";
-                $mail->setFrom('admin@helphog.com', 'HelpHog');
-                $mail->addAddress("admin@helphog.com", 'To');
-
-                $message = 'Order Number: ' . $order_number;
-
-                $mail->Subject = "HelpHog - Mediation Required";
-                $mail->Body    = $message;
-                $mail->send();
+                send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - Mediation Required", 'Order Number: ' . $order_number);
             }
 
             $all_emails = array();
@@ -1144,7 +1015,13 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
             }
 
             for ($i = 0; $i < count($all_emails); $i++) {
-                send_dispute_email($all_emails[$i], $service, $db);
+              $name = "";
+              $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+              $stmnt->execute(array($all_emails[$i]));
+              foreach ($stmnt->fetchAll() as $row) {
+                $name = $row['firstname'];
+              }
+              send_email($all_emails[$i], "no-reply@helphog.com", "HelpHog - Task Disputed", get_dispute_email($name, $service));
             }
 
             return true;
@@ -1156,31 +1033,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
 
     function send_dispute_email($client_email, $service, $db) {
 
-        $name = "";
-        $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
-        $stmnt->execute(array($client_email));
-        foreach($stmnt->fetchAll() as $row) {
-            $name = $row['firstname'];
-        }
-
-        $mail = new PHPMailer;
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($client_email, 'To');
-
-        $mail->Subject = "HelpHog - Task Disputed";
-        $mail->Body    = get_dispute_email($name, $service);
-        $mail->IsHTML(true);
-        $mail->send();
-        $mail->ClearAllRecipients();
+        
     }
 
 
@@ -1283,27 +1136,7 @@ https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernu
         $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
         $local_date->setTimezone(new DateTimeZone($tz));
 
-        $mail = new PHPMailer;
-
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($email, 'To');
-
-        $mail->Subject = "HelpHog - Claimed Task";
-        $mail->Body    = get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration);
-        $mail->IsHTML(true);
-
-        $mail->send();
-        $mail->ClearAllRecipients();
-
+        send_email($email, "no-reply@helphog.com", "HelpHog - Claimed Task", get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration));
 
         $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
         $token = '18a458337ffdfd10617571e495314311';

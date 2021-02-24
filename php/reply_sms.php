@@ -5,9 +5,6 @@ include 'common.php';
 use Twilio\TwiML\MessagingResponse;
 use Twilio\Rest\Client;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 // Set the content-type to XML to send back TwiML from the PHP Helper Library
 header("content-type: text/xml");
 $response = new MessagingResponse();

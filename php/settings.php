@@ -1,8 +1,5 @@
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 include 'common.php';
 if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) && isset($_POST["state"]) && isset($_POST["session"])) {
     
@@ -89,34 +86,13 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
         
         $errors->sessionerror = "false";
         
-        $mail = new PHPMailer;
-    
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($to_send, 'To');
-        
-        $mail->Subject = "HelpHog - Address Changed";
-        $mail->Body    = get_address_email($to_send, $name);
-        $mail->IsHTML(true);
-        
-        $mail->send();
-        
-        $mail->ClearAllRecipients();
+        send_email($to_send, "no-reply@helphog.com", "HelpHog - Address Changed", get_address_email($to_send, $name));
        
         $errors->ziperror = $zip_error;
         header('Content-type: application/json');
         print json_encode($errors);
         
     } else {
-        
         
         $errors->sessionerror = "true";
         header('Content-type: application/json');

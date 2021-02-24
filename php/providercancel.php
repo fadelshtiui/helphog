@@ -1,12 +1,6 @@
 <?php
 include 'common.php';
 
-use Twilio\TwiML\MessagingResponse;
-use Twilio\Rest\Client;
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $stripe = new \Stripe\StripeClient(
   'sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p'
 );
@@ -109,25 +103,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             $stmt = $db->prepare($sql);
             $params = array("pc", $order_number);
             $stmt->execute($params);
-            
-            $mail = new PHPMailer;
-                
-            $mail->isSMTP();
-            $mail->SMTPDebug = 0;
-            $mail->Debugoutput = 'html';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 587;
-            $mail->SMTPSecure = 'tls';
-            $mail->SMTPAuth = true;
-            $mail->Username = "admin@helphog.com";
-            $mail->Password = "Monkeybanana";
-            $mail->setFrom('admin@helphog.com', 'HelpHog');
-            $mail->addAddress($customer_email, 'To');
-            
-            $mail->Subject = "HelpHog - Task Cancelled";
-            $mail->Body    = get_cancel_email($name, $service);
-            $mail->IsHTML(true);
-            $mail->send();
+
+            send_email($customer_email, "admin@helphog.com", "HelpHog - Task Cancelled", get_cancel_email($name, $service));
             
             echo 'task cancelled';
         
@@ -203,8 +180,6 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             
             }
             
-            
-            
             echo 'reactivated task';
             
         }
@@ -236,27 +211,8 @@ function banning($cancels, $client_email) {
         $note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
     }
     
-    $mail = new PHPMailer;
-    
-    $mail->isSMTP();
-    $mail->SMTPDebug = 0;
-    $mail->Debugoutput = 'html';
-    $mail->Host = "smtp.gmail.com";
-    $mail->Port = 587;
-    $mail->SMTPSecure = 'tls';
-    $mail->SMTPAuth = true;
-    $mail->Username = "admin@helphog.com";
-    $mail->Password = "Monkeybanana";
-    $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-    $mail->addAddress($client_email, 'To');
-    
-    $mail->Subject = "Provider Account Notice";
-    $mail->Body    = get_notice_email($name, $note);
-    $mail->IsHTML(true);
-    
-    $mail->send();
-    
-    $mail->ClearAllRecipients();
+    send_email($client_email, "no-reply@helphog.com", "HelpHog - Account Notice", get_notice_email($name, $note));
+
 }
     
 ?>

@@ -24,8 +24,8 @@ if (isset($_POST["firstname"]) && isset($_POST["lastname"]) && isset($_POST["ema
         $secret_key = "" . bin2hex(openssl_random_pseudo_bytes(256));
         
         if ($send_email == 'true') {
-            
-            send_verification_email($firstname, $email, $secret_key);
+
+            send_email($email, "no-reply@helphog.com", "HelpHog - Account Confirmation", get_signup_email($email, $firstname, $secret_key));
             
         }
         

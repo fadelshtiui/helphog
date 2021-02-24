@@ -4,9 +4,6 @@ include 'common.php';
 use Twilio\TwiML\MessagingResponse;
 use Twilio\Rest\Client;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $db = establish_database();
 
 $result = $db->query("SELECT * FROM orders");

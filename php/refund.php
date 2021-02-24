@@ -1,10 +1,6 @@
 <?php
 include 'common.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-
 if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     $db = establish_database();
     $order = trim($_POST["ordernumber"]);
@@ -29,27 +25,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         foreach($stmnt->fetchAll() as $row) {
             $name = $row['firstname'];
         }
-        
-        $mail = new PHPMailer;
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($customer_email, 'To');
-        
-        $mail->Subject = "HelpHog - Task Refunded";
-        $mail->Body    = get_refund_email($name, $service);
-        $mail->IsHTML(true);
-        
-        $mail->send();
-        
-        $mail->ClearAllRecipients();
+
+        send_email($customer_email, "no-reply@helphog.com", "HelpHog - Task Refunded", get_refund_email($name, $service));
         
         $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);

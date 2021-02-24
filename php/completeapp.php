@@ -27,10 +27,10 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
     $stmt->execute($params);
     
     update_radius($radius, $email, $workfield, $db);
+
+    send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
     
-    send_new_applicant_email($firstname, $email, $workfield, $experience, $phone);
-    
-    send_verification_email($firstname, $email, $secret_key);
+    send_email($email, "no-reply@helphog.com", "HelpHog - Account Confirmation", get_signup_email($email, $firstname, $secret_key));
     
     echo '<script>window.location.href = "https://www.helphog.com/verify?message=Before+you+can+use+your+account%2C+please+verify+your+account+through+the+link+we+sent+to+your+email+address.+Be+on+the+lookout+for+an+email+from+our+hiring+team.+Check+your+junk+folder+if+you+don%27t+see+our+email+within+24+hours.";</script>';
     
@@ -51,7 +51,8 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
     
     update_radius($radius, $email, $workfield, $db);
     
-    send_new_applicant_email($firstname, $email, $workfield, $experience, $phone);
+    send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
+
     
     echo '<script>window.location.href = "https://www.helphog.com/verify?message=Your+application+has+been+submitted.+Please+be+on+the+lookout+for+an+email+from+our+hiring+team.+Check+your+junk+folder+if+you+don%27t+see+our+email+within+24+hours.";</script>';
 

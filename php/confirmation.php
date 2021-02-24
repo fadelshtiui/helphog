@@ -2,10 +2,6 @@
 
 include 'common.php';
 
-use Twilio\Rest\Client;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $response = new stdClass();
 $response->ordernumber = "";
 $response->error = "none";
@@ -217,26 +213,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             }
         }
 
-        $mail = new PHPMailer;
-
-        $mail->isSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->Debugoutput = 'html';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "admin@helphog.com";
-        $mail->Password = "Monkeybanana";
-        $mail->setFrom('no-reply@helphog.com', 'HelpHog');
-        $mail->addAddress($customer_email, 'To');
-
-        $mail->Subject = "HelpHog - Confirmation Email";
-        $mail->Body    = get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key);
-        $mail->IsHTML(true);
-
-        $mail->send();
-        $mail->ClearAllRecipients();
+        send_email($customer_email, "no-reply@helphog.com", "HelpHog - Confirmation Email", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key));
 
         $response->firstname = $name;
         $response->schedule = $schedule;
