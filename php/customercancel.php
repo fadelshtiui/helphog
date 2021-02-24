@@ -91,9 +91,9 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         if ($status == "cc" || $status == "pc" || $status == "ac") {
             
             if ($is_post_request) {
-                echo 'alreadycanceled';
+                echo 'error?message=This+order+has+already+been+canceled';
             } else {
-                echo '<script>window.location.href = "https://helphog.com/alreadycanceled";</script>';
+                echo '<script>window.location.href = "https://helphog.com/error?message=This+order+has+already+been+canceled";</script>';
             }
             
             
@@ -102,7 +102,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($is_post_request) {
                 echo 'ordererror';
             } else {
-                echo '<script>window.location.href = "https://helphog.com/ordererror";</script>';
+                echo '<script>window.location.href = "https://helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
             }
         
         } else {
