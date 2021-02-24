@@ -3,8 +3,8 @@ include 'common.php';
 
 $db = establish_database();
 if (isset($_POST["email"]) && isset($_POST["phone"])){
-    $phone = $_POST["phone"];
-    $email = $_POST["email"];
+    $phone = trim($_POST["phone"]);
+    $email = trim($_POST["email"]);
     
     $email_error = "";
     $phone_error = "";

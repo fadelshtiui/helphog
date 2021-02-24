@@ -17,9 +17,9 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
     
     $order = "";
     if (isset($_GET['ordernumber'])) {
-        $order = $_GET["ordernumber"];
+        $order = trim($_GET["ordernumber"]);
     } else {
-        $order = $_POST["ordernumber"];
+        $order = trim($_POST["ordernumber"]);
     }
     
     $validated = false;
@@ -30,7 +30,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         $stmnt = $db->prepare("SELECT cancel_key FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
-            if ($row["cancel_key"] === $_GET['secret']) {
+            if ($row["cancel_key"] === trim($_GET['secret'])) {
                 $validated = true;
             }
         }
@@ -39,7 +39,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
     
     if (isset($_POST['ordernumber']) && isset($_POST['session'])) {
         
-        $validated = validate_customer($order, $_POST['session']);
+        $validated = validate_customer($order, trim($_POST['session']));
         $is_post_request = true;
         
     }

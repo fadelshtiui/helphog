@@ -19,8 +19,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['image_key'])) {
     
     if ($validated) {
 
-        
-
         $uploaded = "";
         $stmnt = $db->prepare("SELECT uploaded FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));

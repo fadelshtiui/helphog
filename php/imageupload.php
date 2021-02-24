@@ -1,17 +1,18 @@
 <?php
 include 'common.php';
 if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
-    
-    if (validate_provider($_POST['ordernumber'], $_POST['session'])) {
+
+    $order_number = trim($_POST["ordernumber"]);
+    if (validate_provider($order_number, trim($_POST['session']))) {
         $db = establish_database();
         $info = strtolower(pathinfo($_FILES['image']['name']) ["extension"]);
         if ($info == "jpg" || $info == "png" || $info == "pdf" || $info == "jpeg") {
-            $order_number = $_POST["ordernumber"];
+            
             $target = "../../uploads/receipts/" . $order_number;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target . '.' . $info)) {
                 $sql = "UPDATE orders SET uploaded = ? WHERE order_number = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($info, $_POST["ordernumber"]);
+                $params = array($info, $order_number);
                 $stmt->execute($params);
                 
                 // Format

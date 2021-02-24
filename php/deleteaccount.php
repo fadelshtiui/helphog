@@ -7,11 +7,11 @@ if (isset($_POST["session"])) {
     
     $errors = new \stdClass();
     $errors->stripeerror = "false";
-    
-    if (check_session($_POST["session"])) {
 
-        $session = $_POST['session'];
-        
+    $session = trim($_POST['session']);
+    
+    if (check_session($session)) {
+
         $type = "";
         $stmnt = $db->prepare("SELECT type FROM login WHERE session = ?;");
         $stmnt->execute(array($session));

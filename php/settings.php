@@ -9,17 +9,19 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
     $errors = new \stdClass();
     
     $db = establish_database();
+
+    $session = trim($_POST['session']);
     
-    if (check_session($_POST["session"])) {
+    if (check_session($session)) {
         $zip_error = "";
-        $zip = $_POST["zip"];
+        $zip = trim($_POST["zip"]);
         if (!preg_match("/^[0-9]{5}$/", $zip)) {
             $zip_error = "true";
         }
         $address = trim($_POST["address"]);
         $city = trim($_POST["city"]);
         $state = trim($_POST["state"]);
-        $session = trim($_POST['session']);
+        
         $name;
         if ($zip_error == "") {
             

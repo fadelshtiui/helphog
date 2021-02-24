@@ -2,7 +2,7 @@
 
 include 'common.php';
 
-if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedule"]) && isset($_POST["duration"]) && isset($_POST["numpeople"]) && isset($_POST['remote']) && isset($_POST['updatecontactlist'])) {
+if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedule"]) && isset($_POST["duration"]) && isset($_POST["numpeople"]) && isset($_POST['remote']) && isset($_POST['updatecontactlist']) && isset($_POST['tz'])) {
     
     $service = trim($_POST["service"]);
     $schedule = trim($_POST["schedule"]);
@@ -11,7 +11,7 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
     $numpeople = trim($_POST["numpeople"]);
     $tz = trim($_POST['tz']);
     $remote = trim($_POST['remote']);
-    $updatecontactlist = $_POST['updatecontactlist'];
+    $updatecontactlist = trim($_POST['updatecontactlist']);
 
     echo check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist);
     

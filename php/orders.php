@@ -2,7 +2,7 @@
 
 include 'common.php';
 
-if (isset($_POST["session"])) {
+if (isset($_POST["session"]) && isset($_POST['tz'])) {
     $db = establish_database();
     $post_session = trim($_POST["session"]);
     $tz = trim($_POST['tz']);

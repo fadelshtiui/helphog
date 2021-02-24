@@ -36,7 +36,7 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
     
 } else if (isset($_SESSION["email"]) && isset($_SESSION["radius"]) && isset($_SESSION["workfield"]) && isset($_SESSION["experience"]) && isset($_SESSION["zip"]) && isset($_SESSION["stripe"]) && isset($_SESSION['tz'])) { // quick apply
     
-    $email = trim($_SESSION["email"]);
+    $email = $_SESSION["email"];
     $radius = $_SESSION["radius"];
     $workfield = $_SESSION["workfield"];
     $experience = $_SESSION["experience"];

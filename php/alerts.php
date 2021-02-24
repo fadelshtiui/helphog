@@ -8,7 +8,7 @@ if (isset($_POST["alerts"]) && isset($_POST["session"])) {
     
     if (check_session($session)) {
         
-        $alerts= $_POST["alerts"];
+        $alerts= trim($_POST["alerts"]);
         
         $db = establish_database();
         

@@ -8,12 +8,12 @@ if (isset($_POST["firstname"]) && isset($_POST["lastname"]) && isset($_POST["ema
     $firstname = ucfirst(strtolower(trim($_POST["firstname"])));
     $lastname = ucfirst(strtolower(trim($_POST["lastname"])));
     $email = trim($_POST["email"]);
-    $password = $_POST["password"];
-    $zip = $_POST["zip"];
+    $password = trim($_POST["password"]);
+    $zip = trim($_POST["zip"]);
     $confirm = trim($_POST["confirm"]);
-    $phone = $_POST["phone"];
-    $send_email = $_POST['sendemail'];
-    $create_account = $_POST['createaccount'];
+    $phone = trim($_POST["phone"]);
+    $send_email = trim($_POST['sendemail']);
+    $create_account = trim($_POST['createaccount']);
 
     $errors = validate_form($firstname, $lastname, $email, $password, $zip, $confirm, $phone);
     

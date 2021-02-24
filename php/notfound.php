@@ -2,8 +2,8 @@
 include 'common.php';
 if (isset($_POST["searchterm"]) && isset($_POST['session'])) {
     
-    $search = $_POST["searchterm"];
-    $session = $_POST['session'];
+    $search = trim($_POST["searchterm"]);
+    $session = trim($_POST['session']);
     
     if (check_session($session)) {
         $db = establish_database();

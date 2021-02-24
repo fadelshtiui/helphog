@@ -6,8 +6,8 @@ $response = new stdClass();
 $response->error = "";
 
 if (isset($_POST["ordernumber"]) && isset($_POST['secret'])) {
-    $order_number = $_POST["ordernumber"];
-    $cancel_key = $_POST['secret'];
+    $order_number = trim($_POST["ordernumber"]);
+    $cancel_key = trim($_POST['secret']);
     
     $db = establish_database();
     

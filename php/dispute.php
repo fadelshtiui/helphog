@@ -5,8 +5,8 @@ $response = new stdClass();
 
 if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     
-    $order_number = $_POST['ordernumber'];
-    $session = $_POST['session'];
+    $order_number = trim($_POST['ordernumber']);
+    $session = trim($_POST['session']);
     
     if (validate_provider($order_number, $session)) {
         $success = dispute_order($order_number);
