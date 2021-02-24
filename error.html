@@ -3,18 +3,21 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Not Found</title>
+  <title>Error</title>
+
   <link rel="stylesheet" href="css/style.css" type="text/css">
   <link rel="stylesheet" href="css/footer.css" type="text/css">
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+
+
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
-  <link rel="stylesheet" href="css/notfound.css" type="text/css">
-  <link rel="stylesheet" href="css/notfoundstyle.css">
+  <link rel="stylesheet" href="css/error.css">
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src="js/common.js"></script>
   <script src="js/loading.js"></script>
-  <script src="js/notfound.js"></script>
+  <script src="js/error.js"></script>
 </head>
 
 <body>
@@ -37,7 +40,7 @@
       <main>
         <div id="logo"><a href="/">He!pHog</a></div>
         <div id="intro">
-          <div id="text" type="Text">Sorry, we have not found your request for: "<span id="keyword"></span>"</div>
+          <div id="text" type="Text"><span id="keyword"></span>"</div>
         </div>
         <div id="search-results" style="display:block">
           <div class="container">
@@ -46,18 +49,10 @@
                 <div class="face"></div>
               </div>
               <div class="shadow"></div>
-              <h1>Whoops!</h1>
-              <p>
-                As a newborn organization we are working hard on adding more services to our site.
-                <br />
-                We value your patience and the opportunity to serve you.
-                <br />
-                To make it up to you, we have added your search to our database
-                <br />
-                and will implement your request as soon as possible. Thank You.
+              <p id="message">
               </p>
               <br />
-              <a id="return" href="/">Return to Search</a>
+              <a id="return" href="/">Return to Home</a>
             </div>
           </div>
         </div>

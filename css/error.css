@@ -1,3 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Markazi+Text');
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Lora');
+.result {
+     height: 400px;
+     width: 80%;
+     margin-left: auto;
+     margin-right: auto;
+     margin-top: 50px;
+     margin-bottom: 50px;
+     border: solid 1px #eee;
+     font-family: 'Raleway', sans-serif;
+}
+
+#message {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+
+#keyword {
+     color: #1ecd97;
+     text-transform: none;
+}
+
+* {
+     scroll-behavior: smooth;
+}
+
+#categories {
+     list-style-type: none;
+     padding-left: 0;
+     font-family: 'Raleway', sans-serif;
+}
+
+#categories li {
+     padding: 10px;
+}
+
+#filter {
+     background-color: #eee;
+
+     width: 1000px;
+     height: 500px;
+}
+
+#filter-font{
+    font-size: 30px;
+    margin-top: 10px;
+    color: black;
+    font-family: 'Markazi Text', serif;
+    float: left;
+    margin-left: 30px;
+}
+
+#return {
+    font-size: 2em;
+}
+
+#intro{
+  margin-top: 75px;
+  display: flex;
+  min-width: 1100px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+#text{
+     width: 1200px;
+     font-size: 35px;
+     margin-top: 10px;
+     color: #1ecd97;
+     font-family: 'Raleway', sans-serif;
+}
+
+#spacing {
+     width: 500px;
+     margin-left: 50px;
+}
+
+#services {
+     background-color: #eee;
+     border-radius: 10px;
+     width: 800px;
+     margin-left: 50px;
+}
+
+#search-results {
+     display: flex;
+     margin-top: 0px;
+     min-width: 1100px;
+     justify-content: center;
+}
+
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 @keyframes floating {
   0% {
@@ -123,3 +219,4 @@ p{
   border-radius: 50%;
   animation: floatingShadow 3s ease-in-out infinite;
 }
+

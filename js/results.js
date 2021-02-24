@@ -227,7 +227,7 @@
           if (response.services.length == 0) {
                let queryString = window.location.search
                const urlParams = new URLSearchParams(queryString)
-               window.location = "notfound?search=" + urlParams.get('search')
+               window.location = "error?search=" + urlParams.get('search')
           } else {
 
                if (response.address && response.state && response.city) {
