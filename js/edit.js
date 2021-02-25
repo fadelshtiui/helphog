@@ -145,6 +145,7 @@ window.addEventListener('load', function () {
      if (id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == '') {
           editAddress();
      }
+     checkProviders();
 
 });
 
@@ -436,6 +437,25 @@ function submitLoginHelper(response) {
           document.cookie = "session=" + response.session + ";";
           initModal();
      }
+}
+
+function checkProviders(){
+     let data = new FormData();
+     let service = document.querySelector(".service").innerText
+     data.append("service", service);
+     let url = "php/providers.php";
+     fetch(url, { method: "POST", body: data })
+          .then(checkStatus)
+          .then(res => res.json())
+          .then(providersHelper)
+          .catch(console.log);
+}
+
+function providersHelper(response){
+    if (response.providers != 0){
+        document.querySelector("#quantity").classList.add("hidden");
+        document.querySelector("#quantity-label").classList.add("hidden");
+    }
 }
 
 function guestLogin() {

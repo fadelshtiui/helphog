@@ -94,6 +94,11 @@ function calculateOrderAmount(array $items): int {
     foreach($stmnt->fetchAll() as $row) {
         $cost = $row["cost"];
         $wage = $row["wage"];
+        $providers = $row["wage"];
+    }
+
+    if (providers != 0){
+        $people = $providers;
     }
 
     $price = 0;
@@ -147,7 +152,7 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate){
     $stmnt->execute(array($service));
     foreach($stmnt->fetchAll() as $row) {
         $remote = $row["remote"];
-        $taxCode = $row["taxcode"];
+        $providers = $row["providers"];
     }
 
     $order_number;
@@ -188,7 +193,11 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate){
         $_SESSION['city'] = $order_info->city;
         $_SESSION['state'] = $order_info->state;
     }
-    $_SESSION['people'] = $order_info->people;
+    if (providers == 0){
+        $_SESSION['people'] = $order_info->people;
+    }else{
+        $_SESSION['people'] = $order_info->people;
+    }
     $_SESSION['duration'] = $order_info->duration;
     $_SESSION['day'] = $order_info->day;
     $_SESSION['order'] = $order_info->order;
