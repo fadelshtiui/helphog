@@ -415,7 +415,7 @@ let preloaded = false;
 
 					let order = orders[i];
 
-					if (order.status == 'mc' || order.status == 're' || order.status == 'ac' || order.status == 'pc' || order.status == 'cc') {
+					if (order.status == 'mc' || order.status == 're' || order.status == 'ac' || order.status == 'pc' || order.status == 'cc' || order.status == 'pd') {
 						counter++;
 						id("no-order-history").classList.add("hidden");
 						$('.dashboard-preview').show();

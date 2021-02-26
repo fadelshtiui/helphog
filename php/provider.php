@@ -200,7 +200,7 @@ if ($validated) {
 
         $payment_info = payment($row["order_number"]);
 
-        $entry->revenue = $payment_info->revenue;
+        $entry->revenue = $payment_info->provider_payout;
 
         array_push($orders_array, $entry);
     }
