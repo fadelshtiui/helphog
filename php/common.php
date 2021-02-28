@@ -182,7 +182,7 @@ function pay_provider($order_number)
 			}
 		}
 
-		$sql = "UPDATE orders SET tax_collected = ? WHERE order_number = ?";
+		$sql = "UPDATE orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
 		$stmt = $db->prepare($sql);
 		$params = array($payment_info->tax_collected, $order_number);
 		$stmt->execute($params);
