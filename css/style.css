@@ -67,8 +67,7 @@ h5 {
 }
 
 #slogan {
-  padding-top: 10px;
-  font-size: 14px;
+  font-size: 16px;
   color: black;
 }
 
@@ -345,7 +344,7 @@ a:focus {
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
-:-ms-input-placeholder {  
+:-ms-input-placeholder {
   color: #000;
   opacity: 0.5;
   -ms-transition: opacity 0.35s ease-in-out;
@@ -368,7 +367,7 @@ a:focus {
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
-:hover:-ms-input-placeholder {  
+:hover:-ms-input-placeholder {
   opacity: 0.75;
   -ms-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
@@ -390,7 +389,7 @@ a:focus {
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
-:focus:-ms-input-placeholder {  
+:focus:-ms-input-placeholder {
   opacity: 0;
   -ms-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
