@@ -89,11 +89,7 @@ textarea
 }
 
 .description-left{
-    margin-top: 0px;
-    margin-left: 10px;
-    float: left;
-    height: auto;
-    display: inline;
+
 }
 
 #time-section {
@@ -178,6 +174,7 @@ textarea
 
 body {
   color: black;
+  margin: 100px;
 }
 
 .wrapper {
@@ -819,7 +816,6 @@ a.editbutton {
 
 textarea {
   margin-top: 10px;
-  margin-left: 50px;
   height:100%;
   -moz-border-bottom-colors: none;
   -moz-border-left-colors: none;
@@ -964,11 +960,7 @@ dropdown ul li:nth-child(3):hover .fa {
 }
 
 #options{
-    /*display:inline-flex;*/
-    margin-left: 10px;
-    margin-right: 24px;
     margin-top: 8px;
-    padding-bottom: 12px;
 }
 
 #quantity{
