@@ -39,20 +39,10 @@ a:hover{
 
 body {
   /* padding: 1em; */
-  font-family: "Roboto", sans-serif;
   font-size: 14px;
   /*padding-top: 30px;*/
   /*margin: 8px;*/
 }
-
-html {
-  /*background: url(../images/background10.jpg) no-repeat center center fixed;*/
-  /*-webkit-background-size: cover;*/
-  /*-moz-background-size: cover;*/
-  /*-o-background-size: cover;*/
-  /*background-size: cover;*/
-}
-
 
 h4 {
   color: black;
@@ -74,7 +64,6 @@ select {
   -o-transition: 0.35s ease-in-out;
   transition: 0.35s ease-in-out;
   transition: all 0.35s ease-in-out;
-  font-family: "Roboto", sans-serif;
   margin-bottom: 5px;
 }
 input:focus {
@@ -138,7 +127,6 @@ input[type="checkbox"] + label:after {
   font-size: 0.8em;
   color: #fff;
   opacity: 0;
-  font-family: "Roboto", sans-serif;
   content: "\f00c";
 }
 input:checked + label:after {
@@ -256,7 +244,6 @@ select option {
 }
 
 #form-cover button {
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
   background: #1ECD97;
@@ -271,18 +258,6 @@ select option {
   border-radius: 5px;
   margin-top: 20px;
 }
-/*button{*/
-/*    color: white;*/
-/*    background-color: #1ecd97;*/
-/*    border-radius: 5px;*/
-/*    font-family: "Roboto", sans-serif;*/
-/*}*/
-
-/*button:hover,.form button:active,.form button:focus {*/
-/*  background: #519c75;*/
-/*  border-radius: 5px;*/
-/*  font-family: "Roboto", sans-serif;*/
-/*}*/
 
 .g-recaptcha{
      /*padding-left: 72px;*/

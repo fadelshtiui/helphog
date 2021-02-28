@@ -26,7 +26,6 @@ button {
   transition: all 0.25s ease;
   margin-top: 37px;
   value: "START";
-  font-family: "Arimo", sans-serif;
 }
 button:hover {
   color: white;

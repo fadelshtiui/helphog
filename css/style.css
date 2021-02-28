@@ -47,7 +47,6 @@ input[type=number]::-webkit-outer-spin-button {
    font-size: 4em;
    color: #1ecd97;
    margin-bottom: -10px;
-   font-family: 'Fredoka One', cursive;
    position: absolute;
    top: 0.15em;
    left: 0.50em;
@@ -65,14 +64,12 @@ h5 {
   color: #1ECD97;
   margin-top: 5%;
   margin-bottom: 0px;
-  font-family: 'Fredoka One', cursive;
 }
 
 #slogan {
   padding-top: 10px;
   font-size: 14px;
   color: black;
-  font-family: "Raleway", Arial, sans-serif;
 }
 
 button {
@@ -115,7 +112,6 @@ a:focus {
      padding-left: 3em;
      padding-right: 3em;
      opacity: 0.5;
-     font-family: "Raleway", Arial, sans-serif;
 }
 
 #navigation li a {
@@ -128,7 +124,6 @@ a:focus {
     color: inherit;
     border: none;
     padding: 0;
-    font: inherit;
     cursor: pointer;
     outline: inherit;
 }
@@ -143,7 +138,6 @@ a:focus {
   margin-top: 1.5em;
   margin-left: auto;
   margin-right: auto;
-  font-family: 'rawline', sans-serif; 
   display: inline-flex;
 }
 
@@ -183,7 +177,6 @@ a:focus {
   font-size: 1em;
   position: relative;
   outline: 0px;
-  font-family: 'rawline', sans-serif; 
 }
 
 #zipcode{
@@ -199,7 +192,6 @@ a:focus {
   font-size: 1em;
   position: relative;
   outline: 0px;
-  font-family: 'rawline', sans-serif; 
   width: 84px;
 }
 
@@ -301,7 +293,6 @@ a:focus {
 
 #category {
     margin-top: 21px;
-    font-family: "Raleway", Arial, sans-serif;
     color: #2196f3;
     cursor: pointer;
     text-align: center;

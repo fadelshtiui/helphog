@@ -55,7 +55,6 @@
 .pure-material-textfield-standard {
     position: relative;
     display: inline-block;
-    font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
     font-size: 16px;
     line-height: 1.5;
     overflow: hidden;
@@ -76,7 +75,6 @@
     color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.87);
     background-color: transparent;
     box-shadow: none; /* Firefox */
-    font-family: inherit;
     font-size: inherit;
     line-height: inherit;
     caret-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));

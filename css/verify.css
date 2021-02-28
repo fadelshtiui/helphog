@@ -38,7 +38,6 @@ body{
   border-radius: 10px;
 }
 h1{
-  font-family: "Raleway", Arial, sans-serif;
   font-size: 35px;
   /*letter-spacing:3px;*/
   color:#1ecd97 ;
@@ -52,7 +51,6 @@ h1{
   margin:0;
   font-size:1.3em;
   color:black;
-  font-family: "Raleway", Arial, sans-serif;
   /*letter-spacing:1px;*/
 }
 .go-home{
@@ -65,7 +63,6 @@ h1{
   text-transform:capitalize;
   cursor: pointer;
   box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.2);
-  font-family: "Raleway", Arial, sans-serif;
   font-size:20px;
   /*margin-top: 90px;*/
 }
@@ -82,7 +79,6 @@ h1{
   margin:0;
   padding:4px;
   color:black;
-  font-family: "Raleway", Arial, sans-serif;
   /*letter-spacing:1px;*/
 }
 .footer-like p a{

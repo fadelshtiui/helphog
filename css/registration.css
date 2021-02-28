@@ -13,7 +13,6 @@ html {
      width: 550px;
      font-size: 35px;
      color: #1ecd97;
-     font-family: 'Raleway', sans-serif;
 }
 
 #center {
@@ -54,17 +53,12 @@ html {
 
 .heading {
      font-size: 36px;
-     font-family: "Raleway", Arial, sans-serif;
      margin-bottom: 18px;
      margin-top: 18px;
 }
 
 a {
      text-decoration: none;
-}
-
-p {
-     font-family: "Raleway", Arial, sans-serif;
 }
 
 img {

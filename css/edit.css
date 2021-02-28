@@ -64,7 +64,6 @@ html{
 
 textarea
 {
-   font-family:"Roboto", sans-serif;
    font-size: 15px;
    margin-bottom: 10px;
 }
@@ -75,12 +74,10 @@ textarea
 }
 
 .pac-item{
-    font-family:rawline;
     font-weight:600;
 }
 
 .pac-selected{
-    font-family:rawline;
     font-weight:600;
 }
 
@@ -182,17 +179,6 @@ textarea
 body {
   color: black;
   margin: 100px;
-}
-
-/*
-* Variables
-*/
-/*
-* CSS
-*/
-
-body {
-font-family: "Raleway", Arial, sans-serif;
 }
 
 .wrapper {
@@ -466,7 +452,6 @@ background: #9b59b6;
   background: #0070ba;
 }
 .validate:after {
-  font-family: 'FontAwesome';
   content: "\f00c";
 }
 
@@ -849,7 +834,6 @@ textarea {
   border-width: medium 1px 1px medium;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
   color: #555555;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 1em;
   line-height: 1.4em;
   padding: 5px 8px;
@@ -1048,7 +1032,6 @@ dropdown ul li:nth-child(3):hover .fa {
 .popup h2 {
   margin-top: 0;
   color: #333;
-  font-family: Tahoma, Arial, sans-serif;
 }
 .popup .close {
     position: relative;

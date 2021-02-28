@@ -101,7 +101,6 @@ position:relative;
     position: absolute;
     font-size: 3rem;
     color: white;
-    font-family: 'Hind', sans-serif;
 }
 
 li{
@@ -183,7 +182,6 @@ li{
   font-size: 40px;
   padding: 0;
   font-weight: bold;
-  font-family: 'Nanum Gothic', sans-serif;
 }
 
 .projectFactsWrap .item p{
@@ -191,7 +189,6 @@ li{
   font-size: 18px;
   margin: 0;
   padding: 10px;
-  font-family: "Raleway", Arial, sans-serif;
 }
 
 
@@ -241,7 +238,6 @@ footer p {
 color: rgba(255, 255, 255, 0.8);
   font-size: 16px;
   opacity: 0;
-  font-family: 'Open Sans';
   width: 100%;
     word-wrap: break-word;
   line-height: 25px;

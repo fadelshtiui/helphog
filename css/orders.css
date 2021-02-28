@@ -74,7 +74,6 @@ html {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
 }
 
@@ -118,7 +117,6 @@ h4 {
   font-size: 50px;
   color: #1ecd97;
   font-weight: 400;
-  font-family: 'Raleway', sans-serif;
   ;
   padding: 28px;
 }
@@ -128,7 +126,6 @@ h4 {
   margin-top: -1px;
   color: #506776;
   font-weight: 200;
-  font-family: 'Raleway', sans-serif;
   ;
 }
 
@@ -210,7 +207,6 @@ button {
 }
 
 h2 {
-  font-family: sans-serif;
   text-transform: uppercase;
   font-weight: 100;
 }
@@ -234,7 +230,6 @@ button.dark {
   background-color: #fff;
   border-radius: 4px;
   font-size: 11.5px;
-  font-family: inherit;
   font-weight: 400;
   cursor: pointer;
   margin-left: 0;

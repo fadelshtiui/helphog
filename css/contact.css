@@ -15,7 +15,6 @@ html {
      width: 550px;
      font-size: 35px;
      color: #2196f3;
-     font-family: 'Raleway', sans-serif;
 }
 
 #center {
@@ -58,7 +57,6 @@ html {
 
 .heading {
      font-size: 36px;
-     font-family: 'rawline', sans-serif;
      margin-bottom: 18px;
      margin-top: 18px;
 }
@@ -66,10 +64,6 @@ html {
 a {
      text-decoration: none;
      /*display: none;*/
-}
-
-p {
-     font-family: 'rawline', sans-serif;
 }
 
 img {

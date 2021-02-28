@@ -25,7 +25,6 @@
   bottom: 15px;
   right: 0;
   height: 40px;
-  font-family: "Roboto", sans-serif;
 }
 
 .cancel-button,
@@ -61,7 +60,6 @@
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-  /*font-family: "Roboto", sans-serif;*/
   overflow: hidden;
   transition: background 0.15s ease;
 }

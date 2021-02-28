@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="css/orders.css" type="text/css">
 	<link rel="stylesheet" href="css/footer.css" type="text/css">
 	<link rel="stylesheet" href="css/loading.css" type="text/css">
+	<link rel="stylesheet" href="css/global.css">
 
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 	<script src='https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js'></script>
@@ -70,9 +71,9 @@
 			<v-app id="inspire">
 				<div id="wrapper">
 					<v-toolbar flat color="white">
-						<v-toolbar-title style="font-family: 'Raleway', sans-serif;">Order History</v-toolbar-title>
+						<v-toolbar-title>Order History</v-toolbar-title>
 						<v-spacer></v-spacer>
-						<d style="margin-right:20px;color:#a7a7a7;font-family: 'Raleway', sans-serif;">click on the row
+						<d style="margin-right:20px;color:#a7a7a7;">click on the row
 							for more information</d>
 					</v-toolbar>
 					<v-data-table :headers="headers" :items="orders" :expand="expand" item-key="number">
