@@ -89,15 +89,16 @@ function calculateOrderAmount(array $items): int {
     global $db;
     $wage = "";
     $cost = "";
-    $stmnt = $db->prepare("SELECT cost, wage FROM services WHERE service = ?;");
+    $providers = "";
+    $stmnt = $db->prepare("SELECT cost, wage, providers FROM services WHERE service = ?;");
     $stmnt->execute(array($service));
     foreach($stmnt->fetchAll() as $row) {
         $cost = $row["cost"];
         $wage = $row["wage"];
-        $providers = $row["wage"];
+        $providers = $row["providers"];
     }
 
-    if (providers != 0){
+    if ($providers != 0){
         $people = $providers;
     }
 
@@ -107,7 +108,6 @@ function calculateOrderAmount(array $items): int {
     } else {
         $price = $people * $cost * $duration;
     }
-
     return $price * 100;
 }
 
@@ -148,7 +148,8 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate){
     $service = $entry->service;
 
     $remote = "";
-    $stmnt = $db->prepare("SELECT remote FROM services WHERE service = ?;");
+    $providers = "";
+    $stmnt = $db->prepare("SELECT remote, providers FROM services WHERE service = ?;");
     $stmnt->execute(array($service));
     foreach($stmnt->fetchAll() as $row) {
         $remote = $row["remote"];
@@ -196,7 +197,7 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate){
     if (providers == 0){
         $_SESSION['people'] = $order_info->people;
     }else{
-        $_SESSION['people'] = $order_info->people;
+        $_SESSION['people'] = $providers;
     }
     $_SESSION['duration'] = $order_info->duration;
     $_SESSION['day'] = $order_info->day;
