@@ -39,13 +39,12 @@ window.addEventListener('load', function () {
 
      id("close").onclick = function () {
           document.documentElement.style.overflow = "overlay";
-          document.querySelector("button").disabled = false;
-          var tdtag = document.querySelectorAll('.trtag')
-               tdtag.forEach(el => {
-                   el.classList.remove('visibility');
-                   el.classList.add('notvisible');
-
-          })
+          document.querySelector("#button").disabled = false;
+          //   var tdtag = document.querySelectorAll('.trtag')
+          //       tdtag.forEach(el => {
+          //           el.classList.remove('visibility');
+          //           el.classList.add('notvisible');
+          //   })
 
      }
 
@@ -439,7 +438,7 @@ function submitLoginHelper(response) {
      }
 }
 
-function checkProviders(){
+function checkProviders() {
      let data = new FormData();
      let service = document.querySelector(".service").innerText
      data.append("service", service);
@@ -451,11 +450,11 @@ function checkProviders(){
           .catch(console.log);
 }
 
-function providersHelper(response){
-    if (response.providers != 0){
-        document.querySelector("#quantity").classList.add("hidden");
-        document.querySelector("#quantity-label").classList.add("hidden");
-    }
+function providersHelper(response) {
+     if (response.providers != 0) {
+          document.querySelector("#quantity").classList.add("hidden");
+          document.querySelector("#quantity-label").classList.add("hidden");
+     }
 }
 
 function guestLogin() {
@@ -497,6 +496,16 @@ function generateOrderNumber() {
 }
 
 function initModal() {
+
+     var tdtag = document.querySelectorAll('.trtag')
+     tdtag.forEach(el => {
+          el.classList.remove('visibility');
+          el.classList.add('notvisible');
+     })
+
+
+
+
      id('order').value = generateOrderNumber()
 
      document.documentElement.style.overflow = "hidden";
@@ -662,8 +671,8 @@ async function stripe(service, duration, people, cost) {
                var form = id("payment-form");
                var tdtag = document.querySelectorAll('.trtag')
                tdtag.forEach(el => {
-                   el.classList.add('visibility');
-                   el.classList.remove('notvisible');
+                    el.classList.add('visibility');
+                    el.classList.remove('notvisible');
 
                })
                form.addEventListener("submit", function (event) {
