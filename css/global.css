@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Poppins');
-
 /* 
- * everything that's not the logo will use this font
+ * everything that's not the logo or an icon will use this font
  * !important to override external bootstrap CSS files
  *
  */
-* :not(.logo-font) {
+
+* :not(.logo-font, .v-icon, .fa) {
   font-family: "Poppins", "sans-serif" !important;
 }
 
