@@ -5,7 +5,7 @@
  *
  */
 
-* :not(.logo-font, .v-icon, .fa) {
+* :not(.logo-font, .v-icon, .fa, i) {
   font-family: "Poppins", "sans-serif" !important;
 }
 
