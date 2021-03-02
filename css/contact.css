@@ -2,57 +2,55 @@
 @import url('https://fonts.googleapis.com/css?family=Exo');
 @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
 @import 'https://cdn.rawgit.com/h-ibaldo/Raleway_Fixed_Numerals/master/css/rawline.css';
-
-
 html {
-  background:#f5f5f5;
+     background: #f5f5f5;
 }
 
-#head{
+#head {
      margin: 0 auto;
      margin-bottom: 10px;
      margin-top: -80px;
      width: 550px;
      font-size: 35px;
-     color: #2196f3;
+     color: #1ecd97;
 }
 
 #center {
-    width: 800px;
-    height: 500px;
-    margin: auto;
-    margin-top:150px;
-    margin-bottom:200px;
-    display: none;
+     width: 800px;
+     height: 500px;
+     margin: auto;
+     margin-top: 150px;
+     margin-bottom: 200px;
+     display: none;
 }
 
 #left {
-    width:300px;
-    height: 500px;
-    float: left;
-    margin-left: 75px;
-    border-radius: 15px;
-    /*background-color: #f5f5f5;*/
-    text-align: center;
+     width: 300px;
+     height: 500px;
+     float: left;
+     margin-left: 75px;
+     border-radius: 15px;
+     /*background-color: #f5f5f5;*/
+     text-align: center;
 }
 
 #right {
-    width:300px;
-    height: 500px;
-    float: right;
-    margin-right: 75px;
-    border-radius: 15px;
-    /*background-color: #f5f5f5;*/
-    text-align: center;
+     width: 300px;
+     height: 500px;
+     float: right;
+     margin-right: 75px;
+     border-radius: 15px;
+     /*background-color: #f5f5f5;*/
+     text-align: center;
 }
 
 .inner {
-    width: 250px;
-    height: 450px;
-    border:1px solid black;
-    margin: auto;
-    margin-top: 25px;
-    border-radius: 15px;
+     width: 250px;
+     height: 450px;
+     border: 1px solid black;
+     margin: auto;
+     margin-top: 25px;
+     border-radius: 15px;
 }
 
 .heading {
@@ -79,49 +77,59 @@ img {
      margin-bottom: 40px;
 }
 
-#left:hover {
-     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
+/*#left:hover {*/
 
-#right:hover {
-     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
+/*     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
 
+/*}*/
+
+/*#right:hover {*/
+
+/*     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+
+/*}*/
 
 @keyframes hover {
      from {
           border: none;
      }
-     to {
-
-     }
+     to {}
 }
 
 .letter {
-  margin: 110px auto;
-  background-color: #FFF;
-  position: relative;
-  height: 70px;
-  width: 100px;
-  overflow: hidden;
+     margin: 110px auto;
+     background-color: #FFF;
+     position: relative;
+     height: 70px;
+     width: 100px;
+     overflow: hidden;
 }
+
 .letter:before, .letter:after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  height: 60px;
-  width: 60px;
-  transform: rotate(45deg) skew(-5deg, -5deg);
-  margin-left: -50px;
-  height: 100px;
-  width: 100px;
-  background-color: #FFF;
+     content: '';
+     position: absolute;
+     left: 50%;
+     height: 60px;
+     width: 60px;
+     transform: rotate(45deg) skew(-5deg, -5deg);
+     margin-left: -50px;
+     height: 100px;
+     width: 100px;
+     background-color: #FFF;
 }
+
 .letter:before {
-  bottom: -100%;
-  box-shadow: -5px -5px 0 0 #EBABAB;
+     bottom: -100%;
+     box-shadow: -5px -5px 0 0 #EBABAB;
 }
+
 .letter:after {
-  top: -95%;
-  box-shadow: 5px 5px 0 0 #EBABAB;
+     top: -95%;
+     box-shadow: 5px 5px 0 0 #EBABAB;
+}
+
+.important {
+     color: #1ecd97;
+     font-size: 125%;
+     font-weight: bold;
 }
