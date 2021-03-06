@@ -16,6 +16,7 @@ body {
 
 #description{
     font-size: 16px;
+    font-weight: 400;
 }
 
 
@@ -790,7 +791,7 @@ button {
 .results--grid {
   /*grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));*/
   width:900px;
-  
+
 }
 
 .results--list {
@@ -841,7 +842,7 @@ button {
   box-shadow: none;
   /*background: var(--primaryShade4);*/
   background: #1BB887;
-  
+
 }
 .profile a:active, .profile a:focus {
   top: 0;
@@ -1078,7 +1079,7 @@ a.addressbutton{
     top: 0;
     transition: 0.2s ease;
     border: 0.5px solid #ddd;
-    
+
 }
 
 a.addressbutton:hover{

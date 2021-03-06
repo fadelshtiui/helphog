@@ -3,9 +3,8 @@
 }
 
 body {
-  font-weight: 300;
+  /*font-weight: 300;*/
   line-height: 1.5;
-  font-size: 16px;
   text-align: center;
   transition: all 0.3s ease;
 }
@@ -28,7 +27,6 @@ body {
     display:none !important;
 }
 
-
 main {
   --neutralShade0: #f8f8f8;
   --neutralShade1: #f2f2f2;
@@ -47,6 +45,7 @@ main {
 
 /*overall layout*/
 main {
+  font-size: 16px;
   width: 90%;
   margin: 3em auto 0;
   max-width: 1500px;
