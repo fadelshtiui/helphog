@@ -134,6 +134,7 @@ p{
   height: 500px;
   text-align: center;
   font-size: 16px;
+  width:970px;
 }
 .container h1 {
   font-size: 32px;
@@ -214,4 +215,3 @@ p{
   border-radius: 50%;
   animation: floatingShadow 3s ease-in-out infinite;
 }
-

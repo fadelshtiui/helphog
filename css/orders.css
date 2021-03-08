@@ -26,7 +26,11 @@ a[href*="intent"] {
   text-decoration: none;
 }
 
-/*  
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+/*
 		 * Rating styles
 		 */
 
