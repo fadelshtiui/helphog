@@ -91,19 +91,20 @@
                       <!--<option value="8" selected>Until Completion</option>-->-->
                     </select>
                   </div>
-                  <label for="quantity3" id="cancelbufferlabel">In the rare case your order is not claimed, how many
+                  <label for="quantity3" class="hidden" id="cancelbufferlabel">In the rare case your order is not claimed, how many
                     hours before the order time would you like to be notified?</label>
-                  <div id="quantity3" include="form-input-select()">
+                  <div id="quantity3" class="hidden" include="form-input-select()">
                     <select id="cancelbuffer" required>
                       <!--
                                       This is how we can do "placeholder" options.
                                       note: "required" attribute is on the select
                                     -->
-                      <option value="60" hidden>1 hour</option>
+                      <option value="0">Default</option>
+                      <option value="60">1 hour</option>
 
                       <!-- normal options -->
                       <option value="60">1 hour</option>
-                      <option value="120" selected>2 hours</option>
+                      <option value="120">2 hours</option>
                       <option value="240">4 hours</option>
                       <option value="480">8 hours</option>
                       <option value="720">12 hours</option>
@@ -116,7 +117,7 @@
                 </div>
                 <textarea id="message" cols="50" maxlength="1000"
                   style="width: 100%; height: 69px; border-radius: 6px; resize: none;"
-                  placeholder="Please describe what you need help with..."></textarea>
+                  placeholder="Please describe exactly what needs to be done..."></textarea>
               </div>
               </div>
             </div>
