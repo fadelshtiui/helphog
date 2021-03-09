@@ -73,7 +73,7 @@ function &payment($order)
 		$wage = $row['wage'];
 		$prorated = $row['prorated'];
 		$result->intent = $row['intent'];
-		
+
 		if ($row["wage"] == "hour") {
 			$ts1 = strtotime($row["start"]);
 			$ts2 = strtotime($row["end"]);
@@ -313,7 +313,6 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 		$client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'There\'s a new service request in your area!
 
 Service: ' . $service . '
-Order Number: ' . $ordernumber . '
 Date: ' . $local_time->format("F j, Y, g:i a") . '
 Max duration: ' . $duration . '
 ' . $commute . '
