@@ -33,6 +33,17 @@ window.addEventListener('load', function () {
           guestOpen = false;
      });
 
+     var x = document.getElementById("options-tab");
+     x.style.display = "none";
+
+     $('#advanced-options').on('click', function () {
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+     });
+
      $('.popupCloseButton').click(function () {
           $('.hover_bkgr_fricc').hide();
      });

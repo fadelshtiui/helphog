@@ -27,6 +27,14 @@ html{
     opacity:0;
 }
 
+#advanced-options:hover, #advanced-options:focus{
+    cursor:pointer;
+}
+
+#taskerinput{
+    width:20%;
+}
+
 #taxRate{
     color: gray;
     font-size: 14px;
