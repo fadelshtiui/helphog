@@ -51,22 +51,14 @@ function checkLoggedIn() {
 function updateNav(response) {
 
     if (response.validated == "true") {
-        id("sign-in-nav").classList.add("hidden");
-        id("register-nav").classList.add("hidden");
-        id("track-order").classList.add("hidden");
-
-        if (response.account.type == "Personal") {
-            id("provider").classList.add("hidden");
-        }
-
         id("sign-out").onclick = signOut;
-
+        if (response.account.type == "Business") {
+            id("provider").classList.remove("hidden");
+        }
+        
+        id('signed-in-nav').classList.remove('hidden')
     } else {
-        id("provider").classList.add("hidden");
-        id('sign-out').classList.add('hidden');
-        id('settings').classList.add('hidden')
-        id('apply').classList.add('hidden')
-        id('orders').classList.add('hidden')
+        id('signed-out-nav').classList.remove('hidden')
     }
 
 }
