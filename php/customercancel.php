@@ -71,20 +71,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $customerName = $row['firstname'];
         }
                 
-        $tz = "";
-        $providerName = "";
-        $phone = "";
-        $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM login WHERE email = ?;");
-        $stmnt->execute(array($providerEmail));
-        foreach($stmnt->fetchAll() as $row) {
-            $providerName = $row['firstname'];
-            $tz = $row['timezone'];
-            $phone = $row['phone'];
-        }
-        
-        $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-        $local_date->setTimezone(new DateTimeZone($tz));
-                
         if ($status == "cc" || $status == "pc" || $status == "ac") {
             
             if ($is_post_request) {
@@ -103,6 +89,20 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             }
         
         } else {
+            
+            $tz = "";
+            $providerName = "";
+            $phone = "";
+            $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM login WHERE email = ?;");
+            $stmnt->execute(array($providerEmail));
+            foreach($stmnt->fetchAll() as $row) {
+                $providerName = $row['firstname'];
+                $tz = $row['timezone'];
+                $phone = $row['phone'];
+            }
+            
+            $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+            $local_date->setTimezone(new DateTimeZone($tz));
                 
             $amount = 0;
             $payment_info = payment($order);
