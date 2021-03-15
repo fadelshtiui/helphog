@@ -27,6 +27,11 @@ body {
     display:none !important;
 }
 
+#navigation li a {
+    font-weight: 600;
+    line-height: 1;
+}
+
 main {
   --neutralShade0: #f8f8f8;
   --neutralShade1: #f2f2f2;
