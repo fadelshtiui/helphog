@@ -330,7 +330,12 @@
                               url += '&zip=' + zip
                          }
                          url += "&origin=results";
-                         url += '&search=' + urlParams.get('search')
+                         if (urlParams.get('search')) {
+                             url += '&search=' + urlParams.get('search')
+                         } else {
+                             url += '&category=' + urlParams.get('category')
+                         }
+                         
 
                          window.location = url;
                     }
