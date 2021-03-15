@@ -19,6 +19,10 @@ body {
     font-weight: 400;
 }
 
+#navigation li a {
+    font-weight: 600;
+}
+
 
 main {
   --neutralShade0: #f8f8f8;
