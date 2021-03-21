@@ -95,29 +95,12 @@
           let response = await fetch(url, { method: "POST", body: data })
           await checkStatus(response)
           let result = await response.json()
+          populateCategories(result.categories)
           handleResponse(result)
+
      }
 
      function populateCategories(response) {
-
-          // footer
-          let list = document.querySelector('.nav__ul--extra')
-
-          for (let i = 0; i < response.length; i++) {
-
-               let category = response[i];
-
-               let entry = document.createElement('li')
-
-               let link = document.createElement('a')
-               link.innerText = category.charAt(0).toUpperCase() + category.slice(1)
-               link.href = 'results?category=' + category
-
-               entry.appendChild(link)
-
-               list.appendChild(entry)
-
-          }
 
           for (let i = 0; i < response.length; i++) {
                let category = response[i];
@@ -247,8 +230,6 @@
                          // id('current-zip-guest').innerText =
                     }
                }
-
-
 
                let counters = document.querySelectorAll('.badge')
                for (let i = 0; i < counters.length; i++) {
