@@ -2,8 +2,21 @@ body {
      text-align: left;
 }
 
+.content {
+     background-color: #f9fafb;
+}
+
 #document {
-     width: 70%;
+     font-size: 105%;
+     width: 60%;
      margin-left: auto;
      margin-right: auto;
+     background-color: white;
+     padding: 40px;
+     margin-top: 40px;
+     margin-bottom: 40px;
+}
+
+.footer {
+     margin-top: 0px;
 }
