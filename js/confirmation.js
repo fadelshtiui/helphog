@@ -12,6 +12,14 @@ $(window).on('load', function () {
 
 function handle(response) {
 
+    if (response.error == "tried to refresh confirmation page") {
+        window.location = '/'
+    } else if (response.error == "missing session parameters") {
+        window.location = '/error?message=Oops.+Something+went+wrong.+Please+try+again.'
+    } else if (response.error == "waited very long before clicking place order") {
+        window.location = '/error?message="Request+timed+out.+Please+try+placing+your+order+again.'
+    }
+
     id("order-number").innerText = response.ordernumber;
 
     if (response.firstname) {
@@ -42,8 +50,8 @@ function handle(response) {
         hour(response.cost, response.people, response.duration);
     }
 
-    if (response.taxrate != ''){
-       id("taxRate").innerText = " + tax (" + response.taxrate + ")";
+    if (response.taxrate != '') {
+        id("taxRate").innerText = " + tax (" + response.taxrate + ")";
     }
 
     $('#load').fadeOut(500);
