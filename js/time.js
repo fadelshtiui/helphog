@@ -128,6 +128,11 @@ app.directive('datePicker', function ($timeout, $window) {
                         today.getMonth() == date.getMonth()) {
                         showday = true;
                     }
+                    console.log(dateDiffInDays(date, today))
+                    if (dateDiffInDays(today, date) > 6) {
+                        showday = false;
+                    }
+
                     var day = new Date(date);
                     var dayname = day.getDay();
                     var daydate = day.getDate();
@@ -135,6 +140,16 @@ app.directive('datePicker', function ($timeout, $window) {
                     date.setDate(date.getDate() + 1);
                 }
                 scope.month = days;
+            }
+
+            // a and b are javascript Date objects
+            function dateDiffInDays(a, b) {
+                const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                // Discard the time and time-zone information.
+                const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+                const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+                return Math.floor((utc2 - utc1) / _MS_PER_DAY);
             }
 
             function initializeDate() {
