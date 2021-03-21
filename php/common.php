@@ -151,25 +151,25 @@ function pay_provider($order_number)
 		$stripe_acc = "";
 		$stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
 		$stmnt->execute(array($provider_email));
-		foreach($stmnt->fetchAll() as $row) {
-		    $stripe_acc = $row['stripe_acc'];
+		foreach ($stmnt->fetchAll() as $row) {
+			$stripe_acc = $row['stripe_acc'];
 		}
 
 		$transfer = \Stripe\Transfer::create([
-		  "amount" => ceil($payment_info->provider_payout * 100),
-		  "currency" => "usd",
-		  "destination" => $stripe_acc,
-		  "description" => $service . " (" . $order_number . ")",
-		  "transfer_group" => '{' . $order_number . '}',
+			"amount" => ceil($payment_info->provider_payout * 100),
+			"currency" => "usd",
+			"destination" => $stripe_acc,
+			"description" => $service . " (" . $order_number . ")",
+			"transfer_group" => '{' . $order_number . '}',
 		]);
 
-		$providers = explode("," , $secondary_providers);
-		foreach ($providers as $provider){
+		$providers = explode(",", $secondary_providers);
+		foreach ($providers as $provider) {
 			if ($provider != "") {
 				$secondary_stripe_acc = "";
 				$stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
 				$stmnt->execute(array($provider));
-				foreach($stmnt->fetchAll() as $row) {
+				foreach ($stmnt->fetchAll() as $row) {
 					$secondary_stripe_acc = $row["stripe_acc"];
 					$transfer = \Stripe\Transfer::create([
 						"amount" => ceil($payment_info->provider_payout * 100),
@@ -696,10 +696,10 @@ function mark_completed($order, $message)
 			$client->messages->create('+1' . $customer_phone, array('from' => '+12532593451', 'body' => $message));
 		}
 
-
-		$sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+		$current_timestamp = gmdate("Y-m-d H:i:s");
+		$sql = "UPDATE orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
 		$stmt = $db->prepare($sql);
-		$params = array('mc', $order);
+		$params = array('mc', $current_timestamp, $order);
 		$stmt->execute($params);
 
 		return true;
