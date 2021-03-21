@@ -17,7 +17,7 @@ foreach ($result as $row) {
     $utc->setTimezone(new DateTimeZone($timezone));
     $schedule = $utc->format('F j, Y, g:i a');
     
-    if (minutes_since($row['schedule']) >= 1440 && $row["status"] == "mc") {
+    if (minutes_since($row['mc_timestamp']) >= 1440 && $row["status"] == "mc") {
         
         pay_provider($order_number);
         
