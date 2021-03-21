@@ -799,19 +799,19 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		if ($email == $client_email) {
 			return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 		}
+		
+		$secondary_providers = "";
+		$stmnt = $db->prepare("SELECT secondary_providers FROM orders WHERE order_number = ?;");
+		$stmnt->execute(array($order_number));
+		foreach ($stmnt->fetchAll() as $row) {
+			$secondary_providers = $row['secondary_providers'];
+		}
 
 		if (!$first_provider) {
 
 			if ($people == 1) {
 				return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 			} else {
-
-				$secondary_providers = "";
-				$stmnt = $db->prepare("SELECT secondary_providers FROM orders WHERE order_number = ?;");
-				$stmnt->execute(array($order_number));
-				foreach ($stmnt->fetchAll() as $row) {
-					$secondary_providers = $row['secondary_providers'];
-				}
 
 				if (strpos($secondary_providers, $email) !== false) {
 					return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
@@ -875,20 +875,55 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				}
 			}
 		} else { // first provider
+		
+		    $replacing_primary_provider = ($secondary_providers != "" && count(explode(',', $secondary_providers)) + 1 == $people);
 
-			if ($people == 1) {
+			if ($people == 1 || $replacing_primary_provider) {
 				$sql = "UPDATE orders SET status = ? WHERE order_number = ?";
 				$stmt = $db->prepare($sql);
 				$params = array("cl", $order_number);
 				$stmt->execute($params);
+				
 			}
+			
+			if ($replacing_primary_provider) {
+			    $secondary_providers_array = explode(',', $secondary_providers);
+				$message = "Here are the providers you will be working with:\n";
+				foreach ($secondary_providers_array as $curr_email) {
 
+					$name = "";
+					$phone = "";
+					$stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+					$stmnt->execute(array($curr_email));
+					foreach ($stmnt->fetchAll() as $row) {
+						$name = $row['firstname'];
+						$phone = $row['phone'];
+					}
+
+					$message .= $name . " (" . $phone . ")\n";
+				}
+				
+				$stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
+        		$stmnt->execute(array($email));
+        		foreach ($stmnt->fetchAll() as $row) {
+        			$client_phone = $row['phone'];
+        		}
+        				
+				$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
+				$token = '18a458337ffdfd10617571e495314311';
+				$client = new Client($sid, $token);
+				$client_phone = '+1' . $client_phone;
+				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+				
+			}
+			    
 			$sql = "UPDATE orders SET client_email = ? WHERE order_number = ?";
 			$stmt = $db->prepare($sql);
 			$params = array($email, $order_number);
 			$stmt->execute($params);
 
 			send_claimed_notification($order_number, $email, "primary", $db, $duration);
+			
 			if ($mobile) {
 				return '<script>window.location.href = "https://helphog.com/mobileclaimed";</script>';
 			}
