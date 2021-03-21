@@ -331,11 +331,11 @@
                          }
                          url += "&origin=results";
                          if (urlParams.get('search')) {
-                             url += '&search=' + urlParams.get('search')
+                              url += '&search=' + urlParams.get('search')
                          } else {
-                             url += '&category=' + urlParams.get('category')
+                              url += '&category=' + urlParams.get('category')
                          }
-                         
+
 
                          window.location = url;
                     }
@@ -444,6 +444,7 @@
                               } else {
                                    url += '&search=' + urlParams.get('search')
                               }
+                              url += "&origin=" + urlParams.get('origin')
 
                               window.location = url;
                          };

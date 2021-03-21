@@ -38,9 +38,9 @@ window.addEventListener('load', function () {
 
      $('#advanced-options').on('click', function () {
           if (x.style.display === "none") {
-            x.style.display = "block";
+               x.style.display = "block";
           } else {
-            x.style.display = "none";
+               x.style.display = "none";
           }
      });
 
@@ -220,12 +220,12 @@ function navigateBack() {
      }
      if (back == 'details') {
           url += '&service=' + urlParams.get('service')
-     } else {
-          if (urlParams.get('search')) {
-               url += '&search=' + urlParams.get('search')
-          } else {
-               url += '&category=' + urlParams.get('category')
-          }
+     }
+
+     if (urlParams.get('search')) {
+          url += '&search=' + urlParams.get('search')
+     } else if (urlParams.get('category')) {
+          url += '&category=' + urlParams.get('category')
      }
 
      if (urlParams.get('address')) {

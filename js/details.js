@@ -153,6 +153,8 @@
                     url += '&description=' + response.description
                     url += "&price=" + response.cost
                     url += "&wage=" + response.wage
+
+
                     url += "&origin=" + urlParams.get('origin')
 
                     if (zip) {
@@ -173,8 +175,13 @@
                          url += "&state=" + id('current-state').innerText
                     }
 
+                    if (urlParams.get('search')) {
+                         url += "&search=" + urlParams.get('search')
+                    } else if (urlParams.get('category')) {
+                         url += "&category=" + urlParamss.get('category')
+                    }
+
                     url += '&back=details'
-                    console.log(url)
                     window.location = url
                }
 
@@ -239,7 +246,13 @@
                id('button').innerText = 'Unavailable in ' + newZip
           } else if (response.available == 1) {
                const urlParams = new URLSearchParams(window.location.search)
-               window.location = "edit?service=" + response.service + "&description=" + response.description + "&price=" + response.cost + "&wage=" + response.wage + "&zip=" + newZip + "&remote=" + response.remote + '&back=details' + '&origin=' + urlParams.get('origin');
+               let url = "edit?service=" + response.service + "&description=" + response.description + "&price=" + response.cost + "&wage=" + response.wage + "&zip=" + newZip + "&remote=" + response.remote + '&back=details';
+               url += '&origin=' + urlParams.get('origin')
+               if (urlParams.get('search')) {
+                    url += "&search=" + urlParams.get('search')
+               } else if (urlParams.get('category')) {
+                    url += "&category=" + urlParams.get('category')
+               }
           } else {
                id('availability').innerText = 'Uncertain'
                id('button').innerText = 'Click to check availability'
