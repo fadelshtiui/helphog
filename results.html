@@ -29,135 +29,135 @@
 <body>
      <a id="scroll-to-zip" href="#logo" class='hidden'></a>
      <div id="loading" class="loading hidden">
-		<div>
-			<div class="c1"></div>
-			<div class="c2"></div>
-			<div class="c3"></div>
-			<div class="c4"></div>
-		</div>
-	</div>
+          <div>
+               <div class="c1"></div>
+               <div class="c2"></div>
+               <div class="c3"></div>
+               <div class="c4"></div>
+          </div>
+     </div>
 
      <div class="content">
-        <div class="header">
+          <div class="header">
                <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
                <ul id="navigation">
                     <div id="signed-in-nav" class="hidden">
-                      <li id="sign-out"><a href="/">Sign Out</a></li>
-                      <li id="settings"><a href="settings">Settings</a></li>
-                      <li id="apply"><a href="quickapply">Apply</a></li>
-                      <li id="orders"><a href="orders">Orders</a></li>
-                      <li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
-                      <li id="contact"><a href="contact">Contact Us</a></li>
-                      <li id="about"><a href="about">About</a></li>
+                         <li id="sign-out"><a href="/">Sign Out</a></li>
+                         <li id="settings"><a href="settings">Settings</a></li>
+                         <li id="apply"><a href="quickapply">Apply</a></li>
+                         <li id="orders"><a href="orders">Orders</a></li>
+                         <li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
+                         <li id="contact"><a href="contact">Contact Us</a></li>
+                         <li id="about"><a href="about">About</a></li>
                     </div>
                     <div id="signed-out-nav" class="hidden">
-                      <li id="sign-in-nav"><a href="signin">Login</a></li>
-                      <li id="register-nav"><a href="registration">Register</a></li>
-                      <li id="track-order"><a href="tracking">Track Order</a></li>
-                      <li id="contact"><a href="contact">Contact Us</a></li>
-                      <li id="about"><a href="about">About</a></li>
+                         <li id="sign-in-nav"><a href="signin">Login</a></li>
+                         <li id="register-nav"><a href="registration">Register</a></li>
+                         <li id="track-order"><a href="tracking">Track Order</a></li>
+                         <li id="contact"><a href="contact">Contact Us</a></li>
+                         <li id="about"><a href="about">About</a></li>
                     </div>
-                  </ul>
-            </div>
-               <br>
-               <input class="variation" id="bluepurple" type="radio" value="1" name="color" checked="checked" />
-               <main id="main" class="hidden" style="margin-top:100px;">
-                    <style scoped>
-                    </style>
-                    <section class="results-header">
-                         <h1>Here's what you're looking for.</h1>
-                         <div class="results-header__option">
-                              <a href="/"> &lt; search again</a>
+               </ul>
+          </div>
+          <br>
+          <input class="variation" id="bluepurple" type="radio" value="1" name="color" checked="checked" />
+          <main id="main" class="hidden" style="margin-top:100px;">
+               <style scoped>
+               </style>
+               <section class="results-header">
+                    <h1>Here's what you're looking for.</h1>
+                    <div class="results-header__option">
+                         <a href="/"> &lt; search again</a>
+                    </div>
+               </section>
+               <div class="filter-section__wrapper">
+                    <section class="filter-section">
+                         <h6>Filters</h6>
+                         <div id="highlight">
+                              <div id="availability-filters" class="filters">
+                                   <h5 class="filters__title">Location</h5>
+                                   <div class="address">
+                                        <div id="address-updater">
+                                             <div id="locationField">
+                                                  <input id="autocomplete" placeholder="Enter your location"
+                                                       type="text" />
+                                             </div>
+                                             <div id="addressDisplay" class="locationDisplay">
+                                                  <span id="current-address"></span>
+                                                  <br class="address-spacing">
+                                                  <span id="current-city"></span><span id="city-state-comma">,
+                                                  </span><span id="current-state"></span>
+                                                  <br class="address-spacing">
+                                                  <span id="current-zip"></span>
+                                                  <br>
+                                             </div>
+                                             <profile__cta class="profile__cta location"><a class="addressbutton"
+                                                       id="edit">Edit</a>
+                                             </profile__cta>
+                                        </div>
+                                        <div id="zip-updater">
+                                             <div id="locationFieldGuest">
+                                                  <input id="zip-input" type="number" placeholder="Enter Zipcode">
+                                             </div>
+                                             <profile__cta class="profile__cta location"><a class="addressbutton"
+                                                       id="update">Update</a>
+                                             </profile__cta>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div id="category-filters" class="filters">
+                              <h5 class="filters__title">Field</h5>
+                              <div class="filters__item">
+                                   <div class="checkbox">
+                                        <input id="checkbox-0" type="checkbox" data-category="all" checked />
+                                        <label for="checkbox-0">All<span class="box"></span></label>
+                                   </div>
+                                   <span id="total" class="badge status-primary">0</span>
+                              </div>
+                         </div>
+                         <div id="availability-filters" class="filters">
+                              <h5 class="filters__title">Availability</h5>
+                              <div class="filters__item">
+                                   <div class="checkbox">
+                                        <input id="checkbox-98" type="checkbox" data-availability="filter" />
+                                        <label for="checkbox-98">Available<span class="box"></span></label>
+                                   </div>
+                                   <span id="only-available" class="badge status-primary">0</span>
+                              </div>
+                              <div class="filters__item">
+                                   <div class="checkbox">
+                                        <input id="checkbox-99" type="checkbox" checked data-availability="all" />
+                                        <label for="checkbox-99">Show All<span class="box"></span></label>
+                                   </div>
+                                   <span id="show-all" class="badge status-primary">0</span>
+                              </div>
                          </div>
                     </section>
-                    <div class="filter-section__wrapper">
-                         <section class="filter-section">
-                              <h6>Filters</h6>
-                              <div id="highlight">
-                                   <div id="availability-filters" class="filters">
-                                        <h5 class="filters__title">Location</h5>
-                                        <div class="address">
-                                             <div id="address-updater">
-                                                  <div id="locationField">
-                                                       <input id="autocomplete" placeholder="Enter your location"
-                                                            type="text" />
-                                                  </div>
-                                                  <div id="addressDisplay" class="locationDisplay">
-                                                       <span id="current-address"></span>
-                                                       <br class="address-spacing">
-                                                       <span id="current-city"></span><span id="city-state-comma">,
-                                                       </span><span id="current-state"></span>
-                                                       <br class="address-spacing">
-                                                       <span id="current-zip"></span>
-                                                       <br>
-                                                  </div>
-                                                  <profile__cta class="profile__cta location"><a class="addressbutton"
-                                                            id="edit">Edit</a>
-                                                  </profile__cta>
-                                             </div>
-                                             <div id="zip-updater">
-                                                  <div id="locationFieldGuest">
-                                                       <input id="zip-input" type="number" placeholder="Enter Zipcode">
-                                                  </div>
-                                                  <profile__cta class="profile__cta location"><a class="addressbutton"
-                                                            id="update">Update</a>
-                                                  </profile__cta>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                              <div id="category-filters" class="filters">
-                                   <h5 class="filters__title">Field</h5>
-                                   <div class="filters__item">
-                                        <div class="checkbox">
-                                             <input id="checkbox-0" type="checkbox" data-category="all" checked />
-                                             <label for="checkbox-0">All<span class="box"></span></label>
-                                        </div>
-                                        <span id="total" class="badge status-primary">0</span>
-                                   </div>
-                              </div>
-                              <div id="availability-filters" class="filters">
-                                   <h5 class="filters__title">Availability</h5>
-                                   <div class="filters__item">
-                                        <div class="checkbox">
-                                             <input id="checkbox-98" type="checkbox" data-availability="filter" />
-                                             <label for="checkbox-98">Available<span class="box"></span></label>
-                                        </div>
-                                        <span id="only-available" class="badge status-primary">0</span>
-                                   </div>
-                                   <div class="filters__item">
-                                        <div class="checkbox">
-                                             <input id="checkbox-99" type="checkbox" checked data-availability="all" />
-                                             <label for="checkbox-99">Show All<span class="box"></span></label>
-                                        </div>
-                                        <span id="show-all" class="badge status-primary">0</span>
-                                   </div>
-                              </div>
-                         </section>
-                    </div>
-                    <section class="results-section results--grid">
-                         <!--<div class="profile">-->
-                         <!--  <div class="profile__image"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/dog.png" alt="Doggo"/></div>-->
-                         <!--  <div class="profile__info">-->
-                         <!--    <h3>Doggo Dogg</h3>-->
-                         <!--    <p class="profile__info__extra">A very good boi that loves playing fetch and ice-cream! Gentle with everyone. Scared of the rain.</p>-->
-                         <!--  </div>-->
-                         <!--  <div class="profile__stats">-->
-                         <!--    <p class="profile__stats__title">Availability</p>-->
-                         <!--    <h5 class="profile__stats__info">Available</h5>-->
-                         <!--  </div>-->
-                         <!--  <div class="profile__stats">-->
-                         <!--    <p class="profile__stats__title">Price</p>-->
-                         <!--    <h5>$24/hr</h5>-->
-                         <!--  </div>-->
-                         <!--  <div class="profile__stats">-->
-                         <!--    <p class="profile__stats__title">Rate</p>-->
-                         <!--    <h5 class="profile__stats__info">Hourly</h5>-->
-                         <!--  </div>-->
-                         <!--  <div class="profile__cta"><a class="button">Adopt Doggo!</a></div>-->
-                         <!--</div>-->
-                    </section>
-               </main>
+               </div>
+               <section class="results-section results--grid">
+                    <!--<div class="profile">-->
+                    <!--  <div class="profile__image"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/dog.png" alt="Doggo"/></div>-->
+                    <!--  <div class="profile__info">-->
+                    <!--    <h3>Doggo Dogg</h3>-->
+                    <!--    <p class="profile__info__extra">A very good boi that loves playing fetch and ice-cream! Gentle with everyone. Scared of the rain.</p>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__stats">-->
+                    <!--    <p class="profile__stats__title">Availability</p>-->
+                    <!--    <h5 class="profile__stats__info">Available</h5>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__stats">-->
+                    <!--    <p class="profile__stats__title">Price</p>-->
+                    <!--    <h5>$24/hr</h5>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__stats">-->
+                    <!--    <p class="profile__stats__title">Rate</p>-->
+                    <!--    <h5 class="profile__stats__info">Hourly</h5>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__cta"><a class="button">Adopt Doggo!</a></div>-->
+                    <!--</div>-->
+               </section>
+          </main>
      </div>
      <table id="address" style="display:none;">
           <tr>
@@ -242,10 +242,10 @@
                     <h12 class="nav__title">Legal</h12>
                     <ul class="nav__ul">
                          <li>
-                              <a href="#">Privacy Policy</a>
+                              <a href="privacy">Privacy Policy</a>
                          </li>
                          <li>
-                              <a href="#">Terms of Use</a>
+                              <a href="terms">Terms of Use</a>
                          </li>
                          <li>
                               <a href="#">Sitemap</a>

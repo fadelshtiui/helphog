@@ -28,8 +28,8 @@
 <body>
   <div class="content">
     <div class="header">
-       <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
-       <ul id="navigation">
+      <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
+      <ul id="navigation">
         <div id="signed-in-nav" class="hidden">
           <li id="sign-out"><a href="/">Sign Out</a></li>
           <li id="settings"><a href="settings">Settings</a></li>
@@ -48,74 +48,74 @@
         </div>
       </ul>
     </div>
-      <br>
-      <input class="variation" id="bluepurple" type="radio" value="1" name="color" checked="checked" />
-      <main style="margin-top:10vh;">
-        <a id="back"
-          style="min-width: 210px; color: #298cc8;cursor: pointer;font-weight: 600;font-size: 25px; position: absolute; margin-top: -38px;">
-          &lt; back to results</a>
-        <style scoped>
-        </style>
-        <section class="results-section results--grid">
-          <div class="profile">
-            <div class="profile__image"><img id="image" src="" alt="" /></div>
-            <div class="profile__info">
-              <h3 id="service"></h3>
-              <p id="description" class="profile__info__extra"></p>
-            </div>
-            <div class="profile__stats">
-              <p class="profile__stats__title">Availability</p>
-              <h5 id="availability" class="profile__stats__info"></h5>
-            </div>
-            <div class="profile__stats">
-              <p class="profile__stats__title">Price</p>
-              <h5 id="price"></h5>
-            </div>
-            <div class="profile__stats">
-              <p class="profile__stats__title">Rate</p>
-              <h5 id="rate" class="profile__stats__info"></h5>
-            </div>
-            <div class="profile__cta"><a id="button" class="button"></a></div>
+    <br>
+    <input class="variation" id="bluepurple" type="radio" value="1" name="color" checked="checked" />
+    <main style="margin-top:10vh;">
+      <a id="back"
+        style="min-width: 210px; color: #298cc8;cursor: pointer;font-weight: 600;font-size: 25px; position: absolute; margin-top: -38px;">
+        &lt; back to results</a>
+      <style scoped>
+      </style>
+      <section class="results-section results--grid">
+        <div class="profile">
+          <div class="profile__image"><img id="image" src="" alt="" /></div>
+          <div class="profile__info">
+            <h3 id="service"></h3>
+            <p id="description" class="profile__info__extra"></p>
           </div>
-        </section>
-      </main>
-      <div id="zip-updater" class="hidden">
-        <div class="exit" id="exit-zip" style="
+          <div class="profile__stats">
+            <p class="profile__stats__title">Availability</p>
+            <h5 id="availability" class="profile__stats__info"></h5>
+          </div>
+          <div class="profile__stats">
+            <p class="profile__stats__title">Price</p>
+            <h5 id="price"></h5>
+          </div>
+          <div class="profile__stats">
+            <p class="profile__stats__title">Rate</p>
+            <h5 id="rate" class="profile__stats__info"></h5>
+          </div>
+          <div class="profile__cta"><a id="button" class="button"></a></div>
+        </div>
+      </section>
+    </main>
+    <div id="zip-updater" class="hidden">
+      <div class="exit" id="exit-zip" style="
 						top: 6px;
 						position: absolute;
 						right: 16px;
 						color: gray;
 						">x</div>
-        <h5 class="filters__title">Enter your zipcode to check availability in your area</h5>
-        <div id="locationFieldGuest">
-          <input id="zip-input" type="number" placeholder="Enter Zipcode">
-        </div>
-        <profile__cta class="profile__cta location"><a class="addressbutton" id="update">Update</a></profile__cta>
+      <h5 class="filters__title">Enter your zipcode to check availability in your area</h5>
+      <div id="locationFieldGuest">
+        <input id="zip-input" type="number" placeholder="Enter Zipcode">
       </div>
-      <div id="address-updater" class="hidden">
-        <div class="exit" id="exit-address" style="
+      <profile__cta class="profile__cta location"><a class="addressbutton" id="update">Update</a></profile__cta>
+    </div>
+    <div id="address-updater" class="hidden">
+      <div class="exit" id="exit-address" style="
 						top: 6px;
 						position: absolute;
 						right: 16px;
 						color: gray;
 						">x</div>
-        <h5 class="filters__title">Enter your address to check availability in your area</h5>
-        <div id="locationFieldGuest">
-          <div id="locationField">
-            <input id="autocomplete" placeholder="Enter your location" type="text" />
-          </div>
-          <div id="addressDisplay" class="locationDisplay">
-            <span id="current-address" style="font-weight:400;"></span>
-            <br class="address-spacing">
-            <span id="current-city" style="font-weight:400;"></span><span id="city-state-comma"
-              style="font-weight:400;">, </span><span id="current-state" style="font-weight:400;"></span>
-            <br class="address-spacing">
-            <span id="current-zip" style="font-weight:400;"></span>
-            <br>
-          </div>
+      <h5 class="filters__title">Enter your address to check availability in your area</h5>
+      <div id="locationFieldGuest">
+        <div id="locationField">
+          <input id="autocomplete" placeholder="Enter your location" type="text" />
         </div>
-        <profile__cta class="profile__cta location"><a class="addressbutton" id="edit">Edit</a></profile__cta>
+        <div id="addressDisplay" class="locationDisplay">
+          <span id="current-address" style="font-weight:400;"></span>
+          <br class="address-spacing">
+          <span id="current-city" style="font-weight:400;"></span><span id="city-state-comma" style="font-weight:400;">,
+          </span><span id="current-state" style="font-weight:400;"></span>
+          <br class="address-spacing">
+          <span id="current-zip" style="font-weight:400;"></span>
+          <br>
+        </div>
       </div>
+      <profile__cta class="profile__cta location"><a class="addressbutton" id="edit">Edit</a></profile__cta>
+    </div>
   </div>
   <table id="address" style="display: none;">
     <tr>
@@ -200,10 +200,10 @@
         <h12 class="nav__title">Legal</h12>
         <ul class="nav__ul">
           <li>
-            <a href="#">Privacy Policy</a>
+            <a href="privacy">Privacy Policy</a>
           </li>
           <li>
-            <a href="#">Terms of Use</a>
+            <a href="terms">Terms of Use</a>
           </li>
           <li>
             <a href="#">Sitemap</a>

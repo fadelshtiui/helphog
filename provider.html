@@ -26,7 +26,8 @@
 	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800'>
-	<link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
+	<link rel='stylesheet'
+		href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
 
 	<link rel="stylesheet" href="css/provider.css">
 	<link rel="stylesheet" href="css/tracker.css">
@@ -86,7 +87,8 @@
 							<ul>
 								<!-- Item:Selected (Element:Modifier)        -->
 								<li class="dashboard-nav__item dashboard-nav__item--selected "><a class="other"
-										href="discover_places"><img src="assets/images/map.svg" />Active Orders</a></li>
+										href="discover_places"><img src="assets/images/map.svg" />Active
+										Orders</a></li>
 								<!-- Item (Element)-->
 								<li id="special" class="dashboard-nav__item "><a class href="my_trip"><img
 											src="assets/images/briefcase.svg" />Order History</a></li>
@@ -123,14 +125,14 @@
 							<br>
 
 							<div class="card-container">
-							    <div id="loading" class="loading hidden">
-		<div>
-			<div class="c1"></div>
-			<div class="c2"></div>
-			<div class="c3"></div>
-			<div class="c4"></div>
-		</div>
-	</div>
+								<div id="loading" class="loading hidden">
+									<div>
+										<div class="c1"></div>
+										<div class="c2"></div>
+										<div class="c3"></div>
+										<div class="c4"></div>
+									</div>
+								</div>
 								<div class="content-card">
 									<!--							     DO NOT DELETE ****-->
 									<!--									<div class="slider-card">-->
@@ -248,7 +250,8 @@
 						<div class="dashboard-content__panel" data-panel-id="notifications">
 							<div class="time" style="color: black;">
 								<h1>Your Availability</h1>
-								<h2>Select desired time for when you are available to complete tasks. You can do so by
+								<h2>Select desired time for when you are available to complete tasks. You can do
+									so by
 									clicking on the table below.</h2>
 								<div id="timeslots"></div>
 
@@ -266,15 +269,18 @@
 
 							<div class="settings" style="color: black;">
 								<h1 style="color: black;">Travel Settings</h1>
-								<h2 style="color: black;">Select your desired maximum traveling distance for your
+								<h2 style="color: black;">Select your desired maximum traveling distance for
+									your
 									services</h2>
 								<div class="margins">
 									<form oninput="output.value = Math.round(range.valueAsNumber / 1000) + ' miles'"
 										id="sliderUpdate">
 										<div class="range">
-											<input id="slider-input" name="range" type="range" min="0" max="100000">
+											<input id="slider-input" name="range" type="range" min="0"
+												max="100000">
 											<div class="range-output">
-												<output id="distance" class="output" name="output" for="range">
+												<output id="distance" class="output" name="output"
+													for="range">
 													50 miles
 												</output>
 											</div>
@@ -283,7 +289,8 @@
 
 								</div>
 								<h1 style="color: black;">Business Address</h1>
-								<h2 style="color: black;">Address from which your are commuting to your clients</h2>
+								<h2 style="color: black;">Address from which your are commuting to your clients
+								</h2>
 								<br>
 								<div id="master">
 
@@ -297,8 +304,8 @@
 										<div id="addressDisplay" class="locationDisplay">
 											<span id="current-address"></span>
 											<br class="address-spacing">
-											<span id="current-city"></span><span id="city-state-comma">, </span><span
-												id="current-state"></span>
+											<span id="current-city"></span><span id="city-state-comma">,
+											</span><span id="current-state"></span>
 											<br class="address-spacing">
 											<span id="current-zip"></span>
 											<br>
@@ -332,7 +339,8 @@
 										<tr>
 											<td class="label">State</td>
 											<td class="slimField">
-												<input class="field" id="administrative_area_level_1" disabled="true" />
+												<input class="field" id="administrative_area_level_1"
+													disabled="true" />
 											</td>
 											<td class="label">Zip code</td>
 											<td class="wideField">
@@ -359,15 +367,19 @@
 						<div class="dashboard-content__panel" data-panel-id="settings">
 							<div class="time">
 								<h1 style="color: black;">Time Zone</h1>
-								<h2 style="color: black;">If you're traveling outside of your registered location, you
+								<h2 style="color: black;">If you're traveling outside of your registered
+									location, you
 									can change your timezone.<br>
-									<select id="timezone" style="width: 300px; margin-left:0; margin-top: 23px;">
+									<select id="timezone"
+										style="width: 300px; margin-left:0; margin-top: 23px;">
 										<option value="-12">[UTC - 12] Baker Island Time</option>
 										<option value="-11">[UTC - 11] Niue Time, Samoa Standard Time</option>
-										<option value="-10">[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time
+										<option value="-10">[UTC - 10] Hawaii-Aleutian Standard Time, Cook
+											Island Time
 										</option>
 										<option value="-9.5">[UTC - 9:30] Marquesas Islands Time</option>
-										<option value="-9">[UTC - 9] Alaska Standard Time, Gambier Island Time</option>
+										<option value="-9">[UTC - 9] Alaska Standard Time, Gambier Island Time
+										</option>
 										<option value="-8">[UTC - 8] Pacific Standard Time</option>
 										<option value="-7">[UTC - 7] Mountain Standard Time</option>
 										<option value="-6">[UTC - 6] Central Standard Time</option>
@@ -375,56 +387,79 @@
 										<option value="-4.5">[UTC - 4:30] Venezuelan Standard Time</option>
 										<option value="-4">[UTC - 4] Atlantic Standard Time</option>
 										<option value="-3.5">[UTC - 3:30] Newfoundland Standard Time</option>
-										<option value="-3">[UTC - 3] Amazon Standard Time, Central Greenland Time
+										<option value="-3">[UTC - 3] Amazon Standard Time, Central Greenland
+											Time
 										</option>
-										<option value="-2">[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the
+										<option value="-2">[UTC - 2] Fernando de Noronha Time, South Georgia
+											&amp; the
 											South Sandwich Islands Time</option>
-										<option value="-1">[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern
+										<option value="-1">[UTC - 1] Azores Standard Time, Cape Verde Time,
+											Eastern
 											Greenland Time</option>
-										<option value="0">[UTC] Western European Time, Greenwich Mean Time</option>
-										<option value="1">[UTC + 1] Central European Time, West African Time</option>
-										<option value="2">[UTC + 2] Eastern European Time, Central African Time</option>
-										<option value="3">[UTC + 3] Moscow Standard Time, Eastern African Time</option>
-										<option value="3.5">[UTC + 3:30] Iran Standard Time</option>
-										<option value="4">[UTC + 4] Gulf Standard Time, Samara Standard Time</option>
-										<option value="4.5">[UTC + 4:30] Afghanistan Time</option>
-										<option value="5">[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time
+										<option value="0">[UTC] Western European Time, Greenwich Mean Time
 										</option>
-										<option value="5.5">[UTC + 5:30] Indian Standard Time, Sri Lanka Time</option>
-										<option value="5.75">[UTC + 5:45] Nepal Time</option>
-										<option value="6">[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard
+										<option value="1">[UTC + 1] Central European Time, West African Time
+										</option>
+										<option value="2">[UTC + 2] Eastern European Time, Central African
 											Time</option>
-										<option value="6.5">[UTC + 6:30] Cocos Islands Time, Myanmar Time</option>
-										<option value="7">[UTC + 7] Indochina Time, Krasnoyarsk Standard Time</option>
-										<option value="8">[UTC + 8] Chinese Standard Time, Australian Western Standard
-											Time, Irkutsk Standard Time</option>
-										<option value="8.75">[UTC + 8:45] Southeastern Western Australia Standard Time
+										<option value="3">[UTC + 3] Moscow Standard Time, Eastern African Time
 										</option>
-										<option value="9">[UTC + 9] Japan Standard Time, Korea Standard Time, Chita
+										<option value="3.5">[UTC + 3:30] Iran Standard Time</option>
+										<option value="4">[UTC + 4] Gulf Standard Time, Samara Standard Time
+										</option>
+										<option value="4.5">[UTC + 4:30] Afghanistan Time</option>
+										<option value="5">[UTC + 5] Pakistan Standard Time, Yekaterinburg
+											Standard Time
+										</option>
+										<option value="5.5">[UTC + 5:30] Indian Standard Time, Sri Lanka Time
+										</option>
+										<option value="5.75">[UTC + 5:45] Nepal Time</option>
+										<option value="6">[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk
+											Standard
+											Time</option>
+										<option value="6.5">[UTC + 6:30] Cocos Islands Time, Myanmar Time
+										</option>
+										<option value="7">[UTC + 7] Indochina Time, Krasnoyarsk Standard Time
+										</option>
+										<option value="8">[UTC + 8] Chinese Standard Time, Australian Western
+											Standard
+											Time, Irkutsk Standard Time</option>
+										<option value="8.75">[UTC + 8:45] Southeastern Western Australia
+											Standard Time
+										</option>
+										<option value="9">[UTC + 9] Japan Standard Time, Korea Standard Time,
+											Chita
 											Standard Time</option>
-										<option value="9.5">[UTC + 9:30] Australian Central Standard Time</option>
-										<option value="10">[UTC + 10] Australian Eastern Standard Time, Vladivostok
+										<option value="9.5">[UTC + 9:30] Australian Central Standard Time
+										</option>
+										<option value="10">[UTC + 10] Australian Eastern Standard Time,
+											Vladivostok
 											Standard Time</option>
 										<option value="10.5">[UTC + 10:30] Lord Howe Standard Time</option>
-										<option value="11">[UTC + 11] Solomon Island Time, Magadan Standard Time
+										<option value="11">[UTC + 11] Solomon Island Time, Magadan Standard
+											Time
 										</option>
 										<option value="11.5">[UTC + 11:30] Norfolk Island Time</option>
-										<option value="12">[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard
+										<option value="12">[UTC + 12] New Zealand Time, Fiji Time, Kamchatka
+											Standard
 											Time</option>
 										<option value="12.75">[UTC + 12:45] Chatham Islands Time</option>
-										<option value="13">[UTC + 13] Tonga Time, Phoenix Islands Time</option>
+										<option value="13">[UTC + 13] Tonga Time, Phoenix Islands Time
+										</option>
 										<option value="14">[UTC + 14] Line Island Time</option>
 									</select>
 								</h2>
 								<h1 style="margin-top:40px; color:black" class="important">Alerts</h1>
-								<h2 class="important" style="color: black;">Select your prefered method for receiving
-									alerts for new tasks. <br> If you have none selected, you will not be listed as an
+								<h2 class="important" style="color: black;">Select your prefered method for
+									receiving
+									alerts for new tasks. <br> If you have none selected, you will not be
+									listed as an
 									active provider.</h2>
 								<div id="checkbox-container">
 									<div>
 										<h2 style="font-weight:600">E-MAIL</h2>
-										<input type="checkbox" id="email-notification" name="email-notification"
-											value="email">
+										<input type="checkbox" id="email-notification"
+											name="email-notification" value="email">
 									</div>
 									<div>
 										<h2 style="font-weight:600">SMS</h2>
@@ -465,13 +500,15 @@
 										Address:<br>
 										<div id="address_display"></div>
 										Started:<br>
-										<div id="start_display" style="font-weight:500; font-size: 19px;"></div>
+										<div id="start_display" style="font-weight:500; font-size: 19px;">
+										</div>
 										Ended:<br>
 										<div id="end_display" style="font-weight:500; font-size: 19px;"></div>
 										Salary:<br>
 										<div id="price_display"></div>
 										Revenue:<br>
-										<div id="revenue_display" style="font-weight:500; font-size: 19px;"></div>
+										<div id="revenue_display" style="font-weight:500; font-size: 19px;">
+										</div>
 									</section>
 								</div>
 							</div>
@@ -556,11 +593,11 @@
 
 					<ul class="nav__ul">
 						<li>
-							<a href="#">Privacy Policy</a>
+							<a href="privacy">Privacy Policy</a>
 						</li>
 
 						<li>
-							<a href="#">Terms of Use</a>
+							<a href="terms">Terms of Use</a>
 						</li>
 
 						<li>

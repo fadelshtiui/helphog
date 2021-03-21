@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<title>Your Orders</title>
 
-	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'>
+	<link rel='stylesheet'
+		href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'>
 	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/vuetify@1.5.14/dist/vuetify.min.css'>
 
 
@@ -44,26 +45,26 @@
 	</div>
 	<div class="content">
 		<div class="header">
-       <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
-       <ul id="navigation">
-		<div id="signed-in-nav" class="hidden">
-		  <li id="sign-out"><a href="/">Sign Out</a></li>
-		  <li id="settings"><a href="settings">Settings</a></li>
-		  <li id="apply"><a href="quickapply">Apply</a></li>
-		  <li id="orders"><a href="orders">Orders</a></li>
-		  <li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
-		  <li id="contact"><a href="contact">Contact Us</a></li>
-		  <li id="about"><a href="about">About</a></li>
+			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
+			<ul id="navigation">
+				<div id="signed-in-nav" class="hidden">
+					<li id="sign-out"><a href="/">Sign Out</a></li>
+					<li id="settings"><a href="settings">Settings</a></li>
+					<li id="apply"><a href="quickapply">Apply</a></li>
+					<li id="orders"><a href="orders">Orders</a></li>
+					<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+				<div id="signed-out-nav" class="hidden">
+					<li id="sign-in-nav"><a href="signin">Login</a></li>
+					<li id="register-nav"><a href="registration">Register</a></li>
+					<li id="track-order"><a href="tracking">Track Order</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+			</ul>
 		</div>
-		<div id="signed-out-nav" class="hidden">
-		  <li id="sign-in-nav"><a href="signin">Login</a></li>
-		  <li id="register-nav"><a href="registration">Register</a></li>
-		  <li id="track-order"><a href="tracking">Track Order</a></li>
-		  <li id="contact"><a href="contact">Contact Us</a></li>
-		  <li id="about"><a href="about">About</a></li>
-		</div>
-	  </ul>
-    </div>
 		<br>
 		<br>
 		<br>
@@ -102,9 +103,19 @@
 								<td class="text-xs-left" style='font-weight:400;'
 									@click="props.expanded = !props.expanded">${{ props.item.amount }}</td>
 								<td v-if="props.item.status == 'ac' || props.item.status == 'cc' || props.item.status == 'pc' || props.item.status == 'pe'"
-									class="text-xs-left" style='font-weight:500;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+									class="text-xs-left" style='font-weight:500;'>{{ (props.item.status == 'pe'
+									? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status ==
+									'st' ? "In Progress" : props.item.status == 'en' ? "Ended" :
+									props.item.status == 'mc' ? "Completed" : props.item.status == 're' ?
+									"Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di'
+									? "Disputed" : "Cancelled") }}</td>
 								<td v-if="props.item.status == 'cl' || props.item.status == 'st' || props.item.status == 'en'"
-									class="text-xs-left" style='font-weight:500; color:blue;'>{{ (props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ? "Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status == 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" : props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid" : props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
+									class="text-xs-left" style='font-weight:500; color:blue;'>{{
+									(props.item.status == 'pe' ? "Pending" : props.item.status == 'cl' ?
+									"Claimed" : props.item.status == 'st' ? "In Progress" : props.item.status
+									== 'en' ? "Ended" : props.item.status == 'mc' ? "Completed" :
+									props.item.status == 're' ? "Refunded" : props.item.status == 'pd' ? "Paid"
+									: props.item.status == 'di' ? "Disputed" : "Cancelled") }}</td>
 								<td v-if="props.item.status == 'di'" class="text-xs-left"
 									style='font-weight:500; color:red;'>Disputed</td>
 								<td v-if="props.item.status == 're'" class="text-xs-left"
@@ -113,26 +124,35 @@
 									style='font-weight:500; color:#795548;'>Paid</td>
 								<td v-if="props.item.status == 'mc'" class="text-xs-left"
 									style='font-weight:500; color:#3f8242;'>Task Completed</td>
-								<td v-if="props.item.status == 'mc' && props.item.rating == '0'" class="text-xs-left"
-									style='font-weight:400;'>
-									<v-btn @click="status(); selectedItem = props.item; " class="dark">Review Order
+								<td v-if="props.item.status == 'mc' && props.item.rating == '0'"
+									class="text-xs-left" style='font-weight:400;'>
+									<v-btn @click="status(); selectedItem = props.item; " class="dark">Review
+										Order
 									</v-btn>
 									<transition name="fade" appear>
-										<div class="modal-overlay" v-if="showModal" @click="showModal = false"></div>
+										<div class="modal-overlay" v-if="showModal"
+											@click="showModal = false"></div>
 									</transition>
 									<transition name="pop" appear>
 										<div class="modal" role="dialog" v-if="showModal">
 											<h1>Confirm Completion</h1>
-											<p style="font-size: 16px;">If your order has been successfully completed
-												please review {{ selectedItem.provider }}'s performance as your {{
-												selectedItem.name }} provider and mark the order completed. If you have
+											<p style="font-size: 16px;">If your order has been successfully
+												completed
+												please review {{ selectedItem.provider }}'s performance as
+												your {{
+												selectedItem.name }} provider and mark the order completed.
+												If you have
 												any questions/concerns please contact us.</p>
 
 											<div class="rating rating2">
-												<a @click="setRating(5)" href="#5" title="Give 5 stars">★</a>
-												<a @click="setRating(4)" href="#4" title="Give 4 stars">★</a>
-												<a @click="setRating(3)" href="#3" title="Give 3 stars">★</a>
-												<a @click="setRating(2)" href="#2" title="Give 2 stars">★</a>
+												<a @click="setRating(5)" href="#5"
+													title="Give 5 stars">★</a>
+												<a @click="setRating(4)" href="#4"
+													title="Give 4 stars">★</a>
+												<a @click="setRating(3)" href="#3"
+													title="Give 3 stars">★</a>
+												<a @click="setRating(2)" href="#2"
+													title="Give 2 stars">★</a>
 												<a @click="setRating(1)" href="#1" title="Give 1 star">★</a>
 											</div>
 
@@ -146,18 +166,22 @@
 								</td>
 								<td v-else-if="props.item.status  == 'pe' || props.item.status == 'cl'"
 									class="text-xs-left" style='font-weight:300;'>
-									<v-btn @click="status2(); selectedItem = props.item" class="dark">Cancel Order
+									<v-btn @click="status2(); selectedItem = props.item" class="dark">Cancel
+										Order
 									</v-btn>
 									<transition name="fade" appear>
-										<div class="modal-overlay" v-if="showCancel" @click="showCancel = false"></div>
+										<div class="modal-overlay" v-if="showCancel"
+											@click="showCancel = false"></div>
 									</transition>
 									<transition name="pop" appear>
 										<div class="modal" role="dialog" v-if="showCancel">
 											<h1>Confirm Cancellation</h1>
-											<p style="font-size: 16px;">{{ selectedItem.warning }}Are you sure you would
+											<p style="font-size: 16px;">{{ selectedItem.warning }}Are you
+												sure you would
 												like to cancel?</p>
 											<br><br>
-											<v-btn @click="cancel(selectedItem)" class="Submit" style="color:red;">
+											<v-btn @click="cancel(selectedItem)" class="Submit"
+												style="color:red;">
 												Cancel Order</v-btn>
 											<v-btn @click="undo2()" class="Submit">Exit</v-btn>
 										</div>
@@ -175,60 +199,82 @@
 								<template v-slot:items="props">
 									<tr style="height: 95px;">
 										<td width="10%" style='font-weight:300;'></td>
-										<td width="15%" style='font-weight:300; text-align:left!important;'>Message: {{
+										<td width="15%" style='font-weight:300; text-align:left!important;'>
+											Message: {{
 											props.item.message }}</td>
-										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work Started:
+										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work
+											Started:
 											<br>{{ props.item.began }}
 										</td>
-										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work Ended: <br>{{
+										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work
+											Ended: <br>{{
 											props.item.ended }}</td>
-										<td v-if="props.item.receipt == 'download'" @click="viewImage(props.item)"
-											width="10%" class="text-xs-left" style='font-weight:300;'>Receipts:<br><a>{{
+										<td v-if="props.item.receipt == 'download'"
+											@click="viewImage(props.item)" width="10%" class="text-xs-left"
+											style='font-weight:300;'>Receipts:<br><a>{{
 												props.item.receipt }}</a></td>
 										<td v-else width="10%" class="text-xs-left"
 											style='font-weight:300; color: black;'>Receipts:<br>none</td>
 										<td v-if="props.item.type == 'hour'" width="15%" class="text-xs-left"
 											style='font-weight:300;'>{{ props.item.hours == 0 ? "&#60;1" :
-											props.item.hours }} hour(s) at ${{ props.item.wage }} per hour <span
-												v-if="props.item.expenditure != 0">+ ${{ props.item.expenditure }} for
-												parts/supplies</span></td>
+											props.item.hours }} hour(s) at ${{ props.item.wage }} per hour
+											<span v-if="props.item.expenditure != 0">+ ${{
+												props.item.expenditure }} for
+												parts/supplies</span>
+										</td>
 										<td v-if="props.item.type == 'per'" width="15%" class="text-xs-left"
 											style='font-weight:300;'>${{ props.item.wage }} <span
-												v-if="props.item.expenditure != 0">+ ${{ props.item.expenditure }} for
+												v-if="props.item.expenditure != 0">+ ${{
+												props.item.expenditure }} for
 												parts/supplies</span></td>
 
 										<td v-if="props.item.status == 'ac'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>Not enough providers were located for your order.
-											The refund will appear in your bank statement within 5-10 business days from
+											style='font-weight:300;'>Not enough providers were located for
+											your order.
+											The refund will appear in your bank statement within 5-10
+											business days from
 											your order date.</td>
 										<td v-if="props.item.status == 'cc'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>You canceled this order. The refund will appear in
-											your bank statement within 5-10 business days of your cancellation date.
+											style='font-weight:300;'>You canceled this order. The refund will
+											appear in
+											your bank statement within 5-10 business days of your
+											cancellation date.
 										</td>
 										<td v-if="props.item.status == 'pc'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>You canceled this order. The refund will appear in
-											your bank statement within 5-10 business days of the cancellation date.</td>
+											style='font-weight:300;'>You canceled this order. The refund will
+											appear in
+											your bank statement within 5-10 business days of the cancellation
+											date.</td>
 										<td v-if="props.item.status == 'di'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>You have disputed this order. You will not be
+											style='font-weight:300;'>You have disputed this order. You will
+											not be
 											charged until the dispute is resolved.</td>
 										<td v-if="props.item.status == 're'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>The provider has issued a refund for your order.
-											The refund will appear in your bank statement within 5-10 business of the
+											style='font-weight:300;'>The provider has issued a refund for
+											your order.
+											The refund will appear in your bank statement within 5-10
+											business of the
 											issued date.</td>
 										<td v-if="props.item.status == 'pe'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>Your order has been dispatched to local providers.
+											style='font-weight:300;'>Your order has been dispatched to local
+											providers.
 										</td>
 										<td v-if="props.item.status == 'cl'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>Your order has been claimed by provider(s). The
+											style='font-weight:300;'>Your order has been claimed by
+											provider(s). The
 											provider will keep in contact with you.</td>
 										<td v-if="props.item.status == 'st'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>The provider(s) started working on your task.</td>
+											style='font-weight:300;'>The provider(s) started working on your
+											task.</td>
 										<td v-if="props.item.status == 'en'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>The provider(s) finished working on your task.</td>
+											style='font-weight:300;'>The provider(s) finished working on your
+											task.</td>
 										<td v-if="props.item.status == 'mc'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>Your order has been marked as completed.</td>
+											style='font-weight:300;'>Your order has been marked as completed.
+										</td>
 										<td v-if="props.item.status == 'pd'" width="30%" class="text-xs-left"
-											style='font-weight:300;'>Payment has been processed for this order.</td>
+											style='font-weight:300;'>Payment has been processed for this
+											order.</td>
 
 									</tr>
 								</template>
@@ -306,11 +352,11 @@
 
 				<ul class="nav__ul">
 					<li>
-						<a href="#">Privacy Policy</a>
+						<a href="privacy">Privacy Policy</a>
 					</li>
 
 					<li>
-						<a href="#">Terms of Use</a>
+						<a href="terms">Terms of Use</a>
 					</li>
 
 					<li>

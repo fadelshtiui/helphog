@@ -26,27 +26,27 @@
 
 <body>
 	<div class="content">
-	<div class="header">
-       <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
-       <ul id="navigation">
-		<div id="signed-in-nav" class="hidden">
-			<li id="sign-out"><a href="/">Sign Out</a></li>
-			<li id="settings"><a href="settings">Settings</a></li>
-			<li id="apply"><a href="quickapply">Apply</a></li>
-			<li id="orders"><a href="orders">Orders</a></li>
-			<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
-			<li id="contact"><a href="contact">Contact Us</a></li>
-			<li id="about"><a href="about">About</a></li>
+		<div class="header">
+			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
+			<ul id="navigation">
+				<div id="signed-in-nav" class="hidden">
+					<li id="sign-out"><a href="/">Sign Out</a></li>
+					<li id="settings"><a href="settings">Settings</a></li>
+					<li id="apply"><a href="quickapply">Apply</a></li>
+					<li id="orders"><a href="orders">Orders</a></li>
+					<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+				<div id="signed-out-nav" class="hidden">
+					<li id="sign-in-nav"><a href="signin">Login</a></li>
+					<li id="register-nav"><a href="registration">Register</a></li>
+					<li id="track-order"><a href="tracking">Track Order</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+			</ul>
 		</div>
-		<div id="signed-out-nav" class="hidden">
-		  <li id="sign-in-nav"><a href="signin">Login</a></li>
-		  <li id="register-nav"><a href="registration">Register</a></li>
-		  <li id="track-order"><a href="tracking">Track Order</a></li>
-		  <li id="contact"><a href="contact">Contact Us</a></li>
-		  <li id="about"><a href="about">About</a></li>
-		</div>
-	  </ul>
-    </div>
 		<br />
 		<div id='container2' class="container2" style="display:none;">
 			<form onsubmit="return false;">
@@ -109,8 +109,7 @@
 						</div>
 					</div>
 				</div>
-				<button type="button"
-					style="width: 100%; margin-bottom: 18px; background-color: #1ecd97;"
+				<button type="button" style="width: 100%; margin-bottom: 18px; background-color: #1ecd97;"
 					class="btn btn-primary btn-lg" id="sign-up"
 					data-loading-text="<i class='fa fa-spinner fa-spin '></i> Registering">Continue</button>
 				<p>By clicking continue, you agree to our <a style="color: blue;" href="terms">terms and
@@ -119,12 +118,13 @@
 		</div>
 
 		<div id="part-two" class="container2" style="display:none; overflow:visible;">
-			<h1 id="title"
-				style="color: black; font-size: 21px; margin-bottom: 18px;">
+			<h1 id="title" style="color: black; font-size: 21px; margin-bottom: 18px;">
 				Provider Application</h1>
 			<div id="form-cover" style="overflow:visible;">
-				<div id="description">To become a HelpHog provider, please fill out the following form. Once submitted,
-					we will review your application and activate your provider account. Please expect a call from our
+				<div id="description">To become a HelpHog provider, please fill out the following form. Once
+					submitted,
+					we will review your application and activate your provider account. Please expect a call from
+					our
 					hiring team.</div>
 				<hr>
 				<form id="survey-form" style="overflow:visible;" onsubmit="return false;">
@@ -155,7 +155,8 @@
 							<div class="labels">
 								<label id="lbarea" for="areatext"
 									style="float:left;  margin-top:10px; margin-bottom:10px;"><span
-										class="text-danger"></span> List relevant skills and experience : </label>
+										class="text-danger"></span> List relevant skills and experience :
+								</label>
 							</div>
 							<div class="rightTab">
 								<textarea id="aratext" name="areatext" placeholder="Please type here..."
@@ -243,11 +244,11 @@
 
 				<ul class="nav__ul">
 					<li>
-						<a href="#">Privacy Policy</a>
+						<a href="privacy">Privacy Policy</a>
 					</li>
 
 					<li>
-						<a href="#">Terms of Use</a>
+						<a href="terms">Terms of Use</a>
 					</li>
 
 					<li>
