@@ -2,10 +2,6 @@ body {
      text-align: left;
 }
 
-.content {
-     background-color: #f9fafb;
-}
-
 #document {
      font-size: 105%;
      width: 60%;
@@ -15,6 +11,8 @@ body {
      padding: 40px;
      margin-top: 40px;
      margin-bottom: 40px;
+     border-radius: 5px;
+     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 30%), 0px 0px 1px 0px rgb(0 0 0 / 28%);
 }
 
 .footer {
