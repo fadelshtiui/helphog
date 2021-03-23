@@ -613,6 +613,8 @@ let preloaded = false;
 						expenditurebutton.name = "upload";
 						expenditurebutton.innerText = "UPLOAD";
 
+						expenditurebutton.disabled = true
+
 						// 	// if (order.uploaded == 'y') {
 						// 		expenditurebutton.innerText = "SUBMIT";
 						// 	}
