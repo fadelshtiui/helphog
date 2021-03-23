@@ -1,222 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HelpHog</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script
+      type="text/javascript"
+      src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"
+    ></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
+      defer
+    ></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/details.css" type="text/css" />
+    <link rel="stylesheet" href="css/footer.css" type="text/css" />
+    <link rel="stylesheet" href="css/global.css" />
 
-<head>
-  <meta charset="UTF-8">
-  <title>HelpHog</title>
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,500,500i,600,700" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-  <link rel='stylesheet'
-    href='https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css'>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
-    defer></script>
-  <link rel="stylesheet" href="css/style.css" type="text/css">
-  <link rel="stylesheet" href="css/details.css" type="text/css">
-  <link rel="stylesheet" href="css/footer.css" type="text/css">
-  <link rel="stylesheet" href="css/global.css">
+    <script src="js/common.js"></script>
+    <script src="js/loading.js"></script>
+    <script src="js/details.js"></script>
+    <script src="js/google.js"></script>
+  </head>
 
-  <script src="js/common.js"></script>
-  <script src="js/loading.js"></script>
-  <script src="js/details.js"></script>
-  <script src="js/google.js"></script>
-</head>
-
-<body>
-  <div class="content">
-    <div class="header">
-      <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
-      <ul id="navigation">
-        <div id="signed-in-nav" class="hidden">
-          <li id="sign-out"><a href="/">Sign Out</a></li>
-          <li id="settings"><a href="settings">Settings</a></li>
-          <li id="apply"><a href="quickapply">Apply</a></li>
-          <li id="orders"><a href="orders">Orders</a></li>
-          <li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
-          <li id="contact"><a href="contact">Contact Us</a></li>
-          <li id="about"><a href="about">About</a></li>
+  <body>
+    <div class="content">
+      <div class="header">
+        <div id="logo">
+          <a href="/" style="display: none" class="logo-font">He!pHog</a>
         </div>
-        <div id="signed-out-nav" class="hidden">
-          <li id="sign-in-nav"><a href="signin">Login</a></li>
-          <li id="register-nav"><a href="registration">Register</a></li>
-          <li id="track-order"><a href="tracking">Track Order</a></li>
-          <li id="contact"><a href="contact">Contact Us</a></li>
-          <li id="about"><a href="about">About</a></li>
+        <ul id="navigation">
+          <div id="signed-in-nav" class="hidden">
+            <li id="sign-out"><a href="/">Sign Out</a></li>
+            <li id="settings"><a href="settings">Settings</a></li>
+            <li id="apply"><a href="quickapply">Apply</a></li>
+            <li id="orders"><a href="orders">Orders</a></li>
+            <li id="provider" class="hidden">
+              <a href="provider">Provider Portal</a>
+            </li>
+            <li id="contact"><a href="contact">Contact Us</a></li>
+            <li id="about"><a href="about">About</a></li>
+          </div>
+          <div id="signed-out-nav" class="hidden">
+            <li id="sign-in-nav"><a href="signin">Login</a></li>
+            <li id="register-nav"><a href="registration">Register</a></li>
+            <li id="track-order"><a href="tracking">Track Order</a></li>
+            <li id="contact"><a href="contact">Contact Us</a></li>
+            <li id="about"><a href="about">About</a></li>
+          </div>
+        </ul>
+      </div>
+      <br />
+      <input
+        class="variation"
+        id="bluepurple"
+        type="radio"
+        value="1"
+        name="color"
+        checked="checked"
+      />
+      <main style="margin-top: 10vh">
+        <a
+          id="back"
+          style="
+            min-width: 210px;
+            color: #298cc8;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 25px;
+            position: absolute;
+            margin-top: -38px;
+          "
+        >
+          &lt; back to results</a
+        >
+        <style scoped></style>
+        <section class="results-section results--grid">
+          <div class="profile">
+            <div class="profile__image"><img id="image" src="" alt="" /></div>
+            <div class="profile__info">
+              <h3 id="service"></h3>
+              <p id="description" class="profile__info__extra"></p>
+            </div>
+            <div class="profile__stats">
+              <p class="profile__stats__title">Availability</p>
+              <h5 id="availability" class="profile__stats__info"></h5>
+            </div>
+            <div class="profile__stats">
+              <p class="profile__stats__title">Price</p>
+              <h5 id="price"></h5>
+            </div>
+            <div class="profile__stats">
+              <p class="profile__stats__title">Rate</p>
+              <h5 id="rate" class="profile__stats__info"></h5>
+            </div>
+            <div class="profile__cta"><a id="button" class="button"></a></div>
+          </div>
+        </section>
+      </main>
+      <div id="zip-updater" class="hidden">
+        <div
+          class="exit"
+          id="exit-zip"
+          style="top: 6px; position: absolute; right: 16px; color: gray"
+        >
+          x
         </div>
+        <h5 class="filters__title">
+          Enter your zipcode to check availability in your area
+        </h5>
+        <div id="locationFieldGuest">
+          <input id="zip-input" type="number" placeholder="Enter Zipcode" />
+        </div>
+        <profile__cta class="profile__cta location"
+          ><a class="addressbutton" id="update">Update</a></profile__cta
+        >
+      </div>
+      <div id="address-updater" class="hidden">
+        <div
+          class="exit"
+          id="exit-address"
+          style="top: 6px; position: absolute; right: 16px; color: gray"
+        >
+          x
+        </div>
+        <h5 class="filters__title">
+          Enter your address to check availability in your area
+        </h5>
+        <div id="locationFieldGuest">
+          <div id="locationField">
+            <input
+              id="autocomplete"
+              placeholder="Enter your location"
+              type="text"
+            />
+          </div>
+          <div id="addressDisplay" class="locationDisplay">
+            <span id="current-address" style="font-weight: 400"></span>
+            <br class="address-spacing" />
+            <span id="current-city" style="font-weight: 400"></span
+            ><span id="city-state-comma" style="font-weight: 400">, </span
+            ><span id="current-state" style="font-weight: 400"></span>
+            <br class="address-spacing" />
+            <span id="current-zip" style="font-weight: 400"></span>
+            <br />
+          </div>
+        </div>
+        <profile__cta class="profile__cta location"
+          ><a class="addressbutton" id="edit">Edit</a></profile__cta
+        >
+      </div>
+    </div>
+    <table id="address" style="display: none">
+      <tr>
+        <td class="label">Street Address</td>
+        <td class="slimField">
+          <input class="field" id="street_number" disabled="true" />
+        </td>
+        <td class="wideField" colspan="2">
+          <input class="field" id="route" disabled="true" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">City</td>
+        <td class="wideField" colspan="3">
+          <input class="field" id="locality" disabled="true" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">State</td>
+        <td class="slimField">
+          <input
+            class="field"
+            id="administrative_area_level_1"
+            disabled="true"
+          />
+        </td>
+        <td class="label">Zip code</td>
+        <td class="wideField">
+          <input class="field" id="postal_code" disabled="true" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Country</td>
+        <td class="wideField" colspan="3">
+          <input class="field" id="country" disabled="true" />
+        </td>
+      </tr>
+    </table>
+    <footer class="footer">
+      <ul class="footer__nav">
+        <li class="nav__item">
+          <h12 class="nav__title">Contact</h12>
+          <address style="margin-top: -2px">
+            +1 (425) 412-7423<br />
+            <a class="footer__btn" href="mailto:support@helphog.com"
+              >Email Us</a
+            >
+          </address>
+        </li>
+        <li class="nav__item">
+          <h12 class="nav__title">Discover</h12>
+          <ul class="nav__ul">
+            <li>
+              <a href="https://helphog.com/signin?redirect=quickapply"
+                >Become a Provider</a
+              >
+            </li>
+            <li>
+              <a href="https://helphog.com/signin">Login</a>
+            </li>
+            <li>
+              <a href="https://helphog.com/about">About Us</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav__item nav__item--extra">
+          <h12 class="nav__title">Services</h12>
+          <ul class="nav__ul nav__ul--extra">
+            <!--<li>-->
+            <!--  <a href="#">Automotive</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--  <a href="#">Creative</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--  <a href="#">Education</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--  <a href="#">Household</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--  <a href="#">Labor</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--  <a href="#">Tech</a>-->
+            <!--</li>-->
+          </ul>
+        </li>
+        <li class="nav__item">
+          <h12 class="nav__title">Legal</h12>
+          <ul class="nav__ul">
+            <li>
+              <a href="privacy">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="terms">Terms of Use</a>
+            </li>
+            <li>
+              <a href="#">Sitemap</a>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </div>
-    <br>
-    <input class="variation" id="bluepurple" type="radio" value="1" name="color" checked="checked" />
-    <main style="margin-top:10vh;">
-      <a id="back"
-        style="min-width: 210px; color: #298cc8;cursor: pointer;font-weight: 600;font-size: 25px; position: absolute; margin-top: -38px;">
-        &lt; back to results</a>
-      <style scoped>
-      </style>
-      <section class="results-section results--grid">
-        <div class="profile">
-          <div class="profile__image"><img id="image" src="" alt="" /></div>
-          <div class="profile__info">
-            <h3 id="service"></h3>
-            <p id="description" class="profile__info__extra"></p>
-          </div>
-          <div class="profile__stats">
-            <p class="profile__stats__title">Availability</p>
-            <h5 id="availability" class="profile__stats__info"></h5>
-          </div>
-          <div class="profile__stats">
-            <p class="profile__stats__title">Price</p>
-            <h5 id="price"></h5>
-          </div>
-          <div class="profile__stats">
-            <p class="profile__stats__title">Rate</p>
-            <h5 id="rate" class="profile__stats__info"></h5>
-          </div>
-          <div class="profile__cta"><a id="button" class="button"></a></div>
-        </div>
-      </section>
-    </main>
-    <div id="zip-updater" class="hidden">
-      <div class="exit" id="exit-zip" style="
-						top: 6px;
-						position: absolute;
-						right: 16px;
-						color: gray;
-						">x</div>
-      <h5 class="filters__title">Enter your zipcode to check availability in your area</h5>
-      <div id="locationFieldGuest">
-        <input id="zip-input" type="number" placeholder="Enter Zipcode">
+      <div class="legal">
+        <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
       </div>
-      <profile__cta class="profile__cta location"><a class="addressbutton" id="update">Update</a></profile__cta>
-    </div>
-    <div id="address-updater" class="hidden">
-      <div class="exit" id="exit-address" style="
-						top: 6px;
-						position: absolute;
-						right: 16px;
-						color: gray;
-						">x</div>
-      <h5 class="filters__title">Enter your address to check availability in your area</h5>
-      <div id="locationFieldGuest">
-        <div id="locationField">
-          <input id="autocomplete" placeholder="Enter your location" type="text" />
-        </div>
-        <div id="addressDisplay" class="locationDisplay">
-          <span id="current-address" style="font-weight:400;"></span>
-          <br class="address-spacing">
-          <span id="current-city" style="font-weight:400;"></span><span id="city-state-comma" style="font-weight:400;">,
-          </span><span id="current-state" style="font-weight:400;"></span>
-          <br class="address-spacing">
-          <span id="current-zip" style="font-weight:400;"></span>
-          <br>
-        </div>
-      </div>
-      <profile__cta class="profile__cta location"><a class="addressbutton" id="edit">Edit</a></profile__cta>
-    </div>
-  </div>
-  <table id="address" style="display: none;">
-    <tr>
-      <td class="label">Street Address</td>
-      <td class="slimField">
-        <input class="field" id="street_number" disabled="true" />
-      </td>
-      <td class="wideField" colspan="2">
-        <input class="field" id="route" disabled="true" />
-      </td>
-    </tr>
-    <tr>
-      <td class="label">City</td>
-      <td class="wideField" colspan="3">
-        <input class="field" id="locality" disabled="true" />
-      </td>
-    </tr>
-    <tr>
-      <td class="label">State</td>
-      <td class="slimField">
-        <input class="field" id="administrative_area_level_1" disabled="true" />
-      </td>
-      <td class="label">Zip code</td>
-      <td class="wideField">
-        <input class="field" id="postal_code" disabled="true" />
-      </td>
-    </tr>
-    <tr>
-      <td class="label">Country</td>
-      <td class="wideField" colspan="3">
-        <input class="field" id="country" disabled="true" />
-      </td>
-    </tr>
-  </table>
-  <footer class="footer">
-    <ul class="footer__nav">
-      <li class="nav__item">
-        <h12 class="nav__title">Contact</h12>
-        <address style="margin-top: -2px;">
-          +1 (425) 412-7423<br>
-          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
-        </address>
-      </li>
-      <li class="nav__item">
-        <h12 class="nav__title">Discover</h12>
-        <ul class="nav__ul">
-          <li>
-            <a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
-          </li>
-          <li>
-            <a href="https://helphog.com/signin">Login</a>
-          </li>
-          <li>
-            <a href="https://helphog.com/about">About Us</a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav__item nav__item--extra">
-        <h12 class="nav__title">Services</h12>
-        <ul class="nav__ul nav__ul--extra">
-          <!--<li>-->
-          <!--  <a href="#">Automotive</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Creative</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Education</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Household</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Labor</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Tech</a>-->
-          <!--</li>-->
-        </ul>
-      </li>
-      <li class="nav__item">
-        <h12 class="nav__title">Legal</h12>
-        <ul class="nav__ul">
-          <li>
-            <a href="privacy">Privacy Policy</a>
-          </li>
-          <li>
-            <a href="terms">Terms of Use</a>
-          </li>
-          <li>
-            <a href="#">Sitemap</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <div class="legal">
-      <p>&copy; 2020 HelpHog LLC. All rights reserved.</p>
-    </div>
-  </footer>
-  <!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-</body>
-
+    </footer>
+    <!-- partial -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </body>
 </html>

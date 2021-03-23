@@ -14,15 +14,10 @@ body {
   box-sizing: border-box;
 }
 
-#description{
-    font-size: 16px;
-    font-weight: 400;
+#description {
+  font-size: 16px;
+  font-weight: 400;
 }
-
-#navigation li a {
-    font-weight: 600;
-}
-
 
 main {
   --neutralShade0: #f8f8f8;
@@ -63,33 +58,45 @@ em {
 }
 
 h1 {
-  font: 700 48px/1.2 "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.2;
   margin-bottom: 10px;
 }
 
 h2 {
-  font: 700 32px/1.2 "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
   margin-bottom: 10px;
 }
 
 h3 {
-  font: 700 24px/1.2 "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
   margin-bottom: 10px;
 }
 
 h4 {
-  font: 700 20px/1.2 "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
   margin-bottom: 10px;
 }
 
 h5 {
-  font: 500 18px/1.2 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.2;
   margin-bottom: 10px;
   color: black;
 }
 
 h6 {
-  font: 500 16px/1.2 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -128,7 +135,8 @@ input:disabled ~ * {
   position: absolute;
   left: 0;
 }
-.checkbox span.box:before, .checkbox span.box:after {
+.checkbox span.box:before,
+.checkbox span.box:after {
   content: "";
   position: absolute;
   width: 4px;
@@ -159,7 +167,8 @@ input:disabled ~ * {
   background: var(--grayColor);
   border: var(--grayColor);
 }
-.checkbox input:disabled:checked ~ label:before, .checkbox input:disabled:checked ~ label:after {
+.checkbox input:disabled:checked ~ label:before,
+.checkbox input:disabled:checked ~ label:after {
   background: black;
 }
 
@@ -185,7 +194,8 @@ button {
   text-align: center;
   display: inline-block;
   border: none;
-  font: 500 16px/1 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
   padding: 20px;
   cursor: pointer;
   border-radius: var(--borderRadius);
@@ -196,7 +206,8 @@ button {
   top: 0;
   transition: 0.2s ease;
 }
-a.button:hover, a.button.hover,
+a.button:hover,
+a.button.hover,
 input.button:hover,
 input.button.hover,
 button:hover,
@@ -204,7 +215,8 @@ button.hover {
   top: -3px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
-a.button:active, a.button.active,
+a.button:active,
+a.button.active,
 input.button:active,
 input.button.active,
 button:active,
@@ -240,7 +252,9 @@ input.button.secondary,
 button.secondary {
   background: var(--secondaryColor);
 }
-a.button.secondary:active, a.button.secondary:focus, a.button.secondary.active,
+a.button.secondary:active,
+a.button.secondary:focus,
+a.button.secondary.active,
 input.button.secondary:active,
 input.button.secondary:focus,
 input.button.secondary.active,
@@ -255,7 +269,9 @@ input.button.accent,
 button.accent {
   background: var(--accentColor);
 }
-a.button.accent:active, a.button.accent:focus, a.button.accent.active,
+a.button.accent:active,
+a.button.accent:focus,
+a.button.accent.active,
 input.button.accent:active,
 input.button.accent:focus,
 input.button.accent.active,
@@ -269,7 +285,9 @@ input.button.accent2,
 button.accent2 {
   background: var(--accent2Color);
 }
-a.button.accent2:active, a.button.accent2:focus, a.button.accent2.active,
+a.button.accent2:active,
+a.button.accent2:focus,
+a.button.accent2.active,
 input.button.accent2:active,
 input.button.accent2:focus,
 input.button.accent2.active,
@@ -283,7 +301,9 @@ input.button.accent3,
 button.accent3 {
   background: var(--accent3Color);
 }
-a.button.accent3:active, a.button.accent3:focus, a.button.accent3.active,
+a.button.accent3:active,
+a.button.accent3:focus,
+a.button.accent3.active,
 input.button.accent3:active,
 input.button.accent3:focus,
 input.button.accent3.active,
@@ -292,7 +312,6 @@ button.accent3:focus,
 button.accent3.active {
   background: var(--accent3Shade4);
 }
-
 
 /*badges*/
 .badge {
@@ -313,10 +332,12 @@ button.accent3.active {
   position: relative;
   cursor: pointer;
 }
-.alert.non-collapsible:before, .alert.non-collapsible:after {
+.alert.non-collapsible:before,
+.alert.non-collapsible:after {
   content: none;
 }
-.alert:before, .alert:after {
+.alert:before,
+.alert:after {
   content: "";
   position: absolute;
   width: 4px;
@@ -336,7 +357,8 @@ button.accent3.active {
   background: var(--primaryShade1);
   color: var(--primaryShade5);
 }
-.status-primary:before, .status-primary:after {
+.status-primary:before,
+.status-primary:after {
   background: var(--primaryShade5);
 }
 
@@ -375,17 +397,21 @@ button.accent3.active {
 }
 .tooltip.top:after {
   bottom: 80%;
-  transition: opacity 0.3s ease 0.3s, bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
+  transition: opacity 0.3s ease 0.3s,
+    bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
 }
-.tooltip.top:hover:after, .tooltip.top.hovered:after {
+.tooltip.top:hover:after,
+.tooltip.top.hovered:after {
   bottom: 130%;
   opacity: 1;
 }
 .tooltip.bottom:after {
   top: 80%;
-  transition: opacity 0.3s ease 0.3s, top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
+  transition: opacity 0.3s ease 0.3s,
+    top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
 }
-.tooltip.bottom:hover:after, .tooltip.bottom.hovered:after {
+.tooltip.bottom:hover:after,
+.tooltip.bottom.hovered:after {
   top: 130%;
   opacity: 1;
 }
@@ -395,25 +421,27 @@ input.variation {
   display: none;
 }
 input.variation + label {
-  display: inline-block;a.button,
-input.button,
-button {
-  outline: none;
-  width: 100%;
-  text-align: center;
   display: inline-block;
-  border: none;
-  font: 500 16px/1 "Poppins", sans-serif;
-  padding: 20px;
-  cursor: pointer;
-  border-radius: var(--borderRadius);
-  /*background: var(--primaryColor);*/
-  background: #1ecd97;
-  color: var(--backgroundColor);
-  position: relative;
-  top: 0;
-  transition: 0.2s ease;
-}
+  a.button,
+  input.button,
+  button {
+    outline: none;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: var(--borderRadius);
+    /*background: var(--primaryColor);*/
+    background: #1ecd97;
+    color: var(--backgroundColor);
+    position: relative;
+    top: 0;
+    transition: 0.2s ease;
+  }
   width: 50px;
   height: 50px;
   margin: 30px 20px 0;
@@ -706,7 +734,8 @@ button {
 #pinkaru:checked ~ main a.link {
   color: var(--neutralShade2);
 }
-#dark:checked ~ main a.link:hover, #dark:checked ~ main a.link.hover,
+#dark:checked ~ main a.link:hover,
+#dark:checked ~ main a.link.hover,
 #pinkaru:checked ~ main a.link:hover,
 #pinkaru:checked ~ main a.link.hover {
   color: var(--neutralShade1);
@@ -716,7 +745,8 @@ button {
 #pinkaru:checked ~ main a.link.primary {
   color: var(--primaryShade4);
 }
-#dark:checked ~ main a.link.primary:hover, #dark:checked ~ main a.link.primary.hover,
+#dark:checked ~ main a.link.primary:hover,
+#dark:checked ~ main a.link.primary.hover,
 #pinkaru:checked ~ main a.link.primary:hover,
 #pinkaru:checked ~ main a.link.primary.hover {
   color: var(--primaryShade5);
@@ -725,7 +755,8 @@ button {
 #pinkaru:checked ~ main a.link.secondary {
   color: var(--secondaryShade4);
 }
-#dark:checked ~ main a.link.secondary:hover, #dark:checked ~ main a.link.secondary.hover,
+#dark:checked ~ main a.link.secondary:hover,
+#dark:checked ~ main a.link.secondary.hover,
 #pinkaru:checked ~ main a.link.secondary:hover,
 #pinkaru:checked ~ main a.link.secondary.hover {
   color: var(--secondaryShade5);
@@ -765,7 +796,8 @@ button {
   background: none !important;
   text-align: center;
   text-transform: uppercase;
-  font: 500 14px/1 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
   display: block;
   margin-top: 2px;
 }
@@ -794,20 +826,19 @@ button {
 
 .results--grid {
   /*grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));*/
-  width:900px;
-
+  width: 900px;
 }
 
 .results--list {
   grid-template-columns: 100%;
 }
 
-.pac-item{
-    font-weight:400;
+.pac-item {
+  font-weight: 400;
 }
 
-.pac-selected{
-    font-weight:400;
+.pac-selected {
+  font-weight: 400;
 }
 
 .profile {
@@ -819,7 +850,7 @@ button {
   overflow: hidden;
   transition: 0.2s ease;
   display: grid;
-  grid: 200px repeat(5, auto)/100%;
+  grid: 200px repeat(5, auto) / 100%;
 }
 .profile__image img {
   width: 100%;
@@ -845,14 +876,14 @@ button {
   top: 0;
   box-shadow: none;
   /*background: var(--primaryShade4);*/
-  background: #1BB887;
-
+  background: #1bb887;
 }
-.profile a:active, .profile a:focus {
+.profile a:active,
+.profile a:focus {
   top: 0;
   box-shadow: none;
   /*background: var(--primaryShade5);*/
-  background:#18A478;
+  background: #18a478;
 }
 
 #dark:checked ~ main a.button,
@@ -884,11 +915,11 @@ button {
 }
 
 .filters__title {
-     margin-top: -25px;
-    font-size: 18px;
-    color: var(--grayColor);
-    /* margin: 25px 0; */
-    margin-bottom: 30px;
+  margin-top: -25px;
+  font-size: 18px;
+  color: var(--grayColor);
+  /* margin: 25px 0; */
+  margin-bottom: 30px;
 }
 .filters__item {
   display: grid;
@@ -1026,80 +1057,85 @@ button {
     position: sticky;
     top: 30px;
   }
-
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
-#zip-updater{
-    box-shadow: 0px 0px 96px -38px rgba(0,0,0,0.5) inset, 0px 0px 0px 100vh rgba(0,0,0,0.5);
-    padding: 56px;
-    border-radius: 6px;
-    width: 328px;
-    /*position: absolute;*/
-    position: fixed;
-    top: 32%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -164px;
-    background-color: white;
+#zip-updater {
+  box-shadow: 0px 0px 96px -38px rgba(0, 0, 0, 0.5) inset,
+    0px 0px 0px 100vh rgba(0, 0, 0, 0.5);
+  padding: 56px;
+  border-radius: 6px;
+  width: 328px;
+  /*position: absolute;*/
+  position: fixed;
+  top: 32%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -164px;
+  background-color: white;
 }
 
-#address-updater{
-    box-shadow: 0px 0px 96px -38px rgba(0,0,0,0.5) inset, 0px 0px 0px 100vh rgba(0,0,0,0.5);
-    padding: 56px;
-    border-radius: 6px;
-    width: 720px;
-    /*position: absolute;*/
-    position: fixed;
-    top: 32%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -360px;
-    background-color: white;
+#address-updater {
+  box-shadow: 0px 0px 96px -38px rgba(0, 0, 0, 0.5) inset,
+    0px 0px 0px 100vh rgba(0, 0, 0, 0.5);
+  padding: 56px;
+  border-radius: 6px;
+  width: 720px;
+  /*position: absolute;*/
+  position: fixed;
+  top: 32%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -360px;
+  background-color: white;
 }
 
-#addressDisplay{
-    font-size: 20px;
+#addressDisplay {
+  font-size: 20px;
 }
 
-#edit{
-    margin-top:15px;
+#edit {
+  margin-top: 15px;
 }
 
-a.addressbutton{
-    outline: none;
-    color: black;
-    text-align: center;
-    display: inline-block;
-    border: none;
-    font: 500 14px/1 "Poppins", sans-serif;
-    padding: 14px;
-    cursor: pointer;
-    border-radius: 6px;
-    position: relative;
-    top: 0;
-    transition: 0.2s ease;
-    border: 0.5px solid #ddd;
-
+a.addressbutton {
+  outline: none;
+  color: black;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  position: relative;
+  top: 0;
+  transition: 0.2s ease;
+  border: 0.5px solid #ddd;
 }
 
-a.addressbutton:hover{
-    background-color:#e1f5fe;
+a.addressbutton:hover {
+  background-color: #e1f5fe;
 }
-input{
-    border: none;
-    outline: none;
-    font: 500 18px/1.2 "Poppins", sans-serif;
-    border-bottom: 0.5px solid black;
-    margin-bottom: 20px;
-    width: 60%;
-    height: 30px;
-    text-align: center;
+input {
+  border: none;
+  outline: none;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.2;
+  border-bottom: 0.5px solid black;
+  margin-bottom: 20px;
+  width: 60%;
+  height: 30px;
+  text-align: center;
 }
-h5{
-  font: 500 18px/1.2 "Poppins", sans-serif;
+h5 {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.2;
   color: black;
 }
