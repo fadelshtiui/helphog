@@ -28,7 +28,6 @@ body {
 }
 
 #navigation li a {
-    font-weight: 600;
     line-height: 1;
 }
 
@@ -79,33 +78,45 @@ em {
 }
 
 h1 {
-  font: 700 48px/1.2 "Poppins", sans-serif;
+  font-size: 48px;
+  line-height: 1.2;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
 h2 {
-  font: 700 32px/1.2 "Poppins", sans-serif;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
 h3 {
-  font: 700 24px/1.2 "Poppins", sans-serif;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
 h4 {
-  font: 700 20px/1.2 "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
   margin-bottom: 10px;
 }
 
 h5 {
-  font: 500 18px/1.2 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.2;
   margin-bottom: 10px;
   color: black;
 }
 
 h6 {
-  font: 500 16px/1.2 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -194,7 +205,8 @@ input:disabled ~ * {
     text-align: center;
     display: inline-block;
     border: none;
-    font: 500 14px/1 "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
     padding: 14px;
     cursor: pointer;
     border-radius: var(--borderRadius);
@@ -212,7 +224,9 @@ input:disabled ~ * {
 .address input{
     border:none;
     outline:none;
-    font:500 18px/1.2 "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
     border-bottom:0.5px solid black;
     margin-bottom:20px;
     width:60%;
@@ -257,7 +271,8 @@ button {
   text-align: center;
   display: inline-block;
   border: none;
-  font: 500 16px/1 "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
   padding: 20px;
   cursor: pointer;
   border-radius: var(--borderRadius);
@@ -840,7 +855,8 @@ input.variation + label {
   background: none !important;
   text-align: center;
   text-transform: uppercase;
-  font: 500 14px/1 "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
   display: block;
   margin-top: 2px;
 }
