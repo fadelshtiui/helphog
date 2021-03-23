@@ -126,7 +126,7 @@
     }
 
     function deleteAccount() {
-        if (confirm('Are you sure you want to delete your account? All your data will be removed and your account will be closed.')) {
+        if (confirm('Are you sure you want to delete your account? All your data will be removed and your account will be closed. If you are a provider, this action will delete your Stripe account.')) {
 
             let data = new FormData();
             data.append("session", getSession());
@@ -136,6 +136,7 @@
                 .then(res => res.json())
                 .then(handleDeleteResponse)
                 .catch(console.log);
+                
         }
     }
 
@@ -144,9 +145,11 @@
             alert("Please log out and try again.");
         } else if (response.stripeerror == "true") {
             alert("Please make sure your Stripe balance is zero before deleting your account.");
+        } else if (response.ordererror == "true") {
+            alert("Please make sure you have no active orders before deleting your account.")
+        } else {
+            window.location.replace("https://helphog.com");
         }
-
-        window.location.replace("https://helphog.com");
     }
 
 
