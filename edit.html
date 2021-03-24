@@ -123,9 +123,12 @@
                     <label for="taskerinputField" id="taskerlabel">Would like to have the same provider?</label>
                     <div id="taskerinputField">
                       <input id="taskerinput" placeholder="Provider ID#" type="text" />
-                      <label id="providerSelected" class="hidden" style="font-weight: bolder;"><span id="provider"></span> has been selected.</label>
-                      <a class="editbutton hidden" id="removeprovider">Remove</a>
-                      <a class="editbutton" id="checkprovider">Select</a>
+                      <label id="providerSelected" class="hidden" style="font-weight: bolder;"><span
+                          id="provider"></span> has been selected.</label>
+                      <button style="margin-left: 5px; width: 100px;" class="secondary hidden"
+                        id="removeprovider">Remove</button>
+                      <button style="margin-left: 5px; width: 100px;" class="secondary"
+                        id="checkprovider">Select</button>
                     </div>
                     <label id="errorlabel" class="hidden"></label>
                   </div>
@@ -209,14 +212,14 @@
                     <div class="calendar-header">
                       <div class="goback" ng-click="moveBack()" ng-if="pickdate">
                         <svg width="30" height="30">
-                          <path fill="none" stroke="#0070ba" stroke-width="3" d="M19,6 l-9,9 l9,9" />
+                          <path fill="none" stroke="black" stroke-width="3" d="M19,6 l-9,9 l9,9" />
                         </svg>
                       </div>
                       <div class="current-month-container">{{ currentViewDate.getFullYear() }} {{ currentMonthName() }}
                       </div>
                       <div class="goforward" ng-click="moveForward()" ng-if="pickdate">
                         <svg width="30" height="30">
-                          <path fill="none" stroke="#0070ba" stroke-width="3" d="M11,6 l9,9 l-9,9" />
+                          <path fill="none" stroke="black" stroke-width="3" d="M11,6 l9,9 l-9,9" />
                         </svg>
                       </div>
                     </div>
@@ -559,7 +562,7 @@
         </div>
       </div>
       <div id="centerdiv">
-        <button class="trigger_popup_fricc button" id="button">Checkout</button>
+        <button class="trigger_popup_fricc primary-green" id="button">Checkout</button>
         <div class="box">
           <!--<a class="button" href="#popup1">Pop up</a>-->
         </div>
@@ -719,7 +722,7 @@
                                   Payment succeeded, see the result in your
                                   <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
                                 </p>
-                                <button id="submit" class="button">
+                                <button id="submit" class="primary-green">
                                   <div class="spinner hidden" id="spinner"></div>
                                   <span id="button-text">Place Order</span>
                                 </button>
@@ -783,16 +786,19 @@
                   <input id="password" class="form-control" type="text" placeholder="Password" required="required" />
                   <span id="password-error" class="error"></span>
                 </fieldset>
-                <button id="submit-login" class="btn btn-primary">Submit</button><span id="noaccount"><a
-                    href="form">Don't have an account?</a></span>
+                <button id="submit-login" style="margin-bottom: 10px;" class="primary-green">Submit</button><span
+                  id="noaccount">
+                  <a href="form">Don't have an account?</a></span>
                 <div class="register-slide">
                   <a class="close-register"><i class="lnr lnr-cross"></i></a>
                   <p>Click the "Create Account" checkbox to create an account during checkout.</p>
                   <a class="close-modal btn btn-primary">Begin Checkout</a>
                 </div>
               </div>
-              <div class="modal-bottom"><a class="modal-btn" id="login">Login</a><a class="modal-btn"
-                  id="guest">Guest</a></div>
+              <div class="modal-bottom">
+                <button class="primary-green" id="login">Login</button>
+                <button class="secondary" id="guest">Checkout as Guest</button>
+              </div>
             </div>
           </div>
           <div class="overlay"></div>

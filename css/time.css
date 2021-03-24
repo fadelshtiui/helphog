@@ -3,13 +3,12 @@
 }
 
 #choose-your-time {
-     height: auto;
+  height: auto;
 }
 
 * {
   box-sizing: border-box;
 }
-
 
 .app-container {
   border-radius: 10px;
@@ -27,8 +26,7 @@
   height: 40px;
 }
 
-.cancel-button,
-.save-button {
+.cancel-button, .save-button {
   float: left;
   height: 40px;
   line-height: 40px;
@@ -50,6 +48,7 @@
 }
 
 /* Datepicker Stuff */
+
 .datepicker {
   position: relative;
   width: 100%;
@@ -121,8 +120,7 @@
   position: relative;
 }
 
-.goback,
-.goforward {
+.goback, .goforward {
   height: 30px;
   width: 30px;
   border-radius: 30px;
@@ -132,8 +130,7 @@
   top: -4px;
 }
 
-.goback path,
-.goforward path {
+.goback path, .goforward path {
   transition: stroke 0.15s ease;
 }
 
@@ -180,10 +177,7 @@
   transition: all 0.25s cubic-bezier(0.7, -0.12, 0.2, 1.12);
 }
 
-.no-hover .datenumber,
-.no-hover .datenumber:hover,
-.no-hover .datenumber:before,
-.no-hover .datenumber:hover::before {
+.no-hover .datenumber, .no-hover .datenumber:hover, .no-hover .datenumber:before, .no-hover .datenumber:hover::before {
   cursor: default;
   color: #8A8A8A;
   background: transparent;
@@ -226,7 +220,7 @@
 }
 
 .datenumber.day-selected:before {
-  background: #0070ba;
+  background: #1ecd97;
   -webkit-transform: scale(1);
   transform: scale(1);
   -webkit-animation: select-date .25s forwards;
@@ -238,18 +232,21 @@
     background: #8cccee4f;
   }
   100% {
-    background: #0070ba;
+    background: #1ecd97;
   }
 }
+
 @keyframes select-date {
   0% {
     background: #8cccee4f;
   }
   100% {
-    background: #0070ba;
+    background: #1ecd97;
   }
 }
+
 /* timepicker styles */
+
 .timepicker-container-outer {
   width: 50%;
   max-width: 700px;
@@ -302,7 +299,7 @@
   width: 40px;
   height: 40px;
   position: absolute;
-  background: #0070ba;
+  background: #1ecd97;
   transition: all 0.15s ease;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
@@ -385,8 +382,7 @@
   transition: color 0.15s ease;
 }
 
-.decrement-time,
-.increment-time {
+.decrement-time, .increment-time {
   cursor: pointer;
   position: absolute;
   display: block;
@@ -400,7 +396,7 @@
 .decrement-time {
   left: 0;
   text-align: left;
-  color: #0070ba;
+  color: #1ecd97;
 }
 
 .increment-time {
@@ -408,8 +404,7 @@
   text-align: right;
 }
 
-.increment-time path,
-.decrement-time path {
+.increment-time path, .decrement-time path {
   transition: all 0.15s ease;
 }
 
@@ -419,6 +414,7 @@
   left: 24px;
   height: 36px;
 }
+
 .time:after {
   content: '';
   height: 2px;
@@ -454,6 +450,7 @@
   transition: all 0.15s ease;
   cursor: pointer;
 }
+
 .time-input:focus, .time-input:active {
   outline: none;
 }
@@ -465,7 +462,8 @@
 .time-input:focus {
   cursor: auto;
 }
-.time-input:focus ~ .formatted-time {
+
+.time-input:focus~.formatted-time {
   border-radius: 2px;
   background: #1ecd97;
   color: white;
@@ -507,13 +505,13 @@
 }
 
 .datepicker.am .am-pm-button:first-child {
-    background: #1ecd97;
-    color: white;
+  background: #1ecd97;
+  color: white;
 }
 
 .datepicker.pm .am-pm-button:last-child {
-    background: #1ecd97;
-    color: white;
+  background: #1ecd97;
+  color: white;
 }
 
 /*
@@ -534,6 +532,7 @@
   }
 }
 */
+
 .datepicker.am .datepicker-header {
   color: white;
   background: #b9d2e3;
@@ -543,36 +542,41 @@
   color: white;
   background: #b9d2e3;
 }
+
 /*
 .datepicker.am .current-time::after {
   background: #1ecd97;
 }
 */
+
 .datepicker.am .actual-time {
   color: white;
 }
+
 .datepicker.am .display-time {
-  color: #0070ba;
-}
-.datepicker.pm .display-time {
-  color: #0070ba;
-}
-.datepicker.am .time-input {
-  color: #0070ba;
-}
-/*
-.datepicker.am .time:after {
-  background: #0070ba;
-}
-*/
-.datepicker.am .increment-time path,
-.datepicker.am .decrement-time path {
-  stroke: #0070ba;
+  color: #1ecd97;
 }
 
-.datepicker.pm .increment-time path,
-.datepicker.pm .decrement-time path {
-  stroke: #0070ba;
+.datepicker.pm .display-time {
+  color: #1ecd97;
+}
+
+.datepicker.am .time-input {
+  color: #1ecd97;
+}
+
+/*
+.datepicker.am .time:after {
+  background: #1ecd97;
+}
+*/
+
+.datepicker.am .increment-time path, .datepicker.am .decrement-time path {
+  stroke: #1ecd97;
+}
+
+.datepicker.pm .increment-time path, .datepicker.pm .decrement-time path {
+  stroke: #1ecd97;
 }
 
 /*
@@ -601,7 +605,7 @@
   transform: scale(1);
 }
 .datepicker.pm .datenumber.day-selected {
-  color: #0070ba;
+  color: #1ecd97;
 }
 .datepicker.pm .datenumber.day-selected:before {
   background: white;
@@ -615,7 +619,7 @@
   background: white;
 }
 .datepicker.pm .actual-time {
-  color: #0070ba;
+  color: #1ecd97;
 }
 .datepicker.pm .display-time {
   color: white;
@@ -628,7 +632,7 @@
 }
 
 .datepicker.pm .am-pm-button:last-child {
-  color: #0070ba;
+  color: #1ecd97;
 }
 
 .datepicker.pm .cancel-button {
@@ -637,7 +641,7 @@
 }
 .datepicker.pm .save-button {
   background: white;
-  color: #0070ba;
+  color: #1ecd97;
 }
 .datepicker.pm .goback path,
 .datepicker.pm .goforward path {
@@ -645,41 +649,48 @@
 }
 .datepicker.pm .time-input:focus ~ .formatted-time {
   background: white;
-  color: #0070ba;
+  color: #1ecd97;
 }
 */
-.datepicker.compact .datepicker-title,
-.datepicker.compact .datepicker-subheader {
+
+.datepicker.compact .datepicker-title, .datepicker.compact .datepicker-subheader {
   width: 100%;
   text-align: center;
 }
+
 .datepicker.compact .datepicker-title {
   height: 50px;
   line-height: 50px;
 }
+
 .datepicker.compact .datepicker-subheader {
   height: 30px;
   line-height: 30px;
 }
+
 .datepicker.compact .display-time {
   width: 60%;
   font-size: 20px;
   line-height: 36px;
 }
+
 .datepicker.compact .app-container {
   width: 100%;
 }
+
 .datepicker.compact .datepicker-calendar {
   width: 100%;
   margin: 0 auto;
   float: none;
 }
+
 .datepicker.compact .timepicker-container-outer {
   width: 100%;
   margin: 0 auto;
   float: none;
   top: -15px;
 }
+
 .datepicker.compact .buttons-container {
   position: relative;
   float: right;
