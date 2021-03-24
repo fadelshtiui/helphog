@@ -178,7 +178,7 @@
                     if (urlParams.get('search')) {
                          url += "&search=" + urlParams.get('search')
                     } else if (urlParams.get('category')) {
-                         url += "&category=" + urlParamss.get('category')
+                         url += "&category=" + urlParams.get('category')
                     }
 
                     url += '&back=details'
