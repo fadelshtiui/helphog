@@ -1,5 +1,7 @@
 let guestOpen = false;
 let loginOpen = false;
+let providerId = 'none';
+let selected = false;
 
 window.addEventListener('load', function () {
 
@@ -59,6 +61,29 @@ window.addEventListener('load', function () {
 
      }
 
+     id("checkprovider").onclick = function () {
+        const urlParams = new URLSearchParams(window.location.search)
+        id("errorlabel").classList.add("hidden")
+        id("providerSelected").classList.add("hidden")
+        if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
+             if (id("taskerinput").value !== ""){
+                 providerId = id("taskerinput").value;
+                 checkAvailability('false', updateTimePicker, true);
+             }else{
+                 id("errorlabel").classList.remove("hidden");
+                 id("errorlabel").innerText = "No provider ID entered.";
+             }
+
+        }else{
+            id("errorlabel").classList.remove("hidden");
+            id("errorlabel").innerText = "Please enter your full address below first.";
+        }
+     }
+
+     id("removeprovider").onclick = function () {
+         toggleSelected();
+     }
+
      id('locationField').classList.add('hidden')
 
      id('edit').addEventListener('click', editAddress)
@@ -89,13 +114,24 @@ window.addEventListener('load', function () {
      initTextFields();
 
      id('duration').onchange = function () {
-          checkAvailability('false', updateTimePicker);
+          checkAvailability('false', updateTimePicker, false);
      }
      id('numpeople').onchange = function () {
-          checkAvailability('false', updateTimePicker);
+          if(id('numpeople').value == 1){
+              id('taskerinputField').classList.remove("hidden");
+              id('taskerlabel').classList.remove("hidden");
+          }
+          else{
+              providerId = "none";
+              id('taskerlabel').classList.add("hidden");
+              id('taskerinputField').classList.add("hidden");
+              id('errorlabel').classList.add("hidden");
+              id('providerSelected').classList.add("hidden");
+          }
+          checkAvailability('false', updateTimePicker, false);
      }
 
-     checkAvailability('false', updateTimePicker);
+     checkAvailability('false', updateTimePicker, false);
 
      id("submit-login").onclick = submitLogin;
 
@@ -209,6 +245,24 @@ function initTextFields() {
 
 }
 
+function toggleSelected(){
+    if(selected){
+        id("taskerinput").classList.remove("hidden")
+        id("checkprovider").classList.remove("hidden")
+        id("removeprovider").classList.add("hidden")
+        id("providerSelected").classList.add("hidden")
+        id("taskerinput").innerText = "";
+        providerId = 'none';
+        checkAvailability('false', updateTimePicker, false);
+        selected = false
+    }else{
+        id("taskerinput").classList.add("hidden")
+        id("checkprovider").classList.add("hidden")
+        id("removeprovider").classList.remove("hidden")
+        selected = true
+    }
+}
+
 function navigateBack() {
 
      const urlParams = new URLSearchParams(window.location.search)
@@ -245,7 +299,7 @@ function navigateBack() {
      window.location = url
 }
 
-async function checkAvailability(updatecontactlist, callback) {
+async function checkAvailability(updatecontactlist, callback, updateprovider) {
 
      id('button').disabled = true;
 
@@ -277,13 +331,25 @@ async function checkAvailability(updatecontactlist, callback) {
      data.append("duration", duration);
      data.append("remote", remote);
      data.append('updatecontactlist', updatecontactlist);
+     console.log(providerId)
+     data.append('id', providerId);
      let url = "php/checkavailability.php";
      addLoader();
      let response = await fetch(url, { method: "POST", body: data })
      await checkStatus(response);
      response = await response.text();
-     callback(response);
-     removeLoader();
+     if (response == 'Provider with the inputed ID does not exist or does not provide this service' || response == 'The selected provider is unavailable for this order'){
+         id("errorlabel").classList.remove("hidden");
+         if (id('numpeople').value != 1){
+             id("errorlabel").classList.add("hidden");
+         }
+         id("errorlabel").innerText = response;
+         removeLoader();
+     }else{
+         checkProviders();
+         callback(response);
+         removeLoader();
+     }
 }
 
 function addLoader() {
@@ -343,6 +409,7 @@ function updateTimePicker(response) {
 
      id('button').disabled = false;
 }
+
 
 function updateTime() {
      const urlParams = new URLSearchParams(window.location.search)
@@ -453,6 +520,7 @@ function checkProviders() {
      let data = new FormData();
      let service = document.querySelector(".service").innerText
      data.append("service", service);
+     data.append("id", providerId);
      let url = "php/providers.php";
      fetch(url, { method: "POST", body: data })
           .then(checkStatus)
@@ -465,6 +533,17 @@ function providersHelper(response) {
      if (response.providers != 0) {
           document.querySelector("#quantity").classList.add("hidden");
           document.querySelector("#quantity-label").classList.add("hidden");
+     }
+     if (providerId != "none"){
+         id("providerSelected").classList.remove("hidden");
+         id("errorlabel").classList.add("hidden");
+         id("provider").innerText = response.name;
+         if (selected == false){
+            toggleSelected()
+         }
+     }else{
+         id("providerSelected").classList.add("hidden");
+
      }
 }
 
@@ -599,7 +678,7 @@ async function stripe(service, duration, people, cost) {
           message = id('message').value
      }
 
-     await checkAvailability('true', console.log);
+     await checkAvailability('true', console.log, false);
 
      let tz = jstz.determine();
      let timezone = tz.name();
