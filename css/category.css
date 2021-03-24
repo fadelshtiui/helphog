@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 @import url('https://fonts.googleapis.com/css?family=Exo');
 @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
-
 html {
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -11,9 +10,8 @@ html {
 }
 
 #loading-animation {
-    display: none;
+  display: none;
 }
-
 
 h1 {
   text-align: center;
@@ -36,33 +34,11 @@ h1 {
 }
 
 .toggles button {
-  border: 0px solid Black;
-  border-radius: 2px;
-  color: #000000;
   display: block;
   float: left;
   margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 10px;
-  padding: 10px;
   width: 168px;
   cursor: pointer;
-  font-size: 14px;
-  /*box-shadow: 0 0 0px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);*/
-}
-
-.toggles button:hover {
-    background-color: #1ECD97;
-    color: white;
-}
-
-.toggles button:active {
-    background-color: #1ECD97;
-    color: white;
-}
-
-.toggles button:focus {
-    background-color: #1ECD97;
-    color: white;
-    outline: none;
 }

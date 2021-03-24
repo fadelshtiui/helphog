@@ -10,7 +10,7 @@
           inputElement.addEventListener('keydown', enforceFormat);
           inputElement.addEventListener('keyup', formatToPhone);
 
-          $('.btn').on('click', signUp);
+          $('.primary-green').on('click', signUp);
 
      };
 
@@ -20,7 +20,7 @@
 
      function signUp() {
           if (isCaptchaChecked()) {
-               $('.btn').button('loading');
+               // $('.btn').button('loading');
                let data = new FormData();
                let firstName = id("first-name").value;
                let lastName = id("last-name").value;
@@ -115,7 +115,7 @@
                response.passworderror == "" && response.phoneerror == "" && response.ziperror == "" && response.confirmerror == "") {
                window.location = "verify?message=Before+you+can+use+your+account%2C+please+verify+your+account+through+the+link+we+sent+to+your+email+address.+If+you+dont+see+our+email+check+your+junk+folder.";
           } else {
-               $('.btn').button('reset');
+               // $('.btn').button('reset');
           }
 
      }

@@ -388,8 +388,8 @@
                     let buttonContainer = document.createElement('profile__cta')
                     buttonContainer.classList.add('profile__cta')
 
-                    let link = document.createElement('a')
-                    link.classList.add('button')
+                    let link = document.createElement('button')
+                    link.classList.add('primary-green')
 
                     if (service.available == 1) {
                          link.innerText = 'Book'
@@ -430,7 +430,7 @@
                               window.location = url;
                          };
                     } else if (service.available == 0) {
-                         link.classList.add('disabled')
+                         link.disabled = true;
                          link.innerText = 'Unavailable'
 
                          buttonContainer.onclick = function () {

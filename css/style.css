@@ -2,66 +2,81 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 @import 'https://cdn.rawgit.com/h-ibaldo/Raleway_Fixed_Numerals/master/css/rawline.css';
+::-webkit-input-placeholder {
+  transition: opacity 0.5s;
+}
 
+::-moz-placeholder {
+  transition: opacity 0.5s;
+}
 
-::-webkit-input-placeholder { transition : opacity 0.5s; }
-::-moz-placeholder { transition : opacity 0.5s; }
-:-ms-input-placeholder { transition : opacity 0.5s; }
-.fade::-webkit-input-placeholder { opacity : 0; }
-.fade::-moz-placeholder { opacity : 0; }
-.fade:-ms-input-placeholder { opacity : 0; }
+:-ms-input-placeholder {
+  transition: opacity 0.5s;
+}
+
+.fade::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+.fade::-moz-placeholder {
+  opacity: 0;
+}
+
+.fade:-ms-input-placeholder {
+  opacity: 0;
+}
 
 /* General styles */
+
 body {
   text-align: center;
   /*padding-top: 30px;*/
   font-size: 14px;
   margin: 0px;
-      -webkit-font-feature-settings: "lnum";
-    -moz-font-feature-settings: "lnum";
-    font-feature-settings: "lnum";
+  -webkit-font-feature-settings: "lnum";
+  -moz-font-feature-settings: "lnum";
+  font-feature-settings: "lnum";
 }
 
 html {
-    margin: 0px;
-    min-width: 1050px;
-    background-color: white;
+  margin: 0px;
+  min-width: 1050px;
+  background-color: white;
 }
 
-#location{
-    height: 18px;
-    width: 10px;
+#location {
+  height: 18px;
+  width: 10px;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 #loading-animation {
-    display: none;
+  display: none;
 }
 
-#logo{
-    font-size: 2.4em;
-    color: #1ecd97;
-    position: absolute;
-    padding: 0.26em;
-    padding-left: 0.7em;
-    line-height: 1;
+#logo {
+  font-size: 2.4em;
+  color: #1ecd97;
+  position: absolute;
+  padding: 0.26em;
+  padding-left: 0.7em;
+  line-height: 1;
 }
 
-.header{
-    border-bottom: 1px solid #e5e5e5;
-    width:100%;
-    height:51px;
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  width: 100%;
+  height: 51px;
 }
 
-#infovid{
-    width: 800px;
-    margin-top:20px;
-    border-radius: 5px;
+#infovid {
+  width: 800px;
+  margin-top: 20px;
+  border-radius: 5px;
 }
 
 h5 {
@@ -76,64 +91,66 @@ h5 {
   color: black;
 }
 
-button {
-     border: none;
-     background-color:#b1bbb81f;
-}
+/*button {*/
+
+/*     border: none;*/
+
+/*     background-color:#b1bbb81f;*/
+
+/*}*/
 
 .hidden {
   display: none;
 }
 
 a {
-     text-decoration: none;
-     color: #1ecd97;
-     line-height: 1;
+  text-decoration: none;
+  color: #1ecd97;
+  line-height: 1;
 }
 
-a:hover{
-    text-decoration: none;
+a:hover {
+  text-decoration: none;
 }
 
 a:focus {
-    text-decoration: none;
+  text-decoration: none;
 }
-
 
 /* navigation Bar */
 
 #navigation {
-     list-style-type: none;
-     box-sizing: content-box;
-     margin-top: 16px;
-    max-width: 80%;
-    float: right;
+  list-style-type: none;
+  box-sizing: content-box;
+  margin-top: 16px;
+  max-width: 80%;
+  float: right;
 }
 
 #navigation li {
-     /* display: inline; */
-     float: right;
-     padding-left: 2em;
-     padding-right: 2em;
-     opacity: 0.5;
+  /* display: inline; */
+  float: right;
+  padding-left: 2em;
+  padding-right: 2em;
+  opacity: 0.5;
 }
 
 #navigation li a {
-     color: black;
-     font-weight: bold;
+  color: black;
+  font-weight: bold;
 }
 
 #registration, #sign-in, #about {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    outline: inherit;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
 }
 
 #navigation li:hover {
-   opacity: 1.0;
+  opacity: 1.0;
 }
 
 /* Search Bar */
@@ -157,21 +174,31 @@ a:focus {
 }
 
 /*.search-icon {*/
+
 /*  position: absolute;*/
+
 /*  left: 349px;*/
+
 /*  top: 7px;*/
+
 /*  width: 32px;*/
+
 /*  height: 40px;*/
+
 /*  color: #999;*/
+
 /*  font-size: 1.3em;*/
+
 /*  padding: 7px 15px;*/
+
 /*}*/
 
 .search-input {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  width: 500px;
+  width: 520px;
+  padding-left: 10px;
   height: 40px;
   float: right;
   background-color: transparent;
@@ -183,7 +210,7 @@ a:focus {
   outline: 0px;
 }
 
-#zipcode{
+#zipcode {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -199,9 +226,9 @@ a:focus {
   width: 84px;
 }
 
-#location{
-    margin-top: 10px;
-    margin-left: 10px;
+#location {
+  margin-top: 10px;
+  margin-left: 10px;
 }
 
 @-webkit-keyframes fadeInTop {
@@ -213,6 +240,7 @@ a:focus {
     opacity: 1;
   }
 }
+
 @-moz-keyframes fadeInTop {
   0% {
     opacity: 0;
@@ -222,6 +250,7 @@ a:focus {
     opacity: 1;
   }
 }
+
 @keyframes fadeInTop {
   0% {
     opacity: 0;
@@ -235,6 +264,7 @@ a:focus {
     opacity: 1;
   }
 }
+
 .search-results {
   list-style: none;
   margin: 0;
@@ -247,6 +277,7 @@ a:focus {
   top: 40px;
   text-align: left;
 }
+
 .search-results li {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -260,34 +291,40 @@ a:focus {
   /* remove this part if you dont like the animation */
   /* END OF ANIMATION */
 }
+
 .search-results li:hover {
   background-color: #519c75;
   cursor: pointer;
 }
+
 .search-results li:nth-child(1) {
   /* Animation */
   -webkit-animation: fadeInTop 0.4s 0s forwards;
   animation: fadeInTop 0.4s 0s forwards;
   opacity: 0;
 }
+
 .search-results li:nth-child(2) {
   /* Animation */
   -webkit-animation: fadeInTop 0.4s 0.1s forwards;
   animation: fadeInTop 0.4s 0.1s forwards;
   opacity: 0;
 }
+
 .search-results li:nth-child(3) {
   /* Animation */
   -webkit-animation: fadeInTop 0.4s 0.2s forwards;
   animation: fadeInTop 0.4s 0.2s forwards;
   opacity: 0;
 }
+
 .search-results li:nth-child(4) {
   /* Animation */
   -webkit-animation: fadeInTop 0.4s 0.3s forwards;
   animation: fadeInTop 0.4s 0.3s forwards;
   opacity: 0;
 }
+
 .search-results li:nth-child(5) {
   /* Animation */
   -webkit-animation: fadeInTop 0.4s 0.4s forwards;
@@ -296,59 +333,63 @@ a:focus {
 }
 
 #category {
-    margin-top: 21px;
-    color: #2196f3;
-    cursor: pointer;
-    text-align: center;
-    width: 150px;
-    margin-left: auto;
-    margin-right: auto;
+  margin-top: 21px;
+  color: #2196f3;
+  cursor: pointer;
+  text-align: center;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #search-image {
-    width: 30px;
-    height: 30px;
-    margin-left: 6px;
-    margin-top: -3px;
+  width: 30px;
+  height: 30px;
+  margin-left: 6px;
+  margin-top: -3px;
 }
 
 .search-icon {
-    position: absolute;
-    float: right;
-    width: 57px;
-    height: 57px;
-    top: -9px;
-    right: -9px;
-    cursor: pointer;
+  position: absolute;
+  float: right;
+  width: 57px;
+  height: 57px;
+  top: -9px;
+  right: -9px;
+  cursor: pointer;
 }
 
 #search-image:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #search-btn:active, #search-btn:focus {
-    outline: none;
+  outline: none;
 }
 
 /* Place Holder CSS */
+
 ::-webkit-input-placeholder {
   color: #000;
   opacity: 0.5;
   -webkit-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :-moz-placeholder {
   color: #000;
   opacity: 0.5;
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 ::-moz-placeholder {
   color: #000;
   opacity: 0.5;
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :-ms-input-placeholder {
   color: #000;
   opacity: 0.5;
@@ -357,21 +398,25 @@ a:focus {
 }
 
 /* Place Holder CSS for Focus */
+
 :hover::-webkit-input-placeholder {
   opacity: 0.75;
   -webkit-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :hover:-moz-placeholder {
   opacity: 0.75;
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :hover::-moz-placeholder {
   opacity: 0.75;
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :hover:-ms-input-placeholder {
   opacity: 0.75;
   -ms-transition: opacity 0.35s ease-in-out;
@@ -379,30 +424,51 @@ a:focus {
 }
 
 /* Place Holder CSS for Focus */
+
 :focus::-webkit-input-placeholder {
   opacity: 0;
   -webkit-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :focus:-moz-placeholder {
   opacity: 0;
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :focus::-moz-placeholder {
   opacity: 0;
   -moz-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
+
 :focus:-ms-input-placeholder {
   opacity: 0;
   -ms-transition: opacity 0.35s ease-in-out;
   transition: opacity 0.35s ease-in-out;
 }
 
-.fade::-webkit-input-placeholder { opacity : 0; }
-.fade::-moz-placeholder { opacity : 0; }
-.fade:-ms-input-placeholder { opacity : 0; }
-::-webkit-input-placeholder { transition : opacity 0.75s; }
-::-moz-placeholder { transition : opacity 0.75s; }
-:-ms-input-placeholder { transition : opacity 0.75s; }
+.fade::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+.fade::-moz-placeholder {
+  opacity: 0;
+}
+
+.fade:-ms-input-placeholder {
+  opacity: 0;
+}
+
+::-webkit-input-placeholder {
+  transition: opacity 0.75s;
+}
+
+::-moz-placeholder {
+  transition: opacity 0.75s;
+}
+
+:-ms-input-placeholder {
+  transition: opacity 0.75s;
+}

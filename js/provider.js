@@ -585,39 +585,20 @@ let preloaded = false;
 							this.style.color = 'black'
 						});
 
-						// if (order.uploaded == "n" || order.expenditure > 0) {
 						choosefileinput.classList.add("choose-file");
 						choosefileinput.type = "file";
-						// 	} else {
-						// 		choosefileinput.type = "number";
-						// 		choosefileinput.style.backgroundColor = "transparent";
-						// 		choosefileinput.style.color = "black";
-						// 		choosefileinput.style.width = "80%";
-						// 		choosefileinput.style.margin = "auto";
-						// 		choosefileinput.style.textAlign = "center";
-						// 		choosefileinput.style.fontSize = "24px";
-						// 		choosefileinput.style.border = "0";
-						// 		choosefileinput.style.borderBottom = "1px solid #ccc";
-						// 		choosefileinput.style.borderRadius = "0";
-						// 		choosefileinput.style.padding = "5px 0";
-						// 	}
-
 						choosefilediv.appendChild(choosefileinput);
 
 						let expenditurediv = document.createElement("div");
 
 						let expenditurebutton = document.createElement("button");
 						expenditurebutton.dataset.ordernumber = order.order_number;
-						expenditurebutton.classList.add("expenditure-button");
+						expenditurebutton.classList.add("secondary");
+						expenditurebutton.style.marginTop = "15px"
+						expenditurebutton.style.width = "90%";
 						// expenditurebutton.type = "submit";
 						expenditurebutton.name = "upload";
 						expenditurebutton.innerText = "UPLOAD";
-
-						expenditurebutton.disabled = true
-
-						// 	// if (order.uploaded == 'y') {
-						// 		expenditurebutton.innerText = "SUBMIT";
-						// 	}
 
 						if (order.expenditure > 0) {
 							attach.textContent = "We have processed your extra expenditures for a total of $" + order.expenditure
@@ -664,9 +645,11 @@ let preloaded = false;
 						action.classList.add("action");
 
 						let button = document.createElement("button");
+						button.classList.add("primary-green")
 						button.innerText = "START";
 						if (order.status == "st") {
-							button.classList.toggle("started");
+							button.classList.remove("primary-green")
+							button.classList.add("primary-red")
 							button.innerText = "STOP";
 						}
 
@@ -680,27 +663,34 @@ let preloaded = false;
 						}
 
 						let button2 = document.createElement("button");
+						button2.classList.add("primary-red")
 						button2.innerText = "CANCEL";
 
 						button2.dataset.ordernumber = order.order_number;
 
 						if (order.currently_paused == 'y') {
+							button2.classList.remove("primary-red")
+							button2.classList.add("secondary")
 							button2.innerText = "RESUME";
 						} else if (order.status == "st") {
+							button2.classList.remove("primary-red")
+							button2.classList.add("secondary")
 							button2.innerText = "PAUSE";
-							button2.classList.toggle("paused");
 						}
 
 						if (order.status == "en" || order.status == "di") {
 							button2.innerText = "REFUND CUSTOMER";
-							button2.classList.toggle('started');
 							button2.onclick = refund;
 						} else {
 							button2.addEventListener("click", cancel);
 						}
 
-						button.style.marginTop = "14px";
-						button2.style.marginTop = "14px";
+						button.style.marginTop = "9px";
+						button2.style.marginTop = "9px";
+						button2.style.padding = "15px"
+						button.style.width = "90%";
+						button2.style.width = "90%"
+						button.style.padding = "15px"
 
 						if (order.role == "primary") {
 							button2.dataset.role = 'primary';
@@ -742,7 +732,7 @@ let preloaded = false;
 	function markCompleted() {
 		if (confirm("Please verify that all necessary receipts are attached of any additional expenditures.")) {
 
-            id('loading').classList.remove('hidden')
+			id('loading').classList.remove('hidden')
 			let data = new FormData();
 			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
@@ -839,22 +829,28 @@ let preloaded = false;
 		if (this.innerText == "START") {
 			if (confirm("Are you sure you would like to start?")) {
 
-				this.classList.add("started");
+				this.classList.remove("primary-green")
+				this.classList.add("primary-red");
 				this.innerText = "STOP";
 				this.nextElementSibling.innerText = "PAUSE";
-				this.nextElementSibling.classList.add("paused");
+				this.nextElementSibling.classList.remove("primary-green")
+				this.nextElementSibling.classList.remove("primary-red")
+				this.nextElementSibling.classList.add("secondary");
 			}
 		} else {
 			if (confirm("Are you sure you would like to stop?")) {
 
-				this.classList.remove("started");
+				this.classList.remove("primary-red");
+				this.classList.add("primary-green");
 				this.innerText = "MARK COMPLETED";
 				this.removeEventListener("click", toggle);
 				this.addEventListener("click", markCompleted);
 
 				this.nextElementSibling.innerText = "REFUND CUSTOMER";
-				this.nextElementSibling.classList.remove("paused");
-				this.nextElementSibling.classList.add('started')
+				this.nextElementSibling.classList.remove("primary-green")
+				this.nextElementSibling.classList.remove('secondary')
+				this.nextElementSibling.classList.add("primary-red")
+
 				this.nextElementSibling.removeEventListener("click", cancel);
 				this.nextElementSibling.addEventListener("click", refund);
 
@@ -868,10 +864,13 @@ let preloaded = false;
 			.then((response) => {
 				if (response.error != "") {
 					alert(response.error)
-					this.classList.remove("started");
 					this.innerText = "START";
+					this.classList.remove("primary-red")
+					this.classList.add("primary-green")
 					this.nextElementSibling.innerText = "CANCEL";
-					this.nextElementSibling.classList.remove("paused");
+					this.nextElementSibling.classList.remove("primary-green")
+					this.nextElementSibling.classList.add("primary-red")
+
 				}
 			})
 

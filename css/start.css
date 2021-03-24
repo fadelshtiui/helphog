@@ -9,36 +9,6 @@
   text-align: center;
 }
 
-button {
-  outline: none;
-  height: 40px;
-  text-align: center;
-  width: 130px;
-  border-radius: 40px;
-  background: #fff;
-  border: 2px solid #1ECD97;
-  color: #1ECD97;
-  letter-spacing: 1px;
-  text-shadow: 0;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  margin-top: 37px;
-  value: "START";
-}
-button:hover {
-  color: white;
-  background: #1ECD97;
-}
-button:active {
-  letter-spacing: 2px;
-}
-/*
-button:after {
-  content: "START";
-}
-*/
 .onclic {
   width: 40px;
   border-color: #bbbbbb;
@@ -46,11 +16,13 @@ button:after {
   font-size: 0;
   border-left-color: #1ECD97;
   -webkit-animation: rotating 2s 0.25s linear infinite;
-    animation: rotating 2s 0.25s linear infinite;
+  animation: rotating 2s 0.25s linear infinite;
 }
+
 .onclic:after {
   content: "";
 }
+
 .onclic:hover {
   color: #1ECD97;
   background: white;
@@ -61,77 +33,81 @@ button:after {
   color: white;
   background: #1ECD97;
 }
+
 .validate:after {
   font-family: 'FontAwesome';
   content: "\f00c";
 }
 
-.inprogress{
-    color:#d87770;
-    border: 2px solid #d87770;
-    background:white;
-    content:"STOP";
+.inprogress {
+  color: #d87770;
+  border: 2px solid #d87770;
+  background: white;
+  content: "STOP";
 }
+
 .inprogress:hover {
-    color:#d87770;
-    border: 2px solid #d87770;
-    background:gray;
+  color: #d87770;
+  border: 2px solid #d87770;
+  background: gray;
 }
 
 @-webkit-keyframes rotating {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes rotating {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 .mdl-layout {
-    align-items: center;
-    justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
+
 .mdl-layout__content {
-    padding: 24px;
-    flex: none;
+  padding: 24px;
+  flex: none;
 }
+
 .mdl-textfield__error {
-    width: 100%;
-    left: 0;
- text-align: left;
+  width: 100%;
+  left: 0;
+  text-align: left;
 }
 
 .hidden {
-    display:none;
+  display: none;
 }
 
 .started {
-    color: red;
-    border-color: red;
+  color: red;
+  border-color: red;
 }
 
 .started:hover {
-    background: red;
+  background: red;
 }
 
 .paused {
-    color: #bfbf9a9c;
-    border-color: #bfbf9a9c;
+  color: #bfbf9a9c;
+  border-color: #bfbf9a9c;
 }
 
 .paused:hover {
-    background: #bfbf9a9c;
+  background: #bfbf9a9c;
 }

@@ -9,29 +9,6 @@
   text-align: center;
 }
 
-.button {
-  outline: none;
-  height: 40px;
-  text-align: center;
-  width: 250px;
-  border-radius: 15px;
-  background: #fff;
-  border: 2px solid #2196f3;
-  color: #2196f3;
-  letter-spacing: 1px;
-  text-shadow: 0;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.button:hover {
-  color: white;
-  background: #2196f3;
-}
-.button:active {
-  letter-spacing: 2px;
-}
-
 .onclic {
   width: 40px;
   border-color: #bbbbbb;

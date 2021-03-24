@@ -14,7 +14,7 @@ $(window).on('load', function () {
 		.catch(console.log);
 
 	$("#sign-up").click(function () {
-		$('.btn').button('loading');
+		// $('.btn').button('loading');
 		let data = new FormData();
 		let firstName = id("first-name").value;
 		let lastName = id("last-name").value;
@@ -42,7 +42,7 @@ $(window).on('load', function () {
 
 	$("#submit").click(function () {
 		if (isCaptchaChecked()) {
-			$('.btn').button('loading');
+			// $('.btn').button('loading');
 			let data = new FormData();
 
 			let workfield = id("dropdown").value;
@@ -86,7 +86,7 @@ $(window).on('load', function () {
 	}
 
 	function checkFormErrors(response) {
-		$('.btn').button('reset');
+		// $('.btn').button('reset');
 		if (response.firstnameerror == "true") {
 			id("first-name-error").innerText = "*Only letters and white space\n are allowed for first names.";
 		} else if (response.firstnameerror == "empty") {
@@ -161,7 +161,7 @@ $(window).on('load', function () {
 		if (response == "Please upload PNG, JPG, PDF, DOCX files only" || response == 'Error: an account with this email already exists') {
 
 			alert(response)
-			$('.btn').button('reset');
+			// $('.btn').button('reset');
 
 		} else {
 

@@ -216,8 +216,6 @@ body {
   cursor: pointer;
   font-size: 20px;
   display: inline-block;
-  font-weight: bold;
-  outline: none;
   width: 100%;
 }
 
@@ -226,15 +224,12 @@ button:focus {
 }
 
 #agreement {
-    margin-top: 120px;
+  margin-top: 30px;
 }
 
 #submit {
   cursor: pointer;
-  font-size: 20px;
   display: inline-block;
-  font-weight: bold;
-  outline: none;
   width: 100%;
 }
 
@@ -256,7 +251,6 @@ form {
 
 input {
   border-radius: 6px;
-  margin-bottom: 6px;
   padding: 12px;
   border: 1px solid rgba(50, 50, 93, 0.1);
   height: 44px;

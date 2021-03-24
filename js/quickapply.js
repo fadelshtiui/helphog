@@ -27,7 +27,7 @@
     }
 
     function submit() {
-        $('.btn').button('loading');
+        // $('.btn').button('loading');
 
         let session = "";
         let cookies = document.cookie.split(";");
@@ -44,7 +44,7 @@
 
         if (id("aratext").value === "") {
             alert("Please type a brief description of your experience in this workfield");
-            $('.btn').button('reset');
+            // $('.btn').button('reset');
         } else {
 
             let data = new FormData();
@@ -77,10 +77,10 @@
     function handleResponse(response) {
         if (response == "Please upload PNG, JPG, PDF, DOCX files only") {
             alert("Please upload PNG, JPG, PDF, DOCX files only")
-            $('.btn').button('reset');
+            // $('.btn').button('reset');
 
         } else {
-            $('.btn').button('loading');
+            // $('.btn').button('loading');
             window.location.href = response;
         }
     }

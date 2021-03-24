@@ -1,40 +1,30 @@
-body{
+body {
   font-weight: 300;
   background: #ccc;
   color: #505050;
 }
 
-.header{
+.header {
   font-size: 24px;
   font-weight: 300;
   margin-bottom: 20px;
 }
-.content{
+
+.content {
   font-size: 17px;
   line-height: 27px;
   margin-bottom: 30px;
 }
-.actions{
-  
-}
-.actions a{
-  box-sizing: border-box;
-  padding: 12px 24px;
-  margin: 0 8px;
-  line-height: 20px;
-  background: #FFF;
-  display: inline-block;
-  border: 1px solid #ccc;
-  color: #666;
-  text-decoration: none;
-  border-radius: 25px;
-}
-.actions .success{
-  border: 1px solid #1ecd97;
-  color: #1ecd97;
+
+.actions {
+  display: flex;
 }
 
-.modal{
+.actions>button {
+  margin: 5px;
+}
+
+.modal {
   width: 500px;
   padding: 35px 25px;
   background: white;
@@ -45,7 +35,8 @@ body{
   transform: translateX(-50%) translateY(-50%);
   border-radius: 10px;
 }
-.modal .loader-bar{
+
+.modal .loader-bar {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -55,18 +46,20 @@ body{
   overflow: hidden;
   opacity: 0.99;
 }
-.modal .loader-bar .bar{
+
+.modal .loader-bar .bar {
   position: absolute;
   bottom: 0;
   width: 80px;
   height: 4px;
-  background: #1ecd97;
+  background: #DB2828;
   animation: exordo-loader 3s ease infinite;
   border-radius: 3px;
   transform-origin: 50% 50%;
 }
+
 @keyframes exordo-loader {
-  0%  {
+  0% {
     transform: translateX(0);
   }
   50% {
