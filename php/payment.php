@@ -54,7 +54,7 @@ function calculateTax($price, $taxCode, $order_info): array{
         return array(0, 0);
     }
 
-    $client = TaxJar\Client::withApiKey('df954bdfd0ea6232e873d357d71afa52');
+    $client = TaxJar\Client::withApiKey('69bf1c893fbd334f69cbeab198128f8f');
     $order_taxes = $client->taxForOrder([
       'to_zip' => $order_info->zip,
       'to_state' => $order_info->state,
