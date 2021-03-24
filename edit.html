@@ -123,10 +123,11 @@
                     <label for="taskerinputField" id="taskerlabel">Would like to have the same provider?</label>
                     <div id="taskerinputField">
                       <input id="taskerinput" placeholder="Provider ID#" type="text" />
-                      <button style="margin-left: 5px; width: 15%;" class="secondary" id="checkprovider">Check</button>
+                      <label id="providerSelected" class="hidden" style="font-weight: bolder;"><span id="provider"></span> has been selected.</label>
+                      <a class="editbutton hidden" id="removeprovider">Remove</a>
+                      <a class="editbutton" id="checkprovider">Select</a>
                     </div>
-                    <label id="errorlabel" class="hidden">test</label>
-                    <label id="providerSelected" class="hidden"><span id="provider"></span> has been selected</label>
+                    <label id="errorlabel" class="hidden"></label>
                   </div>
                 </div>
               </div>
@@ -558,7 +559,7 @@
         </div>
       </div>
       <div id="centerdiv">
-        <button class="trigger_popup_fricc primary-green" id="button">Checkout</button>
+        <button class="trigger_popup_fricc button" id="button">Checkout</button>
         <div class="box">
           <!--<a class="button" href="#popup1">Pop up</a>-->
         </div>
@@ -718,7 +719,7 @@
                                   Payment succeeded, see the result in your
                                   <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
                                 </p>
-                                <button id="submit" class="primary-green">
+                                <button id="submit" class="button">
                                   <div class="spinner hidden" id="spinner"></div>
                                   <span id="button-text">Place Order</span>
                                 </button>
@@ -782,8 +783,8 @@
                   <input id="password" class="form-control" type="text" placeholder="Password" required="required" />
                   <span id="password-error" class="error"></span>
                 </fieldset>
-                <button id="submit-login" class="primary-green">Submit</button><span id="noaccount"><a href="form">Don't
-                    have an account?</a></span>
+                <button id="submit-login" class="btn btn-primary">Submit</button><span id="noaccount"><a
+                    href="form">Don't have an account?</a></span>
                 <div class="register-slide">
                   <a class="close-register"><i class="lnr lnr-cross"></i></a>
                   <p>Click the "Create Account" checkbox to create an account during checkout.</p>

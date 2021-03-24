@@ -128,7 +128,7 @@ app.directive('datePicker', function ($timeout, $window) {
                         today.getMonth() == date.getMonth()) {
                         showday = true;
                     }
-                    console.log(dateDiffInDays(date, today))
+                    // console.log(dateDiffInDays(date, today))
                     if (dateDiffInDays(today, date) > 6) {
                         showday = false;
                     }
