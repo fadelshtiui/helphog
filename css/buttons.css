@@ -28,27 +28,45 @@ button:disabled {
 
 /* Primary Buttons */
 
-button.primary {
+button.primary-green, button.primary-red {
      border: none;
-     font: 500 16px/1 "Poppins", sans-serif;
+     font-weight: 500;
+     font-size: 16px;
      padding: 20px;
-     background: #1ecd97;
+     
      color: white;
 }
 
-button.primary:hover {
+button.primary-green {
+     background: #1ecd97;
+}
+
+button.primary-green:hover {
      background: #1BB887;
 }
 
-button.primary:active {
+button.primary-green:active {
      background: #18A478;
+}
+
+button.primary-red {
+     background: #DB2828;
+}
+
+button.primary-red:hover {
+     background: #d01919;
+}
+
+button.primary-red:active {
+     background: #b21e1e
 }
 
 /* Secondary Buttons */
 
 button.secondary {
      color: black;
-     font: 500 14px/1 "Poppins", sans-serif;
+     font-weight: 500;
+     font-size: 14px;
      padding: 14px;
      border: 0.5px solid #ddd;
 }
