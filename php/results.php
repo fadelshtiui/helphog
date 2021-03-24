@@ -156,11 +156,22 @@ foreach ($stmnt->fetchAll() as $row) {
           } else if ($full_address != "") {
                $available = 0;
                foreach ($all_emails as $email) {
-                    $google_response = address_works_for_provider($full_address, $email, time());
-                    if ($google_response->within) {
-                         $available = 1;
-                         $num_available++;
-                         break;
+                    $allzeros = false;
+                    $stmnt = $db->prepare("SELECT availability, phone, timezone FROM login WHERE email = ?;");
+                    $stmnt->execute(array($email));
+                    foreach($stmnt->fetchAll() as $row) {
+                        $full_availability = $row['availability'];
+                        if (strpos($full_availability, '1') === false) {
+                          $allzeros = true;
+                        }
+                    }
+                    if(!$allzeros){
+                        $google_response = address_works_for_provider($full_address, $email, time());
+                        if ($google_response->within) {
+                             $available = 1;
+                             $num_available++;
+                             break;
+                        }
                     }
                }
           }
