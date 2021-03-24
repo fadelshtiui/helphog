@@ -37,6 +37,7 @@
      };
 
      function toggleAddressInput() {
+          this.disabled = true;
           id('addressDisplay').classList.add('hidden');
           id('locationField').classList.remove('hidden');
           id('autocomplete').classList.remove('hidden');
