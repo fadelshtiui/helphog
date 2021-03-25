@@ -16,18 +16,19 @@ if (isset($_POST["service"]) && isset($_POST["id"])) {
         $providers = $row['providers'];
     }
 
+    $available = 0;
+    $stmnt2 = $db->prepare("SELECT availability FROM login WHERE type='Business' AND services LIKE ?;");
+    $stmnt2->execute(array('%' . $service . '%'));
+    foreach($stmnt2->fetchAll() as $row2) {
+        if (strpos($row2['availability'], '1') !== false) {
+            $available++;
+        }
+    }
+
     $result = new \stdClass();
     $result->providers = $providers;
+    $result->available = $available;
 
-
-    if ($id != none){
-        $stmnt2 = $db->prepare("SELECT firstname FROM login WHERE id = ?;");
-        $stmnt2->execute(array($id));
-        foreach($stmnt2->fetchAll() as $row2) {
-            $name = $row2['firstname'];
-        }
-        $result->name = $name;
-    }
     header('Content-type: application/json');
     print json_encode($result);
 }
