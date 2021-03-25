@@ -123,6 +123,14 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
             $phone = $row['phone'];
             $full_availability = $row['availability'];
 
+            if ($providerId != 'none'){
+                if (strpos($full_availability, '1') === false) {
+                  echo 'The selected provider is unavailable for this order';
+                    return;
+                }
+            }
+
+
             // account for travel time
             $travelDurationIndexes = ceil($durations[$i] / 3600) + 1;
             $duration_index = 24 * intval($curr_utc_time->format('w')) + intval($curr_utc_time->format('G'));
@@ -212,13 +220,6 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
             $final_result .= '1';
         } else {
             $final_result .= '0';
-        }
-    }
-
-    if ($providerId !== '0'){
-        if (strpos($final_result, '1') === false) {
-          echo 'The selected provider is unavailable for this order';
-            return;
         }
     }
 
