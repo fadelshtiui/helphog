@@ -15,10 +15,10 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
     $providerId = trim($_POST["id"]);
 
     echo check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId);
-
 }
 
-function check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId) {
+function check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId)
+{
 
     if ($updatecontactlist == 'true') {
         $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tz));
@@ -44,26 +44,25 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
     // if remote, check all providers, otherwise check by zip code
     $all_emails = array();
 
-    if($providerId != 'none'){
+    if ($providerId != 'none') {
         $providerexists = false;
         $stmnt = $db->prepare("SELECT email FROM login WHERE type='Business' AND services LIKE ? AND id=?;");
         $stmnt->execute(array('%' . $service . '%', $providerId));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
             error_log($row['email']);
             $providerexists = true;
         }
 
-        if (!$providerexists){
+        if (!$providerexists) {
             echo 'Provider with the inputed ID does not exist or does not provide this service';
             return;
         }
-
-    }else{
+    } else {
 
         $stmnt = $db->prepare("SELECT email FROM login WHERE type='Business' AND services LIKE ?;");
         $stmnt->execute(array('%' . $service . '%'));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
         }
     }
@@ -71,8 +70,7 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
     if ($remote == 'y') {
 
         $available_emails = $all_emails;
-
-    }else{
+    } else {
 
         // only consider providers who are available in the address and can travel within order timeframe
 
@@ -85,7 +83,7 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
             //     array_push($available_emails, $email);
             // }
             $distanceMatrix = address_works_for_provider($address, $email, $t);
-            if ($distanceMatrix->within){
+            if ($distanceMatrix->within) {
                 array_push($available_emails, $email);
                 array_push($durations, $distanceMatrix->traffic);
             }
@@ -118,14 +116,14 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
         }
         $stmnt = $db->prepare("SELECT availability, phone, timezone FROM login WHERE email = ?;");
         $stmnt->execute(array($curr_email));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             $provider_tz = $row['timezone'];
             $phone = $row['phone'];
             $full_availability = $row['availability'];
 
-            if ($providerId != 'none'){
+            if ($providerId != 'none') {
                 if (strpos($full_availability, '1') === false) {
-                  echo 'The selected provider is unavailable for this order';
+                    echo 'The selected provider is unavailable for this order';
                     return;
                 }
             }
@@ -134,20 +132,21 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
             // account for travel time
             $travelDurationIndexes = ceil($durations[$i] / 3600) + 1;
             $duration_index = 24 * intval($curr_utc_time->format('w')) + intval($curr_utc_time->format('G'));
-            for ($k = $duration_index; $k < $duration_index + $travelDurationIndexes; $k++){
+            for ($k = $duration_index; $k < $duration_index + $travelDurationIndexes; $k++) {
                 $full_availability[$k] = '0';
             }
         }
 
         $sql_schedule = $utc->format('Y-m-d');
+        error_log($sql_schedule);
 
         $start_index = 24 * intval($utc->format('w')) + $offset;
 
 
         // check for overlapping orders
-        $stmnt = $db->prepare("SELECT schedule, duration FROM orders WHERE client_email = ? OR secondary_providers LIKE ? AND schedule LIKE ?;");
-        $stmnt->execute(array($curr_email, '%' . $curr_email . '%', '%' . $sql_schedule . '%'));
-        foreach($stmnt->fetchAll() as $row) {
+        $stmnt = $db->prepare("SELECT * FROM orders WHERE (client_email = ? OR secondary_providers LIKE ?) AND schedule LIKE ?;");
+        $stmnt->execute(array($curr_email, '%' . $curr_email . '%', $sql_schedule . '%'));
+        foreach ($stmnt->fetchAll() as $row) {
 
             $order_time = new DateTime(date('Y-m-d H:i:s', strtotime($row["schedule"])), new DateTimeZone('UTC'));
 
@@ -204,7 +203,6 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
             }
             $j++;
         }
-
     }
 
     if ($updatecontactlist == 'true') {
@@ -224,5 +222,4 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
     }
 
     return $final_result;
-
 }
