@@ -1,5 +1,4 @@
 $(window).on('load', function () {
-	id('loading').classList.add('hidden')
 	$('#loading-animation').css('display', 'none');
 	$('#loading-animation').fadeIn(900);
 	$('a').css('display', 'none');
@@ -12,6 +11,16 @@ $(window).on('load', function () {
 	$('h2').delay(500).fadeIn(900);
 	$('#app').css('display', 'none');
 	$('#app').delay(600).fadeIn(900);
+
+	document.querySelector('.modal-wrapper').addEventListener('click', function () {
+		this.classList.add('hidden')
+	})
+	document.getElementById('notcancel').addEventListener('click', function () {
+		document.querySelector('.modal-wrapper').classList.add('hidden')
+	})
+	document.querySelector('.modal').addEventListener('click', function (e) {
+		e.stopPropagation();
+	})
 
 	let tz = jstz.determine();
 	let timezone = tz.name();
@@ -26,6 +35,56 @@ $(window).on('load', function () {
 		.then(updateOrders)
 		.catch(console.log);
 });
+
+function openCancelPopup(orderNumber) {
+	document.querySelector('.modal-wrapper').classList.remove('hidden')
+
+	let data = new FormData();
+
+	data.append("ordernumber", orderNumber)
+	data.append('session', getSession())
+
+	let url = "php/checkifcancel.php";
+	fetch(url, { method: "POST", body: data })
+		.then(checkStatus)
+		.then(res => res.json())
+		.then(handleResponse)
+		.catch(console.log);
+}
+
+function handleResponse(response) {
+	let date = new Date(response.schedule + " GMT");
+
+	id("first").textContent = "Are you sure you want to cancel " + response.service + " (" + response.order + ") on " + date.toLocaleString() + "?";
+	if (response.within == "true") {
+		id("second").textContent = "Since your order is within 24 hours of now, a non-refundable fee of $15 will be charged to your account."
+	} else {
+		id("second").textContent = "You may cancel your order now free of charge."
+	}
+
+	id('cancel').onclick = function() {
+		id('loading').classList.remove('hidden')
+		let data = new FormData();
+		data.append("ordernumber", response.order);
+		data.append('session', getSession());
+		let url = "php/customercancel.php";
+		let response = await fetch(url, { method: "POST", body: data })
+		await checkStatus(response)
+		response = await response.text();
+		id('loading').classList.add('hidden')
+
+		if (response == 'ordererror') {
+			alert('You cannot cancel an order that is already in progress.');
+		} else {
+			document.querySelector('.modal-wrapper').classList.add('hidden')
+			window.reload()
+		}
+	}
+}
+
+function openReviewPopup(orderNumber) {
+
+}
 
 
 function updateOrders(response) {

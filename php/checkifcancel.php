@@ -5,16 +5,27 @@ include 'common.php';
 $response = new stdClass();
 $response->error = "";
 
-if (isset($_POST["ordernumber"]) && isset($_POST['secret'])) {
+if (isset($_POST["ordernumber"]) && (isset($_POST['secret']) || isset($_POST['session']))) {
     $order_number = trim($_POST["ordernumber"]);
     $cancel_key = trim($_POST['secret']);
+    $session = trim($_POST['session']);
     
     $db = establish_database();
     
+    $sql = "";
+    $params = array();
+    if (isset($_POST['session']) && validate_customer($order_number, $session)) {
+        $sql = "SELECT * FROM orders WHERE order_number = ?;";
+        $params = array($order_number);
+    } else {
+        $sql = "SELECT * FROM orders WHERE order_number = ? AND cancel_key = ?;";
+        $params = array($order_number, $cancel_key);
+    }
+    
     $service = "";
     $schedule = "";
-    $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ? AND cancel_key = ?;");
-    $stmnt->execute(array($order_number, $cancel_key));
+    $stmnt = $db->prepare($sql);
+    $stmnt->execute($params);
     foreach($stmnt->fetchAll() as $row) {
         $service = $row["service"];
         $schedule = $row["schedule"];
@@ -39,5 +50,3 @@ if (isset($_POST["ordernumber"]) && isset($_POST['secret'])) {
 
 header('Content-type: application/json');
 print json_encode($response);
-
-?>

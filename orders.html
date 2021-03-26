@@ -29,8 +29,9 @@
 
 	<script src="js/common.js"></script>
 
-	<link rel="stylesheet" href="css/orders.css" type="text/css">
+
 	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/orders.css" type="text/css">
 
 </head>
 
@@ -41,6 +42,20 @@
 			<div class="c2"></div>
 			<div class="c3"></div>
 			<div class="c4"></div>
+		</div>
+	</div>
+	<div class="modal-wrapper hidden">
+		<div class='modal'>
+			<div class='header'>
+				<span id="first">some text</span>
+			</div>
+			<div class='content'>
+				<span id="second">some text</span>
+			</div>
+			<div class='actions'>
+				<button class="primary-red" id='cancel'>Yes, cancel it</button>
+				<button class="secondary-orders" id='notcancel'>No, keep it</button>
+			</div>
 		</div>
 	</div>
 	<div class="content">
@@ -166,9 +181,14 @@
 								</td>
 								<td v-else-if="props.item.status  == 'pe' || props.item.status == 'cl'"
 									class="text-xs-left" style='font-weight:300;'>
-									<v-btn @click="status2(); selectedItem = props.item" class="dark">Cancel
-										Order
-									</v-btn>
+									<!--<v-btn @click="status2(); selectedItem = props.item" class="secondary-orders">Cancel-->
+									<!--	Order-->
+									<!--</v-btn>-->
+									<button
+										onclick="openCancelPopup(this.parentElement.parentElement.firstElementChild.innerText)"
+										class="secondary-orders cancel-button">
+										Cancel Order
+									</button>
 									<transition name="fade" appear>
 										<div class="modal-overlay" v-if="showCancel"
 											@click="showCancel = false"></div>
@@ -180,7 +200,7 @@
 												sure you would
 												like to cancel?</p>
 											<br><br>
-											<v-btn @click="cancel(selectedItem)" class="Submit"
+											<v-btn @click="cancel(selectedItem)" class="secondary-orders"
 												style="color:red;">
 												Cancel Order</v-btn>
 											<v-btn @click="undo2()" class="Submit">Exit</v-btn>
@@ -296,7 +316,7 @@
 				<address style="margin-top: -2px;">
 					+1 (425) 412-7423<br>
 
-					<button onclick="window.open('mailto:support@helphog.com')" class="secondary"
+					<button onclick="window.open('mailto:support@helphog.com')" class="secondary-orders"
 						style="width: 120px;">Email Us</button>
 				</address>
 			</li>
