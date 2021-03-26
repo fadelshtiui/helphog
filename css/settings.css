@@ -103,36 +103,29 @@ html {
 
 .leftbox {
   float: left;
-  top: -5%;
-  left: 5%;
   position: absolute;
   width: 15%;
-  height: 110%;
-  background: #1ECD97;
-  box-shadow: 3px 3px 10px rgba(119, 119, 119, 0.5);
+  height: 100%;
+  border-right: 0.08rem solid #F2F2F2;
 }
 
 nav a {
   list-style: none;
   padding: 55px;
-  color: #FFFFFF;
+  color: #1ecd97;
   font-size: 3.1em;
   display: block;
   transition: all .3s ease-in-out;
 }
 
 nav a:hover {
-  color: #3FB6A8;
-  transform: scale(1.2);
+  /*transform: scale(1.2);*/
   cursor: pointer;
-}
-
-nav a:first-child {
-  margin-top: 7px;
 }
 
 .active {
   color: #3FB6A8;
+  background: #F5F7F7;
 }
 
 .rightbox {
@@ -148,7 +141,6 @@ nav a:first-child {
 }
 
 h1 {
-  color: #1ECD97;
   font-size: 3em;
   margin-top: 40px;
   margin-bottom: 35px;
