@@ -382,7 +382,12 @@ let preloaded = false;
 			}
 		}
 
-		let percentage = response.radius * 3 - 12 + 'px'
+		let percentage = response.radius * 3 - 12
+		if (percentage < 0) {
+			percentage = 0;
+		}
+		console.log(percentage)
+		percentage += 'px'
 		document.querySelector('.rangeslider-fill-lower').style.width = percentage;
 		document.querySelector('.rangeslider-thumb').style.left = percentage;
 		id('slider-input').value = "" + response.radius * 1000;
