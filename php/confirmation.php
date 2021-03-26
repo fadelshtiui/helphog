@@ -49,10 +49,12 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
         $address = $street_address . " " . $city . " " . $state . " " . $zip;
 
-        if (minutes_since($schedule) > 0) {
+        $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($_SESSION['tzoffset']));
+        $utc->setTimezone(new DateTimeZone('UTC'));
+
+        if (minutes_until($utc->format('Y-m-d H:i:s')) < 20) {
 
             $response->error = "waited very long before clicking place order";
-            
         } else {
 
             $response->address = $street_address;
@@ -148,9 +150,6 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             $image_key = '' . bin2hex(openssl_random_pseudo_bytes(128));
 
             $sql = "INSERT INTO orders (order_number, customer_email, timestamp, schedule, address, service, message, cost, customer_phone, client_email, wage, order_cookie, duration, people, intent, status, prorated, accept_key, cancel_key, timezone, cancel_buffer, image_key, sales_tax_percent, street_address, city, state, zip) VALUES (:order_number, :customer_email, :timestamp, :schedule, :address, :service, :message, :price, :customer_phone, :client_email, :wage, :order_cookie, :duration, :people, :intent, :status, :prorated, :accept_key, :cancel_key, :timezone, :cancel_buffer, :image_key, :sales_tax_percent, :street_address, :city, :state, :zip);";
-
-            $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($_SESSION['tzoffset']));
-            $utc->setTimezone(new DateTimeZone('UTC'));
 
             $time = date('m-d-y H:i:s');
             $stmt = $db->prepare($sql);
