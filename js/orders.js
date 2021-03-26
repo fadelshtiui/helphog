@@ -1,3 +1,5 @@
+let selectedStars = 0;
+
 $(window).on('load', function () {
 	$('#loading-animation').css('display', 'none');
 	$('#loading-animation').fadeIn(900);
@@ -14,9 +16,6 @@ $(window).on('load', function () {
 
 	document.querySelector('.modal-wrapper').addEventListener('click', function () {
 		this.classList.add('hidden')
-	})
-	document.getElementById('no').addEventListener('click', function () {
-		document.querySelector('.modal-wrapper').classList.add('hidden')
 	})
 	document.querySelector('.modal').addEventListener('click', function (e) {
 		e.stopPropagation();
@@ -63,7 +62,13 @@ function handleResponse(response) {
 		id("second").textContent = "You may cancel your order now free of charge."
 	}
 
+	id('stars-container').classList.add('hidden')
+
 	document.querySelector('.modal-wrapper').classList.remove('hidden')
+
+	document.querySelector('.actions').classList.remove('extra-button-margin')
+
+	id('no').onclick = closePopup
 
 	id('yes').onclick = async function () {
 		id('loading').classList.remove('hidden')
@@ -79,13 +84,63 @@ function handleResponse(response) {
 		if (response2 == 'ordererror') {
 			alert('You cannot cancel an order that is already in progress.');
 		} else {
-			document.querySelector('.modal-wrapper').classList.add('hidden')
+			// document.querySelector('.modal-wrapper').classList.add('hidden')
 			location.reload()
 		}
 	}
 }
 
-function openReviewPopup(orderNumber) {
+function closePopup() {
+	document.querySelector('.modal-wrapper').classList.add('hidden')
+}
+
+function openReviewPopup(orderNumber, name) {
+	id('first').innerText = "If your order has been successfully completed please review " + name + "'s performance as your provider and mark the order completed."
+	id('second').innerText = " If you have any questions or concerns please don't hesitate to contact us."
+
+	id('yes').classList.remove('primary-red');
+	id('yes').classList.add('primary-green');
+
+	id('yes').innerText = "Mark Completed"
+	id('no').innerText = "Dispute Order"
+
+	id('no').classList.remove('secondary-orders')
+	id('no').classList.add('primary-red')
+
+	id('stars-container').classList.remove('hidden')
+
+	document.querySelector('.actions').classList.add('extra-button-margin')
+
+	document.querySelector('.modal-wrapper').classList.remove('hidden')
+
+	id('yes').onclick = async function () {
+		id('loading').classList.remove('hidden')
+		let data = new FormData();
+		data.append("ordernumber", orderNumber);
+		data.append("rating", selectedStars);
+		data.append('session', getSession())
+		let url = "php/rating.php";
+		let res = await fetch(url, { method: "POST", body: data })
+		await checkStatus(res)
+		location.reload();
+	}
+
+	id('no').onclick = async function () {
+		id('loading').classList.remove('hidden')
+		let data = new FormData();
+		data.append("ordernumber", orderNumber);
+		data.append("session", getSession())
+		let url = "php/dispute.php";
+		let response = await fetch(url, { method: "POST", body: data })
+		await checkStatus(response)
+		response = await response.json()
+		id('loading').classList.add('hidden')
+		if (response.result == 'successful') {
+			location.reload()
+		} else {
+			alert('Sorry, orders may only be disputed within 24 hours of completion.')
+		}
+	}
 
 }
 

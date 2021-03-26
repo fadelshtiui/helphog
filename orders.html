@@ -52,6 +52,13 @@
 			<div class='content'>
 				<span id="second"></span>
 			</div>
+			<div id="stars-container" class="rating rating2 hidden">
+				<a href="#5" onclick="selectedStars = 5;" title="Give 5 stars">★</a>
+				<a href="#4" onclick="selectedStars = 4;" title="Give 4 stars">★</a>
+				<a href="#3" onclick="selectedStars = 3;" title="Give 3 stars">★</a>
+				<a href="#2" onclick="selectedStars = 2;" title="Give 2 stars">★</a>
+				<a href="#1" onclick="selectedStars = 1;" title="Give 1 star">★</a>
+			</div>
 			<div class='actions'>
 				<button class="primary-red" id='yes'></button>
 				<button class="secondary-orders" id='no'></button>
@@ -141,9 +148,14 @@
 									style='font-weight:500; color:#3f8242;'>Task Completed</td>
 								<td v-if="props.item.status == 'mc' && props.item.rating == '0'"
 									class="text-xs-left" style='font-weight:400;'>
-									<v-btn @click="status(); selectedItem = props.item; " class="dark">Review
-										Order
-									</v-btn>
+									<!--<v-btn @click="status(); selectedItem = props.item; " class="dark">Review-->
+									<!--	Order-->
+									<!--</v-btn>-->
+									<button
+										onclick="openReviewPopup(this.parentElement.parentElement.firstElementChild.innerText, this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.innerText)"
+										class="secondary-orders cancel-button">
+										Review Order
+									</button>
 									<transition name="fade" appear>
 										<div class="modal-overlay" v-if="showModal"
 											@click="showModal = false"></div>

@@ -488,3 +488,7 @@ button.secondary-orders:hover {
 .header {
   height: fit-content;
 }
+
+.extra-button-margin {
+  margin-top: 60px;
+}
