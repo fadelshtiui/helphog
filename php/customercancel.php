@@ -100,9 +100,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 $tz = $row['timezone'];
                 $phone = $row['phone'];
             }
-            
-            $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-            $local_date->setTimezone(new DateTimeZone($tz));
                 
             $amount = 0;
             $payment_info = payment($order);
@@ -141,7 +138,12 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                   []
                 );
             }
+            
+            $local_date;
             if ($providerEmail != ""){
+                
+                $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+                $local_date->setTimezone(new DateTimeZone($tz));
                 
                 send_email($providerEmail, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($providerMessage, $providerName));
                 
@@ -193,6 +195,3 @@ function sendTextProvider($service, $order, $phonenumber, $schedule){
     $client = new Client($sid, $token);
     $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . ' was canceled by the customer.'));
 }
-
-   
-?>

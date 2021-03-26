@@ -15,7 +15,7 @@ $(window).on('load', function () {
 	document.querySelector('.modal-wrapper').addEventListener('click', function () {
 		this.classList.add('hidden')
 	})
-	document.getElementById('notcancel').addEventListener('click', function () {
+	document.getElementById('no').addEventListener('click', function () {
 		document.querySelector('.modal-wrapper').classList.add('hidden')
 	})
 	document.querySelector('.modal').addEventListener('click', function (e) {
@@ -37,8 +37,6 @@ $(window).on('load', function () {
 });
 
 function openCancelPopup(orderNumber) {
-	document.querySelector('.modal-wrapper').classList.remove('hidden')
-
 	let data = new FormData();
 
 	data.append("ordernumber", orderNumber)
@@ -52,8 +50,11 @@ function openCancelPopup(orderNumber) {
 		.catch(console.log);
 }
 
-async function handleResponse(response) {
+function handleResponse(response) {
 	let date = new Date(response.schedule + " GMT");
+
+	id('yes').innerText = "Yes, cancel it"
+	id('no').innerText = "No, keep it"
 
 	id("first").textContent = "Are you sure you want to cancel " + response.service + " (" + response.order + ") on " + date.toLocaleString() + "?";
 	if (response.within == "true") {
@@ -62,22 +63,24 @@ async function handleResponse(response) {
 		id("second").textContent = "You may cancel your order now free of charge."
 	}
 
-	id('cancel').onclick = function() {
+	document.querySelector('.modal-wrapper').classList.remove('hidden')
+
+	id('yes').onclick = async function () {
 		id('loading').classList.remove('hidden')
 		let data = new FormData();
 		data.append("ordernumber", response.order);
 		data.append('session', getSession());
 		let url = "php/customercancel.php";
-		let response = await fetch(url, { method: "POST", body: data })
-		await checkStatus(response)
-		response = await response.text();
+		let response2 = await fetch(url, { method: "POST", body: data })
+		await checkStatus(response2)
+		response2 = await response2.text();
 		id('loading').classList.add('hidden')
 
-		if (response == 'ordererror') {
+		if (response2 == 'ordererror') {
 			alert('You cannot cancel an order that is already in progress.');
 		} else {
 			document.querySelector('.modal-wrapper').classList.add('hidden')
-			window.reload()
+			location.reload()
 		}
 	}
 }
