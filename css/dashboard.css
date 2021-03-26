@@ -50,8 +50,9 @@ html {
   color: inherit;
   text-decoration: none;
 }
-.dashboard-nav__item a img {
-  margin: 0 1.5rem 0 0;
+.dashboard-nav__item a i {
+  color:#bfc7cd;
+  font-size:18px;
 }
 .dashboard-nav__item--selected {
   background: #F5F7F7;
@@ -78,7 +79,7 @@ html {
 .dashboard-list__item h2 {
   margin: 0 0 1.6875rem;
   color: #5F6876;
-  
+
 }
 .dashboard-list__item span {
   display: block;
@@ -227,7 +228,7 @@ html {
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover
@@ -242,7 +243,7 @@ select:-webkit-autofill:focus {
 
 #distance-update:after {
     content: "UPDATE";
-    
+
 }
 
 #distance-update {
@@ -381,5 +382,3 @@ select:-webkit-autofill:focus {
         }
     }
 }
-
-

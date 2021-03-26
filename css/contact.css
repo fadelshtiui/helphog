@@ -7,12 +7,13 @@ html {
 }
 
 #head {
-     margin: 0 auto;
-     margin-bottom: 10px;
-     margin-top: -80px;
-     width: 550px;
-     font-size: 35px;
-     color: #1ecd97;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    margin-top: 21px;
+    width: 550px;
+    font-size: 35px;
+    color: #000000;
+    padding: 25px;
 }
 
 #center {
@@ -22,6 +23,8 @@ html {
      margin-top: 150px;
      margin-bottom: 200px;
      display: none;
+     box-shadow:0 1px 3px 0 rgb(0 0 0 / 30%), 0px 0px 1px 0px rgb(0 0 0 / 28%);
+     border-radius: 5px;
 }
 
 #left {
@@ -55,8 +58,8 @@ html {
 
 .heading {
      font-size: 36px;
-     margin-bottom: 18px;
-     margin-top: 18px;
+     margin-bottom: 0px;
+     margin-top: 0px;
 }
 
 a {
@@ -129,7 +132,6 @@ img {
 }
 
 .important {
-     color: #1ecd97;
      font-size: 125%;
      font-weight: bold;
 }
