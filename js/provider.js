@@ -489,8 +489,8 @@ let preloaded = false;
 						let section1 = document.createElement("div");
 						section1.classList.add("section");
 
-						let image = document.createElement("img");
-						image.src = "assets/images/home.png";
+						let image = document.createElement("i");
+						image.classList.add('active-order-icon', 'fas', 'fa-map-marked-alt')
 
 						let h1 = document.createElement("h1");
 						h1.textContent = "Address";
@@ -524,8 +524,8 @@ let preloaded = false;
 						let section2 = document.createElement("div");
 						section2.classList.add("section");
 
-						let image2 = document.createElement("img");
-						image2.src = "assets/images/cash.png";
+						let image2 = document.createElement("i");
+						image2.classList.add('active-order-icon', "fas", "fa-hand-holding-usd")
 
 						let salary = document.createElement("h1");
 						salary.textContent = "Salary";
@@ -564,8 +564,8 @@ let preloaded = false;
 						let section3 = document.createElement("div");
 						section3.classList.add("section");
 
-						let image3 = document.createElement("img");
-						image3.src = "assets/images/download.png";
+						let image3 = document.createElement("i");
+						image3.classList.add('fas', "fa-upload", "active-order-icon")
 
 						let documents = document.createElement("h1");
 						documents.textContent = "Upload Documents";
@@ -604,6 +604,7 @@ let preloaded = false;
 						// expenditurebutton.type = "submit";
 						expenditurebutton.name = "upload";
 						expenditurebutton.innerText = "UPLOAD";
+						expenditurebutton.disabled = true;
 
 						if (order.expenditure > 0) {
 							attach.textContent = "We have processed your extra expenditures for a total of $" + order.expenditure
