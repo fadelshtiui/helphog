@@ -52,7 +52,7 @@ function openCancelPopup(orderNumber) {
 		.catch(console.log);
 }
 
-function handleResponse(response) {
+async function handleResponse(response) {
 	let date = new Date(response.schedule + " GMT");
 
 	id("first").textContent = "Are you sure you want to cancel " + response.service + " (" + response.order + ") on " + date.toLocaleString() + "?";
