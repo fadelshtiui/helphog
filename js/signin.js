@@ -6,7 +6,7 @@
         id('extra-prompt').classList.add('hidden')
         let queryString = window.location.search
         const urlParams = new URLSearchParams(queryString)
-        if (urlParams.get('redirect')) {
+        if (urlParams.get('redirect') && urlParams.get('redirect') == 'quickapply') {
             id('extra-prompt').classList.remove('hidden')
         }
 

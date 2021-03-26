@@ -208,7 +208,9 @@ let preloaded = false;
 			displayResults(response);
 
 		} else {
-			document.querySelector(".container").classList.remove("hidden");
+
+			window.location.href = "signin?redirect=provider"
+			// document.querySelector(".container").classList.remove("hidden");
 		}
 	}
 
