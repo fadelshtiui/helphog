@@ -167,15 +167,15 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
         $providers = $row["providers"];
     }
 
-    $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($order_info->tzoffset));
-    $utc->setTimezone(new DateTimeZone('UTC'));
+    // $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($order_info->tzoffset));
+    // $utc->setTimezone(new DateTimeZone('UTC'));
 
     $time = date('Y-m-d H:i:s');
-    $utc->format('Y-m-d H:i:s');
+    // $utc->format('Y-m-d H:i:s');
 
     // $cancelBuffer = ($time - $utc) / 60;
 
-    $order_number;
+    $order_number = 0;
     $unique = false;
     while (!$unique) {
         $order_number = (time() + mt_rand()) % 100000;
