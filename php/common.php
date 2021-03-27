@@ -187,57 +187,6 @@ function pay_provider($order_number)
 		$params = array($payment_info->tax_collected, $order_number);
 		$stmt->execute($params);
 	}
-
-	// $name = "";
-	// $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
-	// $stmnt->execute(array($row["customer_email"]));
-	// foreach ($stmnt->fetchAll() as $row) {
-	// 	$name = " " . $row['firstname'];
-	// }
-
-	// $price = $cost;
-
-	// if ($wage == "hour") {
-	// 	$duration = $duration . " hour(s)";
-	// }
-	// if ($wage == "per") {
-	// 	$duration = "No time limit";
-	// }
-
-	// $orig_price = $cost;
-
-	// if ($wage == "hour") {
-	// 	$providerWage = "$" . $price . "/hr";
-	// } else {
-	// 	$providerWage = "$" . $price;
-	// }
-
-	// if ($wage == "hour") {
-	// 	$price = $price * $people;
-	// 	$price = $price * $durationTemp;
-	// } else {
-	// 	$cost *= $people;
-	// }
-
-	// $peopleText = "providers";
-	// if ($people == 1) {
-	// 	$peopleText = "provider";
-	// }
-
-	// $hourText = "hour";
-	// if ($durationTemp > 1) {
-	// 	$hourText = "hours";
-	// }
-
-	// if ($wage == "hour") {
-	// 	$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . $duration . ")";
-	// 	$amount = $total_before_tax;
-	// } else {
-	// 	$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
-	// 	$amount = $cost;
-	// }
-
-	// send_email($customer_email, "support@helphog.com", "HelpHog - Receipt for " . $service, get_receipt($name, $service, $order_number, $schedule, $subtotal, $amount, $tax_collected, $customer_payment));
 }
 
 function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message)
@@ -662,13 +611,30 @@ function start_stop_order($order)
 	}
 }
 
+function getId($email){
+    $db = establish_database();
+	$stmnt = $db->prepare("SELECT id FROM login WHERE email = ?;");
+	$stmnt->execute(array($email));
+	foreach ($stmnt->fetchAll() as $row) {
+		$providerId = $row['id'];
+	}
+	return $providerId;
+}
+
 function mark_completed($order, $message)
 {
+    $payment_info = payment($order);
+
 	$db = establish_database();
 
 	$service = "";
 	$customer_email = "";
 	$customer_phone = "";
+	$wage = "";
+	$cost = "";
+	$people= "";
+	$schedule = "";
+	$client_email = "";
 	$disputes = 0;
 	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
@@ -677,17 +643,97 @@ function mark_completed($order, $message)
 		$customer_email = $row['customer_email'];
 		$customer_phone = $row['customer_phone'];
 		$disputes = $row['disputes'];
+		$cost = $row['cost'];
+		$wage = $row['wage'];
+		$people = $row['people'];
+		$schedule = $row['schedule'];
+		$client_email = $row['client_email'];
+
 	}
+
+	$providerId = getId($client_email);
+
 
 	if ($disputes < 3) {
 		$name = "";
-		$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+		$phone = "";
+		$stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
 		$stmnt->execute(array($customer_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$name = $row['firstname'];
+			$phone = $row['phone'];
 		}
 
-		send_email($customer_email, "no-reply@helphog.com", "HelpHog - Task Completed", get_marked_completed_email($name, $service));
+		//Receipt text and email
+
+		$name = "";
+    	$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+    	$stmnt->execute(array($row["customer_email"]));
+    	foreach ($stmnt->fetchAll() as $row) {
+    		$name = " " . $row['firstname'];
+    	}
+
+    	$customer_payment = $payment_info->customer_payment;
+    	$tax_collected = $payment_info->tax_collected;
+        $duration =  $payment_info->worked_time;
+
+    	$price = $cost;
+
+    	if ($wage == "hour") {
+    		$duration = $duration . " hour(s)";
+    	}
+    	if ($wage == "per") {
+    		$duration = "No time limit";
+    	}
+
+    	$orig_price = $cost;
+
+    	if ($wage == "hour") {
+    		$providerWage = "$" . $price . "/hr";
+    	} else {
+    		$providerWage = "$" . $price;
+    	}
+
+    	if ($wage == "hour") {
+    		$price = $price * $people;
+
+    	} else {
+    		$cost *= $people;
+    	}
+
+    	$peopleText = "providers";
+    	if ($people == 1) {
+    		$peopleText = "provider";
+    	}
+
+    	$hourText = "hour";
+    	if ($durationTemp > 1) {
+    		$hourText = "hours";
+    	}
+
+    	if ($wage == "hour") {
+    		$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . $duration . ")";
+    		$amount = $total_before_tax;
+    	} else {
+    		$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
+    		$amount = $cost;
+    	}
+
+    	send_email($customer_email, "support@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment));
+
+    	$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
+
+' . $subtotal . '  -  $' . $amount . '
+Sales tax  -  $' . $tax_collected . '
+
+Total  -  $' . $customer_payment . '
+
+If there\'s an issue with the quality of service provided, you may dispute this order by texting back DISPUTE.
+
+For future orders with the same provider use #' . $providerId . ' at checkout.';
+
+
+	    send_text($phone, $message);
 
 		if ($message != "") {
 			$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
@@ -799,7 +845,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		if ($email == $client_email) {
 			return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 		}
-		
+
 		$secondary_providers = "";
 		$stmnt = $db->prepare("SELECT secondary_providers FROM orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
@@ -875,7 +921,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				}
 			}
 		} else { // first provider
-		
+
 		    $replacing_primary_provider = ($secondary_providers != "" && count(explode(',', $secondary_providers)) + 1 == $people);
 
 			if ($people == 1 || $replacing_primary_provider) {
@@ -883,9 +929,9 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				$stmt = $db->prepare($sql);
 				$params = array("cl", $order_number);
 				$stmt->execute($params);
-				
+
 			}
-			
+
 			if ($replacing_primary_provider) {
 			    $secondary_providers_array = explode(',', $secondary_providers);
 				$message = "Here are the providers you will be working with:\n";
@@ -902,28 +948,28 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 					$message .= $name . " (" . $phone . ")\n";
 				}
-				
+
 				$stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
         		$stmnt->execute(array($email));
         		foreach ($stmnt->fetchAll() as $row) {
         			$client_phone = $row['phone'];
         		}
-        				
+
 				$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
 				$token = '18a458337ffdfd10617571e495314311';
 				$client = new Client($sid, $token);
 				$client_phone = '+1' . $client_phone;
 				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
-				
+
 			}
-			    
+
 			$sql = "UPDATE orders SET client_email = ? WHERE order_number = ?";
 			$stmt = $db->prepare($sql);
 			$params = array($email, $order_number);
 			$stmt->execute($params);
 
 			send_claimed_notification($order_number, $email, "primary", $db, $duration);
-			
+
 			if ($mobile) {
 				return '<script>window.location.href = "https://helphog.com/mobileclaimed";</script>';
 			}
@@ -2879,552 +2925,552 @@ function get_marked_completed_email($name, $service)
 ';
 }
 
-// function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total)
-// {
-// 	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-// <html xmlns="http://www.w3.org/1999/xhtml">
-//   <head>
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-//     <meta name="x-apple-disable-message-reformatting" />
-//     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-//     <meta name="color-scheme" content="light dark" />
-//     <meta name="supported-color-schemes" content="light dark" />
-//     <title></title>
-//     <style type="text/css" rel="stylesheet" media="all">
-//     /* Base ------------------------------ */
+function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total)
+{
+	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    <title></title>
+    <style type="text/css" rel="stylesheet" media="all">
+    /* Base ------------------------------ */
 
-//     @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700&display=swap");
-//     body {
-//       width: 100% !important;
-//       height: 100%;
-//       margin: 0;
-//       -webkit-text-size-adjust: none;
-//     }
+    @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700&display=swap");
+    body {
+      width: 100% !important;
+      height: 100%;
+      margin: 0;
+      -webkit-text-size-adjust: none;
+    }
 
-//     a {
-//       color: #3869D4;
-//     }
+    a {
+      color: #3869D4;
+    }
 
-//     a img {
-//       border: none;
-//     }
+    a img {
+      border: none;
+    }
 
-//     td {
-//       word-break: break-word;
-//     }
+    td {
+      word-break: break-word;
+    }
 
-//     .preheader {
-//       display: none !important;
-//       visibility: hidden;
-//       mso-hide: all;
-//       font-size: 1px;
-//       line-height: 1px;
-//       max-height: 0;
-//       max-width: 0;
-//       opacity: 0;
-//       overflow: hidden;
-//     }
-//     /* Type ------------------------------ */
+    .preheader {
+      display: none !important;
+      visibility: hidden;
+      mso-hide: all;
+      font-size: 1px;
+      line-height: 1px;
+      max-height: 0;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    /* Type ------------------------------ */
 
-//     body,
-//     td,
-//     th {
-//       font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
-//     }
+    body,
+    td,
+    th {
+      font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+    }
 
-//     h1 {
-//       margin-top: 0;
-//       color: #333333;
-//       font-size: 22px;
-//       font-weight: bold;
-//       text-align: left;
-//     }
+    h1 {
+      margin-top: 0;
+      color: #333333;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: left;
+    }
 
-//     h2 {
-//       margin-top: 0;
-//       color: #333333;
-//       font-size: 16px;
-//       font-weight: bold;
-//       text-align: left;
-//     }
+    h2 {
+      margin-top: 0;
+      color: #333333;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: left;
+    }
 
-//     h3 {
-//       margin-top: 0;
-//       color: #333333;
-//       font-size: 14px;
-//       font-weight: bold;
-//       text-align: left;
-//     }
+    h3 {
+      margin-top: 0;
+      color: #333333;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: left;
+    }
 
-//     td,
-//     th {
-//       font-size: 16px;
-//     }
+    td,
+    th {
+      font-size: 16px;
+    }
 
-//     p,
-//     ul,
-//     ol,
-//     blockquote {
-//       margin: .4em 0 1.1875em;
-//       font-size: 16px;
-//       line-height: 1.625;
-//     }
+    p,
+    ul,
+    ol,
+    blockquote {
+      margin: .4em 0 1.1875em;
+      font-size: 16px;
+      line-height: 1.625;
+    }
 
-//     p.sub {
-//       font-size: 13px;
-//     }
-//     /* Utilities ------------------------------ */
+    p.sub {
+      font-size: 13px;
+    }
+    /* Utilities ------------------------------ */
 
-//     .align-right {
-//       text-align: right;
-//     }
+    .align-right {
+      text-align: right;
+    }
 
-//     .align-left {
-//       text-align: left;
-//     }
+    .align-left {
+      text-align: left;
+    }
 
-//     .align-center {
-//       text-align: center;
-//     }
-//     /* Buttons ------------------------------ */
+    .align-center {
+      text-align: center;
+    }
+    /* Buttons ------------------------------ */
 
-//     .button {
-//       background-color: #3869D4;
-//       border-top: 10px solid #3869D4;
-//       border-right: 18px solid #3869D4;
-//       border-bottom: 10px solid #3869D4;
-//       border-left: 18px solid #3869D4;
-//       display: inline-block;
-//       color: #FFF;
-//       text-decoration: none;
-//       border-radius: 3px;
-//       box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16);
-//       -webkit-text-size-adjust: none;
-//       box-sizing: border-box;
-//     }
+    .button {
+      background-color: #3869D4;
+      border-top: 10px solid #3869D4;
+      border-right: 18px solid #3869D4;
+      border-bottom: 10px solid #3869D4;
+      border-left: 18px solid #3869D4;
+      display: inline-block;
+      color: #FFF;
+      text-decoration: none;
+      border-radius: 3px;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16);
+      -webkit-text-size-adjust: none;
+      box-sizing: border-box;
+    }
 
-//     .button--green {
-//       background-color: #22BC66;
-//       border-top: 10px solid #22BC66;
-//       border-right: 18px solid #22BC66;
-//       border-bottom: 10px solid #22BC66;
-//       border-left: 18px solid #22BC66;
-//     }
+    .button--green {
+      background-color: #22BC66;
+      border-top: 10px solid #22BC66;
+      border-right: 18px solid #22BC66;
+      border-bottom: 10px solid #22BC66;
+      border-left: 18px solid #22BC66;
+    }
 
-//     .button--red {
-//       background-color: #FF6136;
-//       border-top: 10px solid #FF6136;
-//       border-right: 18px solid #FF6136;
-//       border-bottom: 10px solid #FF6136;
-//       border-left: 18px solid #FF6136;
-//     }
+    .button--red {
+      background-color: #FF6136;
+      border-top: 10px solid #FF6136;
+      border-right: 18px solid #FF6136;
+      border-bottom: 10px solid #FF6136;
+      border-left: 18px solid #FF6136;
+    }
 
-//     @media only screen and (max-width: 500px) {
-//       .button {
-//         width: 100% !important;
-//         text-align: center !important;
-//       }
-//     }
-//     /* Attribute list ------------------------------ */
+    @media only screen and (max-width: 500px) {
+      .button {
+        width: 100% !important;
+        text-align: center !important;
+      }
+    }
+    /* Attribute list ------------------------------ */
 
-//     .attributes {
-//       margin: 0 0 21px;
-//     }
+    .attributes {
+      margin: 0 0 21px;
+    }
 
-//     .attributes_content {
-//       background-color: #F4F4F7;
-//       padding: 16px;
-//     }
+    .attributes_content {
+      background-color: #F4F4F7;
+      padding: 16px;
+    }
 
-//     .attributes_item {
-//       padding: 0;
-//     }
-//     /* Related Items ------------------------------ */
+    .attributes_item {
+      padding: 0;
+    }
+    /* Related Items ------------------------------ */
 
-//     .related {
-//       width: 100%;
-//       margin: 0;
-//       padding: 25px 0 0 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//     }
+    .related {
+      width: 100%;
+      margin: 0;
+      padding: 25px 0 0 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+    }
 
-//     .related_item {
-//       padding: 10px 0;
-//       color: #CBCCCF;
-//       font-size: 15px;
-//       line-height: 18px;
-//     }
+    .related_item {
+      padding: 10px 0;
+      color: #CBCCCF;
+      font-size: 15px;
+      line-height: 18px;
+    }
 
-//     .related_item-title {
-//       display: block;
-//       margin: .5em 0 0;
-//     }
+    .related_item-title {
+      display: block;
+      margin: .5em 0 0;
+    }
 
-//     .related_item-thumb {
-//       display: block;
-//       padding-bottom: 10px;
-//     }
+    .related_item-thumb {
+      display: block;
+      padding-bottom: 10px;
+    }
 
-//     .related_heading {
-//       border-top: 1px solid #CBCCCF;
-//       text-align: center;
-//       padding: 25px 0 10px;
-//     }
-//     /* Discount Code ------------------------------ */
+    .related_heading {
+      border-top: 1px solid #CBCCCF;
+      text-align: center;
+      padding: 25px 0 10px;
+    }
+    /* Discount Code ------------------------------ */
 
-//     .discount {
-//       width: 100%;
-//       margin: 0;
-//       padding: 24px;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//       background-color: #F4F4F7;
-//       border: 2px dashed #CBCCCF;
-//     }
+    .discount {
+      width: 100%;
+      margin: 0;
+      padding: 24px;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+      background-color: #F4F4F7;
+      border: 2px dashed #CBCCCF;
+    }
 
-//     .discount_heading {
-//       text-align: center;
-//     }
+    .discount_heading {
+      text-align: center;
+    }
 
-//     .discount_body {
-//       text-align: center;
-//       font-size: 15px;
-//     }
-//     /* Social Icons ------------------------------ */
+    .discount_body {
+      text-align: center;
+      font-size: 15px;
+    }
+    /* Social Icons ------------------------------ */
 
-//     .social {
-//       width: auto;
-//     }
+    .social {
+      width: auto;
+    }
 
-//     .social td {
-//       padding: 0;
-//       width: auto;
-//     }
+    .social td {
+      padding: 0;
+      width: auto;
+    }
 
-//     .social_icon {
-//       height: 20px;
-//       margin: 0 8px 10px 8px;
-//       padding: 0;
-//     }
-//     /* Data table ------------------------------ */
+    .social_icon {
+      height: 20px;
+      margin: 0 8px 10px 8px;
+      padding: 0;
+    }
+    /* Data table ------------------------------ */
 
-//     .purchase {
-//       width: 100%;
-//       margin: 0;
-//       padding: 35px 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//     }
+    .purchase {
+      width: 100%;
+      margin: 0;
+      padding: 35px 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+    }
 
-//     .purchase_content {
-//       width: 100%;
-//       margin: 0;
-//       padding: 25px 0 0 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//     }
+    .purchase_content {
+      width: 100%;
+      margin: 0;
+      padding: 25px 0 0 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+    }
 
-//     .purchase_item {
-//       padding: 10px 0;
-//       color: #51545E;
-//       font-size: 15px;
-//       line-height: 18px;
-//     }
+    .purchase_item {
+      padding: 10px 0;
+      color: #51545E;
+      font-size: 15px;
+      line-height: 18px;
+    }
 
-//     .purchase_heading {
-//       padding-bottom: 8px;
-//       border-bottom: 1px solid #EAEAEC;
-//     }
+    .purchase_heading {
+      padding-bottom: 8px;
+      border-bottom: 1px solid #EAEAEC;
+    }
 
-//     .purchase_heading p {
-//       margin: 0;
-//       color: #85878E;
-//       font-size: 12px;
-//     }
+    .purchase_heading p {
+      margin: 0;
+      color: #85878E;
+      font-size: 12px;
+    }
 
-//     .purchase_footer {
-//       padding-top: 15px;
-//       border-top: 1px solid #EAEAEC;
-//     }
+    .purchase_footer {
+      padding-top: 15px;
+      border-top: 1px solid #EAEAEC;
+    }
 
-//     .purchase_total {
-//       margin: 0;
-//       text-align: right;
-//       font-weight: bold;
-//       color: #333333;
-//     }
+    .purchase_total {
+      margin: 0;
+      text-align: right;
+      font-weight: bold;
+      color: #333333;
+    }
 
-//     .purchase_total--label {
-//       padding: 0 15px 0 0;
-//     }
+    .purchase_total--label {
+      padding: 0 15px 0 0;
+    }
 
-//     body {
-//       background-color: #F4F4F7;
-//       color: #51545E;
-//     }
+    body {
+      background-color: #F4F4F7;
+      color: #51545E;
+    }
 
-//     p {
-//       color: #51545E;
-//     }
+    p {
+      color: #51545E;
+    }
 
-//     p.sub {
-//       color: #6B6E76;
-//     }
+    p.sub {
+      color: #6B6E76;
+    }
 
-//     .email-wrapper {
-//       width: 100%;
-//       margin: 0;
-//       padding: 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//       background-color: #F4F4F7;
-//     }
+    .email-wrapper {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+      background-color: #F4F4F7;
+    }
 
-//     .email-content {
-//       width: 100%;
-//       margin: 0;
-//       padding: 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//     }
-//     /* Masthead ----------------------- */
+    .email-content {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+    }
+    /* Masthead ----------------------- */
 
-//     .email-masthead {
-//       padding: 25px 0;
-//       text-align: center;
-//     }
+    .email-masthead {
+      padding: 25px 0;
+      text-align: center;
+    }
 
-//     .email-masthead_logo {
-//       width: 94px;
-//     }
+    .email-masthead_logo {
+      width: 94px;
+    }
 
-//     .email-masthead_name {
-//       font-size: 16px;
-//       font-weight: bold;
-//       color: #A8AAAF;
-//       text-decoration: none;
-//       text-shadow: 0 1px 0 white;
-//     }
-//     /* Body ------------------------------ */
+    .email-masthead_name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #A8AAAF;
+      text-decoration: none;
+      text-shadow: 0 1px 0 white;
+    }
+    /* Body ------------------------------ */
 
-//     .email-body {
-//       width: 100%;
-//       margin: 0;
-//       padding: 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//       background-color: #FFFFFF;
-//     }
+    .email-body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+      background-color: #FFFFFF;
+    }
 
-//     .email-body_inner {
-//       width: 570px;
-//       margin: 0 auto;
-//       padding: 0;
-//       -premailer-width: 570px;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//       background-color: #FFFFFF;
-//     }
+    .email-body_inner {
+      width: 570px;
+      margin: 0 auto;
+      padding: 0;
+      -premailer-width: 570px;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+      background-color: #FFFFFF;
+    }
 
-//     .email-footer {
-//       width: 570px;
-//       margin: 0 auto;
-//       padding: 0;
-//       -premailer-width: 570px;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//       text-align: center;
-//     }
+    .email-footer {
+      width: 570px;
+      margin: 0 auto;
+      padding: 0;
+      -premailer-width: 570px;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+      text-align: center;
+    }
 
-//     .email-footer p {
-//       color: #6B6E76;
-//     }
+    .email-footer p {
+      color: #6B6E76;
+    }
 
-//     .body-action {
-//       width: 100%;
-//       margin: 30px auto;
-//       padding: 0;
-//       -premailer-width: 100%;
-//       -premailer-cellpadding: 0;
-//       -premailer-cellspacing: 0;
-//       text-align: center;
-//     }
+    .body-action {
+      width: 100%;
+      margin: 30px auto;
+      padding: 0;
+      -premailer-width: 100%;
+      -premailer-cellpadding: 0;
+      -premailer-cellspacing: 0;
+      text-align: center;
+    }
 
-//     .body-sub {
-//       margin-top: 25px;
-//       padding-top: 25px;
-//       border-top: 1px solid #EAEAEC;
-//     }
+    .body-sub {
+      margin-top: 25px;
+      padding-top: 25px;
+      border-top: 1px solid #EAEAEC;
+    }
 
-//     .content-cell {
-//       padding: 35px;
-//     }
-//     /*Media Queries ------------------------------ */
+    .content-cell {
+      padding: 35px;
+    }
+    /*Media Queries ------------------------------ */
 
-//     @media only screen and (max-width: 600px) {
-//       .email-body_inner,
-//       .email-footer {
-//         width: 100% !important;
-//       }
-//     }
+    @media only screen and (max-width: 600px) {
+      .email-body_inner,
+      .email-footer {
+        width: 100% !important;
+      }
+    }
 
-//     @media (prefers-color-scheme: dark) {
-//       body,
-//       .email-body,
-//       .email-body_inner,
-//       .email-content,
-//       .email-wrapper,
-//       .email-masthead,
-//       .email-footer {
-//         background-color: #333333 !important;
-//         color: #FFF !important;
-//       }
-//       p,
-//       ul,
-//       ol,
-//       blockquote,
-//       h1,
-//       h2,
-//       h3,
-//       span,
-//       .purchase_item {
-//         color: #FFF !important;
-//       }
-//       .attributes_content,
-//       .discount {
-//         background-color: #222 !important;
-//       }
-//       .email-masthead_name {
-//         text-shadow: none !important;
-//       }
-//     }
+    @media (prefers-color-scheme: dark) {
+      body,
+      .email-body,
+      .email-body_inner,
+      .email-content,
+      .email-wrapper,
+      .email-masthead,
+      .email-footer {
+        background-color: #333333 !important;
+        color: #FFF !important;
+      }
+      p,
+      ul,
+      ol,
+      blockquote,
+      h1,
+      h2,
+      h3,
+      span,
+      .purchase_item {
+        color: #FFF !important;
+      }
+      .attributes_content,
+      .discount {
+        background-color: #222 !important;
+      }
+      .email-masthead_name {
+        text-shadow: none !important;
+      }
+    }
 
-//     :root {
-//       color-scheme: light dark;
-//       supported-color-schemes: light dark;
-//     }
-//     </style>
-//     <!--[if mso]>
-//     <style type="text/css">
-//       .f-fallback  {
-//         font-family: Arial, sans-serif;
-//       }
-//     </style>
-//   <![endif]-->
-//   </head>
-//   <body>
-//     <span class="preheader">This is a receipt for your recent purchase on ' . $schedule . '. No payment is due with this receipt.</span>
-//     <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-//       <tr>
-//         <td align="center">
-//           <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-//             <tr>
-//               <td class="email-masthead">
-//                 <a href="https://helphog.com/results?search=' . $service . '" class="f-fallback email-masthead_name">
-//                 ' . $service . '
-//               </a>
-//               </td>
-//             </tr>
-//             <!-- Email Body -->
-//             <tr>
-//               <td class="email-body" width="100%" cellpadding="0" cellspacing="0">
-//                 <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
-//                   <!-- Body content -->
-//                   <tr>
-//                     <td class="content-cell">
-//                       <div class="f-fallback">
-//                         <h1>Hi' . $name . ',</h1>
-//                         <p>Thanks for using HelpHog. This email is the receipt for your purchase. No payment is due.</p>
-//                         <p>This purchase will appear as &quotHELPHOG - Service&quot on your bank statement.</p>
+    :root {
+      color-scheme: light dark;
+      supported-color-schemes: light dark;
+    }
+    </style>
+    <!--[if mso]>
+    <style type="text/css">
+      .f-fallback  {
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  <![endif]-->
+  </head>
+  <body>
+    <span class="preheader">This is a receipt for your recent purchase on ' . $schedule . '. No payment is due with this receipt.</span>
+    <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center">
+          <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+            <tr>
+              <td class="email-masthead">
+                <a href="https://helphog.com/results?search=' . $service . '" class="f-fallback email-masthead_name">
+                ' . $service . '
+              </a>
+              </td>
+            </tr>
+            <!-- Email Body -->
+            <tr>
+              <td class="email-body" width="100%" cellpadding="0" cellspacing="0">
+                <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                  <!-- Body content -->
+                  <tr>
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>Hi' . $name . ',</h1>
+                        <p>Thanks for using HelpHog. This email is the receipt for your purchase. No payment is due.</p>
+                        <p>This purchase will appear as &quotHELPHOG - Service&quot on your bank statement.</p>
 
-//                         <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-//                           <tr>
-//                             <td>
-//                               <h3>Order: ' . $order_number . '</h3></td>
-//                             <td>
-//                               <h3 class="align-right">' . $schedule . '</h3></td>
-//                           </tr>
-//                           <tr>
-//                             <td colspan="2">
-//                               <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0">
-//                                 <tr>
-//                                   <th class="purchase_heading" align="left">
-//                                     <p class="f-fallback">Description</p>
-//                                   </th>
-//                                   <th class="purchase_heading" align="right">
-//                                     <p class="f-fallback">Amount</p>
-//                                   </th>
-//                                 </tr>
-//                                 ' . $service . '
-//                                 <tr>
-//                                   <td width="80%" class="purchase_item"><span class="f-fallback">' . $description . ' </span></td>
-//                                   <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">' . money_format('%.2n', $cost) . '</span></td>
-//                                 </tr>
-//                                 <tr>
-//                                  <td width="80%" class="purchase_item"><span class="f-fallback">Sales Tax</span></td>
-//                                  <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">' . money_format('%.2n', $tax) . '</span></td>
-//                                 </tr>
-//                                 <tr>
-//                                   <td width="80%" class="purchase_footer" valign="middle">
-//                                     <p class="f-fallback purchase_total purchase_total--label">Total</p>
-//                                   </td>
-//                                   <td width="20%" class="purchase_footer" valign="middle">
-//                                     <p class="f-fallback purchase_total">$' . money_format('%.2n', $total) . '</p>
-//                                   </td>
-//                                 </tr>
-//                               </table>
-//                             </td>
-//                           </tr>
-//                         </table>
-//                         <p>If you have any questions about this receipt, simply reply to this email or reach out to our <a href="helphog.com/contact">support team</a> for help.</p>
-//                         <p>Cheers,
-//                           <br>The HelpHog Team</p>
-//                         <!-- Action -->
-//                         <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-//                           <tr>
-//                             <td align="center">
-//                               <!-- Border based button
-//            https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
-//                             </td>
-//                           </tr>
-//                         </table>
-//                         <!-- Sub copy -->
+                        <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                          <tr>
+                            <td>
+                              <h3>Order: ' . $order_number . '</h3></td>
+                            <td>
+                              <h3 class="align-right">' . $schedule . '</h3></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">
+                              <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                  <th class="purchase_heading" align="left">
+                                    <p class="f-fallback">Description</p>
+                                  </th>
+                                  <th class="purchase_heading" align="right">
+                                    <p class="f-fallback">Amount</p>
+                                  </th>
+                                </tr>
+                                ' . $service . '
+                                <tr>
+                                  <td width="80%" class="purchase_item"><span class="f-fallback">' . $description . ' </span></td>
+                                  <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $cost) . '</span></td>
+                                </tr>
+                                <tr>
+                                 <td width="80%" class="purchase_item"><span class="f-fallback">Sales Tax</span></td>
+                                 <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $tax) . '</span></td>
+                                </tr>
+                                <tr>
+                                  <td width="80%" class="purchase_footer" valign="middle">
+                                    <p class="f-fallback purchase_total purchase_total--label">Total</p>
+                                  </td>
+                                  <td width="20%" class="purchase_footer" valign="middle">
+                                    <p class="f-fallback purchase_total">$' . money_format('%.2n', $total) . '</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>If you have any questions about this receipt, simply reply to this email or reach out to our <a href="helphog.com/contact">support team</a> for help.</p>
+                        <p>Cheers,
+                          <br>The HelpHog Team</p>
+                        <!-- Action -->
+                        <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                          <tr>
+                            <td align="center">
+                              <!-- Border based button
+            https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                            </td>
+                          </tr>
+                        </table>
+                        <!-- Sub copy -->
 
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 </table>
-//               </td>
-//             </tr>
-//             <tr>
-//               <td>
-//                 <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
-//                   <tr>
-//                     <td class="content-cell" align="center">
-//                       <p class="f-fallback sub align-center">&copy; 2021 HelpHog, LLC. All rights reserved.</p>
-//                       <p class="f-fallback sub align-center">
-//                         HelpHog, LLC
-//                         <br>19427 73rd Ave West.
-//                         <br>Lynnwood, WA 98036
-//                       </p>
-//                     </td>
-//                   </tr>
-//                 </table>
-//               </td>
-//             </tr>
-//           </table>
-//         </td>
-//       </tr>
-//     </table>
-//   </body>
-// </html>
-// ';
-// }
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td class="content-cell" align="center">
+                      <p class="f-fallback sub align-center">&copy; 2021 HelpHog, LLC. All rights reserved.</p>
+                      <p class="f-fallback sub align-center">
+                        HelpHog, LLC
+                        <br>19427 73rd Ave West.
+                        <br>Lynnwood, WA 98036
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+';
+}
