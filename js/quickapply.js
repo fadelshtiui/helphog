@@ -43,7 +43,8 @@
         let radius = '0';
 
         if (id("aratext").value === "") {
-            alert("Please type a brief description of your experience in this workfield");
+            id('warning-message').innerText = "Please type a brief description of your experience in this workfield";
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
             // $('.btn').button('reset');
         } else {
 
@@ -76,7 +77,8 @@
 
     function handleResponse(response) {
         if (response == "Please upload PNG, JPG, PDF, DOCX files only") {
-            alert("Please upload PNG, JPG, PDF, DOCX files only")
+            id('warning-message').innerText = response
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
             // $('.btn').button('reset');
 
         } else {
