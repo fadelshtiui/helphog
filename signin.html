@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 	<link rel="stylesheet" href="css/footer.css" type="text/css" />
 	<link rel="stylesheet" href="css/global.css">
+	<link rel="stylesheet" href="css/all.css">
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
 	<script src="js/common.js"></script>
 	<script src="js/signin.js"></script>
@@ -15,6 +16,20 @@
 </head>
 
 <body>
+	<div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
+		<div class='modal'>
+			<div class='header'>
+				<span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
+			</div>
+			<div class='content'>
+				<span id="warning-message"></span>
+			</div>
+			<div class='actions'>
+				<button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
+					class="secondary">OK, Close Modal</button>
+			</div>
+		</div>
+	</div>
 	<div class="content">
 		<div class="header">
 			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>

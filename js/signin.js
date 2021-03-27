@@ -51,7 +51,8 @@
         }
 
         if (response.verified == "n") {
-            alert("Your account has not yet been verified. Please check your email for a verification email.");
+            id('warning-message').innerText = "Your account has not yet been verified. Please check your email for a verification email."
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else if (response.emailerror == "" && response.passworderror == "") {
             document.cookie = "session=" + response.session + ";";
             let queryString = window.location.search
