@@ -5,7 +5,7 @@ let selected = false;
 
 window.addEventListener('load', function () {
 
-    $('.modal-content').slideToggle();
+     $('.modal-content').slideToggle();
      id('city-state-comma').classList.add('hidden')
      document.querySelector(".loader").classList.add("hidden");
 
@@ -75,26 +75,26 @@ window.addEventListener('load', function () {
      }
 
      id("checkprovider").onclick = function () {
-        const urlParams = new URLSearchParams(window.location.search)
-        id("errorlabel").classList.add("hidden")
-        id("providerSelected").classList.add("hidden")
-        if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
-             if (id("taskerinput").value !== ""){
-                 providerId = id("taskerinput").value;
-                 checkAvailability('false', updateTimePicker, true);
-             }else{
-                 id("errorlabel").classList.remove("hidden");
-                 id("errorlabel").innerText = "No provider ID entered.";
-             }
+          const urlParams = new URLSearchParams(window.location.search)
+          id("errorlabel").classList.add("hidden")
+          id("providerSelected").classList.add("hidden")
+          if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
+               if (id("taskerinput").value !== "") {
+                    providerId = id("taskerinput").value;
+                    checkAvailability('false', updateTimePicker, true);
+               } else {
+                    id("errorlabel").classList.remove("hidden");
+                    id("errorlabel").innerText = "No provider ID entered.";
+               }
 
-        }else{
-            id("errorlabel").classList.remove("hidden");
-            id("errorlabel").innerText = "Please enter your full address below first.";
-        }
+          } else {
+               id("errorlabel").classList.remove("hidden");
+               id("errorlabel").innerText = "Please enter your full address below first.";
+          }
      }
 
      id("removeprovider").onclick = function () {
-         toggleSelected();
+          toggleSelected();
      }
 
      id('locationField').classList.add('hidden')
@@ -130,22 +130,22 @@ window.addEventListener('load', function () {
           checkAvailability('false', updateTimePicker, false);
      }
      id('numpeople').onchange = function () {
-          if(id('numpeople').value == 1){
-              id('taskerinputField').classList.remove("hidden");
-              id('taskerlabel').classList.remove("hidden");
-              id('taskerinput').classList.remove("hidden");
-              id('errorlabel').classList.remove("hidden");
-              id('checkprovider').classList.remove("hidden");
+          if (id('numpeople').value == 1) {
+               id('taskerinputField').classList.remove("hidden");
+               id('taskerlabel').classList.remove("hidden");
+               id('taskerinput').classList.remove("hidden");
+               id('errorlabel').classList.remove("hidden");
+               id('checkprovider').classList.remove("hidden");
 
           }
-          else{
-              providerId = "none";
-              id('taskerlabel').classList.add("hidden");
-              id('removeprovider').classList.add("hidden");
-              id('taskerinput').classList.add("hidden");
-              id('errorlabel').classList.add("hidden");
-              id('providerSelected').classList.add("hidden");
-              id('checkprovider').classList.add("hidden");
+          else {
+               providerId = "none";
+               id('taskerlabel').classList.add("hidden");
+               id('removeprovider').classList.add("hidden");
+               id('taskerinput').classList.add("hidden");
+               id('errorlabel').classList.add("hidden");
+               id('providerSelected').classList.add("hidden");
+               id('checkprovider').classList.add("hidden");
           }
           checkAvailability('false', updateTimePicker, false);
      }
@@ -264,22 +264,22 @@ function initTextFields() {
 
 }
 
-function toggleSelected(){
-    if(selected){
-        id("taskerinput").classList.remove("hidden")
-        id("checkprovider").classList.remove("hidden")
-        id("removeprovider").classList.add("hidden")
-        id("providerSelected").classList.add("hidden")
-        id("taskerinput").innerText = "";
-        providerId = 'none';
-        checkAvailability('false', updateTimePicker, false);
-        selected = false
-    }else{
-        id("taskerinput").classList.add("hidden")
-        id("checkprovider").classList.add("hidden")
-        id("removeprovider").classList.remove("hidden")
-        selected = true
-    }
+function toggleSelected() {
+     if (selected) {
+          id("taskerinput").classList.remove("hidden")
+          id("checkprovider").classList.remove("hidden")
+          id("removeprovider").classList.add("hidden")
+          id("providerSelected").classList.add("hidden")
+          id("taskerinput").innerText = "";
+          providerId = 'none';
+          checkAvailability('false', updateTimePicker, false);
+          selected = false
+     } else {
+          id("taskerinput").classList.add("hidden")
+          id("checkprovider").classList.add("hidden")
+          id("removeprovider").classList.remove("hidden")
+          selected = true
+     }
 }
 
 function navigateBack() {
@@ -357,18 +357,18 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
      let response = await fetch(url, { method: "POST", body: data })
      await checkStatus(response);
      response = await response.text();
-     if (response == 'Provider with the inputed ID does not exist or does not provide this service' || response == 'The selected provider is unavailable for this order'){
-         id("errorlabel").classList.remove("hidden");
-         if (id('numpeople').value != 1){
-             id("errorlabel").classList.add("hidden");
-         }
-         providerId = "none"
-         id("errorlabel").innerText = response;
-         removeLoader();
-     }else{
-         checkProviders();
-         callback(response);
-         removeLoader();
+     if (response == 'Provider with the inputed ID does not exist or does not provide this service' || response == 'The selected provider is unavailable for this order') {
+          id("errorlabel").classList.remove("hidden");
+          if (id('numpeople').value != 1) {
+               id("errorlabel").classList.add("hidden");
+          }
+          providerId = "none"
+          id("errorlabel").innerText = response;
+          removeLoader();
+     } else {
+          checkProviders();
+          callback(response);
+          removeLoader();
      }
 }
 
@@ -448,7 +448,8 @@ function updateTime() {
                id('time').value = this.getAttribute('data-militaryTime')
           }
      } else {
-          alert("Please select a full address.");
+          id('warning-message').innerText = "Please select a full address."
+          document.querySelector('.modal-wrapper').classList.remove('hidden')
      }
 
 }
@@ -458,7 +459,8 @@ async function validateInput() {
      const urlParams = new URLSearchParams(window.location.search)
 
      if ((id("current-address").innerText == "" || id("current-city").innerText == "" || id("current-state").innerText == "" || id("current-zip").innerText == "") && urlParams.get('remote') == 'n') {
-          alert('Please select a full address')
+          id('warning-message').innerText = "Please select a full address."
+          document.querySelector('.modal-wrapper').classList.remove('hidden')
           return;
      }
 
@@ -471,7 +473,8 @@ async function validateInput() {
           }
      }
      if (!timeSelected) {
-          alert('Please select a time for your order.')
+          id('warning-message').innerText = "Please select a time for your order."
+          document.querySelector('.modal-wrapper').classList.remove('hidden')
           return
      }
 
@@ -526,7 +529,8 @@ function submitLoginHelper(response) {
      }
 
      if (response.verified == "n") {
-          alert("Your account has not yet been verified. Please check your email for a verification email.");
+          id('warning-message').innerText = "Your account has not yet been verified. Please check your email for a verification email."
+          document.querySelector('.modal-wrapper').classList.remove('hidden')
      } else if (response.emailerror == "" && response.passworderror == "") {
 
           $('.hover_bkgr_fricc').hide();
@@ -554,24 +558,24 @@ function providersHelper(response) {
           document.querySelector("#quantity").classList.add("hidden");
           document.querySelector("#quantity-label").classList.add("hidden");
      }
-     if (providerId != "none"){
-         id("providerSelected").classList.remove("hidden");
-         id("errorlabel").classList.add("hidden");
-         id('taskerinput').classList.add("hidden");
-         id("provider").innerText = providerId;
-         if (selected == false){
-            toggleSelected()
-         }
-     }else if (id('numpeople').value != 1) {
-         id('taskerlabel').classList.add("hidden");
+     if (providerId != "none") {
+          id("providerSelected").classList.remove("hidden");
+          id("errorlabel").classList.add("hidden");
+          id('taskerinput').classList.add("hidden");
+          id("provider").innerText = providerId;
+          if (selected == false) {
+               toggleSelected()
+          }
+     } else if (id('numpeople').value != 1) {
+          id('taskerlabel').classList.add("hidden");
           id('removeprovider').classList.add("hidden");
           id('taskerinput').classList.add("hidden");
           id('errorlabel').classList.add("hidden");
           id('providerSelected').classList.add("hidden");
           id('checkprovider').classList.add("hidden");
      }
-     for (i = response.available + 1; i <= 5; i++){
-        $("#numpeople option[value=" + i + "]").attr('disabled','disabled')
+     for (i = response.available + 1; i <= 5; i++) {
+          $("#numpeople option[value=" + i + "]").attr('disabled', 'disabled')
      }
 }
 

@@ -39,6 +39,11 @@ body {
   z-index: 500;
 }
 
+.modal {
+  display: block;
+  bottom: 220px;
+}
+
 .modal-inner {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: .5rem;

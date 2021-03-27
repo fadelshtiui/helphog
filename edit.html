@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/popup.css">
   <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/all.css">
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
@@ -39,6 +40,20 @@
     <p id="time"></p>
   </div>
   <div class="content">
+    <div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
+      <div class='modal'>
+        <div class='header'>
+          <span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
+        </div>
+        <div class='content'>
+          <span id="warning-message"></span>
+        </div>
+        <div class='actions'>
+          <button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
+            class="secondary">OK, Close Modal</button>
+        </div>
+      </div>
+    </div>
     <div id="hide">
       <div id="arrow" class="arrow"></div>
       <div class="pure-g-r">
@@ -123,9 +138,12 @@
                     <label for="taskerinputField" id="taskerlabel">Would like to have the same provider?</label>
                     <div id="taskerinputField">
                       <input id="taskerinput" placeholder="Provider ID#" type="text" />
-                      <label id="providerSelected" class="hidden" style="font-weight: bolder;">Provider #<span id="provider"></span> has been selected.</label>
-                      <button style="margin-left: 30px; width: 100px;" class="secondary hidden" id="removeprovider">Remove</button>
-                      <button style="margin-left: 30px; width: 100px;" class="secondary" id="checkprovider">Select</button>
+                      <label id="providerSelected" class="hidden" style="font-weight: bolder;">Provider #<span
+                          id="provider"></span> has been selected.</label>
+                      <button style="margin-left: 30px; width: 100px;" class="secondary hidden"
+                        id="removeprovider">Remove</button>
+                      <button style="margin-left: 30px; width: 100px;" class="secondary"
+                        id="checkprovider">Select</button>
                     </div>
                     <label id="errorlabel" class="hidden" style="margin-top: 10px;"></label>
                   </div>
@@ -783,8 +801,9 @@
                   <input id="password" class="form-control" type="text" placeholder="Password" required="required" />
                   <span id="password-error" class="error"></span>
                 </fieldset>
-                <button id="submit-login" style="margin-bottom: 10px;" class="primary-green">Submit</button><span id="noaccount">
-                <a href="form">Don't have an account?</a></span>
+                <button id="submit-login" style="margin-bottom: 10px;" class="primary-green">Submit</button><span
+                  id="noaccount">
+                  <a href="form">Don't have an account?</a></span>
                 <div class="register-slide">
                   <a class="close-register"><i class="lnr lnr-cross"></i></a>
                   <p>Click the "Create Account" checkbox to create an account during checkout.</p>
@@ -792,8 +811,8 @@
                 </div>
               </div>
               <div class="modal-bottom">
-                  <button class="primary-green" id="login">Login</button>
-                  <button class="secondary" id="guest">Checkout as Guest</button>
+                <button class="primary-green" id="login">Login</button>
+                <button class="secondary" id="guest">Checkout as Guest</button>
               </div>
             </div>
           </div>
