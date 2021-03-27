@@ -162,3 +162,15 @@ i.success {
   font-size: 40px;
   color: #1ecd97;
 }
+
+a.standard {
+  color: #0275d8;
+}
+
+a.standard:active {
+  color: #0275d8;
+}
+
+a.standard:visited {
+  color: #0275d8;
+}

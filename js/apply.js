@@ -70,7 +70,8 @@ $(window).on('load', function () {
 				.catch(console.log);
 
 		} else {
-			alert("Please check the reCAPTCHA box.");
+			id('warning-message').innerText = "Please check the reCAPTCHA box."
+			document.querySelector('.modal-wrapper').classList.remove('hidden')
 		}
 
 	});
@@ -160,8 +161,8 @@ $(window).on('load', function () {
 
 		if (response == "Please upload PNG, JPG, PDF, DOCX files only" || response == 'Error: an account with this email already exists') {
 
-			alert(response)
-			// $('.btn').button('reset');
+			id('warning-message').innerText = response
+			document.querySelector('.modal-wrapper').classList.remove('hidden')
 
 		} else {
 

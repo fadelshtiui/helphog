@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="css/footer.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<link rel="stylesheet" href="css/global.css">
+	<link rel="stylesheet" href="css/all.css">
 
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
@@ -25,6 +26,20 @@
 </head>
 
 <body>
+	<div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
+		<div class='modal'>
+			<div class='header'>
+				<span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
+			</div>
+			<div class='content'>
+				<span id="warning-message"></span>
+			</div>
+			<div class='actions'>
+				<button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
+					class="secondary">OK, Close Modal</button>
+			</div>
+		</div>
+	</div>
 	<div class="content">
 		<div class="header">
 			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
@@ -111,8 +126,8 @@
 				</div>
 				<button type="button" style="margin-bottom: 15px;" class="primary-green" id="sign-up"><i
 						class='fa fa-spinner fa-spin hidden'></i>Continue</button>
-				<p>By clicking continue, you agree to our <a style="color: blue;" href="terms">terms and
-						conditions</a> and <a style="color: blue;" href="privacy">privacy policy.</a></p>
+				<p>By clicking continue, you agree to our <a class="standard" href="terms">terms and
+						conditions</a> and <a class="standard" href="privacy">privacy policy.</a></p>
 			</form>
 		</div>
 

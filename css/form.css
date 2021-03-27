@@ -8,6 +8,11 @@
   overflow: visible;
 }
 
+.modal {
+  display: block;
+  bottom: 220px;
+}
+
 a:hover {
   color: #1ecd97
 }
