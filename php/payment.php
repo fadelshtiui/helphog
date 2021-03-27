@@ -12,19 +12,13 @@ try {
     // retrieve JSON from POST body
     $json_str = file_get_contents('php://input');
     $json_obj = json_decode($json_str);
-    error_log('checking if user is banned...');
     $cred_check = checkAcc($json_obj->creds);
-    error_log('checking if order is prorated...');
     $prorated = checkProrated($json_obj->items);
-    error_log('retrieving tax code...');
     $taxCode = taxCode($json_obj->items);
     $order_info = $json_obj->checkout;
-    error_log('calculating payment price...');
     $order_amount = calculateOrderAmount($json_obj->items);
-    error_log('calculating sales tax...');
     $taxParameters = calculateTax($order_amount / 100, $taxCode, $order_info);
     if ($cred_check) {
-        error_log('creating payment intent...');
         $paymentIntent = \Stripe\PaymentIntent::create([
             'amount' => $order_amount + $taxParameters[0],
             'currency' => 'usd',
@@ -35,9 +29,7 @@ try {
         } else {
             $taxRate = $taxParameters[1] * 100 . "%";
         }
-        error_log('creating order...');
         createOrder($paymentIntent, $order_info, $json_obj->items, $taxRate);
-        error_log('done!');
         $output = [
             'clientSecret' => $paymentIntent->client_secret,
             'taxRate' => $taxRate,
@@ -167,19 +159,17 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
         $providers = $row["providers"];
     }
 
-    // $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($order_info->tzoffset));
-    // $utc->setTimezone(new DateTimeZone('UTC'));
+    $utc = new DateTime(date('Y-m-d H:i:s', strtotime($order_info->schedule)), new DateTimeZone($order_info->tzoffset));
+    $utc->setTimezone(new DateTimeZone('UTC'));
 
-    $time = date('Y-m-d H:i:s');
-    // $utc->format('Y-m-d H:i:s');
+    $now = new DateTime(gmdate('Y-m-d H:i:s'));
 
-    // $cancelBuffer = ($time - $utc) / 60;
+    $default_cancel_buffer = round((strtotime($utc->format('Y-m-d H:i:s')) - strtotime($now->format('Y-m-d H:i:s'))) / 60 / 2);
 
-    $order_number = 0;
+    $order_number;
     $unique = false;
     while (!$unique) {
         $order_number = (time() + mt_rand()) % 100000;
-        error_log($order_number);
         if ($order_number >= 10000) {
             $unique = true;
             $result = $db->query("SELECT order_number FROM orders");
@@ -191,8 +181,6 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
             }
         }
     }
-
-    error_log("done generating order number!");
 
     if (strlen($order_info->message) > 1000) {
         $order_info->message = substr($order_info->message, 0, 1000);
@@ -226,11 +214,11 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
     $_SESSION['day'] = $order_info->day;
     $_SESSION['order'] = $order_info->order;
     $_SESSION['tzoffset'] = $order_info->tzoffset;
-    // if ($order_info->cancelbuffer == 0){
-    //     $_SESSION['cancel_buffer'] = $cancelBuffer;
-    // }else{
-    $_SESSION['cancel_buffer'] = $order_info->cancelbuffer;
-    // }
+    if ($order_info->cancelbuffer == 0) {
+        $_SESSION['cancel_buffer'] = $default_cancel_buffer;
+    } else {
+        $_SESSION['cancel_buffer'] = $order_info->cancelbuffer;
+    }
     $_SESSION['ordernumber'] = $order_number;
     $_SESSION['intent'] = $paymentIntent->id;
 }
