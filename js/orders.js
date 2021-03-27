@@ -54,7 +54,8 @@ function handleResponse(response) {
 
 	id('yes').innerText = "Yes, cancel it"
 	id('no').innerText = "No, keep it"
-
+	id('yes').classList.remove('hidden')
+	id('first').innerHTML = ""
 	id("first").textContent = "Are you sure you want to cancel " + response.service + " (" + response.order + ") on " + date.toLocaleString() + "?";
 	if (response.within == "true") {
 		id("second").textContent = "Since your order is within 24 hours of now, a non-refundable fee of $15 will be charged to your account."
@@ -82,7 +83,14 @@ function handleResponse(response) {
 		id('loading').classList.add('hidden')
 
 		if (response2 == 'ordererror') {
-			alert('You cannot cancel an order that is already in progress.');
+			id('first').innerHTML = "";
+			let warningIcon = document.createElement('i')
+			warningIcon.classList.add('fas', "fa-exclamation-circle", "warning-orders")
+			id('first').appendChild(warningIcon)
+			id('second').innerText = 'You cannot cancel an order that is already in progress.'
+			id('yes').classList.add('hidden')
+			id('no').innerText = "OK, Close Modal"
+			document.querySelector('.modal-wrapper').classList.remove('hidden')
 		} else {
 			// document.querySelector('.modal-wrapper').classList.add('hidden')
 			location.reload()
@@ -95,6 +103,8 @@ function closePopup() {
 }
 
 function openReviewPopup(orderNumber, name) {
+	id('yes').classList.remove('hidden')
+	id('first').innerHTML = "";
 	id('first').innerText = "If your order has been successfully completed please review " + name + "'s performance as your provider and mark the order completed."
 	id('second').innerText = " If you have any questions or concerns please don't hesitate to contact us."
 
@@ -138,7 +148,14 @@ function openReviewPopup(orderNumber, name) {
 		if (response.result == 'successful') {
 			location.reload()
 		} else {
-			alert('Sorry, orders may only be disputed within 24 hours of completion.')
+			id('first').innerHTML = "";
+			let warningIcon = document.createElement('i')
+			warningIcon.classList.add('fas', "fa-exclamation-circle", "warning-orders")
+			id('first').appendChild(warningIcon)
+			id('second').innerText = 'Sorry, orders may only be disputed within 24 hours of completion.'
+			id('yes').classList.add('hidden')
+			id('no').innerText = "OK, Close Modal"
+			document.querySelector('.modal-wrapper').classList.remove('hidden')
 		}
 	}
 

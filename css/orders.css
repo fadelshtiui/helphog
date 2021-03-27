@@ -17,6 +17,11 @@ a[href*="intent"] {
   margin-top: 0.4em;
 }
 
+i.warning-orders {
+  font-size: 40px;
+  color: #DB2828;
+}
+
 #logo a {
   color: #1ecd97;
   text-decoration: none;
