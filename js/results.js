@@ -435,7 +435,8 @@
                          link.innerText = 'Unavailable'
 
                          buttonContainer.onclick = function () {
-                              alert('Sorry, this service is unavailable in your zip code.')
+                              id('warning-message').innerText = 'Sorry, this service is unavailable in your zip code.'
+                              document.querySelector(".modal-wrapper").classList.remove('hidden')
                          }
                     } else { // service.available == 0.5
                          link.innerText = 'Click to check availability'
@@ -501,7 +502,8 @@
                window.location = url;
 
           } else {
-               alert('Please enter a valid US zip code.')
+               id('warning-message').innerText = 'Please enter a valid US zip code.'
+               document.querySelector(".modal-wrapper").classList.remove('hidden')
           }
 
      }
