@@ -309,7 +309,6 @@
     endTime: "24:00",
   });
   $("#day-schedule").on('selected.artsy.dayScheduleSelector', function (e, selected) {
-    console.log(selected);
     submit();
   })
 

@@ -17,7 +17,6 @@ let app = new Vue({
 					self.city = result.city + "," + result.state;
 					$(".display").addClass("animated fadeInDown");
 				}
-				console.log(result);
 			});
 		}
 	},

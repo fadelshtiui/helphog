@@ -71,7 +71,6 @@
 			}, 1000);
 
 		}
-		console.log(response.service)
 		id('service').innerText = response.service
 		if (response.cancelled == "true") {
 			id("canceled").style.display = "block";

@@ -350,7 +350,6 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
      data.append("duration", duration);
      data.append("remote", remote);
      data.append('updatecontactlist', updatecontactlist);
-     console.log(providerId)
      data.append('id', providerId);
      let url = "php/checkavailability.php";
      addLoader();

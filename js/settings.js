@@ -188,21 +188,3 @@ function addressUpdate() {
         .catch(console.log);
 
 }
-
-// function handleAddressResponse(response) {
-//       if (response.sessionerror == "false") {
-//           if (response.ziperror == "true") {
-//           id("zip-error").innerText = "*Invalid zip code.";
-//           } else {
-//               id("zip-error").innerText = "";
-//           }
-//           if(response.ziperror == "") {
-//               alert("Your address has been successfully updated.");
-//               location.reload();
-//           }
-//       } else {
-//           alert("Please try logging out, and then logging in again.");
-//           window.location.href = "index";
-//       }
-
-//      }

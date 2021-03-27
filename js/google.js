@@ -65,7 +65,6 @@ function fillInAddress() {
   }
   if (window.location.pathname == '/edit') {
     checkAvailability(false, updateTimePicker);
-    console.log("dad")
   }
   if (window.location.pathname == '/settings') {
     id('city-state-comma').classList.remove('hidden')

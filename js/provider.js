@@ -388,7 +388,6 @@ let preloaded = false;
 		if (percentage < 0) {
 			percentage = 0;
 		}
-		console.log(percentage)
 		percentage += 'px'
 		document.querySelector('.rangeslider-fill-lower').style.width = percentage;
 		document.querySelector('.rangeslider-thumb').style.left = percentage;

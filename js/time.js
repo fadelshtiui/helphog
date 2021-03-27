@@ -128,7 +128,6 @@ app.directive('datePicker', function ($timeout, $window) {
                         today.getMonth() == date.getMonth()) {
                         showday = true;
                     }
-                    // console.log(dateDiffInDays(date, today))
                     if (dateDiffInDays(today, date) > 6) {
                         showday = false;
                     }
@@ -365,7 +364,6 @@ app.directive('datePicker', function ($timeout, $window) {
                         time = "-" + scope.edittime.digits[0] + ':' + scope.edittime.digits[1] + scope.edittime.digits[2];
                     } else if (scope.edittime.digits.length == 4) {
                         time = scope.edittime.digits[0] + scope.edittime.digits[1].toString() + ':' + scope.edittime.digits[2] + scope.edittime.digits[3];
-                        console.log(time);
                     }
                     return time + ' ' + scope.timeframe;
                 };
@@ -375,7 +373,6 @@ app.directive('datePicker', function ($timeout, $window) {
                     if (numbers[event.which] !== undefined) {
                         if (checkValidTime(numbers[event.which])) {
                             scope.edittime.digits.push(numbers[event.which]);
-                            console.log(scope.edittime.digits);
                             scope.time_input = formatTime();
                             scope.time = numbers[event.which] + ':00';
                             scope.updateDate();
@@ -390,7 +387,6 @@ app.directive('datePicker', function ($timeout, $window) {
                     } else if (event.which == 8) {
                         scope.edittime.digits.pop();
                         scope.time_input = formatTime();
-                        console.log(scope.edittime.digits);
                     }
                     scope.edittime.formatted = scope.time_input;
                     // scope.edittime.input = formatted;
@@ -481,7 +477,6 @@ app.directive('datePicker', function ($timeout, $window) {
                     scope.moving = true;
                     scope.currentoffset = scope.xinitial - timepicker_container.offset().left;
                     scope.totaloffset = scope.xinitial - timepicker_container.offset().left;
-                    // console.log(timepicker_container.width());
                     if (scope.currentoffset < 0) {
                         scope.currentoffset = 0;
                     } else if (scope.currentoffset > timepicker_container.width()) {

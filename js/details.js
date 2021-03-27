@@ -124,8 +124,6 @@
 
           }
 
-          console.log(usingDBAddress)
-
           response = fullResponse.services[0];
 
           id('service').innerText = response.service
@@ -278,7 +276,6 @@
      }
 
      function close() {
-          console.log("works")
           id('address-updater').classList.add('hidden')
           id('zip-updater').classList.add('hidden')
      }
