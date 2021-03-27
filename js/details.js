@@ -8,6 +8,13 @@
                id('back').innerText = '< back to search'
           }
 
+          document.querySelector('.modal').onclick = function (e) {
+               e.stopPropagation();
+          }
+
+          document.querySelector('.modal button').onclick = function () {
+               this.parentElement.parentElement.parentElement.classList.add('hidden');
+          }
 
           id('exit-address').addEventListener('click', close)
           id('back').addEventListener('click', navigateBack)
@@ -16,8 +23,6 @@
           id('locationField').classList.add('hidden')
           id('addressDisplay').classList.add('hidden')
           id('edit').addEventListener('click', toggleAddressDisplay)
-          id('update').addEventListener('click', updateZip)
-
 
           let data = new FormData();
           data.append("session", getSession());
@@ -36,8 +41,6 @@
      }
 
      function generateRequest(response) {
-
-
 
           const urlParams = new URLSearchParams(window.location.search);
 
@@ -74,7 +77,6 @@
      function updateZip() {
           if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(id('zip-input').value)) {
 
-
                const urlParams = new URLSearchParams(window.location.search)
 
                let url = '/details?service=' + urlParams.get('service');
@@ -83,7 +85,22 @@
                window.location = url;
 
           } else {
-               alert('Please enter a valid US zip code.')
+               let warningIcon = document.createElement('i')
+               warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+               id('first').innerHTML = "";
+               id('first').appendChild(warningIcon)
+
+               document.querySelector('.modal-wrapper button').classList.remove('primary-green')
+               document.querySelector('.modal-wrapper button').classList.add('secondary')
+               document.querySelector('.modal-wrapper button').innerText = "OK, Retry"
+
+
+
+               id('warning-message').innerText = 'Please enter a valid US zip code.'
+               document.querySelector('.modal-wrapper').classList.remove('hidden')
+
+               document.querySelector('.modal-wrapper button').onclick = openZipcode
+
           }
      }
 
@@ -127,7 +144,7 @@
                if (!fullResponse.city) {
                     if (fullResponse.zip) {
                          id('button').innerText = 'Unavailable in ' + fullResponse.zip + '. Click here to try a different zipcode.';
-                         id('button').addEventListener('click', openZipcode)
+                         id('button').onclick = openZipcode
                     } else {
                          id('button').classList.add('disabled')
                          id('button').innerText = 'Unavailable';
@@ -189,11 +206,7 @@
                id('availability').innerText = 'Uncertain'
                id('button').innerText = 'Click to check availability'
 
-               id('button').onclick = function () {
-
-                    id('zip-updater').classList.remove('hidden');
-
-               }
+               id('button').onclick = openZipcode
           }
 
 
@@ -271,11 +284,26 @@
      }
 
      function openAddress() {
-          id('address-updater').classList.remove('hidden')
+          document.querySelector('.modal-wrapper').classList.remove('hidden')
      }
 
      function openZipcode() {
-          id('zip-updater').classList.remove('hidden')
+          id('first').innerHTML = ""
+          id('first').innerText = "Enter your zipcode to check availability in your area"
+
+          id('warning-message').innerHTML = ""
+          let input = document.createElement('input')
+          input.id = 'zip-input'
+          input.type = 'number'
+          input.placeholder = 'Enter Zipcode'
+          id('update').onclick = updateZip
+          id('warning-message').appendChild(input)
+
+          document.querySelector('.modal-wrapper button').innerText = "Update"
+          document.querySelector('.modal-wrapper button').classList.remove('secondary')
+          document.querySelector('.modal-wrapper button').classList.add('primary-green')
+          document.querySelector('.modal-wrapper button').onclick = updateZip
+          document.querySelector('.modal-wrapper').classList.remove('hidden')
 
      }
 
