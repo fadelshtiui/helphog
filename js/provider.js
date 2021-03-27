@@ -783,6 +783,7 @@ let preloaded = false;
 
 		if (this.innerText == "CANCEL") {
 			if (confirm("Are you sure that you would like to cancel the task? Please only cancel under extenuating circumstances.")) {
+				id('loading').classList.remove('hidden')
 				let data = new FormData();
 				let ordernumber = this.dataset.ordernumber;
 				let role = this.dataset.role
