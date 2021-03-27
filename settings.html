@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
 
 <head>
 	<meta charset="UTF-8">
 	<title>Settings</title>
 	<link rel='stylesheet prefetch' href='https://use.fontawesome.com/releases/v5.0.10/css/all.css'>
-	<link rel="stylesheet" type="text/css" href="css/settings.css" />
 	<link rel="stylesheet" href="css/global.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/footer.css">
+	<link rel="stylesheet" type="text/css" href="css/settings.css" />
 	<script
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
 		defer></script>
@@ -16,113 +18,211 @@
 </head>
 
 <body>
-	<div id="logo" class="logo-font">He!pHog</div>
-	<div id="tracking">settings</div>
-	<div id="return">return home</div>
-	<!--<a data-scroll href="/">-->
-	<!--	<div class="arrow"></div>-->
-	<!--</a>-->
-	<div class="container">
-		<div id="logo">
-			<a href="/">
-				<h1 class="logo"> </h1>
-			</a>
-		</div>
-		<div class="leftbox">
-			<nav>
-				<a id="profile"><i class="fa fa-user"></i></a>
-				<!-- <a id="subscription"><i class="fa fa-key"></i></a> -->
-				<a id="payment"><i class="fa fa-home"></i></a>
-				<!-- <a id="privacy"><i class="fa fa-tasks"></i></a> -->
-				<a id="settings"><i class="fa fa-cog"></i></a>
-			</nav>
-		</div>
-		<div class="rightbox">
-			<div class="profile">
-				<h1>Contact Information</h1>
-				<h2>Phone Number</h2>
-				<p id="phone"></p>
-				<!-- <input type="number" id="phone"/> -->
-				<br />
-				<h2>Email</h2>
-				<p id="email"></p>
-				<!-- <input autocomplete="off" type="email" id="email"/> -->
-				<br>
-				<p>Please <a href="contact">contact us</a> if you'd like to change either your phone number or
-					email.
-				</p>
+	<div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
+		<div class='modal'>
+			<div class='header'>
+				<span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
 			</div>
-			<div class="payment">
-				<h1>Order Location</h1>
-				<div class="content-area">
-
-					<h2>Address</h2>
-
-					<div id="locationField">
-						<input id="autocomplete" placeholder="Enter your location" type="text" />
-					</div>
-					<div id="addressDisplay" class="locationDisplay">
-						<span id="current-address"></span>
-						<br class="address-spacing">
-						<span id="current-city"></span><span id="city-state-comma">, </span><span
-							id="current-state"></span>
-						<br class="address-spacing">
-						<span id="current-zip"></span>
-						<br>
-						<button style="width: 80px; margin-top: 20px;" class="secondary" id="edit">Edit</button>
-					</div>
-
-
-					<table id="address" style="display: none;">
-						<tr>
-							<td class="label">Street Address</td>
-							<td class="slimField">
-								<input class="field" id="street_number" disabled="true" />
-							</td>
-							<td class="wideField" colspan="2">
-								<input class="field" id="route" disabled="true" />
-							</td>
-						</tr>
-						<tr>
-							<td class="label">City</td>
-							<td class="wideField" colspan="3">
-								<input class="field" id="locality" disabled="true" />
-							</td>
-						</tr>
-						<tr>
-							<td class="label">State</td>
-							<td class="slimField">
-								<input class="field" id="administrative_area_level_1" disabled="true" />
-							</td>
-							<td class="label">Zip code</td>
-							<td class="wideField">
-								<input class="field" id="postal_code" disabled="true" />
-							</td>
-						</tr>
-						<tr>
-							<td class="label">Country</td>
-							<td class="wideField" colspan="3">
-								<input class="field" id="country" disabled="true" />
-							</td>
-						</tr>
-					</table>
-					<p style="margin-top: 150px;">
-						This address will be used by default for all orders.
+			<div class='content'>
+				<span id="warning-message"></span>
+			</div>
+			<div class='actions'>
+				<button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
+					class="secondary">OK, Close Modal</button>
+			</div>
+		</div>
+	</div>
+	<div class="content">
+		<div class="header">
+			<div id="logo" class="logo-font">He!pHog</div>
+			<!--<div id="tracking">settings</div>-->
+			<!--<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>-->
+			<ul id="navigation">
+				<div id="signed-in-nav" class="hidden">
+					<li id="sign-out"><a href="/">Sign Out</a></li>
+					<li><a href="settings">Settings</a></li>
+					<li id="apply"><a href="quickapply">Apply</a></li>
+					<li id="orders"><a href="orders">Orders</a></li>
+					<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+				<div id="signed-out-nav" class="hidden">
+					<li id="sign-in-nav"><a href="signin">Login</a></li>
+					<li id="register-nav"><a href="registration">Register</a></li>
+					<li id="track-order"><a href="tracking">Track Order</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+			</ul>
+		</div>
+		<div class="container">
+			<div id="logo">
+				<a href="/">
+					<h1 class="logo"> </h1>
+				</a>
+			</div>
+			<div class="leftbox">
+				<nav>
+					<a id="profile"><i class="fa fa-user"></i></a>
+					<!-- <a id="subscription"><i class="fa fa-key"></i></a> -->
+					<a id="payment"><i class="fa fa-home"></i></a>
+					<!-- <a id="privacy"><i class="fa fa-tasks"></i></a> -->
+					<a id="settings"><i class="fa fa-cog"></i></a>
+				</nav>
+			</div>
+			<div class="rightbox">
+				<div class="profile">
+					<h1>Contact Information</h1>
+					<h2>Phone Number</h2>
+					<p id="phone"></p>
+					<!-- <input type="number" id="phone"/> -->
+					<br />
+					<h2>Email</h2>
+					<p id="email"></p>
+					<!-- <input autocomplete="off" type="email" id="email"/> -->
+					<br>
+					<p>Please <a href="contact">contact us</a> if you'd like to change either your phone number or
+						email.
 					</p>
 				</div>
+				<div class="payment">
+					<h1>Order Location</h1>
+					<div class="content-area">
 
-			</div>
+						<h2>Address</h2>
 
-			<div class="settings">
-				<h1>Account Settings</h1>
-				<!-- <h2>Notifications</h2> -->
-				<div id="policies">
-					<h2>Account Deletion</h2>
-					<button style="width: 60%;" class="primary-red" id="delete">Delete Account</button>
+						<div id="locationField">
+							<input id="autocomplete" placeholder="Enter your location" type="text" />
+						</div>
+						<div id="addressDisplay" class="locationDisplay">
+							<span id="current-address"></span>
+							<br class="address-spacing">
+							<span id="current-city"></span><span id="city-state-comma">, </span><span
+								id="current-state"></span>
+							<br class="address-spacing">
+							<span id="current-zip"></span>
+							<br>
+							<button style="width: 80px; margin-top: 20px;" class="secondary"
+								id="edit">Edit</button>
+						</div>
+
+
+						<table id="address" style="display: none;">
+							<tr>
+								<td class="label">Street Address</td>
+								<td class="slimField">
+									<input class="field" id="street_number" disabled="true" />
+								</td>
+								<td class="wideField" colspan="2">
+									<input class="field" id="route" disabled="true" />
+								</td>
+							</tr>
+							<tr>
+								<td class="label">City</td>
+								<td class="wideField" colspan="3">
+									<input class="field" id="locality" disabled="true" />
+								</td>
+							</tr>
+							<tr>
+								<td class="label">State</td>
+								<td class="slimField">
+									<input class="field" id="administrative_area_level_1" disabled="true" />
+								</td>
+								<td class="label">Zip code</td>
+								<td class="wideField">
+									<input class="field" id="postal_code" disabled="true" />
+								</td>
+							</tr>
+							<tr>
+								<td class="label">Country</td>
+								<td class="wideField" colspan="3">
+									<input class="field" id="country" disabled="true" />
+								</td>
+							</tr>
+						</table>
+						<p style="margin-top: 150px;">
+							This address will be used by default for all orders.
+						</p>
+					</div>
+
+				</div>
+
+				<div class="settings">
+					<h1>Account Settings</h1>
+					<!-- <h2>Notifications</h2> -->
+					<div id="policies">
+						<h2>Account Deletion</h2>
+						<button style="width: 60%;" class="primary-red" id="delete">Delete Account</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<footer class="footer">
+
+
+		<ul class="footer__nav">
+			<li class="nav__item">
+				<h12 class="nav__title">Contact</h12>
+
+				<address style="margin-top: -2px;">
+					+1 (425) 412-7423<br>
+
+					<button onclick="window.open('mailto:support@helphog.com')" class="secondary"
+						style="width: 120px;">Email Us</button>
+				</address>
+			</li>
+			<li class="nav__item">
+				<h12 class="nav__title">Discover</h12>
+
+				<ul class="nav__ul">
+					<li>
+						<a href="https://helphog.com/signin?redirect=quickapply">Become a Provider</a>
+					</li>
+
+					<li>
+						<a href="https://helphog.com/signin">Login</a>
+					</li>
+
+					<li>
+						<a href="https://helphog.com/about">About Us</a>
+					</li>
+				</ul>
+			</li>
+
+			<li class="nav__item nav__item--extra">
+				<h12 class="nav__title">Services</h12>
+
+				<ul class="nav__ul nav__ul--extra">
+
+				</ul>
+			</li>
+
+			<li class="nav__item">
+				<h12 class="nav__title">Legal</h12>
+
+				<ul class="nav__ul">
+					<li>
+						<a href="privacy">Privacy Policy</a>
+					</li>
+
+					<li>
+						<a href="terms">Terms of Use</a>
+					</li>
+
+					<li>
+						<a href="#">Sitemap</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+		<div class="legal">
+			<p>&copy; 2021 HelpHog LLC. All rights reserved.</p>
+
+		</div>
+	</footer>
 </body>
 
 </html>

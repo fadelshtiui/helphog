@@ -20,7 +20,6 @@
         id("delete").onclick = deleteAccount;
 
         id('logo').onclick = goHome;
-        id('return').onclick = goHome;
 
         id('locationField').classList.add('hidden')
 
@@ -136,19 +135,30 @@
                 .then(res => res.json())
                 .then(handleDeleteResponse)
                 .catch(console.log);
-                
+
         }
     }
 
     function handleDeleteResponse(response) {
         if (response.sessionerror == "true") {
-            alert("Please log out and try again.");
+            id('warning-message').innerText = "Please log out and try again."
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else if (response.stripeerror == "true") {
-            alert("Please make sure your Stripe balance is zero before deleting your account.");
+            id('warning-message').innerText = "Please make sure your Stripe balance is zero before deleting your account."
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else if (response.ordererror == "true") {
-            alert("Please make sure you have no active orders before deleting your account.")
+            id('warning-message').innerText = "Please make sure you have no active orders before deleting your account."
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else {
-            window.location.replace("https://helphog.com");
+            document.querySelector('.modal-wrapper i').classList.remove('warning')
+            document.querySelector('.modal-wrapper i').classList.add('success')
+            document.querySelector('.modal-wrapper button').onclick = function () {
+                window.location.replace("https://helphog.com");
+            }
+            document.querySelector(".modal-wrapper").onclick = function () {
+                window.location.replace("https://helphog.com");
+            }
+
         }
     }
 
@@ -158,7 +168,8 @@
 function addressUpdate() {
 
     if (id("address").innerText == '' || id("current-city").innerText == '' || id("current-zip").innerText == '' || id("current-state").innerText == '') {
-        alert("Please enter a full address.")
+        id('warning-message').innerText = "Please enter a full address."
+        document.querySelector('.modal-wrapper').classList.remove('hidden')
         return
     }
 
