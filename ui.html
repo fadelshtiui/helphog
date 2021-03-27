@@ -1,33 +1,71 @@
 <!DOCTYPE html>
 <html>
-     <head>
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-          <link rel="stylesheet" href="css/buttons.css">
-          <link rel="stylesheet" href="css/global.css">
 
-          <script src="js/ui.js"></script>
-     </head>
-     <body>
-     <div class="modal-wrapper hidden" onclick="(e) => { console.log(e.currentTarget); e.currentTarget.classList.add('hidden'); }">
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="css/all.css">
+     <link rel="stylesheet" href="css/global.css">
+     <script src="js/ui.js"></script>
+</head>
+
+<body>
+
+     <!-- Confirmation Modal -->
+     <!--<div class="modal-wrapper hidden" onclick="(e) => { e.currentTarget.classList.add('hidden'); }">-->
+     <!--     <div class='modal'>-->
+     <!--          <div class='header'>-->
+     <!--               <span id="first">some text</span>-->
+     <!--          </div>-->
+     <!--          <div class='content'>-->
+     <!--               <span id="second">some text</span>-->
+     <!--          </div>-->
+     <!--          <div class='actions'>-->
+     <!--               <button class="primary-red" id='cancel' href='#'>Yes, cancel it</button>-->
+     <!--               <button class="secondary" id='notcancel' href='#'>No, keep it</button>-->
+     <!--          </div>-->
+     <!--     </div>-->
+     <!--</div>-->
+
+     <!-- Failure Modal -->
+     <!--<div class="modal-wrapper hidden" onclick="(e) => { e.currentTarget.classList.add('hidden'); }">-->
+     <!--     <div class='modal'>-->
+     <!--          <div class='header'>-->
+     <!--               <span id="first"><i class="fas fa-exclamation-circle warning"></i></span>-->
+     <!--          </div>-->
+     <!--          <div class='content'>-->
+     <!--               <span id="second">some text</span>-->
+     <!--          </div>-->
+     <!--          <div class='actions'>-->
+     <!--<button class="primary-red" id='cancel' href='#'>Yes, cancel it</button>-->
+     <!--               <button class="secondary" id='notcancel' href='#'>OK, Close Modal</button>-->
+     <!--          </div>-->
+     <!--     </div>-->
+     <!--</div>-->
+
+     <!-- Success Modal -->
+     <div class="modal-wrapper hidden" onclick="(e) => { e.currentTarget.classList.add('hidden'); }">
           <div class='modal'>
                <div class='header'>
-                    <span id="first">some text</span>
+                    <span id="first"><i class="fas fa-check-circle success"></i></span>
                </div>
                <div class='content'>
                     <span id="second">some text</span>
                </div>
                <div class='actions'>
-                    <button class="primary-red" id='cancel' href='#'>Yes, cancel it</button>
-                    <button class="secondary" id='notcancel' href='#'>No, keep it</button>
+                    <!--<button class="primary-red" id='cancel' href='#'>Yes, cancel it</button>-->
+                    <button class="secondary" id='notcancel' href='#'>OK, Close Modal</button>
                </div>
           </div>
      </div>
+
+     <i class="fas fa-check-circle"></i>
      <div style="width: 20%;">
 
           <button class="primary-green">Continue/Submit Button</button>
           <br>
           <br>
-          <button class="primary-green"><i class="fa fa-circle-o-notch fa-spin buttonloadicon"></i>Loading Continue/Submit Button</button>
+          <button class="primary-green"><i class="fa fa-circle-o-notch fa-spin buttonloadicon"></i>Loading
+               Continue/Submit Button</button>
           <br>
           <br>
           <button disabled class="primary-green">Disabled Continue/Submit Button</button>
@@ -38,7 +76,8 @@
           <button class="primary-red">Cancel/Delete Button</button>
           <br>
           <br>
-          <button class="primary-red"><i class="fa fa-circle-o-notch fa-spin buttonloadicon"></i>Loading Cancel/Delete Button</button>
+          <button class="primary-red"><i class="fa fa-circle-o-notch fa-spin buttonloadicon"></i>Loading Cancel/Delete
+               Button</button>
           <br>
           <br>
           <button disabled class="primary-red">Disabled Cancel/Delete Button</button>
@@ -56,5 +95,6 @@
 
           <button class="secondary" onclick="document.querySelector('.modal-wrapper').classList.remove('hidden')">Open Popup</button>
      </div>
-     </body>
+</body>
+
 </html>
