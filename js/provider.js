@@ -854,6 +854,8 @@ let preloaded = false;
 				document.querySelector('.modal-wrapper').classList.add('hidden')
 			}
 
+			document.querySelector('.modal-wrapper').classList.remove('hidden')
+
 			id('yes').onclick = function () {
 				id('loading').classList.remove('hidden')
 				let data = new FormData();
@@ -912,7 +914,7 @@ let preloaded = false;
 			resetModal()
 			id('first').innerText = "Are you sure you would like to start?"
 			id('warning-message').innerText = "You can not reverse this action."
-			id('yes').innerText.innerText = "Yes, start"
+			id('yes').innerText = "Yes, start"
 			id('yes').classList.add('primary-green')
 			id('no').innerText = "No, go back"
 			id('no').classList.add('secondary')
@@ -924,6 +926,8 @@ let preloaded = false;
 
 			id('yes').onclick = function () {
 
+				startStop(startStopButton, data)
+
 				startStopButton.classList.remove("primary-green")
 				startStopButton.classList.add("primary-red");
 				startStopButton.innerText = "STOP";
@@ -931,13 +935,14 @@ let preloaded = false;
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove("primary-red")
 				startStopButton.nextElementSibling.classList.add("secondary");
+
 			}
 		} else { // startStopButton.innerText == "STOP"
 
 			resetModal()
 			id('first').innerText = "Are you sure you would like to stop?"
 			id('warning-message').innerText = "You can not reverse this action."
-			id('yes').innerText.innerText = "Yes, stop"
+			id('yes').innerText = "Yes, stop"
 			id('yes').classList.add('primary-red')
 			id('no').innerText = "No, go back"
 			id('no').classList.add('secondary')
@@ -948,6 +953,8 @@ let preloaded = false;
 			document.querySelector(".modal-wrapper").classList.remove('hidden')
 
 			id('yes').onclick = function () {
+
+				startStop(startStopButton, data)
 
 				startStopButton.classList.remove("primary-red");
 				startStopButton.classList.add("primary-green");
@@ -966,6 +973,11 @@ let preloaded = false;
 			}
 		}
 
+
+
+	}
+
+	function startStop(startStopButton, data) {
 		let url = "php/startstop.php";
 		fetch(url, { method: "POST", body: data })
 			.then(checkStatus)
@@ -1112,14 +1124,14 @@ let preloaded = false;
 		id('yes').classList.remove('primary-red')
 		id('yes').classList.remove('secondary')
 		id('yes').classList.remove('hidden')
-		id('yes').onclick = function () { };
+		id('yes').onclick = null
 		id('yes').innerText = ""
 
 		id('no').classList.remove('primary-green')
 		id('no').classList.remove('primary-red')
 		id('no').classList.remove('secondary')
 		id('yes').classList.remove('hidden')
-		id('no').onclick = function () { };
+		id('no').onclick = null
 		id('no').innerText = ""
 	}
 
