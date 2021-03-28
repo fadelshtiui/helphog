@@ -125,7 +125,17 @@
     }
 
     function deleteAccount() {
-        if (confirm('Are you sure you want to delete your account? All your data will be removed and your account will be closed. If you are a provider, this action will delete your Stripe account.')) {
+        resetModal()
+        id('yes').innerText = 'Yes, delete'
+        id('yes').classList.add('primary-red')
+        id('first').innerText = 'Are you sure you want to delete your account?'
+        id('warning-message').innerText = 'All your data will be removed and your account will be closed. If you are a provider, this action will delete your Stripe account.'
+        id('no').classList.add('secondary')
+        id('no').innerText = "No, close modal"
+        id('no').onclick = function() {
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
+        }
+        id('yes').onclick = function() {
 
             let data = new FormData();
             data.append("session", getSession());
@@ -140,19 +150,37 @@
     }
 
     function handleDeleteResponse(response) {
+        let warningIcon = document.createElement('i')
+        warningIcon.classList.add('fas')
         if (response.sessionerror == "true") {
-            id('warning-message').innerText = "Please log out and try again."
+            resetModal()
+            id('no').classList.add('hidden')
+            id('warning-message').innerText = "Please log out and try again.";
+            warningIcon.classList.add('fa-exclamation-circle', 'warning')
+            id('first').appendChild(warningIcon)
             document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else if (response.stripeerror == "true") {
+            resetModal()
+            id('no').classList.add('hidden')
             id('warning-message').innerText = "Please make sure your Stripe balance is zero before deleting your account."
+            warningIcon.classList.add('fa-exclamation-circle', 'warning')
+            id('first').appendChild(warningIcon)
             document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else if (response.ordererror == "true") {
+            resetModal()
+            id('no').classList.add('hidden')
             id('warning-message').innerText = "Please make sure you have no active orders before deleting your account."
+            warningIcon.classList.add('fa-exclamation-circle', 'warning')
+            id('first').appendChild(warningIcon)
             document.querySelector('.modal-wrapper').classList.remove('hidden')
         } else {
-            document.querySelector('.modal-wrapper i').classList.remove('warning')
-            document.querySelector('.modal-wrapper i').classList.add('success')
-            document.querySelector('.modal-wrapper button').onclick = function () {
+            resetModal()
+            id('no').classList.add('hidden')
+            warningIcon.classList.add('fa-check-circle', 'warning')
+            id('first').appendChild(warningIcon)
+            id('yes').innerText = "OK, go home"
+            id('yes').classList.add('secondary')
+            id('yes').onclick = function () {
                 window.location.replace("https://helphog.com");
             }
             document.querySelector(".modal-wrapper").onclick = function () {
@@ -160,6 +188,25 @@
             }
 
         }
+    }
+
+    function resetModal() {
+        id('first').innerHTML = ""
+        id('warning-message').innerHTML = ""
+
+        id('yes').classList.remove('primary-green')
+        id('yes').classList.remove('primary-red')
+        id('yes').classList.remove('secondary')
+        id('yes').classList.remove('hidden')
+        id('yes').onclick = function () { };
+        id('yes').innerText = ""
+
+        id('no').classList.remove('primary-green')
+        id('no').classList.remove('primary-red')
+        id('no').classList.remove('secondary')
+        id('yes').classList.remove('hidden')
+        id('no').onclick = function () { };
+        id('no').innerText = ""
     }
 
 
