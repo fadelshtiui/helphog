@@ -148,6 +148,7 @@ function openReviewPopup(orderNumber, name) {
 		if (response.result == 'successful') {
 			location.reload()
 		} else {
+		    id('stars-container').classList.add('hidden')
 			id('first').innerHTML = "";
 			let warningIcon = document.createElement('i')
 			warningIcon.classList.add('fas', "fa-exclamation-circle", "warning-orders")
@@ -156,6 +157,12 @@ function openReviewPopup(orderNumber, name) {
 			id('yes').classList.add('hidden')
 			id('no').innerText = "OK, Close Modal"
 			document.querySelector('.modal-wrapper').classList.remove('hidden')
+			id('no').classList.remove('primary-red');
+			id('no').classList.add('secondary-orders');
+			id('no').onclick = function(){
+			    document.querySelector('.modal-wrapper').classList.add('hidden')
+			}
+
 		}
 	}
 
