@@ -27,7 +27,13 @@
                 .then(handleResponse)
                 .catch(console.log);
         } else {
-            alert("Please check the reCAPTCHA box.")
+            id('warning-message').innerText = "Please check the reCAPTCHA box."
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
+
+            id('first').innerHTML = ''
+            let warningIcon = document.createElement('i')
+            warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning');
+            id('first').appendChild(warningIcon)
         }
 
     }
@@ -40,7 +46,17 @@
         } else {
             id("email-error").innerText = "";
             id("reset-password").innerText = "Re-send Email";
-            alert("Thank you! Please check your email for a reset link. Click re-send if you don't receive the email.");
+            id('warning-message').innerText = "Thank you! Please check your email for a reset link."
+
+
+            id('first').innerHTML = ''
+            let warningIcon = document.createElement('i')
+            warningIcon.classList.add('fas', 'fa-check-circle', 'success');
+            id('first').appendChild(warningIcon)
+
+
+            document.querySelector('.modal-wrapper').classList.remove('hidden')
+
         }
     }
 
