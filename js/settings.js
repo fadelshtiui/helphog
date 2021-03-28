@@ -41,7 +41,7 @@
 
     function redirect(response) {
         if (response.validated == "false") {
-            window.location.href = "/";
+            window.location.href = "signin?redirect=settings";
         } else {
             initialize(response.account.phone, response.account.email, response.account.address, response.account.city, response.account.state, response.account.zip);
         }
@@ -132,10 +132,10 @@
         id('warning-message').innerText = 'All your data will be removed and your account will be closed. If you are a provider, this action will delete your Stripe account.'
         id('no').classList.add('secondary')
         id('no').innerText = "No, close modal"
-        id('no').onclick = function() {
+        id('no').onclick = function () {
             document.querySelector('.modal-wrapper').classList.remove('hidden')
         }
-        id('yes').onclick = function() {
+        id('yes').onclick = function () {
 
             let data = new FormData();
             data.append("session", getSession());
