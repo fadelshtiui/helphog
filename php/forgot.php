@@ -11,8 +11,8 @@ if (isset($_POST["email"])) {
     foreach ($result as $row) {
         if ($email === $row['email']) {
             $found = true;
+            $name = $row['firstname'];
         }
-        $name = $row['firstname'];
     }
     if (!$found) {
         $email_error = "notfound";
