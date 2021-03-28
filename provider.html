@@ -29,7 +29,7 @@
 	<link rel='stylesheet'
 		href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
 
-    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/provider.css">
 	<link rel="stylesheet" href="css/tracker.css">
 	<link rel="stylesheet" href="css/dashboard.css">
@@ -44,11 +44,25 @@
 </head>
 
 <body>
+	<div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
+		<div class='modal'>
+			<div class='header'>
+				<span id="first"></span>
+			</div>
+			<div class='content'>
+				<span id="warning-message"></span>
+			</div>
+			<div class='actions'>
+				<button id="yes"></button>
+				<button id="no"></button>
+			</div>
+		</div>
+	</div>
 	<!--<div id="logo" class="logo-font">He!pHog</div>-->
 	<!--<div id="tracking">portal</div>-->
 	<!--<div id="return">return home</div>-->
 	<div class="content">
-	    <div class="header">
+		<div class="header">
 			<div id="logo"><a href="/" class="logo-font">He!pHog</a></div>
 			<ul id="navigation">
 				<div id="signed-in-nav" class="hidden">
@@ -111,17 +125,29 @@
 							<ul>
 								<!-- Item:Selected (Element:Modifier)        -->
 								<li class="dashboard-nav__item dashboard-nav__item--selected "><a class="other"
-										href="discover_places"><i class="fas fa-book-open" style="margin-right: 10px;margin-left: 0px;"></i>Active
+										href="discover_places"><i class="fas fa-book-open"
+											style="margin-right: 10px;margin-left: 0px;"></i>Active
 										Orders</a></li>
 								<!-- Item (Element)-->
-								<li id="special" class="dashboard-nav__item "><a class href="my_trip"><i class="fas fa-book" style="margin-right: 11px;margin-left: 2px;"></i>Order History</a></li>
+								<li id="special" class="dashboard-nav__item "><a class href="my_trip"><i
+											class="fas fa-book"
+											style="margin-right: 11px;margin-left: 2px;"></i>Order
+										History</a></li>
 								<!-- Item (Element)-->
 								<li class="dashboard-nav__item"><a class="other important import"
-										href="notifications"><i class="fas fa-clock" style="margin-right: 11px;margin-left: 0px;"></i>Availability</a></li>
+										href="notifications"><i class="fas fa-clock"
+											style="margin-right: 11px;margin-left: 0px;"></i>Availability</a>
+								</li>
 								<!-- Item (Element)-->
-								<li class="dashboard-nav__item"><a class="other noaddress" href="payment"><i class="fas fa-street-view" style="margin-right: 12px;margin-left: 0px;"></i>Locality</a></li>
+								<li class="dashboard-nav__item"><a class="other noaddress" href="payment"><i
+											class="fas fa-street-view"
+											style="margin-right: 12px;margin-left: 0px;"></i>Locality</a>
+								</li>
 								<!-- Item (Element)-->
-								<li class="dashboard-nav__item"><a class="other important" href="settings"><i class="fas fa-cog" style="margin-right: 11px;margin-left: 0px;"></i>Settings</a></li>
+								<li class="dashboard-nav__item"><a class="other important" href="settings"><i
+											class="fas fa-cog"
+											style="margin-right: 11px;margin-left: 0px;"></i>Settings</a>
+								</li>
 							</ul>
 						</div>
 					</div>

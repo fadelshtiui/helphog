@@ -286,7 +286,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 body {
-    text-align: left;
+  text-align: left;
 }
 
 select {
@@ -1090,4 +1090,8 @@ th {
   #return {
     display: none;
   }
+}
+
+.modal {
+  display: block;
 }

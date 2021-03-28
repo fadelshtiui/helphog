@@ -21,14 +21,14 @@
 	<div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
 		<div class='modal'>
 			<div class='header'>
-				<span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
+				<span id="first"></span>
 			</div>
 			<div class='content'>
 				<span id="warning-message"></span>
 			</div>
 			<div class='actions'>
-				<button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
-					class="secondary">OK, Close Modal</button>
+				<button id='yes'></button>
+				<button id='no'></button>
 			</div>
 		</div>
 	</div>
