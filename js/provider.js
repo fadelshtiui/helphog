@@ -43,9 +43,9 @@ let preloaded = false;
 
 		timezoneSelector.addEventListener("change", updateTimezone);
 
-		id("return").onclick = function () {
-			window.location.href = "/";
-		};
+// 		id("return").onclick = function () {
+// 			window.location.href = "/";
+// 		};
 
 		id("previewer").classList.add("hidden");
 
@@ -388,6 +388,7 @@ let preloaded = false;
 		if (percentage < 0) {
 			percentage = 0;
 		}
+		console.log(percentage)
 		percentage += 'px'
 		document.querySelector('.rangeslider-fill-lower').style.width = percentage;
 		document.querySelector('.rangeslider-thumb').style.left = percentage;

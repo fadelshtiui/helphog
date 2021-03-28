@@ -29,6 +29,7 @@
 	<link rel='stylesheet'
 		href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
 
+    <link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/provider.css">
 	<link rel="stylesheet" href="css/tracker.css">
 	<link rel="stylesheet" href="css/dashboard.css">
@@ -43,10 +44,31 @@
 </head>
 
 <body>
-	<div id="logo" class="logo-font">He!pHog</div>
-	<div id="tracking">portal</div>
-	<div id="return">return home</div>
+	<!--<div id="logo" class="logo-font">He!pHog</div>-->
+	<!--<div id="tracking">portal</div>-->
+	<!--<div id="return">return home</div>-->
 	<div class="content">
+	    <div class="header">
+			<div id="logo"><a href="/" class="logo-font">He!pHog</a></div>
+			<ul id="navigation">
+				<div id="signed-in-nav" class="hidden">
+					<li id="sign-out"><a href="/">Sign Out</a></li>
+					<li id="settings"><a href="settings">Settings</a></li>
+					<li id="apply"><a href="quickapply">Apply</a></li>
+					<li id="orders"><a href="orders">Orders</a></li>
+					<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+				<div id="signed-out-nav" class="hidden">
+					<li id="sign-in-nav"><a href="signin">Login</a></li>
+					<li id="register-nav"><a href="registration">Register</a></li>
+					<li id="track-order"><a href="tracking">Track Order</a></li>
+					<li id="contact"><a href="contact">Contact Us</a></li>
+					<li id="about"><a href="about">About</a></li>
+				</div>
+			</ul>
+		</div>
 
 		<div class="container hidden" style="width: 1170px;">
 			<form class="form" action="#" autocomplete="off" style="box-sizing:content-box;">

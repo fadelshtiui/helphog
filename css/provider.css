@@ -285,6 +285,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   /* Firefox */
 }
 
+body {
+    text-align: left;
+}
+
 select {
   background: #383c42;
   margin-top: 10px;
@@ -305,17 +309,6 @@ select {
 
 #discover_places {
   text-align: center;
-}
-
-#logo {
-  font-size: 3em;
-  color: #1ecd97;
-  margin-bottom: -10px;
-  position: absolute;
-  top: 0.15em;
-  left: 0.50em;
-  z-index: 1;
-  cursor: pointer;
 }
 
 #tracking {
@@ -914,6 +907,7 @@ body {
 h5 {
   max-width: 200px;
   word-wrap: break-word;
+  font-size: inherit;
 }
 
 .schedule-rows td {
