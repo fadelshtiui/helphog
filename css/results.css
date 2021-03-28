@@ -64,8 +64,8 @@ main section {
 
 .more {
   text-transform: lowercase;
-  color: #1ecd97;
   cursor: pointer;
+  color: #0275d8;
 }
 
 /*typography*/

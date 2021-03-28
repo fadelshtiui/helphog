@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
-
 /* General styles */
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -11,7 +11,7 @@ body {
 }
 
 .error {
-     color: red;
+  color: red;
 }
 
 html {
@@ -19,36 +19,30 @@ html {
 }
 
 a {
-     text-decoration: none;
-
-}
-
-a:hover, a:focus {
-    color:#1ecd97;
+  text-decoration: none;
 }
 
 /* Navigation Bar */
 
 #navigation {
-     list-style-type: none;
+  list-style-type: none;
 }
 
 #login-btn {
-     margin-top: 15px;
+  margin-top: 15px;
 }
 
-#registration, #sign-in, #about{
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    outline: inherit;
+#registration, #sign-in, #about {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
 }
 
 #navigation li:hover {
-   opacity: 1.0;
+  opacity: 1.0;
 }
-
 
 h1 {
   font-size: 6em;
@@ -63,6 +57,7 @@ h1 {
   /*padding: 1% 0 0;*/
   margin: auto;
 }
+
 .form {
   position: relative;
   z-index: 1;
@@ -75,6 +70,7 @@ h1 {
   border-radius: 5px;
   padding-top: 0px;
 }
+
 .form input {
   outline: 0;
   background: #f2f2f2;
@@ -86,6 +82,7 @@ h1 {
   font-size: 14px;
   border-radius: 5px;
 }
+
 .form button {
   text-transform: uppercase;
   outline: 0;
@@ -100,36 +97,43 @@ h1 {
   cursor: pointer;
   border-radius: 5px;
 }
-.form button:hover,.form button:active,.form button:focus {
+
+.form button:hover, .form button:active, .form button:focus {
   background: #519c75;
 }
+
 .form .message {
   margin: 15px 0 0;
   color: #b3b3b3;
   font-size: 12px;
 }
+
 .form .message a {
-  color: #4CAF50;
   text-decoration: none;
 }
+
 .form .register-form {
   display: none;
 }
+
 .container {
   position: relative;
   z-index: 1;
   max-width: 300px;
   margin: 0 auto;
 }
+
 .container:before, .container:after {
   content: "";
   display: block;
   clear: both;
 }
+
 .container .info {
   margin: 50px auto;
   text-align: center;
 }
+
 .container .info h1 {
   margin: 0 0 15px;
   padding: 0;
@@ -137,14 +141,17 @@ h1 {
   font-weight: 300;
   color: #1a1a1a;
 }
+
 .container .info span {
   color: #4d4d4d;
   font-size: 12px;
 }
+
 .container .info span a {
   color: #000000;
   text-decoration: none;
 }
+
 .container .info span .fa {
   color: #EF3B3A;
 }
