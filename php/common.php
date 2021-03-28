@@ -712,20 +712,20 @@ function mark_completed($order, $message)
     	}
 
     	if ($wage == "hour") {
-    		$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . $duration . ")";
+    		$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . number_format((float)$duration, 2, '.', '') . ")";
     		$amount = $total_before_tax;
     	} else {
     		$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
     		$amount = $cost;
     	}
 
-    	send_email($customer_email, "support@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment));
+    	send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment));
 
     	$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 
 ' . $subtotal . '  -  $' . $amount . '
 Sales tax  -  $' . $tax_collected . '
-
+________________________
 Total  -  $' . $customer_payment . '
 
 If there\'s an issue with the quality of service provided, you may dispute this order by texting back DISPUTE.
