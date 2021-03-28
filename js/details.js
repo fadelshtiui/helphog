@@ -81,6 +81,7 @@
 
                let url = '/details?service=' + urlParams.get('service');
                url += '&zip=' + id('zip-input').value
+               url += '&origin=' + urlParams.get('origin')
 
                window.location = url;
 
