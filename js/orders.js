@@ -252,23 +252,6 @@ var v = new Vue({
 
 		async markIncompleted(itemSelected) {
 
-			id('loading').classList.remove('hidden')
-			let data = new FormData();
-			data.append("ordernumber", itemSelected.number);
-			data.append("session", getSession())
-			let url = "php/dispute.php";
-			let response = await fetch(url, { method: "POST", body: data })
-			await checkStatus(response)
-			response = await response.json()
-			id('loading').classList.add('hidden')
-			this.showModal = false;
-			if (response.result == 'successful') {
-				itemSelected.status = "di";
-			} else {
-				alert('Sorry, orders may only be disputed within 24 hours of completion.')
-			}
-
-
 		},
 
 		async viewImage(props) {
@@ -286,23 +269,6 @@ var v = new Vue({
 
 		},
 		async cancel(itemSelected) {
-			id('loading').classList.remove('hidden')
-			let data = new FormData();
-			data.append("ordernumber", itemSelected.number);
-			data.append('session', getSession());
-			let url = "php/customercancel.php";
-			let response = await fetch(url, { method: "POST", body: data })
-			await checkStatus(response)
-			response = await response.text();
-			id('loading').classList.add('hidden')
-
-			if (response == 'ordererror') {
-				alert('You cannot cancel an order that is already in progress.');
-			} else {
-				this.showCancel = false;
-				itemSelected.status = "cc";
-			}
-
 
 		},
 		undo() {

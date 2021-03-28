@@ -45,7 +45,8 @@
                     .then(handleResponse)
                     .catch(console.log);
           } else {
-               alert("Please check the reCAPTCHA box.");
+               id('warning-message').innerText = "Please check the reCAPTCHA box."
+               document.querySelector('.modal-wrapper').classList.remove('hidden')
           }
      }
 
