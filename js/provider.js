@@ -43,9 +43,9 @@ let preloaded = false;
 
 		timezoneSelector.addEventListener("change", updateTimezone);
 
-// 		id("return").onclick = function () {
-// 			window.location.href = "/";
-// 		};
+		// 		id("return").onclick = function () {
+		// 			window.location.href = "/";
+		// 		};
 
 		id("previewer").classList.add("hidden");
 
@@ -216,7 +216,14 @@ let preloaded = false;
 
 	function updateDistance() {
 		if (id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == '') {
-			alert('Please enter your full address and select it from the dropdown below');
+			resetModal()
+			let warningIcon = document.createElement('i')
+			warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+			id('first').appendChild(warningIcon)
+			id('warning-message').innerText = 'Please enter your full address and select it from the dropdown below'
+			id('no').classList.add('hidden')
+			id('yes').innerText = "OK, Close Modal"
+			document.querySelector(".modal-wrapper").classList.remove('hidden')
 			return;
 		}
 
@@ -249,7 +256,16 @@ let preloaded = false;
 
 	async function handleResponseContact(response) {
 		if (await response.text() != '') {
-			alert(await response.text());
+			let message = await response.text()
+
+			resetModal()
+			let warningIcon = document.createElement('i')
+			warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+			id('first').appendChild(warningIcon)
+			id('warning-message').innerText = message
+			id('no').classList.add('hidden')
+			id('yes').innerText = "OK, Close Modal"
+			document.querySelector(".modal-wrapper").classList.remove('hidden')
 		}
 	}
 
@@ -738,11 +754,26 @@ let preloaded = false;
 	}
 
 	function markCompleted() {
-		if (confirm("Please verify that all necessary receipts are attached of any additional expenditures.")) {
+
+		let ordernumber = this.dataset.ordernumber;
+
+		resetModal()
+		id('first').innerText = "Please verify that all necessary receipts are attached of any additional expenditures."
+		id('yes').innerText = "Mark Completed"
+		id('yes').classList.add('primary-green')
+		id('no').innerText = "No, go back"
+		id('no').classList.add('secondary')
+		document.querySelector(".modal-wrapper").classList.remove('hidden')
+
+		id('no').onclick = function () {
+			document.querySelector(".modal-wrapper").classList.add('hidden')
+		}
+
+		id('yes').onclick = function () {
 
 			id('loading').classList.remove('hidden')
 			let data = new FormData();
-			let ordernumber = this.dataset.ordernumber;
+
 			data.append("ordernumber", ordernumber);
 			data.append("session", getSession());
 			let url = "php/markcompleted.php";
@@ -753,7 +784,21 @@ let preloaded = false;
 					if (response.error == "") {
 						location.reload();
 					} else {
-						alert(response.error);
+
+						resetModal()
+						let warningIcon = document.createElement('i')
+						warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+						id('first').appendChild(warningIcon)
+						id('warning-message').innerText = response.error
+						id('no').classList.add('hidden')
+						id('yes').innerText = "OK, Close Modal"
+						id('yes').classList.add('secondary')
+						id('yes').onclick = function () {
+							document.querySelector(".modal-wrapper").classList.add('hidden')
+						}
+						document.querySelector(".modal-wrapper").classList.remove('hidden')
+						id('loading').classList.add('hidden')
+
 					}
 
 				})
@@ -763,7 +808,18 @@ let preloaded = false;
 
 	function refund() {
 
-		if (confirm("Are you sure that you would like to refund the customer?")) {
+		resetModal()
+		id('first').innerText = "Are you sure that you would like to refund the customer?"
+		id('yes').innerText = "Yes, refund"
+		id('yes').classList.add('primary-red')
+		id('no').innerText = "No, go back"
+		id('no').classList.add('secondary')
+		id('no').onclick = function () {
+			document.querySelector(".modal-wrapper").classList.add('hidden')
+		}
+		document.querySelector(".modal-wrapper").classList.remove('hidden')
+
+		id('yes').onclick = function () {
 
 			let data = new FormData();
 			let ordernumber = this.dataset.ordernumber;
@@ -781,12 +837,27 @@ let preloaded = false;
 
 	function cancel() {
 
+		let role = this.dataset.role
+		let ordernumber = this.dataset.ordernumber;
+
 		if (this.innerText == "CANCEL") {
-			if (confirm("Are you sure that you would like to cancel the task? Please only cancel under extenuating circumstances.")) {
+
+			id('first').innerText = "Are you sure that you would like to cancel the task?"
+			id('warning-message').innerText = "Please only cancel under extenuating circumstances."
+
+			id('yes').classList.add('primary-red')
+			id('yes').innerText = "Yes, cancel"
+
+			id('no').classList.add('secondary')
+			id('no').innerText = "No, close modal"
+			id('no').onclick = function () {
+				document.querySelector('.modal-wrapper').classList.add('hidden')
+			}
+
+			id('yes').onclick = function () {
 				id('loading').classList.remove('hidden')
 				let data = new FormData();
-				let ordernumber = this.dataset.ordernumber;
-				let role = this.dataset.role
+
 				let tz = jstz.determine();
 				let timezone = tz.name();
 				data.append("ordernumber", ordernumber);
@@ -802,7 +873,7 @@ let preloaded = false;
 					})
 					.catch(console.log);
 			}
-		} else {
+		} else { // this.innerText == "PAUSE" || this.innerText == "RESUME"
 			let type = this.innerText;
 			let url = "php/pause.php";
 			if (type == "RESUME") {
@@ -810,7 +881,6 @@ let preloaded = false;
 			}
 
 			let data = new FormData();
-			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
 			data.append("session", getSession());
 
@@ -835,33 +905,63 @@ let preloaded = false;
 		data.append("ordernumber", ordernumber);
 		data.append("session", getSession())
 
-		if (this.innerText == "START") {
-			if (confirm("Are you sure you would like to start?")) {
+		let startStopButton = this;
 
-				this.classList.remove("primary-green")
-				this.classList.add("primary-red");
-				this.innerText = "STOP";
-				this.nextElementSibling.innerText = "PAUSE";
-				this.nextElementSibling.classList.remove("primary-green")
-				this.nextElementSibling.classList.remove("primary-red")
-				this.nextElementSibling.classList.add("secondary");
+		if (startStopButton.innerText == "START") {
+
+			resetModal()
+			id('first').innerText = "Are you sure you would like to start?"
+			id('warning-message').innerText = "You can not reverse this action."
+			id('yes').innerText.innerText = "Yes, start"
+			id('yes').classList.add('primary-green')
+			id('no').innerText = "No, go back"
+			id('no').classList.add('secondary')
+			id('no').onclick = function () {
+				document.querySelector('.modal-wrapper').classList.add('hidden')
 			}
-		} else {
-			if (confirm("Are you sure you would like to stop?")) {
 
-				this.classList.remove("primary-red");
-				this.classList.add("primary-green");
-				this.innerText = "MARK COMPLETED";
-				this.removeEventListener("click", toggle);
-				this.addEventListener("click", markCompleted);
+			document.querySelector(".modal-wrapper").classList.remove('hidden')
 
-				this.nextElementSibling.innerText = "REFUND CUSTOMER";
-				this.nextElementSibling.classList.remove("primary-green")
-				this.nextElementSibling.classList.remove('secondary')
-				this.nextElementSibling.classList.add("primary-red")
+			id('yes').onclick = function () {
 
-				this.nextElementSibling.removeEventListener("click", cancel);
-				this.nextElementSibling.addEventListener("click", refund);
+				startStopButton.classList.remove("primary-green")
+				startStopButton.classList.add("primary-red");
+				startStopButton.innerText = "STOP";
+				startStopButton.nextElementSibling.innerText = "PAUSE";
+				startStopButton.nextElementSibling.classList.remove("primary-green")
+				startStopButton.nextElementSibling.classList.remove("primary-red")
+				startStopButton.nextElementSibling.classList.add("secondary");
+			}
+		} else { // startStopButton.innerText == "STOP"
+
+			resetModal()
+			id('first').innerText = "Are you sure you would like to stop?"
+			id('warning-message').innerText = "You can not reverse this action."
+			id('yes').innerText.innerText = "Yes, stop"
+			id('yes').classList.add('primary-red')
+			id('no').innerText = "No, go back"
+			id('no').classList.add('secondary')
+			id('no').onclick = function () {
+				document.querySelector('.modal-wrapper').classList.add('hidden')
+			}
+
+			document.querySelector(".modal-wrapper").classList.remove('hidden')
+
+			id('yes').onclick = function () {
+
+				startStopButton.classList.remove("primary-red");
+				startStopButton.classList.add("primary-green");
+				startStopButton.innerText = "MARK COMPLETED";
+				startStopButton.removeEventListener("click", toggle);
+				startStopButton.addEventListener("click", markCompleted);
+
+				startStopButton.nextElementSibling.innerText = "REFUND CUSTOMER";
+				startStopButton.nextElementSibling.classList.remove("primary-green")
+				startStopButton.nextElementSibling.classList.remove('secondary')
+				startStopButton.nextElementSibling.classList.add("primary-red")
+
+				startStopButton.nextElementSibling.removeEventListener("click", cancel);
+				startStopButton.nextElementSibling.addEventListener("click", refund);
 
 			}
 		}
@@ -872,13 +972,24 @@ let preloaded = false;
 			.then(res => res.json())
 			.then((response) => {
 				if (response.error != "") {
-					alert(response.error)
-					this.innerText = "START";
-					this.classList.remove("primary-red")
-					this.classList.add("primary-green")
-					this.nextElementSibling.innerText = "CANCEL";
-					this.nextElementSibling.classList.remove("primary-green")
-					this.nextElementSibling.classList.add("primary-red")
+
+					resetModal()
+
+					let warningIcon = document.createElement('i')
+					warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+					id('first').appendChild(warningIcon)
+					id('warning-message').innerText = response.error
+					id('no').classList.add('hidden')
+					id('yes').innerText = "OK, Close Modal"
+					id('yes').classList.add('secondary')
+					document.querySelector(".modal-wrapper").classList.remove('hidden')
+
+					startStopButton.innerText = "START";
+					startStopButton.classList.remove("primary-red")
+					startStopButton.classList.add("primary-green")
+					startStopButton.nextElementSibling.innerText = "CANCEL";
+					startStopButton.nextElementSibling.classList.remove("primary-green")
+					startStopButton.nextElementSibling.classList.add("primary-red")
 
 				}
 			})
@@ -992,5 +1103,24 @@ let preloaded = false;
 	var tl = new TimelineMax({
 		delay: 1
 	});
+
+	function resetModal() {
+		id('first').innerHTML = ""
+		id('warning-message').innerHTML = ""
+
+		id('yes').classList.remove('primary-green')
+		id('yes').classList.remove('primary-red')
+		id('yes').classList.remove('secondary')
+		id('yes').classList.remove('hidden')
+		id('yes').onclick = function () { };
+		id('yes').innerText = ""
+
+		id('no').classList.remove('primary-green')
+		id('no').classList.remove('primary-red')
+		id('no').classList.remove('secondary')
+		id('yes').classList.remove('hidden')
+		id('no').onclick = function () { };
+		id('no').innerText = ""
+	}
 
 })();

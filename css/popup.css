@@ -41,7 +41,7 @@ body {
 
 .modal {
   display: block;
-  bottom: 220px;
+  /* bottom: 220px; */
 }
 
 .modal-inner {
