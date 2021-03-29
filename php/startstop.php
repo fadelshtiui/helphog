@@ -10,12 +10,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     
     if (validate_provider($order, $session)) {
         
-        $success = start_stop_order($order);
-        if ($success == false) {
-            $response->error = 'This order has not been fully claimed. Secondary providers must first claim this order.';
-        } else {
-            $response->error = "";
-        }
+        $response->error = start_stop_order($order);
         
     }
     

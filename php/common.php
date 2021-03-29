@@ -592,27 +592,38 @@ function start_stop_order($order)
 	$time = gmdate('y-m-d H:i:s');
 
 	$status = "";
-	$stmnt = $db->prepare("SELECT status FROM orders WHERE order_number = ?;");
+	$schedule = "";
+	$stmnt = $db->prepare("SELECT status, schedule FROM orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$status = $row['status'];
+		$schedule = $row['schedule'];
 	}
 
-	$sql = "";
-	if ($status == "st") {
-		$sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
-	} else if ($status == "cl") {
-		$sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
-	}
-
-	if ($sql != "") {
-		$stmt = $db->prepare($sql);
-		$params = array($time, $order);
-		$stmt->execute($params);
-		return true;
-	} else {
-		return false;
-	}
+    if (minutes_until($schedule) > 45) {
+        
+        return 'You can only start orders within 45 minutes of the schedule time.';
+        
+    } else {
+        
+        $sql = "";
+    	if ($status == "st") {
+    		$sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
+    	} else if ($status == "cl") {
+    		$sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
+    	}
+    
+    	if ($sql != "") {
+    		$stmt = $db->prepare($sql);
+    		$params = array($time, $order);
+    		$stmt->execute($params);
+    		return '';
+    	} else {
+    		return 'This order has not been fully claimed. Secondary providers must first claim this order.';
+    	}
+        
+    }
+    	
 }
 
 function getId($email){
