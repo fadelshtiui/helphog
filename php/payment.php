@@ -221,6 +221,7 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
     }
     $_SESSION['ordernumber'] = $order_number;
     $_SESSION['intent'] = $paymentIntent->id;
+    $_SESSION['providerId'] = $order_info->providerId;
 }
 
 function checkAcc(array $creds): bool

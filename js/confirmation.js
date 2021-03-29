@@ -43,6 +43,7 @@ function handle(response) {
     id("zip").innerText = response.zip;
 
     id("date").innerText = 'Date: ' + response.schedule;
+    id("providerId").innerText = 'Selected Provider: #' + response.providerId;
 
     if (response.wage == "per") {
         per(response.people, response.cost);

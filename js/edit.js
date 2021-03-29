@@ -652,11 +652,15 @@ function initModal() {
           people = "providers"
      }
 
-     id("terms").innerText = "*Estimated cost is calculated based on the amount of hours the tasks is expected to take. If your task takes less time or more time, the charge will decrease or increase respectively. You will not be charged until your order is completed. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. Estimated cost does not include costs of replacement parts/accessories."
+     id("terms").innerText = "*You will not be charged until your order is completed, but your funds may be placed on hold. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. Estimated cost does not include costs of replacement parts/accessories."
 
      id("popupService").innerText = id("first").innerText;
      id("popupMessage").innerText = " " + message;
      id("popupDate").innerText = " " + formatDate(id('date').innerText) + " " + time;
+     if (providerId != 'none'){
+         id("popupProvider1").innerText = "Selected Provider: #"
+         id("popupProvider").innerText = providerId;
+     }
      id("popupProviders").innerText = id("numpeople").value;
      id("popupTotal").innerText = estimate;
 
@@ -745,7 +749,8 @@ async function stripe(service, duration, people, cost) {
                state: id('current-state').innerText,
                people: id('numpeople').value,
                duration: id('duration').value,
-               cancelbuffer: id('cancelbuffer').value
+               cancelbuffer: id('cancelbuffer').value,
+               providerId: providerId
           }
      };
 

@@ -337,39 +337,17 @@
 
                     result.appendChild(infoContainer)
 
-                    let availabilityContainer = document.createElement('div')
-                    availabilityContainer.classList.add('profile__stats')
-
-                    let availabilityTitle = document.createElement('p')
-                    availabilityTitle.classList.add('profile__stats__title')
-                    availabilityTitle.innerText = 'Availability'
-
-                    let availabilityValue = document.createElement('h5')
-                    availabilityValue.classList.add('profile__stats__info')
-                    availabilityValue.innerText = 'Unavailable'
-                    if (service.available) {
-                         availabilityValue.innerText = 'Available'
-                    }
-
-                    availabilityContainer.appendChild(availabilityTitle)
-                    availabilityContainer.appendChild(availabilityValue)
-
-                    result.appendChild(availabilityContainer)
-
                     let priceContainer = document.createElement('div')
                     priceContainer.classList.add('profile__stats')
 
                     let priceTitle = document.createElement('p')
                     priceTitle.classList.add('profile__stats__title')
-                    priceTitle.style.marginLeft = '22px';
+                    priceTitle.style.marginLeft = '28px';
                     priceTitle.innerText = 'Price'
 
                     let priceValue = document.createElement('h5')
                     priceValue.innerText = '$' + service.cost
-                    priceValue.style.marginLeft = '22px';
-
-                    priceContainer.appendChild(priceTitle)
-                    priceContainer.appendChild(priceValue)
+                    priceValue.style.marginLeft = '28px';
 
                     result.appendChild(priceContainer)
 
@@ -379,22 +357,52 @@
                     let rateTitle = document.createElement('p')
                     rateTitle.classList.add('profile__stats__title')
                     rateTitle.innerText = 'Rate'
+                    rateTitle.style.marginLeft = '-5px';
 
                     let rateValue = document.createElement('h5')
                     rateValue.classList.add('profile__stats__info')
+                    rateValue.style.marginLeft = '-5px';
 
+                    let availabilityContainer = document.createElement('div')
+                    availabilityContainer.classList.add('profile__stats')
+
+                    let availabilityTitle = document.createElement('p')
+                    availabilityTitle.classList.add('profile__stats__title')
+                    availabilityTitle.innerText = 'First hour'
+                    availabilityTitle.style.marginLeft = '-45px';
+
+                    let availabilityValue = document.createElement('h5')
+                    availabilityValue.classList.add('profile__stats__info')
+                    availabilityValue.innerText = 'Unavailable'
+                    availabilityValue.style.marginLeft = '-45px';
+
+                    availabilityValue.innerText = 'Full';
+
+                    if (service.prorated == 'y') {
+                         availabilityValue.innerText = 'Prorated';
+                    }
 
                     if (service.wage == 'per') {
                          rateValue.innerText = 'Flat'
+                         availabilityValue.innerText = 'Full';
+
                     } else { // service.wage == 'hour'
                          rateValue.innerText = 'Hourly'
+                         priceValue.innerText = priceValue.innerText + "/hr"
                     }
 
+
+                    priceContainer.appendChild(priceTitle)
+                    priceContainer.appendChild(priceValue)
 
                     rateContainer.appendChild(rateTitle)
                     rateContainer.appendChild(rateValue)
 
+                    availabilityContainer.appendChild(availabilityTitle)
+                    availabilityContainer.appendChild(availabilityValue)
+
                     result.appendChild(rateContainer)
+                    result.appendChild(availabilityContainer)
 
                     let buttonContainer = document.createElement('profile__cta')
                     buttonContainer.classList.add('profile__cta')
@@ -508,7 +516,7 @@
                }
 
                url += '&zip=' + id('zip-input').value
-               
+
                document.cookie = "zip=" + id('zip-input').value + ";";
 
                window.location = url;

@@ -59,6 +59,9 @@ foreach ($stmnt->fetchAll() as $row) {
      $entry->cost = $row["cost"];
      $entry->wage = $row["wage"];
      $entry->remote = $row["remote"];
+     $entry->prorated = $row["prorated"];
+
+     error_log($row["prorated"]);
 
      $category = $row["category"];
 

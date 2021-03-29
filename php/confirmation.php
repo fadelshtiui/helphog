@@ -100,12 +100,12 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
 
             if ($found && $street_address != "Remote (online)") {
-                
+
                 $sql = "UPDATE login SET zip = ?, address = ?, city = ?, state = ? WHERE email = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($_SESSION['zip'], $street_address, $city, $state, $customer_email);
                 $stmt->execute($params);
-                
+
             }
 
             $accept_key = '' . bin2hex(openssl_random_pseudo_bytes(12));
@@ -190,6 +190,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             $response->firstname = $name;
             $response->schedule = $schedule;
             $response->people = $people;
+            $response->providerId = $_SESSION['providerId'];
 
             $available_providers = $_SESSION['available_providers'];
 

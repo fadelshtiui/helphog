@@ -82,7 +82,7 @@
                let url = '/details?service=' + urlParams.get('service');
                url += '&zip=' + id('zip-input').value
                url += '&origin=' + urlParams.get('origin')
-               
+
                document.cookie = "zip=" + id('zip-input').value + ";";
 
                window.location = url;
@@ -135,13 +135,19 @@
           id('price').innerText = '$' + response.cost
           if (response.wage == 'per') {
                id('rate').innerText = 'Flat'
+               id('availability').innerText = 'Full';
           } else {
                id('rate').innerText = 'Hourly'
+               id('price').innerText = '$' + response.cost + "/hr"
+               if (response.prorated == 'y'){
+                   id('availability').innerText = 'Prorated';
+               }else{
+                   id('availability').innerText = 'Full';
+               }
           }
 
           if (response.available == 0) {
 
-               id('availability').innerText = 'Unavailable'
                if (!fullResponse.city) {
                     if (fullResponse.zip) {
                          id('button').innerText = 'Unavailable in ' + fullResponse.zip + '. Click here to try a different zipcode.';
@@ -160,7 +166,6 @@
                     id('addressDisplay').classList.remove('hidden')
                }
           } else if (response.available == 1) {
-               id('availability').innerText = 'Available'
                id('button').innerText = 'Book'
                id('button').onclick = function () {
                     let queryString = window.location.search
@@ -204,7 +209,6 @@
                }
 
           } else {
-               id('availability').innerText = 'Uncertain'
                id('button').innerText = 'Click to check availability'
 
                id('button').onclick = openZipcode
@@ -249,14 +253,19 @@
           window.location = url
      }
 
+    //  function close() {
+    //       id('address-updater').classList.add('hidden')
+    //       id('zip-updater').classList.add('hidden')
+    //  }
+
      function openAddress() {
          id('first').innerHTML = ""
          id('first').innerText = "Enter your address to check availability in your area"
-         
+
           id('autocomplete').classList.remove('hidden')
-          
+
           document.querySelector('.modal-wrapper button').classList.add('hidden')
-          
+
           document.querySelector('.modal-wrapper').classList.remove('hidden')
      }
 
