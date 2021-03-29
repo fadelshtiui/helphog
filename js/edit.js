@@ -652,7 +652,7 @@ function initModal() {
           people = "providers"
      }
 
-     id("terms").innerText = "You will not be charged until your order is completed. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. For automotive repair tasks, estimated cost does include costs of replacement parts/accessories."
+     id("terms").innerText = "*Estimated cost is calculated based on the amount of hours the tasks is expected to take. If your task takes less time or more time, the charge will decrease or increase respectively. You will not be charged until your order is completed. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. Estimated cost does not include costs of replacement parts/accessories."
 
      id("popupService").innerText = id("first").innerText;
      id("popupMessage").innerText = " " + message;
