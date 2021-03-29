@@ -241,24 +241,21 @@
 										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work
 											Ended: <br>{{
 											props.item.ended }}</td>
-										<td v-if="props.item.receipt == 'download'"
-											@click="viewImage(props.item)" width="10%" class="text-xs-left"
-											style='font-weight:300;'>Receipts:<br><a>{{
-												props.item.receipt }}</a></td>
+										<td v-if="props.item.provider != ''"
+											 width="10%" class="text-xs-left"
+											style='font-weight:300;'>Provder ID:<br><a>{{
+												props.item.providerId }}</a></td>
 										<td v-else width="10%" class="text-xs-left"
-											style='font-weight:300; color: black;'>Receipts:<br>none</td>
+											style='font-weight:300; color: black;'>No Provider</td>
 										<td v-if="props.item.type == 'hour'" width="15%" class="text-xs-left"
 											style='font-weight:300;'>{{ props.item.hours == 0 ? "&#60;1" :
 											props.item.hours }} hour(s) at ${{ props.item.wage }} per hour
-											<span v-if="props.item.expenditure != 0">+ ${{
-												props.item.expenditure }} for
-												parts/supplies</span>
+											<span>+ tax ({{
+												props.item.tax_percent }}%)</span>
 										</td>
 										<td v-if="props.item.type == 'per'" width="15%" class="text-xs-left"
-											style='font-weight:300;'>${{ props.item.wage }} <span
-												v-if="props.item.expenditure != 0">+ ${{
-												props.item.expenditure }} for
-												parts/supplies</span></td>
+											style='font-weight:300;'>${{ props.item.wage }} <span>+ tax ({{
+												props.item.tax_percent }}%)</span></td>
 
 										<td v-if="props.item.status == 'ac'" width="30%" class="text-xs-left"
 											style='font-weight:300;'>Not enough providers were located for

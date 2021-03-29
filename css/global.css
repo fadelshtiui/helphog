@@ -24,6 +24,15 @@ body, html {
 
 .logo-font {
   font-family: "Fredoka One", "cursive";
+  color: #1ecd97;
+}
+
+.logo-font:visited {
+  color: #1ecd97;
+}
+
+.logo-font:active {
+  color: #1ecd97;
 }
 
 /* All Buttons */
@@ -165,6 +174,7 @@ i.success {
 }
 
 a.standard {
+  text-decoration: none;
   color: #0275d8;
 }
 

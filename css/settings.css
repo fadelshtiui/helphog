@@ -121,10 +121,14 @@ body {
   border-right: 0.08rem solid #F2F2F2;
 }
 
+#logo {
+  cursor: pointer;
+}
+
 nav a {
   list-style: none;
   padding: 55px;
-  color: #1ecd97;
+  color: #bfc7cd;
   font-size: 3.1em;
   display: block;
   transition: all .3s ease-in-out;
@@ -136,13 +140,12 @@ nav a:hover {
 }
 
 .active {
-  color: #3FB6A8;
   background: #F5F7F7;
 }
 
 .rightbox {
   float: right;
-  width: 70%;
+  width: 78%;
   height: 100%;
 }
 

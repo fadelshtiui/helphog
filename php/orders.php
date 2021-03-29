@@ -36,6 +36,7 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
             $entry->time = $local_date->format('h:i a');
             $entry->message = $row["message"];
             $entry->wage = $row["cost"];
+            $entry->tax_percent = $row["sales_tax_percent"];
 
             $entry->began = "TBD";
             if ($row["start"] != '2019-02-18 01:53:14') {
@@ -49,10 +50,11 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
             if ($row['status'] != 'pe' ) {
 
                 $entry->provider = "";
-                $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+                $stmnt = $db->prepare("SELECT firstname, id FROM login WHERE email = ?;");
                 $stmnt->execute(array($row["client_email"]));
                 foreach($stmnt->fetchAll() as $row2) {
                     $entry->provider = $row2['firstname'];
+                    $entry->providerId = $row2['id'];
                 }
 
             }
@@ -60,20 +62,11 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
             $entry-> type = $row['wage'];
 
 
-            if ($row['status'] != 'st') {
-                $ts1 = strtotime($row["start"]);
-                $ts2 = strtotime($row["end"]);
-                $seconds_diff = $ts2 - $ts1;
-                $seconds_diff -= $row["paused_time"];
+            if ($row['status'] == 'mc' || $row['status'] == 'pd' || $entry-> type == 'per' || $row['status'] == 'di') {
 
-                $time = ($seconds_diff / 3600);
-                if ($row["wage"] == "hour") {
-                    $earnings = $time * $row["cost"];
-                } else {
-                    $earnings = $row["cost"];
-                }
-                $entry->amount = round($earnings + $row["expenditure"], 2) ;
-                $entry->hours = round($time, 2);
+                $entry->amount = payment($entry->number)->customer_payment;
+                $entry->hours = round(payment($entry->number)->worked_time, 2);
+
             } else {
                 $entry->amount = "TBD";
                 $entry->hours = "TBD";
@@ -89,7 +82,7 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
             } else {
                 $entry->receipt = "download";
             }
-            
+
             $entry->imagekey = $row['image_key'];
 
             $mintotal = minutes_until($row['schedule']);

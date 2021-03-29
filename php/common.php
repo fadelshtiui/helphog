@@ -95,7 +95,6 @@ function &payment($order)
 		$max_payment_before_tax = $cost * $people;
 	}
 	$tax_collected = round($max_payment_before_tax * $decimal_percent, 2);
-	$result->tax_collected = $tax_collected;
 	$max_withdraw = round($max_payment_before_tax + $tax_collected, 2);
 
 	if ($wage == "hour") {
@@ -106,10 +105,15 @@ function &payment($order)
 		$tax_collected = round($total_before_tax * $decimal_percent, 2);
 		$result->customer_payment = round($total_before_tax + $tax_collected, 2);
 		$result->provider_payout = $worked_time * $cost * 0.9;
+		$result->total_before_tax = $total_before_tax;
 	} else {
+	    $result->total_before_tax = $max_payment_before_tax;
 		$result->customer_payment = $max_withdraw;
 		$result->provider_payout = $cost * 0.9;
 	}
+	$result->tax_collected = $tax_collected;
+
+
 	return $result;
 }
 
@@ -212,7 +216,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 			$location = ucfirst($city) . ', ' . $state . ' ' . $zip;
 		}
 
-		send_email($client, "no-reply@helphog.com", "HelpHog - New Task Available", get_claim_email($service, $local_time->format("F j, Y, g:i a"), $location, $client, $ordernumber, $price, $message, $name, $duration, $secret_key));
+		send_email($client, "no-reply@helphog.com", "New Task Available", get_claim_email($service, $local_time->format("F j, Y, g:i a"), $location, $client, $ordernumber, $price, $message, $name, $duration, $secret_key));
 	}
 }
 
@@ -635,6 +639,7 @@ function mark_completed($order, $message)
 	$people= "";
 	$schedule = "";
 	$client_email = "";
+	$tz = "";
 	$disputes = 0;
 	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
@@ -648,6 +653,7 @@ function mark_completed($order, $message)
 		$people = $row['people'];
 		$schedule = $row['schedule'];
 		$client_email = $row['client_email'];
+		$tz = $row['timezone'];
 
 	}
 
@@ -660,22 +666,23 @@ function mark_completed($order, $message)
 		$stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
 		$stmnt->execute(array($customer_email));
 		foreach ($stmnt->fetchAll() as $row) {
-			$name = $row['firstname'];
+			$name = " " . $row['firstname'];
 			$phone = $row['phone'];
 		}
 
 		//Receipt text and email
 
-		$name = "";
-    	$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
-    	$stmnt->execute(array($row["customer_email"]));
-    	foreach ($stmnt->fetchAll() as $row) {
-    		$name = " " . $row['firstname'];
-    	}
-
     	$customer_payment = $payment_info->customer_payment;
     	$tax_collected = $payment_info->tax_collected;
         $duration =  $payment_info->worked_time;
+        $total_before_tax = $payment_info->total_before_tax;
+
+        $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+        $local_date->setTimezone(new DateTimeZone($tz));
+
+        $schedule = $local_date->format('m\-d\-y \a\t g:ia');
+
+        error_log("customer payment" . $customer_payment . "tax" . $tax_collected . "duration" . $duration . "total_before_tax" . $total_before_tax);
 
     	$price = $cost;
 
@@ -689,12 +696,6 @@ function mark_completed($order, $message)
     	$orig_price = $cost;
 
     	if ($wage == "hour") {
-    		$providerWage = "$" . $price . "/hr";
-    	} else {
-    		$providerWage = "$" . $price;
-    	}
-
-    	if ($wage == "hour") {
     		$price = $price * $people;
 
     	} else {
@@ -706,26 +707,25 @@ function mark_completed($order, $message)
     		$peopleText = "provider";
     	}
 
-    	$hourText = "hour";
-    	if ($durationTemp > 1) {
-    		$hourText = "hours";
-    	}
-
+        $amount = 0;
     	if ($wage == "hour") {
-    		$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . $duration . ")";
+    		$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . number_format((float)$duration, 2, '.', '') . " hours)";
     		$amount = $total_before_tax;
     	} else {
     		$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
     		$amount = $cost;
     	}
 
-    	send_email($customer_email, "support@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment));
+    	send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
 
     	$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 
-' . $subtotal . '  -  $' . $amount . '
-Sales tax  -  $' . $tax_collected . '
+' . $subtotal . '
 
+Cost  -  $' .  money_format('%.2n', $amount) . '
+
+Sales tax  -  $' . $tax_collected . '
+_______________
 Total  -  $' . $customer_payment . '
 
 If there\'s an issue with the quality of service provided, you may dispute this order by texting back DISPUTE.
@@ -734,13 +734,6 @@ For future orders with the same provider use #' . $providerId . ' at checkout.';
 
 
 	    send_text($phone, $message);
-
-		if ($message != "") {
-			$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-			$token = '18a458337ffdfd10617571e495314311';
-			$client = new Client($sid, $token);
-			$client->messages->create('+1' . $customer_phone, array('from' => '+12532593451', 'body' => $message));
-		}
 
 		$current_timestamp = gmdate("Y-m-d H:i:s");
 		$sql = "UPDATE orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
@@ -1072,7 +1065,7 @@ function dispute_order($order_number)
 		$stmt->execute($params);
 
 		if ($order_disputes == 3) {
-			send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - Mediation Required", 'Order Number: ' . $order_number);
+			send_email("admin@helphog.com", "admin@helphog.com", "Mediation Required", 'Order Number: ' . $order_number);
 		}
 
 		$all_emails = array();
@@ -1092,7 +1085,7 @@ function dispute_order($order_number)
 			foreach ($stmnt->fetchAll() as $row) {
 				$name = $row['firstname'];
 			}
-			send_email($all_emails[$i], "no-reply@helphog.com", "HelpHog - Task Disputed", get_dispute_email($name, $service));
+			send_email($all_emails[$i], "no-reply@helphog.com", "Task Disputed", get_dispute_email($name, $service));
 		}
 
 		return true;
@@ -1203,7 +1196,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
 	$local_date->setTimezone(new DateTimeZone($tz));
 
-	send_email($email, "no-reply@helphog.com", "HelpHog - Claimed Task", get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration));
+	send_email($email, "no-reply@helphog.com", "Claimed Task", get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration));
 
 	$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
 	$token = '18a458337ffdfd10617571e495314311';
@@ -2925,7 +2918,7 @@ function get_marked_completed_email($name, $service)
 ';
 }
 
-function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total)
+function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total, $providerId)
 {
 	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -3430,6 +3423,7 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
                             </td>
                           </tr>
                         </table>
+                        <p>For future orders with the same provider use #' . $providerId . ' at checkout.</p>
                         <p>If you have any questions about this receipt, simply reply to this email or reach out to our <a href="helphog.com/contact">support team</a> for help.</p>
                         <p>Cheers,
                           <br>The HelpHog Team</p>
