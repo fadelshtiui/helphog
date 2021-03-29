@@ -99,50 +99,13 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             }
 
 
-            if ($found) {
-                $no_address = false;
-                $no_city = false;
-                $no_state = false;
-
-                $name = "";
-                $stmnt = $db->prepare("SELECT * FROM login WHERE email = ?;");
-                $stmnt->execute(array($customer_email));
-                foreach ($stmnt->fetchAll() as $row) {
-                    if (strlen($row["address"]) < 1) {
-                        $no_address = true;
-                    }
-                    if (strlen($row["city"]) < 1) {
-                        $no_city = true;
-                    }
-                    if (strlen($row["state"]) < 1) {
-                        $no_state = true;
-                    }
-                }
-
-                if ($no_address && $no_city && $no_state) {
-                    $sql = "UPDATE login SET zip = ? WHERE email = ?";
-                    $stmt = $db->prepare($sql);
-                    $params = array($_SESSION['zip'], $customer_email);
-                    $stmt->execute($params);
-                }
-                if ($no_address) {
-                    $sql = "UPDATE login SET address = ? WHERE email = ?";
-                    $stmt = $db->prepare($sql);
-                    $params = array($street_address, $customer_email);
-                    $stmt->execute($params);
-                }
-                if ($no_city) {
-                    $sql = "UPDATE login SET city = ? WHERE email = ?";
-                    $stmt = $db->prepare($sql);
-                    $params = array($city, $customer_email);
-                    $stmt->execute($params);
-                }
-                if ($no_state) {
-                    $sql = "UPDATE login SET state = ? WHERE email = ?";
-                    $stmt = $db->prepare($sql);
-                    $params = array($state, $customer_email);
-                    $stmt->execute($params);
-                }
+            if ($found && $street_address != "Remote (online)") {
+                
+                $sql = "UPDATE login SET zip = ?, address = ?, city = ?, state = ? WHERE email = ?";
+                $stmt = $db->prepare($sql);
+                $params = array($_SESSION['zip'], $street_address, $city, $state, $customer_email);
+                $stmt->execute($params);
+                
             }
 
             $accept_key = '' . bin2hex(openssl_random_pseudo_bytes(12));
@@ -222,7 +185,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
                 }
             }
 
-            send_email($customer_email, "no-reply@helphog.com", "Confirmation Email", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key));
+            send_email($customer_email, "no-reply@helphog.com", "HelpHog - Confirmation Email", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key));
 
             $response->firstname = $name;
             $response->schedule = $schedule;
