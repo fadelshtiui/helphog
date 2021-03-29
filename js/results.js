@@ -88,6 +88,10 @@
                data.append("zip", urlParams.get('zip'))
           }
 
+          if (urlParams.get('category')) {
+            id('category-filters').classList.add('hidden')
+          }
+
           fetchResults(searchURL, data)
      }
 
@@ -231,15 +235,21 @@
                          // id('current-zip-guest').innerText =
                     }
                }
-
-               let counters = document.querySelectorAll('.badge')
+               let count = 0;
+               let counters = document.querySelectorAll('#category-filters .badge')
                for (let i = 0; i < counters.length; i++) {
                     let counter = counters[i]
                     counter.innerText = '0'
                     if (response.counts[counter.dataset.category]) {
                          counter.innerText = response.counts[counter.dataset.category];
+                         count++;
+                    }else{
+                        counter.parentElement.classList.add('hidden')
                     }
 
+               }
+               if(count <= 1){
+                   id('category-filters').classList.add('hidden');
                }
 
                id('total').innerText = response.services.length;
