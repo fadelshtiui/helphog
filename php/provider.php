@@ -112,6 +112,7 @@ if ($validated) {
         $response->workemail = $row["work_email"];
         $response->alerts = $row["alerts"];
         $response->client_email = $row["client_email"];
+        $response->providerId = $row["id"];
 
         $utc_time_zone = new DateTimeZone('UTC');
         $local_time_zone = new DateTimeZone($tz);
@@ -200,7 +201,7 @@ if ($validated) {
 
         $payment_info = payment($row["order_number"]);
 
-        $entry->revenue = $payment_info->provider_payout;
+        $entry->revenue = money_format('%.2n', $payment_info->provider_payout);
 
         array_push($orders_array, $entry);
     }
