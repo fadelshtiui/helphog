@@ -50,10 +50,11 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
             if ($row['status'] != 'pe' ) {
 
                 $entry->provider = "";
-                $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+                $stmnt = $db->prepare("SELECT firstname, id FROM login WHERE email = ?;");
                 $stmnt->execute(array($row["client_email"]));
                 foreach($stmnt->fetchAll() as $row2) {
                     $entry->provider = $row2['firstname'];
+                    $entry->providerId = $row2['id'];
                 }
 
             }
