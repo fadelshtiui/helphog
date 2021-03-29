@@ -410,7 +410,7 @@ let preloaded = false;
 		document.querySelector('.rangeslider-thumb').style.left = percentage;
 		id('slider-input').value = "" + response.radius * 1000;
 		id("distance").value = response.radius + ' miles';
-		id("name").innerText = response.firstname;
+		id("name").innerText = response.firstname + " #" + response.providerId;
 
 		// 		id("work-phone").value = response.workphone;
 		// 		id("work-email").value = response.workemail;
