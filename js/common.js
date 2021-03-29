@@ -15,6 +15,18 @@ function getSession() {
     return session;
 }
 
+function getZip() {
+    let cookies = document.cookie.split(";");
+    let zip = "";
+    for (let i = 0; i < cookies.length; i++) {
+        let key = cookies[i].split("=");
+        if (key[0].trim() == "zip") {
+            zip = key[1];
+        }
+    }
+    return zip;
+}
+
 function signOut() {
     let cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {

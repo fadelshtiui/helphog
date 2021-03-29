@@ -508,6 +508,8 @@
                }
 
                url += '&zip=' + id('zip-input').value
+               
+               document.cookie = "zip=" + id('zip-input').value + ";";
 
                window.location = url;
 

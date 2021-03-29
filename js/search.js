@@ -32,24 +32,25 @@ var suggestion = ["I need my lawn mowed...", "Car needs an oil change...", "Need
      });
 
      function searchCategory() {
-          if (id("zipcode").value != "") {
-               let searchTerm = this.innerText;
-               window.location.href = "results?zip=" + id('zipcode').value + "&category=" + this.innerText.toLowerCase()
-          } else {
-               window.location.href = "results?category=" + this.innerText.toLowerCase()
+         let searchTerm = this.innerText;
+         let url = "results?category=" + this.innerText.toLowerCase()
+          if (getSession() == "" && getZip() != "") { // not logged in and has saved zip cookie
+               url += "&zip=" + getZip()
           }
+          window.location.href = url;
      }
 
      function search() {
+         alert('search')
           let searchBar = id("search");
           let searchTerm = searchBar.value;
           searchTerm = searchTerm.replace("\"", "");
           searchTerm = searchTerm.replace("\'", "");
           if (searchTerm != '') {
                let url = 'results?search=' + searchTerm
-               if (id('zipcode').value) {
-                    url += '&zip=' + id('zipcode').value
-               }
+               if (getSession() == "" && getZip() != "") { // not logged in and has saved zip cookie
+                   url += "&zip=" + getZip()
+              }
                window.location = url
           }
      }

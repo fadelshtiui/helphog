@@ -33,7 +33,11 @@
                let entry = document.createElement('li');
                entry.textContent = word;
                entry.addEventListener('click', function () {
-                    window.location = 'details?service=' + word + "&origin=search";
+                   let url = 'details?service=' + word + "&origin=search"
+                   if (getSession() == '' && getZip() != "") {
+                       url += '&zip=' + getZip()
+                   }
+                    window.location = url;
                })
                resultsEl.appendChild(entry);
           })
