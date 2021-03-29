@@ -94,6 +94,10 @@ function reloadResults() {
   } else {
     url += 'service=' + urlParams.get('service')
   }
+  
+  if (urlParams.get('origin')) {
+      url += '&origin=' + urlParams.get('origin')
+  }
 
 
   url += '&address=' + id('street_number').value + ' ' + id('route').value;

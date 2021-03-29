@@ -82,6 +82,8 @@
                let url = '/details?service=' + urlParams.get('service');
                url += '&zip=' + id('zip-input').value
                url += '&origin=' + urlParams.get('origin')
+               
+               document.cookie = "zip=" + id('zip-input').value + ";";
 
                window.location = url;
 
@@ -96,7 +98,7 @@
                document.querySelector('.modal-wrapper button').innerText = "OK, Retry"
 
 
-
+                id('autocomplete').classList.add('hidden')
                id('warning-message').innerText = 'Please enter a valid US zip code.'
                document.querySelector('.modal-wrapper').classList.remove('hidden')
 
@@ -152,7 +154,7 @@
 
                } else {
                     id('button').innerText = 'Unavailable in ' + fullResponse.city.charAt(0).toUpperCase() + fullResponse.city.slice(1) + ', ' + fullResponse.state + '. Click here to try a different address.';
-                    id('button').addEventListener('click', openAddress)
+                    id('button').onclick = openAddress
                }
                if (usingDBAddress) {
                     id('addressDisplay').classList.remove('hidden')
@@ -247,41 +249,14 @@
           window.location = url
      }
 
-     let updateAvailability = async (url, newZip) => {
-          let response = await fetch(url)
-          await checkStatus(response)
-          response = await response.json()
-
-          if (response.available == 0) {
-               id('button').classList.add('disabled')
-               id('availability').innerText = 'Unavailable'
-               id('button').innerText = 'Unavailable in ' + newZip
-          } else if (response.available == 1) {
-               const urlParams = new URLSearchParams(window.location.search)
-               let url = "edit?service=" + response.service + "&description=" + response.description + "&price=" + response.cost + "&wage=" + response.wage + "&zip=" + newZip + "&remote=" + response.remote + '&back=details';
-               url += '&origin=' + urlParams.get('origin')
-               if (urlParams.get('search')) {
-                    url += "&search=" + urlParams.get('search')
-               } else if (urlParams.get('category')) {
-                    url += "&category=" + urlParams.get('category')
-               }
-          } else {
-               id('availability').innerText = 'Uncertain'
-               id('button').innerText = 'Click to check availability'
-               id('button').onclick = function () {
-                    let zip = prompt('Please enter a valid zip code: ')
-                    updateAvailability('php/details.php?service=' + response.service + '&zip=' + zip, zip)
-               }
-          }
-
-     }
-
-     function close() {
-          id('address-updater').classList.add('hidden')
-          id('zip-updater').classList.add('hidden')
-     }
-
      function openAddress() {
+         id('first').innerHTML = ""
+         id('first').innerText = "Enter your address to check availability in your area"
+         
+          id('autocomplete').classList.remove('hidden')
+          
+          document.querySelector('.modal-wrapper button').classList.add('hidden')
+          
           document.querySelector('.modal-wrapper').classList.remove('hidden')
      }
 
@@ -289,7 +264,8 @@
           id('first').innerHTML = ""
           id('first').innerText = "Enter your zipcode to check availability in your area"
 
-          id('warning-message').innerHTML = ""
+          id('warning-message').innerText = ""
+          id('autocomplete').classList.add('hidden')
           let input = document.createElement('input')
           input.id = 'zip-input'
           input.type = 'number'
@@ -297,6 +273,7 @@
           id('update').onclick = updateZip
           id('warning-message').appendChild(input)
 
+          document.querySelector('.modal-wrapper button').classList.remove('hidden')
           document.querySelector('.modal-wrapper button').innerText = "Update"
           document.querySelector('.modal-wrapper button').classList.remove('secondary')
           document.querySelector('.modal-wrapper button').classList.add('primary-green')
