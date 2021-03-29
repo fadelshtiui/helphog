@@ -86,7 +86,7 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
         
         $errors->sessionerror = "false";
         
-        send_email($to_send, "no-reply@helphog.com", "HelpHog - Address Changed", get_address_email($to_send, $name));
+        send_email($to_send, "no-reply@helphog.com", "Address Changed", get_address_email($to_send, $name));
        
         $errors->ziperror = $zip_error;
         header('Content-type: application/json');

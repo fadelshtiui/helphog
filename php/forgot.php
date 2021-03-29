@@ -27,7 +27,7 @@ if (isset($_POST["email"])) {
         $params = array($random_hash, $email);
         $stmt->execute($params);
         
-        send_email($email, "no-reply@helphog.com", "HelpHog - Password Reset", get_reset_email($email, $random_hash, $name));
+        send_email($email, "no-reply@helphog.com", "Password Reset", get_reset_email($email, $random_hash, $name));
         
     }
     $errors = new \stdClass();

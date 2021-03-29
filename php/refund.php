@@ -26,7 +26,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
             $name = $row['firstname'];
         }
 
-        send_email($customer_email, "no-reply@helphog.com", "HelpHog - Task Refunded", get_refund_email($name, $service));
+        send_email($customer_email, "no-reply@helphog.com", "Task Refunded", get_refund_email($name, $service));
         
         $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);

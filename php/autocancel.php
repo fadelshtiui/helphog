@@ -68,7 +68,7 @@ foreach ($result as $row) {
                     $primary_work_phone = $row['work_phone'];
                 }
 
-                send_email($client_email, "admin@helphog.com", "HelpHog - Task Cancelled", noPartnersFound($service, $order_number, $schedule));
+                send_email($client_email, "admin@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule));
                 sendTextProvider($service, $order_number, $primary_work_phone, $schedule);
 
             }
@@ -83,7 +83,7 @@ foreach ($result as $row) {
                         $work_phone = $row['work_phone'];
                     }
                     sendTextProvider($service, $order_number, $work_phone, $schedule);
-                    send_email($$email, "admin@helphog.com", "HelpHog - Task Cancelled", noPartnersFound($service, $order_number, $schedule));
+                    send_email($$email, "admin@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule));
                 }
             }
 
@@ -101,7 +101,7 @@ foreach ($result as $row) {
 
             sendTextCustomer($service, $order_number, $customer_phone, $schedule);
 
-            send_email($customer_email, "admin@helphog.com", "HelpHog - Task Cancelled", noProviderFound($service, $order_number, $schedule));
+            send_email($customer_email, "admin@helphog.com", "Task Cancelled", noProviderFound($service, $order_number, $schedule));
 
         }
 

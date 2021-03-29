@@ -104,7 +104,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             $params = array("pc", $order_number);
             $stmt->execute($params);
 
-            send_email($customer_email, "admin@helphog.com", "HelpHog - Task Cancelled", get_cancel_email($name, $service));
+            send_email($customer_email, "admin@helphog.com", "Task Cancelled", get_cancel_email($name, $service));
             
             echo 'task cancelled';
         
@@ -211,7 +211,7 @@ function banning($cancels, $client_email) {
         $note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
     }
     
-    send_email($client_email, "no-reply@helphog.com", "HelpHog - Account Notice", get_notice_email($name, $note));
+    send_email($client_email, "no-reply@helphog.com", "Account Notice", get_notice_email($name, $note));
 
 }
     

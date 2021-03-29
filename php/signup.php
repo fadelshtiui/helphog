@@ -25,7 +25,7 @@ if (isset($_POST["firstname"]) && isset($_POST["lastname"]) && isset($_POST["ema
         
         if ($send_email == 'true') {
 
-            send_email($email, "no-reply@helphog.com", "HelpHog - Account Confirmation", get_signup_email($email, $firstname, $secret_key));
+            send_email($email, "no-reply@helphog.com", "Account Confirmation", get_signup_email($email, $firstname, $secret_key));
             
         }
         

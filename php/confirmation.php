@@ -222,7 +222,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
                 }
             }
 
-            send_email($customer_email, "no-reply@helphog.com", "HelpHog - Confirmation Email", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key));
+            send_email($customer_email, "no-reply@helphog.com", "Confirmation Email", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key));
 
             $response->firstname = $name;
             $response->schedule = $schedule;

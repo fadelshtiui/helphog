@@ -145,7 +145,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
                 $local_date->setTimezone(new DateTimeZone($tz));
                 
-                send_email($providerEmail, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($providerMessage, $providerName));
+                send_email($providerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $providerName));
                 
                 
                 sendTextProvider($service, $order, $phone, $local_date->format("F j, Y, g:i a"));
@@ -162,12 +162,12 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                         $phonenumber = $row['phone'];
                         $name = $row['firstname'];
                     }
-                    send_email($provider, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($providerMessage, $name));
+                    send_email($provider, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $name));
                     sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
                 }
             }
 
-            send_email($customerEmail, "no-reply@helphog.com", "HelpHog - " . $service . " Canceled", customer_cancel($customerMessage, $customerName));
+            send_email($customerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($customerMessage, $customerName));
             
             $sql = "UPDATE orders SET status = 'cc' WHERE order_number = ?;";
             $stmt = $db->prepare($sql);

@@ -31,7 +31,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
                $name = $row['firstname'];
           }
 
-          send_email($client_email, "no-reply@helphog.com", "HelpHog - Order Verified", get_completed_email($service, $name));
+          send_email($client_email, "no-reply@helphog.com", "Order Verified", get_completed_email($service, $name));
 
           $sql = "UPDATE orders SET rating = ? WHERE order_number = ?";
           $stmt = $db->prepare($sql);
