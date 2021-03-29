@@ -41,7 +41,6 @@ var suggestion = ["I need my lawn mowed...", "Car needs an oil change...", "Need
      }
 
      function search() {
-         alert('search')
           let searchBar = id("search");
           let searchTerm = searchBar.value;
           searchTerm = searchTerm.replace("\"", "");
