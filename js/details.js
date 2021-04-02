@@ -274,7 +274,9 @@
           id('first').innerText = "Enter your zipcode to check availability in your area"
 
           id('warning-message').innerText = ""
-          id('autocomplete').classList.add('hidden')
+          if (id('autocomplete')) {
+              id('autocomplete').classList.add('hidden')
+          }
           let input = document.createElement('input')
           input.id = 'zip-input'
           input.type = 'number'
