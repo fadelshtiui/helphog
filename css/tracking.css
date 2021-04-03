@@ -15,6 +15,10 @@
   right: 40px;
 }
 
+main {
+    zoom: 90%;
+}
+
 #return:hover {
   color: gray;
   cursor: pointer;
