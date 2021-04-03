@@ -26,6 +26,10 @@
   opacity: 0;
 }
 
+#home-page-main {
+    zoom: 82%;
+}
+
 /* General styles */
 
 body {
