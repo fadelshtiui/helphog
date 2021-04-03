@@ -66,6 +66,7 @@ function updateNav(response) {
         id("sign-out").onclick = signOut;
         if (response.account.type == "Business") {
             id("provider").classList.remove("hidden");
+            id("apply").classList.add('hidden')
         }
         
         id('signed-in-nav').classList.remove('hidden')
