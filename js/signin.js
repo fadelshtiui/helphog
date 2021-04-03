@@ -14,7 +14,7 @@
         id("password").addEventListener("keyup", function (event) {
             event.preventDefault();
             if (event.keyCode === 13) {
-                button.click();
+                id("login-btn").click();
             }
         });
     });
