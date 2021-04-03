@@ -654,9 +654,9 @@ function initModal() {
 
      id("terms").innerText = "*You will not be charged until your order is completed, but your funds may be placed on hold. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. Estimated cost does not include costs of replacement parts/accessories."
 
-     id("popupService").innerText = id("first").innerText;
+     id("popupService").innerText = document.querySelector(".service").innerText;
      id("popupMessage").innerText = " " + message;
-     id("popupDate").innerText = " " + formatDate(id('date').innerText) + " " + time;
+     id("popupDate").innerText = " " + formatDate(id('date').value) + " " + time;
      if (providerId != 'none'){
          id("popupProvider1").innerText = "Selected Provider: #"
          id("popupProvider").innerText = providerId;
