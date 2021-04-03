@@ -7,6 +7,14 @@ html {
   background-size: cover;
 }
 
+#message {
+  padding-bottom: 3rem;
+}
+
+div>a {
+  font-size: 24px;
+}
+
 * {
   box-sizing: border-box;
   /* outline:1px solid ;*/

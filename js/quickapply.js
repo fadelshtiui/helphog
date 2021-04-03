@@ -4,9 +4,21 @@
 
 (function () {
 
-    window.addEventListener('load', function () {
+    window.addEventListener('load', async function () {
 
         id('submit').onclick = submit;
+
+        let data = new FormData();
+        data.append('session', getSession())
+        let res = await fetch("php/checkapplied", { method: "POST", body: data })
+        await checkStatus(res)
+        res = await res.text()
+
+        if (res == "accepted") {
+            window.location = "verify?message=Please+reach+out+to+us+directly+if+you+would+like+to+apply+to+provide+more+services.&email=none"
+        } else if (res == "applied") {
+            window.location = "verify?message=Your+application+has+been+submitted.+Please+be+on+the+lookout+for+an+email+from+our+hiring+team.+Check+your+junk+folder+if+you+don%27t+see+our+email+within+24+hours+of+applying.&email=none"
+        }
 
         fetch("php/info.php?type=categories")
             .then(checkStatus)
