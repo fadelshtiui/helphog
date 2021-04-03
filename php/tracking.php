@@ -10,36 +10,54 @@ if (isset($_POST["order"]) && isset($_POST['email'])) {
     $response = new \stdClass();
     
     $found = false;
-    $stmnt = $db->prepare("SELECT customer_email FROM orders WHERE order_number = ?;");
-    $stmnt->execute(array($order));
-    foreach($stmnt->fetchAll() as $row) {
-        if ($email == $row['customer_email']) {
+    $result = $db->query("SELECT order_number FROM orders");
+    foreach($result as $row) {
+        if ($row["order_number"] == $order) {
             $found = true;
+            break;
         }
     }
     
     if (!$found) {
         
-        $response->emailerror = "true";
+        $response->ordererror = "true";
         
     } else {
-    
-        $service = "";
-        $status = "";
-        $cancelled = "false";
-        $stmnt = $db->prepare("SELECT service, status FROM orders WHERE order_number = ?;");
+        
+        $found = false;
+        $stmnt = $db->prepare("SELECT customer_email FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
-            $service = $row['service'];
-            $status = $row['status'];
-            if ($status == 'pc' || $status == 'cc' || $status == 'ac') {
-                $cancelled = "true";
+            if ($email == $row['customer_email']) {
+                $found = true;
+                break;
             }
         }
         
-        $response->status = $status;
-        $response->service = $service;
-        $response->cancelled = $cancelled;
+        if (!$found) {
+            
+            $response->emailerror = "true";
+            
+        } else {
+        
+            $service = "";
+            $status = "";
+            $cancelled = "false";
+            $stmnt = $db->prepare("SELECT service, status FROM orders WHERE order_number = ?;");
+            $stmnt->execute(array($order));
+            foreach($stmnt->fetchAll() as $row) {
+                $service = $row['service'];
+                $status = $row['status'];
+                if ($status == 'pc' || $status == 'cc' || $status == 'ac') {
+                    $cancelled = "true";
+                }
+            }
+            
+            $response->status = $status;
+            $response->service = $service;
+            $response->cancelled = $cancelled;
+            
+        }
         
     }
     

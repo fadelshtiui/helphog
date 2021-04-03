@@ -11,8 +11,8 @@
 			window.location.href = "/";
 		})
 		$(".panel").hide();
-		$(".submit").click(function () {
-			$(".submit").addClass("loading");
+		$("#submit").click(function () {
+			$("#submit").addClass("loading");
 			reset();
 		})
 	});
@@ -35,32 +35,35 @@
 
 
 
-		if (response.emailerror == "true" || response['status'] == "nf") {
+		if (response.emailerror == "true" || response.ordererror == "true") {
 			setTimeout(function () {
-				$(".submit").addClass("hide-loading");
+				$("#submit").addClass("hide-loading");
 				// For failed icon just replace ".done" with ".failed"
 				$(".failed").addClass("finish");
 			}, 1000);
 			setTimeout(function () {
-				$(".submit").removeClass("loading");
-				$(".submit").removeClass("hide-loading");
+				$("#submit").removeClass("loading");
+				$("#submit").removeClass("hide-loading");
 				$(".done").removeClass("finish");
 				$(".failed").removeClass("finish");
-				document.getElementById('message').innerText = "Incorrect order number."
 
 				if (response.emailerror == "true") {
-					document.getElementById('message').innerText = "Email not found."
+					document.getElementById('message').innerText = "Invalid email."
+				} else if (response.ordererror == "true") {
+				    id('message').innerText = "Order number not found"
 				}
+				
+				id('message').style.color = "#DB2828";
 			}, 1000);
 		} else {
 			setTimeout(function () {
-				$(".submit").addClass("hide-loading");
+				$("#submit").addClass("hide-loading");
 				// For failed icon just replace ".done" with ".failed"
 				$(".done").addClass("finish");
 			}, 1000);
 			setTimeout(function () {
-				$(".submit").removeClass("loading");
-				$(".submit").removeClass("hide-loading");
+				$("#submit").removeClass("loading");
+				$("#submit").removeClass("hide-loading");
 				$(".done").removeClass("finish");
 				$(".failed").removeClass("finish");
 			}, 1000);
