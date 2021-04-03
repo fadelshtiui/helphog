@@ -133,8 +133,9 @@
         id('no').classList.add('secondary')
         id('no').innerText = "No, close modal"
         id('no').onclick = function () {
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            document.querySelector('.modal-wrapper').classList.add('hidden')
         }
+        document.querySelector('.modal-wrapper').classList.remove('hidden')
         id('yes').onclick = function () {
 
             let data = new FormData();
