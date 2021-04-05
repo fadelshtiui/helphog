@@ -312,8 +312,27 @@
     submit();
   })
 
-})($);
+  let timeLabels = document.querySelectorAll('.time-label')
 
+  let append = "am"
+  let count = 0;
+
+  timeLabels.forEach(label => {
+    if (count == 0) {
+      label.innerText = "12:00 " + append;
+    } else {
+      label.innerText = count + ":00 " + append;
+    }
+    count++;
+    if (count > 12) {
+      count = 1;
+    }
+    if (count > 11) {
+      append = "pm";
+    }
+  })
+
+})($);
 
 
 function submit() {

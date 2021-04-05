@@ -923,6 +923,7 @@ h5 {
   background-color: transparent;
   text-align: right;
   position: relative;
+  width: fit-content;
   /*top: -12px;*/
 }
 
@@ -1068,6 +1069,7 @@ table {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 th {
