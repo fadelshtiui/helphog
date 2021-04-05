@@ -11,19 +11,19 @@ $stripe = new \Stripe\StripeClient(
 $db = establish_database();
 
 if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['ordernumber']) && isset($_POST['session']) ) {
-    
+
     $order = "";
     if (isset($_GET['ordernumber'])) {
         $order = trim($_GET["ordernumber"]);
     } else {
         $order = trim($_POST["ordernumber"]);
     }
-    
+
     $validated = false;
     $is_post_request = false;
-    
+
     if (isset($_GET['ordernumber']) && isset($_GET['secret'])) {
-        
+
         $stmnt = $db->prepare("SELECT cancel_key FROM orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
@@ -31,21 +31,21 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 $validated = true;
             }
         }
-    
+
     }
-    
+
     if (isset($_POST['ordernumber']) && isset($_POST['session'])) {
-        
+
         $validated = validate_customer($order, trim($_POST['session']));
         $is_post_request = true;
-        
+
     }
-    
+
     if ($validated) {
-    
+
         $service = "";
         $schedule = "";
-        $status = ""; 
+        $status = "";
         $providerEmail = "";
         $secondary_provider = "";
         $customerEmail = "";
@@ -55,52 +55,50 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         foreach($stmnt->fetchAll() as $row) {
             $service = $row["service"];
             $schedule = $row["schedule"];
-            $status = $row["status"]; 
+            $status = $row["status"];
             $providerEmail = $row["client_email"];
             $secondary_providers = $row["secondary_providers"];
             $customerEmail = $row["customer_email"];
             $people = $row["people"];
         }
-        
-        
-        
+
         $customerName = "";
         $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
         $stmnt->execute(array($customerEmail));
         foreach($stmnt->fetchAll() as $row) {
-            $customerName = $row['firstname'];
+            $customerName = ' ' . $row['firstname'];
         }
-                
+
         if ($status == "cc" || $status == "pc" || $status == "ac") {
-            
+
             if ($is_post_request) {
                 echo 'error?message=This+order+has+already+been+canceled';
             } else {
                 echo '<script>window.location.href = "https://helphog.com/error?message=This+order+has+already+been+canceled";</script>';
             }
-            
-            
-        } else if ($status == "st") { 
-            
+
+
+        } else if ($status == "st") {
+
             if ($is_post_request) {
                 echo 'ordererror';
             } else {
                 echo '<script>window.location.href = "https://helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
             }
-        
+
         } else {
-            
+
             $tz = "";
             $providerName = "";
             $phone = "";
             $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM login WHERE email = ?;");
             $stmnt->execute(array($providerEmail));
             foreach($stmnt->fetchAll() as $row) {
-                $providerName = $row['firstname'];
+                $providerName = ' ' . $row['firstname'];
                 $tz = $row['timezone'];
                 $phone = $row['phone'];
             }
-                
+
             $amount = 0;
             $payment_info = payment($order);
             if (minutes_until($schedule) < 1440) { // within 24 hours
@@ -110,14 +108,14 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 if ($providerEmail != '' && $secondary_providers == '') {
                     $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. Since the customer canceled within 24 hours of the scheduled date, you will be receiving a $10 compensation. We apologize for the inconvience.';
                     $customerMessage = 'Your service request for ' . $service . ' (' . $order .') has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
-                    
+
                     $stripe_acc = "";
                     $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
                     $stmnt->execute(array($providerEmail));
                     foreach ($stmnt->fetchAll() as $row) {
                         $stripe_acc = $row["stripe_acc"];
                     }
-                    
+
                     $transfer = \Stripe\Transfer::create([
                       "amount" => 1000,
                       "currency" => "usd",
@@ -125,42 +123,42 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                       "description" => $service . " (" . $order . ")",
                       "transfer_group" => '{' . $order . '}',
                     ]);
-                    
+
                 } else {
-                    $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. We apologize for the inconvience.';
-                    $customerMessage = 'Your service request for ' . $service . ' (' . $order .') has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
+                    $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled by the customer. We apologize for the inconvience.';
+                    $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
                 }
             } else {
-                $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ')  has been canceled by the customer. We apologize for the inconvience.';
-                $customerMessage = 'Your service request for ' . $service . ' (' . $order .') has been canceled. The full refund will appear in your bank statement within 5-10 business days.';
+                $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled by the customer. We apologize for the inconvience.';
+                $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled. The full refund will appear in your bank statement within 5-10 business days.';
                 $stripe->paymentIntents->cancel(
                   trim($payment_info->intent),
                   []
                 );
             }
-            
+
             $local_date;
             if ($providerEmail != ""){
-                
+
                 $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
                 $local_date->setTimezone(new DateTimeZone($tz));
-                
+
                 send_email($providerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $providerName));
-                
-                
+
+
                 sendTextProvider($service, $order, $phone, $local_date->format("F j, Y, g:i a"));
             }
             if ($secondary_providers != ""){
                 $providers = explode("," , $secondary_providers);
                 foreach ($providers as $provider){
-                    
+
                     $phonenumber = "";
                     $name = "";
                     $stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
                     $stmnt->execute(array($provider));
                     foreach($stmnt->fetchAll() as $row) {
                         $phonenumber = $row['phone'];
-                        $name = $row['firstname'];
+                        $name = ' ' . $row['firstname'];
                     }
                     send_email($provider, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $name));
                     sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
@@ -168,20 +166,20 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             }
 
             send_email($customerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($customerMessage, $customerName));
-            
+
             $sql = "UPDATE orders SET status = 'cc' WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
             $params = array($order);
             $stmt->execute($params);
-            
+
             if ($is_post_request) {
                 echo 'ordercanceled';
             } else {
                 echo '<script>window.location.href = "https://helphog.com/ordercanceled";</script>';
             }
-            
+
         }
-        
+
     } else {
         echo 'invalid parameters';
     }

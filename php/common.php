@@ -137,12 +137,28 @@ function pay_provider($order_number)
 		$schedule = $row["schedule"];
 		$secondary_providers = $row['secondary_providers'];
 		$provider_email = $row['client_email'];
+		$tz = $row['timezone'];
+		$customer_email = $row['customer_email'];
 	}
 
 	$payment_info = payment($order_number);
 
 	if ($payment_info->customer_payment < 0.50) {
-		sendNoChargeEmail($service, $order_number, $schedule);
+
+		$name = "";
+		$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+		$stmnt->execute(array($customer_email));
+		foreach($stmnt->fetchAll() as $row) {
+		    $name = ' ' . $row['firstname'];
+		}
+
+		$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+		$local_date->setTimezone(new DateTimeZone($tz));
+
+		$schedule = $local_date->format('m\-d\-y \a\t g:ia');
+
+		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
+
 
 		$stripe->paymentIntents->cancel(
 			trim($payment_info->intent),
@@ -201,7 +217,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 	$stmnt = $db->prepare("SELECT firstname, alerts FROM login WHERE email = ?;");
 	$stmnt->execute(array($client));
 	foreach ($stmnt->fetchAll() as $row) {
-		$name = $row['firstname'];
+		$name = ' ' . $row['firstname'];
 		$alerts = $row['alerts'];
 	}
 
@@ -997,6 +1013,8 @@ function dispute_order($order_number)
 	$customer_email = "";
 	$customer_phone = "";
 	$been_disputed = "";
+	$schedule = "";
+	$tz = "";
 	$order_disputes = 0;
 	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
 	$stmnt->execute(array($order_number));
@@ -1009,6 +1027,8 @@ function dispute_order($order_number)
 		$customer_phone = $row['customer_phone'];
 		$been_disputed = $row['been_disputed'];
 		$order_disputes = $row['disputes'];
+		$schedule = $row['schedule'];
+		$tz = $row['timezone'];
 	}
 
 	if (minutes_since($end_time) <= 1440) {
@@ -1094,9 +1114,13 @@ function dispute_order($order_number)
 			$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
 			$stmnt->execute(array($all_emails[$i]));
 			foreach ($stmnt->fetchAll() as $row) {
-				$name = $row['firstname'];
+				$name = ' ' . $row['firstname'];
 			}
-			send_email($all_emails[$i], "no-reply@helphog.com", "Task Disputed", get_dispute_email($name, $service));
+
+			$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+			$local_date->setTimezone(new DateTimeZone($tz));
+
+			send_email($all_emails[$i], "no-reply@helphog.com", "Task Disputed", get_dispute_email($name, $service, $schedule, $order_number));
 		}
 
 		return true;
@@ -1198,7 +1222,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	$stmnt = $db->prepare("SELECT firstname, phone, alerts, timezone FROM login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	foreach ($stmnt->fetchAll() as $row) {
-		$name = $row['firstname'];
+		$name = ' ' . $row['firstname'];
 		$client_phone = $row['phone'];
 		$alerts = $row['alerts'];
 		$tz = $row['timezone'];
@@ -1617,7 +1641,7 @@ function get_claimed_email($customer_message, $service, $schedule, $address, $pr
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ',</h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ',</h2>
         			<p>Now that you\'ve confirmed your availablity to complete this task, please see the information below. Please contact the customer immediately and follow up on their order.</p><br>
         			<p><span style="color: #1c2029;">Message:  </span>' . $customer_message . '</p>
                     <p><span style="color: #1c2029;">Service: </span>' . $service . '</p>
@@ -1731,7 +1755,7 @@ function get_claim_email($service, $schedule, $location, $client, $order_number,
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ',</h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ',</h2>
         			<p>There was a service request in your area. To claim this job please check over the details and then click the claim task button below.</p>
         			<p><span style="color: #1c2029;">Message:  </span>' . $customer_message . '</p>
                     <p><span style="color: #1c2029;">Service: </span>' . $service . '</p>
@@ -1894,7 +1918,7 @@ function get_address_email($to_send, $name)
 ';
 }
 
-function get_cancel_email($name, $service)
+function get_cancel_email($name, $service, $order_number, $schedule)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1950,8 +1974,8 @@ function get_cancel_email($name, $service)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ', </h2>
-        			<p>Unfortunately, your order of ' . $service . ' has been cancelled. Your provider has encountered extenuating circumstances, and will not be able to complete the service. You will be notified shortly if another provider picks up your order.</p>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
+        			<p>Unfortunately, your order of ' . $service . ' (' . $order_number . ') on ' . $schedule . ' has been cancelled. Your provider has encountered extenuating circumstances, and will not be able to complete the service. You will be notified shortly if another provider picks up your order.</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
         			<![endif]-->
@@ -1998,7 +2022,7 @@ function get_cancel_email($name, $service)
 ';
 }
 
-function noProviderFound($service, $order, $schedule)
+function noProviderFound($service, $order, $schedule, $name)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2054,7 +2078,7 @@ function noProviderFound($service, $order, $schedule)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello, </h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
         			<p>Unfortunately, your order of ' . $service . ' (' . $order . ') on ' .  $schedule . ' has been cancelled. The provider designated for your task has not been located. We apologize for the inconvenience this may have caused you and you will not be charged for this order. You can place another order if you\'re still seeking our services.</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2102,7 +2126,7 @@ function noProviderFound($service, $order, $schedule)
 >';
 }
 
-function noPartnersFound($service, $order, $schedule)
+function noPartnersFound($service, $order, $schedule, $name)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2158,7 +2182,7 @@ function noPartnersFound($service, $order, $schedule)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello, </h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
         			<p>Other providers intended to work with you on ' . $service . ' (' . $order . ') on ' . $schedule . ' have not been found. The task has been terminated.</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2261,7 +2285,7 @@ function customer_cancel($message, $name)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ', </h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
         			<p>' . $message . '</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2309,7 +2333,7 @@ function customer_cancel($message, $name)
 ';
 }
 
-function get_refund_email($name, $service)
+function get_refund_email($name, $service, $order, $schedule)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2365,8 +2389,8 @@ function get_refund_email($name, $service)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ', </h2>
-        			<p>The refund for your order of ' . $service . ' has been issued. The refund will appear in your bank statement within 5-10 business days.</p>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
+        			<p>The refund for your order of ' . $service . ' (' . $order . ') on ' . $schedule . ' has been issued. The refund will appear in your bank statement within 5-10 business days.</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
         			<![endif]-->
@@ -2412,7 +2436,7 @@ function get_refund_email($name, $service)
         </body>';
 }
 
-function sendNoChargeEmail($service, $order_number, $schedule)
+function sendNoChargeEmail($service, $order_number, $schedule, $name)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2571,7 +2595,7 @@ function get_notice_email($name, $message)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ', </h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
         			<p>' . $message . ' </p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2619,7 +2643,7 @@ function get_notice_email($name, $message)
 ';
 }
 
-function get_dispute_email($name, $service)
+function get_dispute_email($name, $service, $schedule, $order)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -2675,8 +2699,8 @@ function get_dispute_email($name, $service)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ', </h2>
-        			<p>Your completion ' . $service . ' has been disputed by the customer. The customer either felt that the work was unsatisfactory, or that the additional expenditures added were unfair. Please contact the customer to resolve the issue, or us directly if you are not able to come to a resolution.</p>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
+        			<p>Your completion ' . $service . ' (' . $order . ') on ' . $schedule . ' has been disputed by the customer. The customer either felt that the work was unsatisfactory, or that the additional expenditures added were unfair. Please contact the customer to resolve the issue, or us directly if you are not able to come to a resolution.</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
         			<![endif]-->
@@ -2720,110 +2744,6 @@ function get_dispute_email($name, $service)
         			<![endif]-->
         	</div>
         </body>';
-}
-
-function get_marked_completed_email($name, $service)
-{
-	return '<body style="background: #F9F9F9;">
-        	<div style="background-color:#F9F9F9;">
-        	<div style="margin:0px auto;max-width:640px;background:transparent;">
-        		<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0">
-        		<tbody>
-        			<tr>
-        				<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 0px;">
-        					<!--[if mso | IE]>
-        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
-        						<tr>
-        							<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-        								<![endif]-->
-        								<div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
-        									<div style="margin:0px auto;max-width:640px;background:#7289DA url(https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) top center / cover no-repeat;">
-        										<!--[if mso | IE]>
-        										<v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
-        											<![endif]-->
-        											<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#7289DA url(../images/emaillogo.png) top center / cover no-repeat;" align="center" border="0" background="https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
-        												<tbody>
-        													<tr>
-        														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
-        															<!--[if mso | IE]>
-        															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
-        																	<td style="vertical-align:undefined;width:640px;">
-        																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Completed</div>
-        																		<!--[if mso | IE]>
-        																	</td>
-        																</tr>
-        															</table>
-        															<![endif]-->
-        														</td>
-        													</tr>
-        												</tbody>
-        											</table>
-        											<!--[if mso | IE]>
-        										</v:textbox>
-        										</v:rect>
-        										<![endif]-->
-        									</div>
-        									<!--[if mso | IE]>
-        							</td>
-        						</tr>
-        					</table>
-        					<![endif]-->
-        					<!--[if mso | IE]>
-        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
-        			<tr>
-        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-        			<![endif]--><div style="margin:0px auto;max-width:640px;background:#ffffff;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 70px;"><!--[if mso | IE]>
-        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
-        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
-        			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ', </h2>
-        			<p>Your order of ' . $service . ' has been completed by the provider. Please visit the orders page on our website/app to verify the correct price and rate the service.</p>
-        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]-->
-        			<!--[if mso | IE]>
-        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
-        			<tr>
-        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-        			<![endif]--></div><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px;"><!--[if mso | IE]>
-        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
-        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;"><div style="font-size:1px;line-height:12px;">&nbsp;</div></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]-->
-        			<!--[if mso | IE]>
-        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
-        			<tr>
-        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-        			<![endif]--><div style="margin:0 auto;max-width:640px;background:#ffffff;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden;"><table cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;font-size:0px;padding:0px;"><!--[if mso | IE]>
-        			<table border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
-        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:30px 70px 0px 70px;" align="center"><div style="cursor:auto;color: #1ecd97;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:18px;line-height:16px;text-align:center;">If you have any other questions/concerns, please contact us:</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:14px 70px 30px 70px;" align="center"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:22px;text-align:center;">
-        			(425) 640-3926 or support@helphog.com
-        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]-->
-        			<!--[if mso | IE]>
-        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
-        			<tr>
-        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-        			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
-        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
-        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
-        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
-        			</td></tr></table>
-        			<![endif]-->
-        	</div>
-        </body>
-';
 }
 
 function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total, $providerId)

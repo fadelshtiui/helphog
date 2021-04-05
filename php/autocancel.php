@@ -29,14 +29,10 @@ foreach ($result as $row) {
     $client_email = $row["client_email"];
     $secondary_providers = $row["secondary_providers"];
     $status = $row["status"];
-    $timezone = $row["timezone"];
+    $tz = $row["timezone"];
     $cancel_buffer = $row['cancel_buffer'];
 
     if ($status == "pe") {
-
-        $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-        $utc->setTimezone(new DateTimeZone($timezone));
-        $schedule = $utc->format('F j, Y, g:i a');
 
         $needsToBeCancelled = false;
         if (minutes_until($row["schedule"]) < $cancel_buffer) {
@@ -62,13 +58,21 @@ foreach ($result as $row) {
 
             if ($client_email != "") {
                 $primary_work_phone = "";
-                $stmnt = $db->prepare("SELECT work_phone FROM login WHERE email = ?;");
+                $name = "";
+                $timezone = "";
+                $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM login WHERE email = ?;");
                 $stmnt->execute(array($client_email));
                 foreach($stmnt->fetchAll() as $row) {
                     $primary_work_phone = $row['work_phone'];
+                    $name = ' ' . $row['firstname'];
+                    $timezone = $row['timezone'];
                 }
 
-                send_email($client_email, "admin@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule));
+                $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+                $utc->setTimezone(new DateTimeZone($timezone));
+                $schedule = $utc->format('F j, Y, g:i a');
+
+                send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name));
                 sendTextProvider($service, $order_number, $primary_work_phone, $schedule);
 
             }
@@ -77,22 +81,37 @@ foreach ($result as $row) {
             foreach(explode(',', $secondary_providers) as $email){
                 if ($email != "") {
                     $work_phone = "";
-                    $stmnt = $db->prepare("SELECT work_phone FROM login WHERE email = ?;");
+                    $name2 = "";
+                    $timezone = "";
+                    $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM login WHERE email = ?;");
                     $stmnt->execute(array($email));
                     foreach($stmnt->fetchAll() as $row) {
                         $work_phone = $row['work_phone'];
+                        $name2 = ' ' . $row['firstname'];
+                        $timezone = $row['timezone'];
                     }
+
+                    $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+                    $utc->setTimezone(new DateTimeZone($timezone));
+                    $schedule = $utc->format('F j, Y, g:i a');
+
                     sendTextProvider($service, $order_number, $work_phone, $schedule);
-                    send_email($$email, "admin@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule));
+                    send_email($email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name2));
                 }
             }
 
-            $name = "";
-            $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+            $name3 = "";
+            $timezone = "";
+            $stmnt = $db->prepare("SELECT firstname, timezone FROM login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
             foreach($stmnt->fetchAll() as $row) {
-                $name = $row['firstname'];
+                $name3 = ' ' . $row['firstname'];
+                $timezone = $row['timezone'];
             }
+
+            $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+            $utc->setTimezone(new DateTimeZone($tz));
+            $schedule = $utc->format('F j, Y, g:i a');
 
             $sql = "UPDATE orders SET status = ? WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
@@ -101,7 +120,7 @@ foreach ($result as $row) {
 
             sendTextCustomer($service, $order_number, $customer_phone, $schedule);
 
-            send_email($customer_email, "admin@helphog.com", "Task Cancelled", noProviderFound($service, $order_number, $schedule));
+            send_email($customer_email, "no-reply@helphog.com", "Order Cancelled", noProviderFound($service, $order_number, $schedule, $name3));
 
         }
 
