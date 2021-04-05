@@ -14,25 +14,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['ses
      if (validate_customer($order, $session)) {
 
           pay_provider($order);
-
-          $service = "";
-          $client_email = "";
-          $stmnt = $db->prepare("SELECT service, client_email FROM orders WHERE order_number = ?;");
-          $stmnt->execute(array($order));
-          foreach ($stmnt->fetchAll() as $row) {
-               $service = $row['service'];
-               $client_email = $row['client_email'];
-          }
-
-          $name = "";
-          $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
-          $stmnt->execute(array($client_email));
-          foreach ($stmnt->fetchAll() as $row) {
-               $name = $row['firstname'];
-          }
-
-          send_email($client_email, "no-reply@helphog.com", "Order Verified", get_completed_email($service, $name));
-
+          
           $sql = "UPDATE orders SET rating = ? WHERE order_number = ?";
           $stmt = $db->prepare($sql);
           $params = array($rating, $order);
