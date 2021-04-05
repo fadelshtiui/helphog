@@ -144,7 +144,7 @@ function pay_provider($order_number)
 
 	$payment_info = payment($order_number);
 
-	if ($payment_info->customer_payment < 0.50 && $status == 'mc') {
+	if ($payment_info->customer_payment < 0.50 && $status != 'pd' && $status == 'mc') {
 
 		$name = "";
 		$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
@@ -166,10 +166,10 @@ function pay_provider($order_number)
 			[]
 		);
 
-		$sql = "UPDATE orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
-		$stmt = $db->prepare($sql);
-		$params = array(0, $order_number);
-		$stmt->execute($params);
+		$sql1 = "UPDATE orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
+		$stmt1 = $db->prepare($sql1);
+		$params1 = array(0, $order_number);
+		$stmt1->execute($params1);
 
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
