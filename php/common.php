@@ -164,6 +164,12 @@ function pay_provider($order_number)
 			trim($payment_info->intent),
 			[]
 		);
+
+		$sql = "UPDATE orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
+		$stmt = $db->prepare($sql);
+		$params = array(0, $order_number);
+		$stmt->execute($params);
+
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
 		$intent->capture(['amount_to_capture' => ceil($payment_info->customer_payment * 100)]);
@@ -2492,7 +2498,7 @@ function sendNoChargeEmail($service, $order_number, $schedule, $name)
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello, </h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
         			<p> Due to the short duration of ' . $service . ' (' . $order_number . ') on ' . $schedule . ', you will receive a full refund. The refund will appear in your bank statement within 5-10 business days.</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
