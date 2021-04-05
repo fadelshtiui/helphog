@@ -139,11 +139,12 @@ function pay_provider($order_number)
 		$provider_email = $row['client_email'];
 		$tz = $row['timezone'];
 		$customer_email = $row['customer_email'];
+		$status = $row['status'];
 	}
 
 	$payment_info = payment($order_number);
 
-	if ($payment_info->customer_payment < 0.50) {
+	if ($payment_info->customer_payment < 0.50 && $status == 'mc') {
 
 		$name = "";
 		$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
