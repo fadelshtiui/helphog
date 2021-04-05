@@ -917,6 +917,7 @@ h5 {
   padding: 5px;
   background-color: #eee;
   cursor: pointer;
+  border: 0.0625rem solid lightgray;
 }
 
 .schedule-rows td:first-child {
@@ -924,6 +925,7 @@ h5 {
   text-align: right;
   position: relative;
   width: fit-content;
+  border: none;
   /*top: -12px;*/
 }
 
