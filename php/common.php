@@ -601,18 +601,18 @@ function start_stop_order($order)
 	}
 
     if (minutes_until($schedule) > 45) {
-        
+
         return 'You can only start orders within 45 minutes of the schedule time.';
-        
+
     } else {
-        
+
         $sql = "";
     	if ($status == "st") {
     		$sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
     	} else if ($status == "cl") {
     		$sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
     	}
-    
+
     	if ($sql != "") {
     		$stmt = $db->prepare($sql);
     		$params = array($time, $order);
@@ -621,9 +621,9 @@ function start_stop_order($order)
     	} else {
     		return 'This order has not been fully claimed. Secondary providers must first claim this order.';
     	}
-        
+
     }
-    	
+
 }
 
 function getId($email){
@@ -1229,7 +1229,7 @@ Pay: ' . $price . '
 Message from Customer: ' . $customer_message));
 }
 
-function get_confirmation_email($order_number, $cost, $service, $name, $schedule, $customer_message, $address, $providers, $subtotal, $cancel_key)
+function get_confirmation_email($order_number, $cost, $service, $name, $schedule, $customer_message, $address, $providers, $subtotal, $cancel_key, $provider)
 {
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
@@ -1284,7 +1284,7 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
-        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello ' . $name . ',</h2>
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ',</h2>
         			<p>Your request for ' . $service . ' has been completed. Our respondent will contact you via email/text shortly.</p>
                     <p>Quality of service is our priority, so if you are not satisfied with your service or have any questions, please reply to this email (support@helphog.com) so we can resolve any issues.</p>
               <br>
@@ -1293,7 +1293,7 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
                     <p><span style="color: #1c2029;">Service: </span>' . $service . '</p>
                     <p><span style="color: #1c2029;">Date: </span>' . $schedule . '</p>
                     <p><span style="color: #1c2029;">Address:  </span>' . $address . '</p>
-                    <p><span style="color: #1c2029;">Providers:  </span>' . $providers . '</p>
+                    <p><span style="color: #1c2029;">Providers:  </span>' . $providers . $provider .'</p>
                     <p><span style="color: #1c2029;">Subtotal:  </span>' . $subtotal . '</p>
                     <p><span style="color: #1c2029;">Maximum Cost:  </span>' . $cost . '</p>
                     </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#e47d68"><a href="https://www.helphog.com/cancel?ordernumber=' . $order_number . '&secret=' . $cancel_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">

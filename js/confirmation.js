@@ -22,12 +22,6 @@ function handle(response) {
 
     id("order-number").innerText = response.ordernumber;
 
-    if (response.firstname) {
-        id("name").innerText = "Hi " + response.firstname + ",";
-    } else {
-        id("name").innerText = "Hello,";
-    }
-
     let services = document.querySelectorAll(".service");
     for (let i = 0; i < services.length; i++) {
         services[i].innerText = response.service;
@@ -43,7 +37,9 @@ function handle(response) {
     id("zip").innerText = response.zip;
 
     id("date").innerText = 'Date: ' + response.schedule;
-    id("providerId").innerText = 'Selected Provider: #' + response.providerId;
+    if (response.providerId != "none"){
+        id("providerId").innerText = 'Selected Provider: #' + response.providerId;
+    }
 
     if (response.wage == "per") {
         per(response.people, response.cost);

@@ -155,12 +155,17 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
             $price = "$" . $price;
 
+            if ($sales_tax_percent != 0.00){
+                $price = $price . ' + tax (' . $sales_tax_percent .'%)';
+            }
+
             $name = "";
             $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
             foreach ($stmnt->fetchAll() as $row) {
-                $name = $row['firstname'];
+                $name = ' ' . $row['firstname'];
             }
+
 
             if ($name == "") {
                 $found = false;
@@ -184,13 +189,18 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
                     $stmt->execute($params);
                 }
             }
+            $provider = "";
+            $providerId = $_SESSION['providerId'];
+            if ($providerId != "none"){
+                $provider = ' (#' . $providerId . ')';
+            }
 
-            send_email($customer_email, "no-reply@helphog.com", "HelpHog - Confirmation Email", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key));
+            send_email($customer_email, "no-reply@helphog.com", "Order Confirmation", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key, $provider));
 
             $response->firstname = $name;
             $response->schedule = $schedule;
             $response->people = $people;
-            $response->providerId = $_SESSION['providerId'];
+            $response->providerId = $providerId;
 
             $available_providers = $_SESSION['available_providers'];
 
