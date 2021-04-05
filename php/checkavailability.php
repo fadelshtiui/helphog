@@ -14,11 +14,24 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
     $updatecontactlist = trim($_POST['updatecontactlist']);
     $providerId = trim($_POST["id"]);
 
-    echo check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId);
+    if (isset($_POST['session'])) {
+        $session = trim($_POST["session"]);
+    } else {
+        $session = "";
+    }
+
+    $result = check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId, $session);
+
+    header('Content-Type: application/json');
+    echo json_encode($result);
 }
 
-function check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId)
+function &check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId, $session)
 {
+    $json = new stdClass();
+    $json->availability = '';
+    $json->error = '';
+    $json->provider = '';
 
     if ($updatecontactlist == 'true') {
         $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tz));
@@ -35,8 +48,8 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
         for ($i = 0; $i < 24; $i++) {
             $result .= '0';
         }
-        echo $result;
-        return;
+        $json->availability = $result;
+        return $json;
     }
 
     $db = establish_database();
@@ -46,17 +59,19 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
 
     if ($providerId != 'none') {
         $providerexists = false;
-        $stmnt = $db->prepare("SELECT email FROM login WHERE type='Business' AND services LIKE ? AND id=?;");
+        $stmnt = $db->prepare("SELECT firstname, email FROM login WHERE type = 'Business' AND services LIKE ? AND id = ?;");
         $stmnt->execute(array('%' . $service . '%', $providerId));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
-            error_log($row['email']);
             $providerexists = true;
+            if (user_exists($session)) {
+                $json->provider = $row['firstname'];
+            }
         }
 
         if (!$providerexists) {
-            echo 'Provider with the inputed ID does not exist or does not provide this service';
-            return;
+            $json->error = 'Provider with the inputted ID does not exist or does not provide this service';
+            return $json;
         }
     } else {
 
@@ -123,8 +138,8 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
 
             if ($providerId != 'none') {
                 if (strpos($full_availability, '1') === false) {
-                    echo 'The selected provider is unavailable for this order';
-                    return;
+                    $json->error = 'The selected provider is unavailable for this order';
+                    return $json;
                 }
             }
 
@@ -138,7 +153,6 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
         }
 
         $sql_schedule = $utc->format('Y-m-d');
-        error_log($sql_schedule);
 
         $start_index = 24 * intval($utc->format('w')) + $offset;
 
@@ -209,7 +223,8 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
         session_start();
         $_SESSION = array();
         $_SESSION['available_providers'] = $available_providers;
-        return '';
+        $json->availability = '';
+        return $json;
     }
 
     $final_result = "";
@@ -221,5 +236,7 @@ function check_availability($service, $schedule, $address, $post_duration, $nump
         }
     }
 
-    return $final_result;
+    $json->availability = $final_result;
+
+    return $json;
 }

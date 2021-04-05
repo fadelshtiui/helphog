@@ -107,7 +107,7 @@ function &payment($order)
 		$result->provider_payout = $worked_time * $cost * 0.9;
 		$result->total_before_tax = $total_before_tax;
 	} else {
-	    $result->total_before_tax = $max_payment_before_tax;
+		$result->total_before_tax = $max_payment_before_tax;
 		$result->customer_payment = $max_withdraw;
 		$result->provider_payout = $cost * 0.9;
 	}
@@ -149,8 +149,8 @@ function pay_provider($order_number)
 		$name = "";
 		$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
 		$stmnt->execute(array($customer_email));
-		foreach($stmnt->fetchAll() as $row) {
-		    $name = ' ' . $row['firstname'];
+		foreach ($stmnt->fetchAll() as $row) {
+			$name = ' ' . $row['firstname'];
 		}
 
 		$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
@@ -170,7 +170,6 @@ function pay_provider($order_number)
 		$stmt1 = $db->prepare($sql1);
 		$params1 = array(0, $order_number);
 		$stmt1->execute($params1);
-
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
 		$intent->capture(['amount_to_capture' => ceil($payment_info->customer_payment * 100)]);
@@ -322,6 +321,20 @@ function minutes_since($time)
 	$diff = strtotime($now->format('Y-m-d H:i:s')) - strtotime($then->format('Y-m-d H:i:s'));
 
 	return $diff / 60;
+}
+
+function user_exists($session)
+{
+	$db = establish_database();
+
+	$result = $db->query("SELECT session FROM login;");
+	foreach ($result as $row) {
+		if (hash_equals($row['session'], $session)) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 
@@ -623,34 +636,32 @@ function start_stop_order($order)
 		$schedule = $row['schedule'];
 	}
 
-    if (minutes_until($schedule) > 45) {
+	if (minutes_until($schedule) > 45) {
 
-        return 'You can only start orders within 45 minutes of the schedule time.';
+		return 'You can only start orders within 45 minutes of the schedule time.';
+	} else {
 
-    } else {
+		$sql = "";
+		if ($status == "st") {
+			$sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
+		} else if ($status == "cl") {
+			$sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
+		}
 
-        $sql = "";
-    	if ($status == "st") {
-    		$sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
-    	} else if ($status == "cl") {
-    		$sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
-    	}
-
-    	if ($sql != "") {
-    		$stmt = $db->prepare($sql);
-    		$params = array($time, $order);
-    		$stmt->execute($params);
-    		return '';
-    	} else {
-    		return 'This order has not been fully claimed. Secondary providers must first claim this order.';
-    	}
-
-    }
-
+		if ($sql != "") {
+			$stmt = $db->prepare($sql);
+			$params = array($time, $order);
+			$stmt->execute($params);
+			return '';
+		} else {
+			return 'This order has not been fully claimed. Secondary providers must first claim this order.';
+		}
+	}
 }
 
-function getId($email){
-    $db = establish_database();
+function getId($email)
+{
+	$db = establish_database();
 	$stmnt = $db->prepare("SELECT id FROM login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	foreach ($stmnt->fetchAll() as $row) {
@@ -661,7 +672,7 @@ function getId($email){
 
 function mark_completed($order, $message)
 {
-    $payment_info = payment($order);
+	$payment_info = payment($order);
 
 	$db = establish_database();
 
@@ -670,7 +681,7 @@ function mark_completed($order, $message)
 	$customer_phone = "";
 	$wage = "";
 	$cost = "";
-	$people= "";
+	$people = "";
 	$schedule = "";
 	$client_email = "";
 	$tz = "";
@@ -688,7 +699,6 @@ function mark_completed($order, $message)
 		$schedule = $row['schedule'];
 		$client_email = $row['client_email'];
 		$tz = $row['timezone'];
-
 	}
 
 	$providerId = getId($client_email);
@@ -706,53 +716,52 @@ function mark_completed($order, $message)
 
 		//Receipt text and email
 
-    	$customer_payment = $payment_info->customer_payment;
-    	$tax_collected = $payment_info->tax_collected;
-        $duration =  $payment_info->worked_time;
-        $total_before_tax = $payment_info->total_before_tax;
+		$customer_payment = $payment_info->customer_payment;
+		$tax_collected = $payment_info->tax_collected;
+		$duration =  $payment_info->worked_time;
+		$total_before_tax = $payment_info->total_before_tax;
 
-        $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-        $local_date->setTimezone(new DateTimeZone($tz));
+		$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+		$local_date->setTimezone(new DateTimeZone($tz));
 
-        $schedule = $local_date->format('m\-d\-y \a\t g:ia');
+		$schedule = $local_date->format('m\-d\-y \a\t g:ia');
 
-        error_log("customer payment" . $customer_payment . "tax" . $tax_collected . "duration" . $duration . "total_before_tax" . $total_before_tax);
+		error_log("customer payment" . $customer_payment . "tax" . $tax_collected . "duration" . $duration . "total_before_tax" . $total_before_tax);
 
-    	$price = $cost;
+		$price = $cost;
 
-    	if ($wage == "hour") {
-    		$duration = $duration . " hour(s)";
-    	}
-    	if ($wage == "per") {
-    		$duration = "No time limit";
-    	}
+		if ($wage == "hour") {
+			$duration = $duration . " hour(s)";
+		}
+		if ($wage == "per") {
+			$duration = "No time limit";
+		}
 
-    	$orig_price = $cost;
+		$orig_price = $cost;
 
-    	if ($wage == "hour") {
-    		$price = $price * $people;
+		if ($wage == "hour") {
+			$price = $price * $people;
+		} else {
+			$cost *= $people;
+		}
 
-    	} else {
-    		$cost *= $people;
-    	}
+		$peopleText = "providers";
+		if ($people == 1) {
+			$peopleText = "provider";
+		}
 
-    	$peopleText = "providers";
-    	if ($people == 1) {
-    		$peopleText = "provider";
-    	}
+		$amount = 0;
+		if ($wage == "hour") {
+			$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . number_format((float)$duration, 2, '.', '') . " hours)";
+			$amount = $total_before_tax;
+		} else {
+			$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
+			$amount = $cost;
+		}
 
-        $amount = 0;
-    	if ($wage == "hour") {
-    		$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . number_format((float)$duration, 2, '.', '') . " hours)";
-    		$amount = $total_before_tax;
-    	} else {
-    		$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
-    		$amount = $cost;
-    	}
+		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
 
-    	send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
-
-    	$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
+		$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 
 ' . $subtotal . '
 
@@ -767,7 +776,7 @@ If there\'s an issue with the quality of service provided, you may dispute this 
 For future orders with the same provider use #' . $providerId . ' at checkout.';
 
 
-	    send_text($phone, $message);
+		send_text($phone, $message);
 
 		$current_timestamp = gmdate("Y-m-d H:i:s");
 		$sql = "UPDATE orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
@@ -949,18 +958,17 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 			}
 		} else { // first provider
 
-		    $replacing_primary_provider = ($secondary_providers != "" && count(explode(',', $secondary_providers)) + 1 == $people);
+			$replacing_primary_provider = ($secondary_providers != "" && count(explode(',', $secondary_providers)) + 1 == $people);
 
 			if ($people == 1 || $replacing_primary_provider) {
 				$sql = "UPDATE orders SET status = ? WHERE order_number = ?";
 				$stmt = $db->prepare($sql);
 				$params = array("cl", $order_number);
 				$stmt->execute($params);
-
 			}
 
 			if ($replacing_primary_provider) {
-			    $secondary_providers_array = explode(',', $secondary_providers);
+				$secondary_providers_array = explode(',', $secondary_providers);
 				$message = "Here are the providers you will be working with:\n";
 				foreach ($secondary_providers_array as $curr_email) {
 
@@ -977,17 +985,16 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				}
 
 				$stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
-        		$stmnt->execute(array($email));
-        		foreach ($stmnt->fetchAll() as $row) {
-        			$client_phone = $row['phone'];
-        		}
+				$stmnt->execute(array($email));
+				foreach ($stmnt->fetchAll() as $row) {
+					$client_phone = $row['phone'];
+				}
 
 				$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
 				$token = '18a458337ffdfd10617571e495314311';
 				$client = new Client($sid, $token);
 				$client_phone = '+1' . $client_phone;
 				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
-
 			}
 
 			$sql = "UPDATE orders SET client_email = ? WHERE order_number = ?";
@@ -1324,7 +1331,7 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
                     <p><span style="color: #1c2029;">Service: </span>' . $service . '</p>
                     <p><span style="color: #1c2029;">Date: </span>' . $schedule . '</p>
                     <p><span style="color: #1c2029;">Address:  </span>' . $address . '</p>
-                    <p><span style="color: #1c2029;">Providers:  </span>' . $providers . $provider .'</p>
+                    <p><span style="color: #1c2029;">Providers:  </span>' . $providers . $provider . '</p>
                     <p><span style="color: #1c2029;">Subtotal:  </span>' . $subtotal . '</p>
                     <p><span style="color: #1c2029;">Maximum Cost:  </span>' . $cost . '</p>
                     </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#e47d68"><a href="https://www.helphog.com/cancel?ordernumber=' . $order_number . '&secret=' . $cancel_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">

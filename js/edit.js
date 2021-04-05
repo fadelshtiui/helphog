@@ -351,22 +351,28 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
      data.append("remote", remote);
      data.append('updatecontactlist', updatecontactlist);
      data.append('id', providerId);
+     data.append('session', getSession())
      let url = "php/checkavailability.php";
      addLoader();
      let response = await fetch(url, { method: "POST", body: data })
      await checkStatus(response);
-     response = await response.text();
-     if (response == 'Provider with the inputed ID does not exist or does not provide this service' || response == 'The selected provider is unavailable for this order') {
+     response = await response.json();
+     if (response.error == 'Provider with the inputed ID does not exist or does not provide this service' || response.error == 'The selected provider is unavailable for this order') {
           id("errorlabel").classList.remove("hidden");
           if (id('numpeople').value != 1) {
                id("errorlabel").classList.add("hidden");
           }
           providerId = "none"
-          id("errorlabel").innerText = response;
+          id("errorlabel").innerText = response.error;
           removeLoader();
      } else {
+          if (response.provider != '') {
+               id('provider').innerText = response.provider
+          } else {
+               id('provider').innerText = "Provider #" + providerId;
+          }
           checkProviders();
-          callback(response);
+          callback(response.availability);
           removeLoader();
      }
 }
@@ -561,7 +567,7 @@ function providersHelper(response) {
           id("providerSelected").classList.remove("hidden");
           id("errorlabel").classList.add("hidden");
           id('taskerinput').classList.add("hidden");
-          id("provider").innerText = providerId;
+
           if (selected == false) {
                toggleSelected()
           }
@@ -657,9 +663,9 @@ function initModal() {
      id("popupService").innerText = document.querySelector(".service").innerText;
      id("popupMessage").innerText = " " + message;
      id("popupDate").innerText = " " + formatDate(id('date').value) + " " + time;
-     if (providerId != 'none'){
-         id("popupProvider1").innerText = "Selected Provider: #"
-         id("popupProvider").innerText = providerId;
+     if (providerId != 'none') {
+          id("popupProvider1").innerText = "Selected Provider: #"
+          id("popupProvider").innerText = providerId;
      }
      id("popupProviders").innerText = id("numpeople").value;
      id("popupTotal").innerText = estimate;
