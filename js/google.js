@@ -93,10 +93,15 @@ function reloadResults() {
     }
   } else {
     url += 'service=' + urlParams.get('service')
+    if (urlParams.get('search')) {
+      url += '&search=' + urlParams.get('search')
+    } else {
+      url += '&category=' + urlParams.get('category')
+    }
   }
-  
+
   if (urlParams.get('origin')) {
-      url += '&origin=' + urlParams.get('origin')
+    url += '&origin=' + urlParams.get('origin')
   }
 
 
