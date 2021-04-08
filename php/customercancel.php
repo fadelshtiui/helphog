@@ -43,6 +43,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
 
     if ($validated) {
 
+        $customer_timezone = "";
         $service = "";
         $schedule = "";
         $status = "";
@@ -60,6 +61,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $secondary_providers = $row["secondary_providers"];
             $customerEmail = $row["customer_email"];
             $people = $row["people"];
+            $customer_timezone = $row['timezone'];
         }
 
         $customerName = "";
@@ -98,16 +100,23 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 $tz = $row['timezone'];
                 $phone = $row['phone'];
             }
+            
+            $customer_local_date;
 
             $amount = 0;
             $payment_info = payment($order);
+            
+            $customer_local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+            $customer_local_date->setTimezone(new DateTimeZone($customer_timezone));
+
+            $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. We apologize for the inconvience.';
+            $customerMessage = '';
             if (minutes_until($schedule) < 1440) { // within 24 hours
                 $amount = 15;
                 $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
                 $intent->capture(['amount_to_capture' => $amount * 100]);
                 if ($providerEmail != '' && $secondary_providers == '') {
                     $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. Since the customer canceled within 24 hours of the scheduled date, you will be receiving a $10 compensation. We apologize for the inconvience.';
-                    $customerMessage = 'Your service request for ' . $service . ' (' . $order .') has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
 
                     $stripe_acc = "";
                     $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
@@ -124,27 +133,20 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                       "transfer_group" => '{' . $order . '}',
                     ]);
 
-                } else {
-                    $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled by the customer. We apologize for the inconvience.';
-                    $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
                 }
+                $customerMessage = 'Your service request for ' . $service . ' (' . $order .') on ' . $customer_local_date->format("F j, Y, g:i a") . ' has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
             } else {
-                $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled by the customer. We apologize for the inconvience.';
-                $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $schedule . ' has been canceled. The full refund will appear in your bank statement within 5-10 business days.';
+                $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $customer_local_date->format("F j, Y, g:i a") . ' has been canceled. The full refund will appear in your bank statement within 5-10 business days.';
                 $stripe->paymentIntents->cancel(
                   trim($payment_info->intent),
                   []
                 );
             }
 
-            $local_date;
+           
             if ($providerEmail != ""){
 
-                $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-                $local_date->setTimezone(new DateTimeZone($tz));
-
                 send_email($providerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $providerName));
-
 
                 sendTextProvider($service, $order, $phone, $local_date->format("F j, Y, g:i a"));
             }
@@ -164,7 +166,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                     sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
                 }
             }
-
+            
             send_email($customerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($customerMessage, $customerName));
 
             $sql = "UPDATE orders SET status = 'cc' WHERE order_number = ?;";
