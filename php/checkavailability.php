@@ -13,15 +13,15 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
     $remote = trim($_POST['remote']);
     $updatecontactlist = trim($_POST['updatecontactlist']);
     $providerId = trim($_POST["id"]);
-
+    
     if (isset($_POST['session'])) {
         $session = trim($_POST["session"]);
     } else {
         $session = "";
     }
-
+    
     $result = check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId, $session);
-
+    
     header('Content-Type: application/json');
     echo json_encode($result);
 }
@@ -201,8 +201,8 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
                 array_push($available_providers, $contact);
             }
 
-            header('Content-type: application/json');
-            print json_encode($available_providers);
+            # header('Content-type: application/json');
+            # print json_encode($available_providers);
         }
 
 
@@ -235,7 +235,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
             $final_result .= '0';
         }
     }
-
+    
     $json->availability = $final_result;
 
     return $json;
