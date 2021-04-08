@@ -87,15 +87,15 @@ function id(id) {
 }
 
 function qs(selector) {
-    return qs(selector);
+    return document.querySelector(selector);
 }
 
 function qsa(selector) {
-    return qsa(selector);
+    return document.querySelectorAll(selector);
 }
 
 function ce(tag) {
-    return ce(tag);
+    return document.createElement(tag);
 }
 
 const isNumericInput = (event) => {
