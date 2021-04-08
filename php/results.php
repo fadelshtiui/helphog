@@ -5,7 +5,7 @@ include_once 'common.php';
 $response = new \stdClass();
 
 $category_count = array();
-$services = array();
+$services = new SplDoublyLinkedList();
 $categories_array = array();
 
 $db = establish_database();
@@ -182,12 +182,22 @@ foreach ($stmnt->fetchAll() as $row) {
 
 
      $entry->available = $available;
+     
+     if ($entry->available == 1) {
+         $services->push($entry);
+     } else {
+         $services->add(0, $entry);
+     }
 
-     array_push($services, $entry);
+}
+
+$services_array = array();
+while (!$services->isEmpty()) {
+    array_push($services_array, $services->pop());
 }
 
 $response->available = $num_available;
-$response->services = $services;
+$response->services = $services_array;
 $response->counts = $category_count;
 
 header('Content-type: application/json');
