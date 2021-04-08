@@ -21,13 +21,13 @@ let preloaded = false;
 
 		id('edit').addEventListener('click', toggleAddressDisplay)
 
-		var checkbox1 = document.querySelector("input[name=email-notification]");
+		var checkbox1 = qs("input[name=email-notification]");
 
 		checkbox1.addEventListener('change', function () {
 			checkbox();
 		});
 
-		var checkbox2 = document.querySelector("input[name=sms-notification]");
+		var checkbox2 = qs("input[name=sms-notification]");
 
 		checkbox2.addEventListener('change', function () {
 			checkbox();
@@ -39,7 +39,7 @@ let preloaded = false;
 
 		id('sliderUpdate').addEventListener("mouseup", updateDistance);
 
-		var timezoneSelector = document.querySelector("#timezone")
+		var timezoneSelector = qs("#timezone")
 
 		timezoneSelector.addEventListener("change", updateTimezone);
 
@@ -80,11 +80,11 @@ let preloaded = false;
 	});
 
 	function clearAvailability() {
-		let rows = document.querySelectorAll(".time-slot")
+		let rows = qsa(".time-slot")
 		rows.forEach(row => {
 			row.removeAttribute('data-selected')
 		})
-		document.querySelector('.import').style.color = "red";
+		qs('.import').style.color = "red";
 		submit();
 	}
 
@@ -102,7 +102,7 @@ let preloaded = false;
 				id('locationField').classList.add('hidden')
 				id('edit').classList.remove('hidden')
 				id('current-city').style.color = 'black'
-				document.querySelector('.noaddress').style.color = '#5f6876';
+				qs('.noaddress').style.color = '#5f6876';
 				updateDistance();
 			}
 		});
@@ -168,7 +168,7 @@ let preloaded = false;
 			this.parentElement.parentElement.previousElementSibling.classList.add('done-loading')
 			uploading = false;
 
-			let messageBox = document.querySelector(".attach-message");
+			let messageBox = qs(".attach-message");
 			if (response.startsWith("amount")) {
 				this.parentElement.parentElement.previousElementSibling.innerText = "We have processed your extra expenditures for a total of $" + response.substring(6)
 			} else {
@@ -210,20 +210,20 @@ let preloaded = false;
 		} else {
 
 			window.location.href = "signin?redirect=provider"
-			// document.querySelector(".container").classList.remove("hidden");
+			// qs(".container").classList.remove("hidden");
 		}
 	}
 
 	function updateDistance() {
 		if (id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == '') {
 			resetModal()
-			let warningIcon = document.createElement('i')
+			let warningIcon = ce('i')
 			warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
 			id('first').appendChild(warningIcon)
 			id('warning-message').innerText = 'Please enter your full address and select it from the dropdown below'
 			id('no').classList.add('hidden')
 			id('yes').innerText = "OK, Close Modal"
-			document.querySelector(".modal-wrapper").classList.remove('hidden')
+			qs(".modal-wrapper").classList.remove('hidden')
 			return;
 		}
 
@@ -259,13 +259,13 @@ let preloaded = false;
 			let message = await response.text()
 
 			resetModal()
-			let warningIcon = document.createElement('i')
+			let warningIcon = ce('i')
 			warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
 			id('first').appendChild(warningIcon)
 			id('warning-message').innerText = message
 			id('no').classList.add('hidden')
 			id('yes').innerText = "OK, Close Modal"
-			document.querySelector(".modal-wrapper").classList.remove('hidden')
+			qs(".modal-wrapper").classList.remove('hidden')
 		}
 	}
 
@@ -372,7 +372,7 @@ let preloaded = false;
 		}
 
 		for (let i = 0; i < 7; i++) {
-			let rows = document.querySelectorAll(".time-slot")
+			let rows = qsa(".time-slot")
 			for (let j = 0; j < rows.length; j++) {
 				let entry = rows[j];
 				let time = parseInt(entry.getAttribute('data-time'))
@@ -406,8 +406,8 @@ let preloaded = false;
 		}
 		console.log(percentage)
 		percentage += 'px'
-		document.querySelector('.rangeslider-fill-lower').style.width = percentage;
-		document.querySelector('.rangeslider-thumb').style.left = percentage;
+		qs('.rangeslider-fill-lower').style.width = percentage;
+		qs('.rangeslider-thumb').style.left = percentage;
 		id('slider-input').value = "" + response.radius * 1000;
 		id("distance").value = response.radius + ' miles';
 		id("name").innerText = response.firstname + " #" + response.providerId;
@@ -419,9 +419,9 @@ let preloaded = false;
 			id('city-state-comma').classList.add('hidden')
 			id('current-city').innerText = 'Please enter your address here'
 			id('current-city').style.color = 'red'
-			document.querySelector('.noaddress').style.color = 'red';
+			qs('.noaddress').style.color = 'red';
 		} else {
-			document.querySelector('.noaddress').style.color = '#5f6876';
+			qs('.noaddress').style.color = '#5f6876';
 			id("current-address").innerText = response.workaddress;
 			id("current-city").innerText = response.workcity;
 			id("current-zip").innerText = response.workzip;
@@ -442,17 +442,17 @@ let preloaded = false;
 						counter++;
 						id("no-order-history").classList.add("hidden");
 						$('.dashboard-preview').show();
-						let block = document.createElement("div");
+						let block = ce("div");
 						block.classList.add("dashboard-list");
-						let element = document.createElement("div");
+						let element = ce("div");
 						element.classList.add("dashboard-list__item");
 						block.appendChild(element);
-						let service = document.createElement("h2");
+						let service = ce("h2");
 						service.innerText = "#" + order.order_number + ": " + order.service;
 
-						let customer = document.createElement("h2");
+						let customer = ce("h2");
 						customer.innerText = order.customer_email;
-						let span = document.createElement("span");
+						let span = ce("span");
 						span.innerText = "Date: " + order.schedule;
 						element.appendChild(service);
 						element.appendChild(customer);
@@ -488,10 +488,10 @@ let preloaded = false;
 						}
 					} else {
 						id("no-ongoing-orders").classList.add("hidden");
-						let container = document.createElement("div");
+						let container = ce("div");
 						container.classList.add("slider-card");
 
-						let title = document.createElement("div");
+						let title = ce("div");
 						title.classList.add("title");
 						title.textContent = "#" + order.order_number + ": " + order.service;
 
@@ -500,36 +500,36 @@ let preloaded = false;
 							title.textContent = title.textContent + " (Disputed)"
 						}
 
-						let date = document.createElement("div");
+						let date = ce("div");
 						date.classList.add("date");
 						date.textContent = order.schedule;
 
-						let section1 = document.createElement("div");
+						let section1 = ce("div");
 						section1.classList.add("section");
 
-						let image = document.createElement("i");
+						let image = ce("i");
 						image.classList.add('active-order-icon', 'fas', 'fa-map-marked-alt')
 
-						let h1 = document.createElement("h1");
+						let h1 = ce("h1");
 						h1.textContent = "Address";
 
-						let h51 = document.createElement("h5");
+						let h51 = ce("h5");
 						h51.style.color = 'black';
 						h51.style.fontWeight = "400";
 						h51.textContent = order.customer_email;
 
-						let h52 = document.createElement("h5");
+						let h52 = ce("h5");
 						h52.style.color = 'black';
 						h52.style.fontWeight = "400";
 						h52.textContent = order.customer_phone;
 
-						let h53 = document.createElement("h5");
+						let h53 = ce("h5");
 						h53.style.color = 'black';
 						h53.style.fontWeight = "400";
 						h53.textContent = order.address;
 
-						let br1 = document.createElement("br");
-						let br2 = document.createElement("br");
+						let br1 = ce("br");
+						let br2 = ce("br");
 
 						section1.appendChild(image);
 						section1.appendChild(h1);
@@ -539,21 +539,21 @@ let preloaded = false;
 						section1.appendChild(br2);
 						section1.appendChild(h53);
 
-						let section2 = document.createElement("div");
+						let section2 = ce("div");
 						section2.classList.add("section");
 
-						let image2 = document.createElement("i");
+						let image2 = ce("i");
 						image2.classList.add('active-order-icon', "fas", "fa-hand-holding-usd")
 
-						let salary = document.createElement("h1");
+						let salary = ce("h1");
 						salary.textContent = "Salary";
 
-						let price = document.createElement("h3");
+						let price = ce("h3");
 						let displayPrice = "$" + order.price;
 
 						price.textContent = displayPrice;
 
-						let wageType = document.createElement("h4");
+						let wageType = ce("h4");
 						if (order.wage == "hour") {
 							wageType.textContent = "per hour";
 						} else {
@@ -566,12 +566,12 @@ let preloaded = false;
 						section2.appendChild(wageType);
 
 						if (order.secondary_providers_string.length != 0) {
-							let coworkers = document.createElement("h1");
+							let coworkers = ce("h1");
 							coworkers.textContent = "Co-workers";
 							section2.appendChild(coworkers);
 
 							for (let i = 0; i < order.secondary_providers_string.length; i++) {
-								let coworkersContact = document.createElement("h5");
+								let coworkersContact = ce("h5");
 								coworkersContact.style.color = 'black';
 								coworkersContact.style.fontWeight = "400";
 								coworkersContact.textContent = order.secondary_providers_string[i];
@@ -579,16 +579,16 @@ let preloaded = false;
 							}
 						}
 
-						let section3 = document.createElement("div");
+						let section3 = ce("div");
 						section3.classList.add("section");
 
-						let image3 = document.createElement("i");
+						let image3 = ce("i");
 						image3.classList.add('fas', "fa-upload", "active-order-icon")
 
-						let documents = document.createElement("h1");
+						let documents = ce("h1");
 						documents.textContent = "Upload Documents";
 
-						let attach = document.createElement("h5");
+						let attach = ce("h5");
 						attach.classList.add("attach-message")
 
 						attach.textContent = "Attach receipt(s) of any additional expenditures spent on the task:";
@@ -597,13 +597,13 @@ let preloaded = false;
 
 						}
 
-						let form = document.createElement("div");
+						let form = ce("div");
 						form.classList.add("expenditure");
 
-						let choosefilediv = document.createElement("div");
+						let choosefilediv = ce("div");
 						choosefilediv.id = "choose-file-div";
 
-						let choosefileinput = document.createElement("input");
+						let choosefileinput = ce("input");
 						choosefileinput.addEventListener("click", function () {
 							this.style.color = 'black'
 						});
@@ -612,9 +612,9 @@ let preloaded = false;
 						choosefileinput.type = "file";
 						choosefilediv.appendChild(choosefileinput);
 
-						let expenditurediv = document.createElement("div");
+						let expenditurediv = ce("div");
 
-						let expenditurebutton = document.createElement("button");
+						let expenditurebutton = ce("button");
 						expenditurebutton.dataset.ordernumber = order.order_number;
 						expenditurebutton.classList.add("secondary");
 						expenditurebutton.style.marginTop = "15px"
@@ -646,7 +646,7 @@ let preloaded = false;
 							section3.appendChild(attach);
 							section3.appendChild(form);
 						} else {
-							let notifyMessage = document.createElement("h3");
+							let notifyMessage = ce("h3");
 							notifyMessage.style.fontSize = "20px";
 							notifyMessage.style.padding = "22px"
 							notifyMessage.style.color = "blue";
@@ -656,19 +656,19 @@ let preloaded = false;
 
 
 
-						let message = document.createElement("div");
+						let message = ce("div");
 						message.classList.add("message");
 
-						let note = document.createElement("h1");
+						let note = ce("h1");
 						note.textContent = "Customer Note: ";
 
 						message.appendChild(note);
 						message.textContent += order.message;
 
-						let action = document.createElement("div");
+						let action = ce("div");
 						action.classList.add("action");
 
-						let button = document.createElement("button");
+						let button = ce("button");
 						button.classList.add("primary-green")
 						button.innerText = "START";
 						if (order.status == "st") {
@@ -686,7 +686,7 @@ let preloaded = false;
 							button.addEventListener("click", toggle);
 						}
 
-						let button2 = document.createElement("button");
+						let button2 = ce("button");
 						button2.classList.add("primary-red")
 						button2.innerText = "CANCEL";
 
@@ -725,7 +725,7 @@ let preloaded = false;
 								button2.dataset.role = 'secondary';
 								action.appendChild(button2);
 							} else {
-								let header3 = document.createElement("h3");
+								let header3 = ce("h3");
 								header3.style.fontSize = "20px";
 								header3.style.padding = "15px";
 								header3.innerText = "Only the primary provider has the ability to alter the order status.";
@@ -743,13 +743,13 @@ let preloaded = false;
 						container.appendChild(message);
 						container.appendChild(action);
 
-						let outer = document.querySelector(".content-card");
+						let outer = qs(".content-card");
 						outer.appendChild(container);
 					}
 				}
 			}
 		}
-		document.querySelector(".container").classList.remove("hidden");
+		qs(".container").classList.remove("hidden");
 
 	}
 
@@ -763,10 +763,10 @@ let preloaded = false;
 		id('yes').classList.add('primary-green')
 		id('no').innerText = "No, go back"
 		id('no').classList.add('secondary')
-		document.querySelector(".modal-wrapper").classList.remove('hidden')
+		qs(".modal-wrapper").classList.remove('hidden')
 
 		id('no').onclick = function () {
-			document.querySelector(".modal-wrapper").classList.add('hidden')
+			qs(".modal-wrapper").classList.add('hidden')
 		}
 
 		id('yes').onclick = function () {
@@ -786,7 +786,7 @@ let preloaded = false;
 					} else {
 
 						resetModal()
-						let warningIcon = document.createElement('i')
+						let warningIcon = ce('i')
 						warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
 						id('first').appendChild(warningIcon)
 						id('warning-message').innerText = response.error
@@ -794,9 +794,9 @@ let preloaded = false;
 						id('yes').innerText = "OK, Close Modal"
 						id('yes').classList.add('secondary')
 						id('yes').onclick = function () {
-							document.querySelector(".modal-wrapper").classList.add('hidden')
+							qs(".modal-wrapper").classList.add('hidden')
 						}
-						document.querySelector(".modal-wrapper").classList.remove('hidden')
+						qs(".modal-wrapper").classList.remove('hidden')
 						id('loading').classList.add('hidden')
 
 					}
@@ -815,9 +815,9 @@ let preloaded = false;
 		id('no').innerText = "No, go back"
 		id('no').classList.add('secondary')
 		id('no').onclick = function () {
-			document.querySelector(".modal-wrapper").classList.add('hidden')
+			qs(".modal-wrapper").classList.add('hidden')
 		}
-		document.querySelector(".modal-wrapper").classList.remove('hidden')
+		qs(".modal-wrapper").classList.remove('hidden')
 
 		id('yes').onclick = function () {
 
@@ -851,10 +851,10 @@ let preloaded = false;
 			id('no').classList.add('secondary')
 			id('no').innerText = "No, close modal"
 			id('no').onclick = function () {
-				document.querySelector('.modal-wrapper').classList.add('hidden')
+				qs('.modal-wrapper').classList.add('hidden')
 			}
 
-			document.querySelector('.modal-wrapper').classList.remove('hidden')
+			qs('.modal-wrapper').classList.remove('hidden')
 
 			id('yes').onclick = function () {
 				id('loading').classList.remove('hidden')
@@ -919,10 +919,10 @@ let preloaded = false;
 			id('no').innerText = "No, go back"
 			id('no').classList.add('secondary')
 			id('no').onclick = function () {
-				document.querySelector('.modal-wrapper').classList.add('hidden')
+				qs('.modal-wrapper').classList.add('hidden')
 			}
 
-			document.querySelector(".modal-wrapper").classList.remove('hidden')
+			qs(".modal-wrapper").classList.remove('hidden')
 
 			id('yes').onclick = function () {
 
@@ -947,10 +947,10 @@ let preloaded = false;
 			id('no').innerText = "No, go back"
 			id('no').classList.add('secondary')
 			id('no').onclick = function () {
-				document.querySelector('.modal-wrapper').classList.add('hidden')
+				qs('.modal-wrapper').classList.add('hidden')
 			}
 
-			document.querySelector(".modal-wrapper").classList.remove('hidden')
+			qs(".modal-wrapper").classList.remove('hidden')
 
 			id('yes').onclick = function () {
 
@@ -987,14 +987,14 @@ let preloaded = false;
 
 					resetModal()
 
-					let warningIcon = document.createElement('i')
+					let warningIcon = ce('i')
 					warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
 					id('first').appendChild(warningIcon)
 					id('warning-message').innerText = response.error
 					id('no').classList.add('hidden')
 					id('yes').innerText = "OK, Close Modal"
 					id('yes').classList.add('secondary')
-					document.querySelector(".modal-wrapper").classList.remove('hidden')
+					qs(".modal-wrapper").classList.remove('hidden')
 
 					startStopButton.innerText = "START";
 					startStopButton.classList.remove("primary-red")
@@ -1035,7 +1035,7 @@ let preloaded = false;
 		id("customer_email_display").innerText = this.dataset.customer_email;
 		id("service_display").innerText = this.dataset.service;
 		id("address_display").innerText = this.dataset.address;
-		let others = document.querySelectorAll(".dashboard-list__item");
+		let others = qsa(".dashboard-list__item");
 		for (let i = 0; i < others.length; i++) {
 			others[i].classList.remove("dashboard-list__item--active");
 		}

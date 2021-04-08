@@ -81,11 +81,11 @@
 
           if (response.numbererror == "true" || response.numbererror == "empty") {
                id('warning-message').innerText = "Error occured. Please retry clicking on the reset link you received."
-               let warningIcon = document.createElement('i')
+               let warningIcon = ce('i')
                warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
                id('first').innerHTML = ''
                id('first').appendChild(warningIcon)
-               document.querySelector('.modal-wrapper').classList.remove('hidden')
+               qs('.modal-wrapper').classList.remove('hidden')
 
           } else {
                id("confirm-number-error").innerText = "";
@@ -93,14 +93,14 @@
 
           if (response.emailerror == "" && response.passworderror == "" && response.confirmerror == "" && response.numbererror == "") {
                id('warning-message').innerText = "Error occured. Please retry clicking on the reset link you received."
-               let warningIcon = document.createElement('i')
+               let warningIcon = ce('i')
                warningIcon.classList.add('fas', 'fa-check-circle', 'success')
                id('first').innerHTML = ''
                id('first').appendChild(warningIcon)
-               document.querySelector('.modal-wrapper').classList.remove('hidden')
+               qs('.modal-wrapper').classList.remove('hidden')
 
-               document.querySelector('.modal button').innerText = "OK, Login"
-               document.querySelector('.modal button').onclick = function () {
+               qs('.modal button').innerText = "OK, Login"
+               qs('.modal button').onclick = function () {
                     window.location = "signin";
                }
 

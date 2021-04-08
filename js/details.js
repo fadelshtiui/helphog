@@ -8,11 +8,11 @@
                id('back').innerText = '< back to search'
           }
 
-          document.querySelector('.modal').onclick = function (e) {
+          qs('.modal').onclick = function (e) {
                e.stopPropagation();
           }
 
-          document.querySelector('.modal button').onclick = function () {
+          qs('.modal button').onclick = function () {
                this.parentElement.parentElement.parentElement.classList.add('hidden');
           }
 
@@ -88,21 +88,21 @@
                window.location = url;
 
           } else {
-               let warningIcon = document.createElement('i')
+               let warningIcon = ce('i')
                warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
                id('first').innerHTML = "";
                id('first').appendChild(warningIcon)
 
-               document.querySelector('.modal-wrapper button').classList.remove('primary-green')
-               document.querySelector('.modal-wrapper button').classList.add('secondary')
-               document.querySelector('.modal-wrapper button').innerText = "OK, Retry"
+               qs('.modal-wrapper button').classList.remove('primary-green')
+               qs('.modal-wrapper button').classList.add('secondary')
+               qs('.modal-wrapper button').innerText = "OK, Retry"
 
 
                 id('autocomplete').classList.add('hidden')
                id('warning-message').innerText = 'Please enter a valid US zip code.'
-               document.querySelector('.modal-wrapper').classList.remove('hidden')
+               qs('.modal-wrapper').classList.remove('hidden')
 
-               document.querySelector('.modal-wrapper button').onclick = openZipcode
+               qs('.modal-wrapper button').onclick = openZipcode
 
           }
      }
@@ -264,9 +264,9 @@
 
           id('autocomplete').classList.remove('hidden')
 
-          document.querySelector('.modal-wrapper button').classList.add('hidden')
+          qs('.modal-wrapper button').classList.add('hidden')
 
-          document.querySelector('.modal-wrapper').classList.remove('hidden')
+          qs('.modal-wrapper').classList.remove('hidden')
      }
 
      function openZipcode() {
@@ -277,19 +277,19 @@
           if (id('autocomplete')) {
               id('autocomplete').classList.add('hidden')
           }
-          let input = document.createElement('input')
+          let input = ce('input')
           input.id = 'zip-input'
           input.type = 'number'
           input.placeholder = 'Enter Zipcode'
           id('update').onclick = updateZip
           id('warning-message').appendChild(input)
 
-          document.querySelector('.modal-wrapper button').classList.remove('hidden')
-          document.querySelector('.modal-wrapper button').innerText = "Update"
-          document.querySelector('.modal-wrapper button').classList.remove('secondary')
-          document.querySelector('.modal-wrapper button').classList.add('primary-green')
-          document.querySelector('.modal-wrapper button').onclick = updateZip
-          document.querySelector('.modal-wrapper').classList.remove('hidden')
+          qs('.modal-wrapper button').classList.remove('hidden')
+          qs('.modal-wrapper button').innerText = "Update"
+          qs('.modal-wrapper button').classList.remove('secondary')
+          qs('.modal-wrapper button').classList.add('primary-green')
+          qs('.modal-wrapper button').onclick = updateZip
+          qs('.modal-wrapper').classList.remove('hidden')
 
      }
 

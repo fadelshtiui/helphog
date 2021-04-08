@@ -14,10 +14,10 @@ $(window).on('load', function () {
 	$('#app').css('display', 'none');
 	$('#app').delay(600).fadeIn(900);
 
-	document.querySelector('.modal-wrapper').addEventListener('click', function () {
+	qs('.modal-wrapper').addEventListener('click', function () {
 		this.classList.add('hidden')
 	})
-	document.querySelector('.modal').addEventListener('click', function (e) {
+	qs('.modal').addEventListener('click', function (e) {
 		e.stopPropagation();
 	})
 
@@ -65,9 +65,9 @@ function handleResponse(response) {
 
 	id('stars-container').classList.add('hidden')
 
-	document.querySelector('.modal-wrapper').classList.remove('hidden')
+	qs('.modal-wrapper').classList.remove('hidden')
 
-	document.querySelector('.actions').classList.remove('extra-button-margin')
+	qs('.actions').classList.remove('extra-button-margin')
 
 	id('no').onclick = closePopup
 
@@ -84,22 +84,22 @@ function handleResponse(response) {
 
 		if (response2 == 'ordererror') {
 			id('first').innerHTML = "";
-			let warningIcon = document.createElement('i')
+			let warningIcon = ce('i')
 			warningIcon.classList.add('fas', "fa-exclamation-circle", "warning-orders")
 			id('first').appendChild(warningIcon)
 			id('second').innerText = 'You cannot cancel an order that is already in progress.'
 			id('yes').classList.add('hidden')
 			id('no').innerText = "OK, Close Modal"
-			document.querySelector('.modal-wrapper').classList.remove('hidden')
+			qs('.modal-wrapper').classList.remove('hidden')
 		} else {
-			// document.querySelector('.modal-wrapper').classList.add('hidden')
+			// qs('.modal-wrapper').classList.add('hidden')
 			location.reload()
 		}
 	}
 }
 
 function closePopup() {
-	document.querySelector('.modal-wrapper').classList.add('hidden')
+	qs('.modal-wrapper').classList.add('hidden')
 }
 
 function openReviewPopup(orderNumber, name) {
@@ -119,9 +119,9 @@ function openReviewPopup(orderNumber, name) {
 
 	id('stars-container').classList.remove('hidden')
 
-	document.querySelector('.actions').classList.add('extra-button-margin')
+	qs('.actions').classList.add('extra-button-margin')
 
-	document.querySelector('.modal-wrapper').classList.remove('hidden')
+	qs('.modal-wrapper').classList.remove('hidden')
 
 	id('yes').onclick = async function () {
 		id('loading').classList.remove('hidden')
@@ -150,17 +150,17 @@ function openReviewPopup(orderNumber, name) {
 		} else {
 		    id('stars-container').classList.add('hidden')
 			id('first').innerHTML = "";
-			let warningIcon = document.createElement('i')
+			let warningIcon = ce('i')
 			warningIcon.classList.add('fas', "fa-exclamation-circle", "warning-orders")
 			id('first').appendChild(warningIcon)
 			id('second').innerText = 'Sorry, orders may only be disputed within 24 hours of completion.'
 			id('yes').classList.add('hidden')
 			id('no').innerText = "OK, Close Modal"
-			document.querySelector('.modal-wrapper').classList.remove('hidden')
+			qs('.modal-wrapper').classList.remove('hidden')
 			id('no').classList.remove('primary-red');
 			id('no').classList.add('secondary-orders');
 			id('no').onclick = function(){
-			    document.querySelector('.modal-wrapper').classList.add('hidden')
+			    qs('.modal-wrapper').classList.add('hidden')
 			}
 
 		}

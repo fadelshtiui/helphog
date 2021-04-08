@@ -83,7 +83,7 @@ $(window).on('load', async function () {
 
 		} else {
 			id('warning-message').innerText = "Please check the reCAPTCHA box."
-			document.querySelector('.modal-wrapper').classList.remove('hidden')
+			qs('.modal-wrapper').classList.remove('hidden')
 		}
 
 	});
@@ -91,7 +91,7 @@ $(window).on('load', async function () {
 	function populateCategories(response) {
 		let dropdown = id("dropdown");
 		for (let i = 0; i < response.length; i++) {
-			let option = document.createElement("option");
+			let option = ce("option");
 			option.value = response[i];
 			option.innerText = response[i].charAt(0).toUpperCase() + response[i].slice(1);
 			dropdown.append(option);
@@ -174,7 +174,7 @@ $(window).on('load', async function () {
 		if (response == "Please upload PNG, JPG, PDF, DOCX files only" || response == 'Error: an account with this email already exists') {
 
 			id('warning-message').innerText = response
-			document.querySelector('.modal-wrapper').classList.remove('hidden')
+			qs('.modal-wrapper').classList.remove('hidden')
 
 		} else {
 

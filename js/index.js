@@ -30,7 +30,7 @@
      displayResults = function (resultsEl, wordList) {
           resultsEl.innerHTML = '';
           wordList.forEach(word => {
-               let entry = document.createElement('li');
+               let entry = ce('li');
                entry.textContent = word;
                entry.addEventListener('click', function () {
                    let url = 'details?service=' + word + "&origin=search"

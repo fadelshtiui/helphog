@@ -86,6 +86,18 @@ function id(id) {
     return document.getElementById(id);
 }
 
+function qs(selector) {
+    return qs(selector);
+}
+
+function qsa(selector) {
+    return qsa(selector);
+}
+
+function ce(tag) {
+    return ce(tag);
+}
+
 const isNumericInput = (event) => {
     const key = event.keyCode;
     return ((key >= 48 && key <= 57) || // Allow number line
@@ -133,16 +145,16 @@ async function populateFooter() {
     await checkStatus(response)
     response = await response.json()
 
-    let list = document.querySelector('.nav__ul--extra')
+    let list = qs('.nav__ul--extra')
 
     if (list) {
         for (let i = 0; i < response.length; i++) {
 
             let category = response[i];
 
-            let entry = document.createElement('li')
+            let entry = ce('li')
 
-            let link = document.createElement('a')
+            let link = ce('a')
             link.innerText = category.charAt(0).toUpperCase() + category.slice(1)
             link.href = 'results?category=' + category
 

@@ -7,7 +7,7 @@ window.addEventListener('load', function () {
 
      $('.modal-content').slideToggle();
      id('city-state-comma').classList.add('hidden')
-     document.querySelector(".loader").classList.add("hidden");
+     qs(".loader").classList.add("hidden");
 
      $('#guest').on('click', function () {
 
@@ -65,8 +65,8 @@ window.addEventListener('load', function () {
 
      id("close").onclick = function () {
           document.documentElement.style.overflow = "overlay";
-          document.querySelector("#button").disabled = false;
-          //   var tdtag = document.querySelectorAll('.trtag')
+          qs("#button").disabled = false;
+          //   var tdtag = qsa('.trtag')
           //       tdtag.forEach(el => {
           //           el.classList.remove('visibility');
           //           el.classList.add('notvisible');
@@ -118,7 +118,7 @@ window.addEventListener('load', function () {
      id('dow').value = today.toDateString().substring(0, 3)
      id('date').value = today.toDateString().substring(4, 15)
 
-     let timeslots = document.querySelectorAll('.timeslot')
+     let timeslots = qsa('.timeslot')
      for (let i = 0; i < timeslots.length; i++) {
           let slot = timeslots[i];
           slot.onclick = updateTime;
@@ -222,8 +222,8 @@ function editAddress() {
 }
 
 function initTextFields() {
-     let service = document.querySelector(".service");
-     let description = document.querySelector(".description");
+     let service = qs(".service");
+     let description = qs(".description");
 
      let queryString = window.location.search
      const urlParams = new URLSearchParams(queryString)
@@ -378,18 +378,18 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
 }
 
 function addLoader() {
-     document.querySelector(".loader").classList.remove("hidden");
-     document.querySelector(".timePicker").classList.add("darked");
+     qs(".loader").classList.remove("hidden");
+     qs(".timePicker").classList.add("darked");
 }
 
 function removeLoader() {
-     document.querySelector(".loader").classList.add("hidden");
-     document.querySelector(".timePicker").classList.remove("darked");
+     qs(".loader").classList.add("hidden");
+     qs(".timePicker").classList.remove("darked");
 }
 
 function updateTimePicker(response) {
 
-     let slots = document.querySelectorAll(".timeslot")
+     let slots = qsa(".timeslot")
 
      for (let i = 0; i < slots.length; i++) {
 
@@ -417,7 +417,7 @@ function updateTimePicker(response) {
 
      if (newdate.getFullYear() == today.getFullYear() && newdate.getMonth() == today.getMonth() && newdate.getDate() == today.getDate()) {
           let currentHour = today.getHours();
-          let slots = document.querySelectorAll(".timeslot")
+          let slots = qsa(".timeslot")
           for (let i = 0; i < slots.length; i++) {
 
                let slot = slots[i]
@@ -442,7 +442,7 @@ function updateTime() {
      if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
           if (this.classList.contains("available-column")) {
 
-               let timeslots = document.querySelectorAll('.timeslot')
+               let timeslots = qsa('.timeslot')
                for (let i = 0; i < timeslots.length; i++) {
                     let slot = timeslots[i];
                     slot.classList.remove("time-selected");
@@ -454,7 +454,7 @@ function updateTime() {
           }
      } else {
           id('warning-message').innerText = "Please select a full address."
-          document.querySelector('.modal-wrapper').classList.remove('hidden')
+          qs('.modal-wrapper').classList.remove('hidden')
      }
 
 }
@@ -465,12 +465,12 @@ async function validateInput() {
 
      if ((id("current-address").innerText == "" || id("current-city").innerText == "" || id("current-state").innerText == "" || id("current-zip").innerText == "") && urlParams.get('remote') == 'n') {
           id('warning-message').innerText = "Please select a full address."
-          document.querySelector('.modal-wrapper').classList.remove('hidden')
+          qs('.modal-wrapper').classList.remove('hidden')
           return;
      }
 
      let timeSelected = false;
-     let timeslots = document.querySelectorAll('.timeslot')
+     let timeslots = qsa('.timeslot')
      for (let i = 0; i < timeslots.length; i++) {
           let slot = timeslots[i];
           if (slot.classList.contains("time-selected")) {
@@ -479,7 +479,7 @@ async function validateInput() {
      }
      if (!timeSelected) {
           id('warning-message').innerText = "Please select a time for your order."
-          document.querySelector('.modal-wrapper').classList.remove('hidden')
+          qs('.modal-wrapper').classList.remove('hidden')
           return
      }
 
@@ -535,7 +535,7 @@ function submitLoginHelper(response) {
 
      if (response.verified == "n") {
           id('warning-message').innerText = "Your account has not yet been verified. Please check your email for a verification email."
-          document.querySelector('.modal-wrapper').classList.remove('hidden')
+          qs('.modal-wrapper').classList.remove('hidden')
      } else if (response.emailerror == "" && response.passworderror == "") {
 
           $('.hover_bkgr_fricc').hide();
@@ -547,7 +547,7 @@ function submitLoginHelper(response) {
 
 function checkProviders() {
      let data = new FormData();
-     let service = document.querySelector(".service").innerText
+     let service = qs(".service").innerText
      data.append("service", service);
      data.append("id", providerId);
      let url = "php/providers.php";
@@ -560,8 +560,8 @@ function checkProviders() {
 
 function providersHelper(response) {
      if (response.providers != 0) {
-          document.querySelector("#quantity").classList.add("hidden");
-          document.querySelector("#quantity-label").classList.add("hidden");
+          qs("#quantity").classList.add("hidden");
+          qs("#quantity-label").classList.add("hidden");
      }
      if (providerId != "none") {
           id("providerSelected").classList.remove("hidden");
@@ -624,7 +624,7 @@ function generateOrderNumber() {
 
 function initModal() {
 
-     var tdtag = document.querySelectorAll('.trtag')
+     var tdtag = qsa('.trtag')
      tdtag.forEach(el => {
           el.classList.remove('visibility');
           el.classList.add('notvisible');
@@ -660,7 +660,7 @@ function initModal() {
 
      id("terms").innerText = "*You will not be charged until your order is completed, but your funds may be placed on hold. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. Estimated cost does not include costs of replacement parts/accessories."
 
-     id("popupService").innerText = document.querySelector(".service").innerText;
+     id("popupService").innerText = qs(".service").innerText;
      id("popupMessage").innerText = " " + message;
      id("popupDate").innerText = " " + formatDate(id('date').value) + " " + time;
      if (providerId != 'none') {
@@ -729,7 +729,7 @@ async function stripe(service, duration, people, cost) {
      var purchase = {
           items: [
                {
-                    service: document.querySelector(".service").innerText,
+                    service: qs(".service").innerText,
                     duration: id('duration').value,
                     people: id('numpeople').value
                }
@@ -744,7 +744,7 @@ async function stripe(service, duration, people, cost) {
                tzoffset: timezone,
                day: id('dow').value,
                order: id('order').value,
-               service: document.querySelector(".service").innerText,
+               service: qs(".service").innerText,
                customeremail: email,
                schedule: id('date').value + ' ' + id('time').value,
                phone: phone,
@@ -760,7 +760,7 @@ async function stripe(service, duration, people, cost) {
           }
      };
 
-     document.querySelector("button").disabled = true;
+     qs("button").disabled = true;
      fetch("php/payment.php", {
           method: "POST",
           headers: {
@@ -791,8 +791,8 @@ async function stripe(service, duration, people, cost) {
                var card = elements.create("card", { style: style });
                card.mount("#card-element");
                card.on("change", function (event) {
-                    document.querySelector("button").disabled = event.empty;
-                    document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+                    qs("button").disabled = event.empty;
+                    qs("#card-error").textContent = event.error ? event.error.message : "";
                });
                if (data.taxRate != '') {
                     id("taxRate").innerText = " + tax (" + data.taxRate + ")";
@@ -801,7 +801,7 @@ async function stripe(service, duration, people, cost) {
                     id("popupTotal").innerText = id("numpeople").value * cost * id("duration").value;
                }
                var form = id("payment-form");
-               var tdtag = document.querySelectorAll('.trtag')
+               var tdtag = qsa('.trtag')
                tdtag.forEach(el => {
                     el.classList.add('visibility');
                     el.classList.remove('notvisible');
@@ -840,13 +840,13 @@ async function stripe(service, duration, people, cost) {
                     "href",
                     "https://dashboard.stripe.com/test/payments/" + paymentIntentId
                );
-          document.querySelector(".result-message").classList.remove("hidden");
-          document.querySelector("button").disabled = true;
+          qs(".result-message").classList.remove("hidden");
+          qs("button").disabled = true;
      };
      // Show the customer the error from Stripe if their card fails to charge
      var showError = function (errorMsgText) {
           loading(false);
-          var errorMsg = document.querySelector("#card-error");
+          var errorMsg = qs("#card-error");
           errorMsg.textContent = errorMsgText;
           setTimeout(function () {
                errorMsg.textContent = "";
@@ -856,13 +856,13 @@ async function stripe(service, duration, people, cost) {
      var loading = function (isLoading) {
           if (isLoading) {
                // Disable the button and show a spinner
-               document.querySelector("button").disabled = true;
-               document.querySelector("#spinner").classList.remove("hidden");
-               document.querySelector("#button-text").classList.add("hidden");
+               qs("button").disabled = true;
+               qs("#spinner").classList.remove("hidden");
+               qs("#button-text").classList.add("hidden");
           } else {
-               document.querySelector("button").disabled = false;
-               document.querySelector("#spinner").classList.add("hidden");
-               document.querySelector("#button-text").classList.remove("hidden");
+               qs("button").disabled = false;
+               qs("#spinner").classList.add("hidden");
+               qs("#button-text").classList.remove("hidden");
           }
      };
 }

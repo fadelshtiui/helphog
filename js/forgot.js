@@ -28,10 +28,10 @@
                 .catch(console.log);
         } else {
             id('warning-message').innerText = "Please check the reCAPTCHA box."
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
 
             id('first').innerHTML = ''
-            let warningIcon = document.createElement('i')
+            let warningIcon = ce('i')
             warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning');
             id('first').appendChild(warningIcon)
         }
@@ -50,12 +50,12 @@
 
 
             id('first').innerHTML = ''
-            let warningIcon = document.createElement('i')
+            let warningIcon = ce('i')
             warningIcon.classList.add('fas', 'fa-check-circle', 'success');
             id('first').appendChild(warningIcon)
 
 
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
 
         }
     }

@@ -78,7 +78,7 @@ class RangeInput {
 	"use strict";
 
 	function b() {
-		var a = document.createElement("input");
+		var a = ce("input");
 		return a.setAttribute("type", "range"), "text" !== a.type;
 	}
 
@@ -250,4 +250,4 @@ class RangeInput {
 });
 
 
-new RangeInput(document.querySelector('.range'));
+new RangeInput(qs('.range'));

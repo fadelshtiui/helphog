@@ -312,7 +312,7 @@
     submit();
   })
 
-  let timeLabels = document.querySelectorAll('.time-label')
+  let timeLabels = qsa('.time-label')
 
   let append = "am"
   let count = 0;
@@ -343,7 +343,7 @@ function submit() {
   let result = "";
 
   for (let i = 0; i < 7; i++) {
-    let rows = document.querySelectorAll(".time-slot")
+    let rows = qsa(".time-slot")
     for (let j = 0; j < rows.length; j++) {
       let entry = rows[j];
       let time = parseInt(entry.getAttribute('data-time'))

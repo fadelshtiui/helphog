@@ -1,7 +1,7 @@
-const successScreen = document.querySelector('.success-screen');
-const header = document.querySelector('.success-screen__header');
-const toast = document.querySelector('.toast');
-const button = document.querySelector('.button');
+const successScreen = qs('.success-screen');
+const header = qs('.success-screen__header');
+const toast = qs('.toast');
+const button = qs('.button');
 
 window.onload = function () {
      button.classList.add('button--loading');
@@ -31,14 +31,14 @@ function showSuccessScreen() {
 }
 
 const Confetti = (function () {
-     const confettiContainer = document.querySelector('.confetti-container');
+     const confettiContainer = qs('.confetti-container');
      const animationSpeeds = ['slow', 'medium', 'fast'];
      const types = ['round', 'rectangle'];
      let renderInterval = null;
 
      function render() {
           renderInterval = setInterval(() => {
-               const particle = document.createElement('div');
+               const particle = ce('div');
 
                const particleType = types[Math.floor(Math.random() * types.length)];
                const particleLeft = (Math.floor(Math.random() * confettiContainer.offsetWidth)) + 'px';

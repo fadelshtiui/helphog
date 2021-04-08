@@ -31,7 +31,7 @@
     function populateCategories(response) {
         let dropdown = id("dropdown");
         for (let i = 0; i < response.length; i++) {
-            let option = document.createElement("option");
+            let option = ce("option");
             option.value = response[i];
             option.innerText = response[i].charAt(0).toUpperCase() + response[i].slice(1);
             dropdown.appendChild(option);
@@ -56,7 +56,7 @@
 
         if (id("aratext").value === "") {
             id('warning-message').innerText = "Please type a brief description of your experience in this workfield";
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
             // $('.btn').button('reset');
         } else {
 
@@ -90,7 +90,7 @@
     function handleResponse(response) {
         if (response == "Please upload PNG, JPG, PDF, DOCX files only") {
             id('warning-message').innerText = response
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
             // $('.btn').button('reset');
 
         } else {

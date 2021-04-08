@@ -22,7 +22,7 @@ function handle(response) {
 
     id("order-number").innerText = response.ordernumber;
 
-    let services = document.querySelectorAll(".service");
+    let services = qsa(".service");
     for (let i = 0; i < services.length; i++) {
         services[i].innerText = response.service;
     }

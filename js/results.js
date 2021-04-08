@@ -7,7 +7,7 @@
      window.onload = function () {
 
           id('loading').classList.remove('hidden');
-          let availabilityFilters = document.querySelectorAll('#availability-filters input')
+          let availabilityFilters = qsa('#availability-filters input')
           for (let i = 0; i < availabilityFilters.length; i++) {
                availabilityFilters[i].onchange = filterAvailability;
           }
@@ -110,22 +110,22 @@
           for (let i = 0; i < response.length; i++) {
                let category = response[i];
 
-               let filterContainer = document.createElement('div')
+               let filterContainer = ce('div')
                filterContainer.classList.add('filters__item')
 
-               let checkboxContainer = document.createElement('div')
+               let checkboxContainer = ce('div')
                checkboxContainer.classList.add('checkbox')
 
-               let checkbox = document.createElement('input')
+               let checkbox = ce('input')
                checkbox.type = 'checkbox'
                checkbox.dataset.category = category
                checkbox.id = 'checkbox-' + (i + 1)
 
-               let label = document.createElement('label')
+               let label = ce('label')
                label.textContent = category.charAt(0).toUpperCase() + category.slice(1)
                label.htmlFor = checkbox.id
 
-               let box = document.createElement('span')
+               let box = ce('span')
                box.classList.add('box')
 
                label.appendChild(box)
@@ -133,7 +133,7 @@
                checkboxContainer.appendChild(checkbox)
                checkboxContainer.appendChild(label)
 
-               let numResults = document.createElement('span')
+               let numResults = ce('span')
                numResults.classList.add('badge')
                numResults.classList.add('status-primary')
                numResults.dataset.category = category
@@ -144,7 +144,7 @@
                id('category-filters').appendChild(filterContainer)
           }
 
-          let categoryFilters = document.querySelectorAll('#category-filters input')
+          let categoryFilters = qsa('#category-filters input')
           for (let i = 0; i < categoryFilters.length; i++) {
                categoryFilters[i].onchange = filterCategory;
           }
@@ -152,7 +152,7 @@
      }
 
      function filterCategory() {
-          let filters = document.querySelectorAll('#category-filters input')
+          let filters = qsa('#category-filters input')
           for (let i = 0; i < filters.length; i++) {
                if (filters[i] != this) {
                     filters[i].checked = false;
@@ -161,7 +161,7 @@
 
           if (this.checked) {
                let currAvailability
-               filters = document.querySelectorAll('#availability-filters input')
+               filters = qsa('#availability-filters input')
                for (let i = 0; i < filters.length; i++) {
                     if (filters[i].checked) {
                          currAvailability = filters[i].dataset.availability
@@ -173,7 +173,7 @@
      }
 
      function filterAvailability() {
-          let filters = document.querySelectorAll('#availability-filters input')
+          let filters = qsa('#availability-filters input')
           for (let i = 0; i < filters.length; i++) {
                if (filters[i] != this) {
                     filters[i].checked = false;
@@ -182,7 +182,7 @@
 
           if (this.checked) {
                let currCategory
-               filters = document.querySelectorAll('#category-filters input')
+               filters = qsa('#category-filters input')
                for (let i = 0; i < filters.length; i++) {
                     if (filters[i].checked) {
                          currCategory = filters[i].dataset.category
@@ -196,7 +196,7 @@
      }
 
      function filter(category, availability) {
-          let results = document.querySelectorAll('.profile')
+          let results = qsa('.profile')
           for (let i = 0; i < results.length; i++) {
                let categoryMatch = (category == 'all' || results[i].dataset.category == category)
                let availabilityMatch = (availability == 'all' || results[i].dataset.available == 1)
@@ -236,7 +236,7 @@
                     }
                }
                let count = 0;
-               let counters = document.querySelectorAll('#category-filters .badge')
+               let counters = qsa('#category-filters .badge')
                for (let i = 0; i < counters.length; i++) {
                     let counter = counters[i]
                     counter.innerText = '0'
@@ -259,27 +259,27 @@
                for (let i = 0; i < response.services.length; i++) {
                     let service = response.services[i]
 
-                    let results = document.querySelector('.results-section')
+                    let results = qs('.results-section')
 
-                    let result = document.createElement('div')
+                    let result = ce('div')
                     result.classList.add('profile')
                     result.dataset.category = service.category
                     result.dataset.available = service.available
 
-                    let imageContainer = document.createElement('div');
+                    let imageContainer = ce('div');
                     imageContainer.classList.add('profile__image')
 
-                    let image = document.createElement('img')
+                    let image = ce('img')
                     image.src = service.src
 
                     imageContainer.appendChild(image)
 
                     result.appendChild(imageContainer)
 
-                    let infoContainer = document.createElement('div')
+                    let infoContainer = ce('div')
                     infoContainer.classList.add('profile__info')
 
-                    let title = document.createElement('h3')
+                    let title = ce('h3')
                     title.innerText = service.service
 
                     let x = 70
@@ -287,7 +287,7 @@
                     //     x--
                     // }
 
-                    let description = document.createElement('p')
+                    let description = ce('p')
                     description.classList.add('profile__info__extra')
                     description.innerText = service.description.substring(0, x)
 
@@ -295,7 +295,7 @@
                     const urlParams = new URLSearchParams(queryString)
                     let zip = urlParams.get('zip')
 
-                    let more = document.createElement('span')
+                    let more = ce('span')
                     more.innerText = " ...(view more)"
                     more.classList.add('more')
                     description.appendChild(more)
@@ -337,41 +337,41 @@
 
                     result.appendChild(infoContainer)
 
-                    let priceContainer = document.createElement('div')
+                    let priceContainer = ce('div')
                     priceContainer.classList.add('profile__stats')
 
-                    let priceTitle = document.createElement('p')
+                    let priceTitle = ce('p')
                     priceTitle.classList.add('profile__stats__title')
                     priceTitle.style.marginLeft = '28px';
                     priceTitle.innerText = 'Price'
 
-                    let priceValue = document.createElement('h5')
+                    let priceValue = ce('h5')
                     priceValue.innerText = '$' + service.cost
                     priceValue.style.marginLeft = '28px';
 
                     result.appendChild(priceContainer)
 
-                    let rateContainer = document.createElement('div')
+                    let rateContainer = ce('div')
                     rateContainer.classList.add('profile__stats')
 
-                    let rateTitle = document.createElement('p')
+                    let rateTitle = ce('p')
                     rateTitle.classList.add('profile__stats__title')
                     rateTitle.innerText = 'Rate'
                     rateTitle.style.marginLeft = '-5px';
 
-                    let rateValue = document.createElement('h5')
+                    let rateValue = ce('h5')
                     rateValue.classList.add('profile__stats__info')
                     rateValue.style.marginLeft = '-5px';
 
-                    let availabilityContainer = document.createElement('div')
+                    let availabilityContainer = ce('div')
                     availabilityContainer.classList.add('profile__stats')
 
-                    let availabilityTitle = document.createElement('p')
+                    let availabilityTitle = ce('p')
                     availabilityTitle.classList.add('profile__stats__title')
                     availabilityTitle.innerText = 'First hour'
                     availabilityTitle.style.marginLeft = '-45px';
 
-                    let availabilityValue = document.createElement('h5')
+                    let availabilityValue = ce('h5')
                     availabilityValue.classList.add('profile__stats__info')
                     availabilityValue.innerText = 'Unavailable'
                     availabilityValue.style.marginLeft = '-45px';
@@ -404,10 +404,10 @@
                     result.appendChild(rateContainer)
                     result.appendChild(availabilityContainer)
 
-                    let buttonContainer = document.createElement('profile__cta')
+                    let buttonContainer = ce('profile__cta')
                     buttonContainer.classList.add('profile__cta')
 
-                    let link = document.createElement('button')
+                    let link = ce('button')
                     link.classList.add('primary-green')
 
                     if (service.available == 1) {
@@ -454,7 +454,7 @@
 
                          buttonContainer.onclick = function () {
                               id('warning-message').innerText = 'Sorry, this service is unavailable in your zip code.'
-                              document.querySelector(".modal-wrapper").classList.remove('hidden')
+                              qs(".modal-wrapper").classList.remove('hidden')
                          }
                     } else { // service.available == 0.5
                          link.innerText = 'Click to check availability'
@@ -463,12 +463,12 @@
                               id('scroll-to-zip').click();
                               var element = id("highlight");
                               element.classList.add("highlightEffect");
-                              var profile = document.querySelectorAll('.profile')
+                              var profile = qsa('.profile')
                               for (let i = 0; i < profile.length; i++) {
                                    profile[i].classList.add("dim")
                               }
 
-                              let checkBoxes = document.querySelectorAll('.checkbox > input')
+                              let checkBoxes = qsa('.checkbox > input')
                               checkBoxes.forEach(checkbox => {
                                    checkbox.disabled = 'true';
                               })
@@ -497,11 +497,11 @@
           if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(id('zip-input').value)) {
                var element = id("highlight");
                element.classList.remove("highlightEffect");
-               var profile = document.querySelectorAll('.profile')
+               var profile = qsa('.profile')
                for (let i = 0; i < profile.length; i++) {
                     profile[i].classList.remove("dim")
                }
-               let checkBoxes = document.querySelectorAll('.checkbox > input')
+               let checkBoxes = qsa('.checkbox > input')
                checkBoxes.forEach(checkbox => {
                     checkbox.disabled = 'false';
                })
@@ -523,7 +523,7 @@
 
           } else {
                id('warning-message').innerText = 'Please enter a valid US zip code.'
-               document.querySelector(".modal-wrapper").classList.remove('hidden')
+               qs(".modal-wrapper").classList.remove('hidden')
           }
 
      }

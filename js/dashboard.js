@@ -9,12 +9,12 @@
 		$('.dashboard-content__panel[data-panel-id=' + itemId + ']').show();
 
 		if (itemId === 'my_trip') {
-			if (document.querySelector("#no-order-history").classList.contains("hidden")) {
+			if (qs("#no-order-history").classList.contains("hidden")) {
 				$('.dashboard-preview').show();
-				document.querySelector("#previewer").classList.remove("hidden");
+				qs("#previewer").classList.remove("hidden");
 			}
 		} else {
-			document.querySelector("#previewer").classList.add("hidden");
+			qs("#previewer").classList.add("hidden");
 			$('.dashboard-preview').hide();
 		}
 
@@ -23,7 +23,7 @@
 	});
 
 
-	document.querySelector("#previewer").classList.add("hidden");
+	qs("#previewer").classList.add("hidden");
 	$('.dashboard-preview').hide();
 
 	$('.dashboard-list__item').on('click', function (e) {

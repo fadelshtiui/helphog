@@ -38,7 +38,7 @@ app.controller('dateTimeCtrl', function ($scope) {
 });
 
 function uncheckTimes() {
-    let timeslots = document.querySelectorAll('.timeslot')
+    let timeslots = qsa('.timeslot')
     for (let i = 0; i < timeslots.length; i++) {
         let slot = timeslots[i];
         slot.classList.remove("time-selected");

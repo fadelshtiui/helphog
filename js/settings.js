@@ -48,11 +48,11 @@
     }
 
     function profile() {
-        let payment = document.querySelector(".payment");
+        let payment = qs(".payment");
         payment.classList.add("hidden");
-        let settings = document.querySelector(".settings");
+        let settings = qs(".settings");
         settings.classList.add("hidden");
-        let profile = document.querySelector(".profile");
+        let profile = qs(".profile");
         profile.classList.remove("hidden");
         id("payment").classList.remove("active");
         id("settings").classList.remove("active");
@@ -77,11 +77,11 @@
     }
 
     function payment() {
-        let profile = document.querySelector(".profile");
+        let profile = qs(".profile");
         profile.classList.add("hidden");
-        let settings = document.querySelector(".settings");
+        let settings = qs(".settings");
         settings.classList.add("hidden");
-        let payment = document.querySelector(".payment");
+        let payment = qs(".payment");
         payment.classList.remove("hidden");
         id("payment").classList.add("active");
         id("settings").classList.remove("active");
@@ -89,11 +89,11 @@
     }
 
     function subscription() {
-        let payment = document.querySelector(".payment");
+        let payment = qs(".payment");
         payment.classList.add("hidden");
-        let profile = document.querySelector(".profile");
+        let profile = qs(".profile");
         profile.classList.add("hidden");
-        let settings = document.querySelector(".settings");
+        let settings = qs(".settings");
         settings.classList.add("hidden");
         id("payment").classList.remove("active");
         id("settings").classList.remove("active");
@@ -101,11 +101,11 @@
     }
 
     function privacy() {
-        let payment = document.querySelector(".payment");
+        let payment = qs(".payment");
         payment.classList.add("hidden");
-        let profile = document.querySelector(".profile");
+        let profile = qs(".profile");
         profile.classList.add("hidden");
-        let settings = document.querySelector(".settings");
+        let settings = qs(".settings");
         settings.classList.add("hidden");
         id("payment").classList.remove("active");
         id("settings").classList.remove("active");
@@ -113,11 +113,11 @@
     }
 
     function settings() {
-        let payment = document.querySelector(".payment");
+        let payment = qs(".payment");
         payment.classList.add("hidden");
-        let profile = document.querySelector(".profile");
+        let profile = qs(".profile");
         profile.classList.add("hidden");
-        let settings = document.querySelector(".settings");
+        let settings = qs(".settings");
         settings.classList.remove("hidden");
         id("payment").classList.remove("active");
         id("settings").classList.add("active");
@@ -133,9 +133,9 @@
         id('no').classList.add('secondary')
         id('no').innerText = "No, close modal"
         id('no').onclick = function () {
-            document.querySelector('.modal-wrapper').classList.add('hidden')
+            qs('.modal-wrapper').classList.add('hidden')
         }
-        document.querySelector('.modal-wrapper').classList.remove('hidden')
+        qs('.modal-wrapper').classList.remove('hidden')
         id('yes').onclick = function () {
 
             let data = new FormData();
@@ -151,7 +151,7 @@
     }
 
     function handleDeleteResponse(response) {
-        let warningIcon = document.createElement('i')
+        let warningIcon = ce('i')
         warningIcon.classList.add('fas')
         if (response.sessionerror == "true") {
             resetModal()
@@ -159,21 +159,21 @@
             id('warning-message').innerText = "Please log out and try again.";
             warningIcon.classList.add('fa-exclamation-circle', 'warning')
             id('first').appendChild(warningIcon)
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
         } else if (response.stripeerror == "true") {
             resetModal()
             id('no').classList.add('hidden')
             id('warning-message').innerText = "Please make sure your Stripe balance is zero before deleting your account."
             warningIcon.classList.add('fa-exclamation-circle', 'warning')
             id('first').appendChild(warningIcon)
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
         } else if (response.ordererror == "true") {
             resetModal()
             id('no').classList.add('hidden')
             id('warning-message').innerText = "Please make sure you have no active orders before deleting your account."
             warningIcon.classList.add('fa-exclamation-circle', 'warning')
             id('first').appendChild(warningIcon)
-            document.querySelector('.modal-wrapper').classList.remove('hidden')
+            qs('.modal-wrapper').classList.remove('hidden')
         } else {
             resetModal()
             id('no').classList.add('hidden')
@@ -184,7 +184,7 @@
             id('yes').onclick = function () {
                 window.location.replace("https://helphog.com");
             }
-            document.querySelector(".modal-wrapper").onclick = function () {
+            qs(".modal-wrapper").onclick = function () {
                 window.location.replace("https://helphog.com");
             }
 
@@ -217,7 +217,7 @@ function addressUpdate() {
 
     if (id("address").innerText == '' || id("current-city").innerText == '' || id("current-zip").innerText == '' || id("current-state").innerText == '') {
         id('warning-message').innerText = "Please enter a full address."
-        document.querySelector('.modal-wrapper').classList.remove('hidden')
+        qs('.modal-wrapper').classList.remove('hidden')
         return
     }
 

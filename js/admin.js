@@ -38,7 +38,7 @@ async function populateAllServices() {
      await checkStatus(response)
      response = await response.json()
      response.forEach(service => {
-          let entry = document.createElement('option');
+          let entry = ce('option');
           entry.innerText = service;
           entry.value = service;
           id('all-services').appendChild(entry)
@@ -56,7 +56,7 @@ async function load() {
      response = await response.json()
 
      response.services.forEach(service => {
-          let entry = document.createElement('li');
+          let entry = ce('li');
           entry.addEventListener('dblclick', function () {
                this.remove();
           })
@@ -71,7 +71,7 @@ async function update() {
 
      let servicesArray = [];
 
-     let services = document.querySelectorAll('#provider-services > li');
+     let services = qsa('#provider-services > li');
 
      services.forEach(service => {
           servicesArray.push(service.innerText);
@@ -98,7 +98,7 @@ async function update() {
 }
 
 function add() {
-     let services = document.querySelectorAll('#provider-services > li');
+     let services = qsa('#provider-services > li');
      let found = false;
 
      services.forEach(service => {
@@ -108,7 +108,7 @@ function add() {
      })
 
      if (!found) {
-          let entry = document.createElement('li')
+          let entry = ce('li')
           entry.addEventListener('dblclick', function () {
                this.remove();
           })

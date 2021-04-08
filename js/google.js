@@ -75,7 +75,7 @@ function fillInAddress() {
     id('locationField').classList.add('hidden')
     id('edit').classList.remove('hidden')
     id('current-city').style.color = 'black'
-    document.querySelector('.noaddress').style.color = '#5f6876';
+    qs('.noaddress').style.color = '#5f6876';
   }
 }
 

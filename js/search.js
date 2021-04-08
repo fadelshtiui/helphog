@@ -25,7 +25,7 @@ var suggestion = ["I need my lawn mowed...", "Car needs an oil change...", "Need
                }
           });
 
-          let subcategories = document.querySelectorAll(".toggles button");
+          let subcategories = qsa(".toggles button");
           for (let i = 0; i < subcategories.length; i++) {
                subcategories[i].onclick = searchCategory;
           }
