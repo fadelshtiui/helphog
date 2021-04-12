@@ -25,7 +25,7 @@ foreach ($stmnt->fetchAll() as $row) {
 }
 
 if ($email == "") {
-    $result = $db->query("SELECT * FROM guests;");
+    $result = $db->query("SELECT * FROM {$DB_PREFIX}guests;");
     foreach ($result as $row) {
         if ($row['phone'] == $formatted_phone) {
             $stmnt = $db->prepare("SELECT customer_email FROM {$DB_PREFIX}orders WHERE customer_phone = ?;");

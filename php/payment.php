@@ -231,7 +231,7 @@ function checkAcc(array $creds): bool
     $email = $entry->email;
     $phone = $entry->phone;
 
-    $stmnt = $db->prepare("SELECT banned FROM guests WHERE phone = ?;");
+    $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}guests WHERE phone = ?;");
     $stmnt->execute(array($phone));
     foreach ($stmnt->fetchAll() as $row) {
         if ($row["banned"] == "y") {

@@ -170,7 +170,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             if ($name == "") {
                 $found = false;
                 $name = "";
-                $result = $db->query("SELECT phone FROM guests;");
+                $result = $db->query("SELECT phone FROM {$DB_PREFIX}guests;");
                 foreach ($result as $row) {
                     if ($customer_phone == $row["phone"]) {
                         $found = true;
@@ -178,12 +178,12 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
                 }
                 $current_timestamp = gmdate("Y-m-d H:i:s");
                 if (!$found) {
-                    $sql = "INSERT INTO guests (phone, timestamp) VALUES (?, ?);";
+                    $sql = "INSERT INTO {$DB_PREFIX}guests (phone, timestamp) VALUES (?, ?);";
                     $stmt = $db->prepare($sql);
                     $params = array($customer_phone, $current_timestamp);
                     $stmt->execute($params);
                 } else {
-                    $sql = "UPDATE guests SET timestamp = ? WHERE phone = ?;";
+                    $sql = "UPDATE {$DB_PREFIX}guests SET timestamp = ? WHERE phone = ?;";
                     $stmt = $db->prepare($sql);
                     $params = array($current_timestamp, $customer_phone);
                     $stmt->execute($params);

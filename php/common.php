@@ -1061,13 +1061,13 @@ function dispute_order($order_number)
 
 		$table = "{$DB_PREFIX}login";
 		if (!$email_found) {
-			$result = $db->query("SELECT phone, disputes FROM guests;");
+			$result = $db->query("SELECT phone, disputes FROM {$DB_PREFIX}guests;");
 			foreach ($result as $row) {
 				if ($customer_phone == $row['phone']) {
 					$disputes = $row['disputes'];
 				}
 			}
-			$table = "guests";
+			$table = "{$DB_PREFIX}guests";
 		}
 
 		if ($been_disputed == 'n') {
@@ -1096,7 +1096,7 @@ function dispute_order($order_number)
 						$params = array('y', $customer_email);
 						$stmt->execute($params);
 					} else {
-						$sql = "UPDATE guests SET banned = ? WHERE phone = ?";
+						$sql = "UPDATE {$DB_PREFIX}guests SET banned = ? WHERE phone = ?";
 						$stmt = $db->prepare($sql);
 						$params = array('y', $customer_phone);
 						$stmt->execute($params);
