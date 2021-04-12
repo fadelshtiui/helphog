@@ -342,7 +342,7 @@
 
                     let priceTitle = ce('p')
                     priceTitle.classList.add('profile__stats__title')
-                    priceTitle.style.marginLeft = '28px';
+                    // priceTitle.style.marginLeft = '28px';
                     priceTitle.innerText = 'Price'
 
                     let priceValue = ce('h5')
