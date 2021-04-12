@@ -6,8 +6,8 @@ deployment:
     - /bin/rm -rf $DEPLOYPATH/*
     - /bin/cp -r * $DEPLOYPATH
     - /bin/cp /home/regiuzkk/constants/live/constants.php $DEPLOYPATH/php
-    - /bin/cp /home/regiuzkk/constants/live/keys.js $DEPLOYPATH/js
+    - /bin/cp /home/regiuzkk/constants/live/constants.js $DEPLOYPATH/js
     - /bin/rm -rf $BETAPATH/*
     - /bin/cp -r * $BETAPATH
     - /bin/cp /home/regiuzkk/constants/test/constants.php $BETAPATH/php
-    - /bin/cp /home/regiuzkk/constants/test/keys.js $BETAPATH/js
+    - /bin/cp /home/regiuzkk/constants/test/constants.js $BETAPATH/js
