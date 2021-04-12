@@ -66,14 +66,7 @@ let preloaded = false;
 			.then(checkSignedIn)
 			.catch(console.log);
 		let input = id("pass");
-		id("submit").onclick = submitter;
 		id("stripeportal").onclick = enterstripe;
-		input.addEventListener("keyup", function (event) {
-			event.preventDefault();
-			if (event.keyCode === 13) {
-				id("submit").click();
-			}
-		});
 
 		const inputElement = id('work-phone');
 
@@ -286,12 +279,6 @@ let preloaded = false;
 			.then(res => res.json())
 			.then(handleResponse)
 			.catch(console.log);
-	}
-
-	function submitter() {
-		id("submit").classList.add("loading");
-		$(".panel").hide();
-		reset();
 	}
 
 	function handleResponse(response) {
