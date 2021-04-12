@@ -14,10 +14,6 @@ html {
   animation: fadein 2s;
 }
 
-.container {
-  zoom: 60%;
-}
-
 @keyframes fadein {
   from {
     opacity: 0;
@@ -91,7 +87,7 @@ body {
 .container {
   background: #FFFFFF;
   width: 1000px;
-  height: 800px;
+  height: 40rem;
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
