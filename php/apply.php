@@ -105,7 +105,7 @@ function upload_resume($email) {
 
 function create_stripe_account($email, $db) {
     include 'constants.php';
-    
+
     $account = \Stripe\Account::create([
       'country' => 'US',
       'type' => 'express',
@@ -118,8 +118,8 @@ function create_stripe_account($email, $db) {
     
     $account_links = \Stripe\AccountLink::create([
       'account' => $account_id,
-      'refresh_url' => 'https://' + $SUBDOMAIN + 'helphog.com/quickapply',
-      'return_url' => 'https://' + $SUBDOMAIN + 'helphog.com/php/completeapp.php',
+      'refresh_url' => 'https://' . $SUBDOMAIN . 'helphog.com/quickapply',
+      'return_url' => 'https://' . $SUBDOMAIN . 'helphog.com/php/completeapp.php',
       'type' => 'account_onboarding'
     ]);
     
