@@ -12,3 +12,7 @@ ul {
 .hidden {
     display: none;
 }
+
+button {
+    width: 20% !important;
+}
