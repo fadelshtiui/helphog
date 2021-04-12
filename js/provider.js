@@ -670,7 +670,7 @@ let preloaded = false;
 							button.innerText = "MARK COMPLETED";
 							button.onclick = markCompleted;
 						} else {
-							button.addEventListener("click", toggle);
+							button.onclick = toggle;
 						}
 
 						let button2 = ce("button");
@@ -692,8 +692,10 @@ let preloaded = false;
 						if (order.status == "en" || order.status == "di") {
 							button2.innerText = "REFUND CUSTOMER";
 							button2.onclick = refund;
+						} else if (order.currently_paused == 'y' || order.status == 'st'){
+							button2.onclick = pauseResume
 						} else {
-							button2.addEventListener("click", cancel);
+							button2.onclick = cancelOrder;
 						}
 
 						button.style.marginTop = "9px";
@@ -822,67 +824,42 @@ let preloaded = false;
 		}
 	}
 
-	function cancel() {
+	function cancelOrder() {
 
 		let role = this.dataset.role
 		let ordernumber = this.dataset.ordernumber;
 
-		if (this.innerText == "CANCEL") {
+		id('first').innerText = "Are you sure that you would like to cancel the task?"
+		id('warning-message').innerText = "Please only cancel under extenuating circumstances."
 
-			id('first').innerText = "Are you sure that you would like to cancel the task?"
-			id('warning-message').innerText = "Please only cancel under extenuating circumstances."
+		id('yes').classList.add('primary-red')
+		id('yes').innerText = "Yes, cancel"
 
-			id('yes').classList.add('primary-red')
-			id('yes').innerText = "Yes, cancel"
+		id('no').classList.add('secondary')
+		id('no').innerText = "No, close modal"
+		id('no').onclick = function () {
+			qs('.modal-wrapper').classList.add('hidden')
+		}
 
-			id('no').classList.add('secondary')
-			id('no').innerText = "No, close modal"
-			id('no').onclick = function () {
-				qs('.modal-wrapper').classList.add('hidden')
-			}
+		qs('.modal-wrapper').classList.remove('hidden')
 
-			qs('.modal-wrapper').classList.remove('hidden')
-
-			id('yes').onclick = function () {
-				id('loading').classList.remove('hidden')
-				let data = new FormData();
-
-				let tz = jstz.determine();
-				let timezone = tz.name();
-				data.append("ordernumber", ordernumber);
-				data.append("session", getSession());
-				data.append("tzoffset", timezone);
-				data.append('role', role)
-				let url = "php/providercancel.php";
-				fetch(url, { method: "POST", body: data })
-					.then(checkStatus)
-					.then(res => res.text())
-					.then(function (response) {
-						location.reload();
-					})
-					.catch(console.log);
-			}
-		} else { // this.innerText == "PAUSE" || this.innerText == "RESUME"
-			let type = this.innerText;
-			let url = "php/pause.php";
-			if (type == "RESUME") {
-				url = "php/resume.php"
-			}
-
+		id('yes').onclick = function () {
+			id('loading').classList.remove('hidden')
 			let data = new FormData();
+
+			let tz = jstz.determine();
+			let timezone = tz.name();
 			data.append("ordernumber", ordernumber);
 			data.append("session", getSession());
-
-			this.classList.toggle("paused");
-
-			if (type == "PAUSE") {
-				this.innerText = "RESUME";
-			} else {
-				this.innerText = "PAUSE";
-			}
-
+			data.append("tzoffset", timezone);
+			data.append('role', role)
+			let url = "php/providercancel.php";
 			fetch(url, { method: "POST", body: data })
 				.then(checkStatus)
+				.then(res => res.text())
+				.then(function (response) {
+					location.reload();
+				})
 				.catch(console.log);
 		}
 	}
@@ -918,10 +895,13 @@ let preloaded = false;
 				startStopButton.classList.remove("primary-green")
 				startStopButton.classList.add("primary-red");
 				startStopButton.innerText = "STOP";
+				startStopButton.onclick = toggle;
+
 				startStopButton.nextElementSibling.innerText = "PAUSE";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove("primary-red")
 				startStopButton.nextElementSibling.classList.add("secondary");
+				startStopButton.nextElementSibling.onclick = pauseResume
 
 			}
 		} else { // startStopButton.innerText == "STOP"
@@ -946,22 +926,43 @@ let preloaded = false;
 				startStopButton.classList.remove("primary-red");
 				startStopButton.classList.add("primary-green");
 				startStopButton.innerText = "MARK COMPLETED";
-				startStopButton.removeEventListener("click", toggle);
-				startStopButton.addEventListener("click", markCompleted);
+				startStopButton.onclick = markCompleted;
 
 				startStopButton.nextElementSibling.innerText = "REFUND CUSTOMER";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove('secondary')
 				startStopButton.nextElementSibling.classList.add("primary-red")
-
-				startStopButton.nextElementSibling.removeEventListener("click", cancel);
-				startStopButton.nextElementSibling.addEventListener("click", refund);
+				startStopButton.nextElementSibling.onclick = refund;
 
 			}
 		}
 
+	}
 
+	function pauseResume() {
+		let type = this.innerText;
+		let url = "php/pause.php";
+		if (type == "RESUME") {
+			url = "php/resume.php"
+		}
 
+		let data = new FormData();
+		data.append("ordernumber", ordernumber);
+		data.append("session", getSession());
+
+		// this.classList.toggle("paused");
+
+		if (type == "PAUSE") {
+			this.innerText = "RESUME";
+		} else {
+			this.innerText = "PAUSE";
+		}
+
+		this.onclick = pauseResume
+
+		fetch(url, { method: "POST", body: data })
+			.then(checkStatus)
+			.catch(console.log);
 	}
 
 	function startStop(startStopButton, data) {
@@ -986,9 +987,12 @@ let preloaded = false;
 					startStopButton.innerText = "START";
 					startStopButton.classList.remove("primary-red")
 					startStopButton.classList.add("primary-green")
+					startStopButton.onclick = toggle;
+
 					startStopButton.nextElementSibling.innerText = "CANCEL";
 					startStopButton.nextElementSibling.classList.remove("primary-green")
 					startStopButton.nextElementSibling.classList.add("primary-red")
+					startStopButton.nextElementSibling.onclick = cancelOrder
 
 				}
 			})
