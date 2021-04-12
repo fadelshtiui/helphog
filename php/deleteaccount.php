@@ -1,6 +1,8 @@
 <?php
 
 include 'common.php';
+include 'keys.php';
+
 if (isset($_POST["session"])) {
     
     $db = establish_database();
@@ -50,7 +52,7 @@ if (isset($_POST["session"])) {
                     $stripe_acc = $row["stripe_acc"];
                 }
                             
-                $stripe = new \Stripe\StripeClient(json_decode(file_get_contents("stripe.json"))->be_key);
+                $stripe = new \Stripe\StripeClient($STRIPE_API_KEY);
                 $response = $stripe->accounts->delete(
                     $stripe_acc,
                     []

@@ -1,8 +1,9 @@
 <?php
 include 'common.php';
+include 'keys.php';
 
 $stripe = new \Stripe\StripeClient(
-     json_decode(file_get_contents("stripe.json"))->be_key
+     $STRIPE_API_KEY
 );
 
 if (isset($_POST["ordernumber"]) && isset($_POST["rating"]) && isset($_POST['session'])) {
