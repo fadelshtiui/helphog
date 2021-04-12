@@ -66,6 +66,9 @@ $(window).on('load', async function () {
 
 			let tz = jstz.determine();
 			let timezone = tz.name();
+			
+			qs('.buttonloadicon').classList.remove('hidden')
+			id('submit').disabled = true;
 
 			if (resume) {
 				data.append('resume', resume, resume.name);
@@ -172,6 +175,9 @@ $(window).on('load', async function () {
 	function redirectToStripe(response) {
 
 		if (response == "Please upload PNG, JPG, PDF, DOCX files only" || response == 'Error: an account with this email already exists') {
+		    
+		    qs('.buttonloadicon').classList.add('hidden')
+			id('submit').disabled = false;
 
 			id('warning-message').innerText = response
 			qs('.modal-wrapper').classList.remove('hidden')
