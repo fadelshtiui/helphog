@@ -357,11 +357,11 @@
                     let rateTitle = ce('p')
                     rateTitle.classList.add('profile__stats__title')
                     rateTitle.innerText = 'Rate'
-                    rateTitle.style.marginLeft = '-5px';
+                    // rateTitle.style.marginLeft = '-5px';
 
                     let rateValue = ce('h5')
                     rateValue.classList.add('profile__stats__info')
-                    rateValue.style.marginLeft = '-5px';
+                    // rateValue.style.marginLeft = '-5px';
 
                     let availabilityContainer = ce('div')
                     availabilityContainer.classList.add('profile__stats')
@@ -369,12 +369,12 @@
                     let availabilityTitle = ce('p')
                     availabilityTitle.classList.add('profile__stats__title')
                     availabilityTitle.innerText = 'First hour'
-                    // availabilityTitle.style.marginLeft = '-45px';
+                    availabilityTitle.style.marginLeft = '-19px';
 
                     let availabilityValue = ce('h5')
                     availabilityValue.classList.add('profile__stats__info')
                     availabilityValue.innerText = 'Unavailable'
-                    // availabilityValue.style.marginLeft = '-45px';
+                    availabilityValue.style.marginLeft = '-19px';
 
                     availabilityValue.innerText = 'Full';
 

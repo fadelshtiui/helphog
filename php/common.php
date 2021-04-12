@@ -765,11 +765,11 @@ function mark_completed($order, $message)
 
 ' . $subtotal . '
 
-Cost  -  $' .  money_format('%.2n', $amount) . '
+Subtotal      -  $' .  money_format('%.2n', $amount) . '
 
-Sales tax  -  $' . $tax_collected . '
-_______________
-Total  -  $' . $customer_payment . '
+Sales tax     -  $' . $tax_collected . '
+
+Total Amount  -  $' . $customer_payment . '
 
 If there\'s an issue with the quality of service provided, you may dispute this order by texting back DISPUTE.
 
