@@ -56,6 +56,8 @@ function send_text($phonenumber, $message)
 
 function &payment($order)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 	$result = new \stdClass();
 	$sales_tax_percent = 0;
@@ -121,6 +123,7 @@ function &payment($order)
 
 function pay_provider($order_number)
 {
+    include 'constants.php';
 
 	$stripe = new \Stripe\StripeClient(
 		$STRIPE_API_KEY
@@ -219,6 +222,8 @@ function pay_provider($order_number)
 
 function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 	$name = "";
 	$alerts = "";
@@ -246,6 +251,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 
 function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message, $duration, $secret_key, $tz, $people, $schedule, $tzoffset, $address, $city, $state, $zip, $service)
 {
+    include 'constants.php';
 
 	$db = establish_database();
 
@@ -327,6 +333,8 @@ function minutes_since($time)
 
 function user_exists($session)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
@@ -342,6 +350,8 @@ function user_exists($session)
 
 function validate_customer($order, $session)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$customer_email = "";
@@ -364,6 +374,8 @@ function validate_customer($order, $session)
 
 function validate_customer_phone($order, $phone)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$customer_phone = "";
@@ -380,6 +392,7 @@ function validate_customer_phone($order, $phone)
 
 function address_works_for_provider($address, $email, $orderTime)
 {
+    include 'constants.php';
 
 	$db = establish_database();
 	$distanceMatrix = new \stdClass();
@@ -423,6 +436,8 @@ function address_works_for_provider($address, $email, $orderTime)
 
 function validate_provider_email($order, $email)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$stmnt = $db->prepare("SELECT client_email FROM {$DB_PREFIX}orders WHERE order_number = ?;");
@@ -438,6 +453,8 @@ function validate_provider_email($order, $email)
 
 function validate_provider($order, $session)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$client_email = "";
@@ -475,6 +492,8 @@ function validate_provider($order, $session)
 
 function validate_user($email, $session)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 	$customer_email = "";
 	$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -490,6 +509,8 @@ function validate_user($email, $session)
 
 function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm, $phone)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$first_name_error = "";
@@ -575,6 +596,7 @@ function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm
 
 function pause_order($order)
 {
+    include 'constants.php';
 
 	$db = establish_database();
 
@@ -587,6 +609,8 @@ function pause_order($order)
 
 function resume_order($order)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$time = gmdate('y-m-d H:i:s');
@@ -625,6 +649,7 @@ function resume_order($order)
 
 function start_stop_order($order)
 {
+    include 'constants.php';
 
 	$db = establish_database();
 	$time = gmdate('y-m-d H:i:s');
@@ -663,6 +688,8 @@ function start_stop_order($order)
 
 function getId($email)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 	$stmnt = $db->prepare("SELECT id FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
@@ -674,6 +701,8 @@ function getId($email)
 
 function mark_completed($order, $message)
 {
+    include 'constants.php';
+    
 	$payment_info = payment($order);
 
 	$db = establish_database();
@@ -803,6 +832,7 @@ For future orders with the same provider use #' . $providerId . ' at checkout.';
  */
 function claim_order($email, $order_number, $accept_key, $mobile)
 {
+    include 'constants.php';
 
 	$db = establish_database();
 
@@ -1020,6 +1050,8 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 function dispute_order($order_number)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 
 	$service = "";
@@ -1147,6 +1179,8 @@ function dispute_order($order_number)
 
 function &establish_database()
 {
+    include 'constants.php';
+    
 	$host = 'localhost';
 	$dbname = 'regiuzkk_help';
 	$user = 'regiuzkk_help';
@@ -1167,6 +1201,8 @@ function &establish_database()
 
 function check_session($post_session)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 	$found = false;
 	if ($post_session != "") {
@@ -1182,6 +1218,8 @@ function check_session($post_session)
 
 function get_order_status($order)
 {
+    include 'constants.php';
+    
 	$db = establish_database();
 	$order_status = "nf";
 	$result = $db->query("SELECT order_number FROM {$DB_PREFIX}orders;");
@@ -1203,6 +1241,7 @@ function get_order_status($order)
 
 function send_claimed_notification($order_number, $email, $type, $db, $duration)
 {
+    include 'constants.php';
 
 	$wage = "";
 	$customer_message = "";
