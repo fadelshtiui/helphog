@@ -347,7 +347,7 @@
 
                     let priceValue = ce('h5')
                     priceValue.innerText = '$' + service.cost
-                    priceValue.style.marginLeft = '28px';
+                    // priceValue.style.marginLeft = '28px';
 
                     result.appendChild(priceContainer)
 
@@ -369,12 +369,12 @@
                     let availabilityTitle = ce('p')
                     availabilityTitle.classList.add('profile__stats__title')
                     availabilityTitle.innerText = 'First hour'
-                    availabilityTitle.style.marginLeft = '-45px';
+                    // availabilityTitle.style.marginLeft = '-45px';
 
                     let availabilityValue = ce('h5')
                     availabilityValue.classList.add('profile__stats__info')
                     availabilityValue.innerText = 'Unavailable'
-                    availabilityValue.style.marginLeft = '-45px';
+                    // availabilityValue.style.marginLeft = '-45px';
 
                     availabilityValue.innerText = 'Full';
 
