@@ -26,10 +26,10 @@ if (isset($_POST["email"]) && isset($_POST["phone"])){
     $login = $db->query("SELECT email, phone FROM {$DB_PREFIX}login;");
     foreach ($login as $row) {
         if ($row["email"] == $email) {
-            $email_error = "Email found, please {$DB_PREFIX}login";
+            $email_error = "Email found, please login";
         }
         if ($row["phone"] == $phone) {
-            $phone_error = "Phone found, please {$DB_PREFIX}login";
+            $phone_error = "Phone found, please login";
         }
     }
     
