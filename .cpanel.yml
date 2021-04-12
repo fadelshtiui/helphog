@@ -2,5 +2,8 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/regiuzkk/public_html/
+    - export BETAPATH=/home/regiuzkk/beta.helphog.com/
     - /bin/rm -rf $DEPLOYPATH/*
     - /bin/cp -r * $DEPLOYPATH
+    - /bin/rm -rf $BETAPATH/*
+    - /bin/cp -r * $BETAPATH
