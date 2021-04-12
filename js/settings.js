@@ -182,10 +182,10 @@
             id('yes').innerText = "OK, go home"
             id('yes').classList.add('secondary')
             id('yes').onclick = function () {
-                window.location.replace("https://helphog.com");
+                window.location.replace("/");
             }
             qs(".modal-wrapper").onclick = function () {
-                window.location.replace("https://helphog.com");
+                window.location.replace("/");
             }
 
         }

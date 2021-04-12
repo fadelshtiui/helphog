@@ -17,7 +17,7 @@ window.onload = function () {
 
 
     id('notcancel').onclick = function () {
-        window.location = "https://helphog.com"
+        window.location = "/"
     }
     id('cancel').onclick = cancel
 }
@@ -38,5 +38,5 @@ function cancel() {
     const urlParams = new URLSearchParams(queryString)
     const orderNumber = urlParams.get('ordernumber')
     const secret = urlParams.get('secret')
-    window.location = "https://helphog.com/php/customercancel.php?ordernumber=" + orderNumber + "&secret=" + secret
+    window.location = "https://" + SUBDOMAIN + "helphog.com/php/customercancel.php?ordernumber=" + orderNumber + "&secret=" + secret
 }

@@ -307,7 +307,7 @@ Message: ' . $message . '
 
 Tap on the following link to obtain this job:
 
-https://helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key));
+https://' . $SUBDOMAIN . 'helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key));
 	}
 }
 
@@ -911,7 +911,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 
 		if ($email == $client_email) {
-			return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 		}
 
 		$secondary_providers = "";
@@ -924,11 +924,11 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		if (!$first_provider) {
 
 			if ($people == 1) {
-				return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+				return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 			} else {
 
 				if (strpos($secondary_providers, $email) !== false) {
-					return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 				}
 
 				$num_secondary = 0;
@@ -939,7 +939,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				}
 
 				if ($num_secondary + 1 >= $people) {
-					return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 				} else {
 
 					$new_secondary = "";
@@ -985,7 +985,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 					$stmt->execute($params);
 
 					send_claimed_notification($order_number, $email, "secondary", $db, $duration);
-					return '<script>window.location.href = "https://helphog.com/success?You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
+					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
 				}
 			}
 		} else { // first provider
@@ -1037,15 +1037,15 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 			send_claimed_notification($order_number, $email, "primary", $db, $duration);
 
 			if ($mobile) {
-				return '<script>window.location.href = "https://helphog.com/mobileclaimed";</script>';
+				return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobileclaimed";</script>';
 			}
-			return '<script>window.location.href = "https://helphog.com/success?message=You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
+			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?message=You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
 		}
 	}
 	if ($mobile) {
-		return '<script>window.location.href = "https://helphog.com/mobiledecline";</script>';
+		return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobiledecline";</script>';
 	}
-	return '<script>window.location.href = "https://helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+	return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 }
 
 function dispute_order($order_number)
@@ -1310,6 +1310,8 @@ Message from Customer: ' . $customer_message));
 
 function get_confirmation_email($order_number, $cost, $service, $name, $schedule, $customer_message, $address, $providers, $subtotal, $cancel_key, $provider)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -1375,7 +1377,7 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
                     <p><span style="color: #1c2029;">Providers:  </span>' . $providers . $provider . '</p>
                     <p><span style="color: #1c2029;">Subtotal:  </span>' . $subtotal . '</p>
                     <p><span style="color: #1c2029;">Maximum Cost:  </span>' . $cost . '</p>
-                    </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#e47d68"><a href="https://www.helphog.com/cancel?ordernumber=' . $order_number . '&secret=' . $cancel_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
+                    </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#e47d68"><a href="https://www.' . $SUBDOMAIN . 'helphog.com/cancel?ordernumber=' . $order_number . '&secret=' . $cancel_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
                Cancel Order
                </a></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
 
@@ -1412,7 +1414,7 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1426,6 +1428,8 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
 
 function get_signup_email($email, $firstname, $secret_key)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -1484,7 +1488,7 @@ function get_signup_email($email, $firstname, $secret_key)
         			<p>This email account (' . $email . ') was used to create an account on helphog.com</p>
         			<p>If this was your request, please verify your account by clicking the following link:</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#1ecd97">
-        			<a href="https://helphog.com/php/verify.php?email=' . $email . '&secret=' . $secret_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
+        			<a href="https://' . $SUBDOMAIN . 'helphog.com/php/verify.php?email=' . $email . '&secret=' . $secret_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
         			Verify Account
         			</a></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1520,7 +1524,7 @@ function get_signup_email($email, $firstname, $secret_key)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://' . $SUBDOMAIN . 'www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1534,6 +1538,8 @@ function get_signup_email($email, $firstname, $secret_key)
 
 function get_reset_email($email, $random_hash, $name)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -1592,7 +1598,7 @@ function get_reset_email($email, $random_hash, $name)
         			<p>The password for your account (' . $email . ') on helphog.com is attempting to be reset.</p>
         			<p>If this was your request, please reset your password using the link below:</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#1ecd97">
-        			<a href="https://helphog.com/reset?code=' . $random_hash . '"style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
+        			<a href="https://' . $SUBDOMAIN . 'helphog.com/reset?code=' . $random_hash . '"style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
         			Reset Password
         			</a></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1628,7 +1634,7 @@ function get_reset_email($email, $random_hash, $name)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a> HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a> HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1642,6 +1648,8 @@ function get_reset_email($email, $random_hash, $name)
 
 function get_claimed_email($customer_message, $service, $schedule, $address, $price, $customer_email, $customer_phone, $name, $duration)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -1706,7 +1714,7 @@ function get_claimed_email($customer_message, $service, $schedule, $address, $pr
                     <p><span style="color: #1c2029;">Salary:  </span>' . $price . '</p>
                     <p><span style="color: #1c2029;">Customer Phone:  </span>' . $customer_phone . '</p>
                     <p><span style="color: #1c2029;">Customer Email:  </span>' . $customer_email . '</p><br>
-        			<p><span style="color: #1c2029;">To manage your order click <a href="https://helphog.com/provider">here</a> </span></p>
+        			<p><span style="color: #1c2029;">To manage your order click <a href="https://' . $SUBDOMAIN . 'helphog.com/provider">here</a> </span></p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
         			<![endif]-->
@@ -1741,7 +1749,7 @@ function get_claimed_email($customer_message, $service, $schedule, $address, $pr
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1756,6 +1764,8 @@ function get_claimed_email($customer_message, $service, $schedule, $address, $pr
 
 function get_claim_email($service, $schedule, $location, $client, $order_number, $price, $customer_message, $name, $duration, $secret_key)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -1819,7 +1829,7 @@ function get_claim_email($service, $schedule, $location, $client, $order_number,
                     <p><span style="color: #1c2029;">Location:  </span>' . $location . '</p>
                     <p><span style="color: #1c2029;">Salary:  </span>' . $price . '</p>
                </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#1ecd97">
-               <a href="https://www.helphog.com/php/accept.php?email=' . $client . '&ordernumber=' . $order_number . '&secret=' . $secret_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
+               <a href="https://www.' . $SUBDOMAIN . 'helphog.com/php/accept.php?email=' . $client . '&ordernumber=' . $order_number . '&secret=' . $secret_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
                Claim Task
                </a></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
 
@@ -1856,7 +1866,7 @@ function get_claim_email($service, $schedule, $location, $client, $order_number,
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1870,6 +1880,8 @@ function get_claim_email($service, $schedule, $location, $client, $order_number,
 
 function get_address_email($to_send, $name)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -1961,7 +1973,7 @@ function get_address_email($to_send, $name)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -1975,6 +1987,8 @@ function get_address_email($to_send, $name)
 
 function get_cancel_email($name, $service, $order_number, $schedule)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2065,7 +2079,7 @@ function get_cancel_email($name, $service, $order_number, $schedule)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2079,6 +2093,8 @@ function get_cancel_email($name, $service, $order_number, $schedule)
 
 function noProviderFound($service, $order, $schedule, $name)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2169,7 +2185,7 @@ function noProviderFound($service, $order, $schedule, $name)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2183,6 +2199,8 @@ function noProviderFound($service, $order, $schedule, $name)
 
 function noPartnersFound($service, $order, $schedule, $name)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2273,7 +2291,7 @@ function noPartnersFound($service, $order, $schedule, $name)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2286,6 +2304,8 @@ function noPartnersFound($service, $order, $schedule, $name)
 
 function customer_cancel($message, $name)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2376,7 +2396,7 @@ function customer_cancel($message, $name)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2390,6 +2410,8 @@ function customer_cancel($message, $name)
 
 function get_refund_email($name, $service, $order, $schedule)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2480,7 +2502,7 @@ function get_refund_email($name, $service, $order, $schedule)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2493,6 +2515,8 @@ function get_refund_email($name, $service, $order, $schedule)
 
 function sendNoChargeEmail($service, $order_number, $schedule, $name)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2583,7 +2607,7 @@ function sendNoChargeEmail($service, $order_number, $schedule, $name)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2596,6 +2620,8 @@ function sendNoChargeEmail($service, $order_number, $schedule, $name)
 
 function get_notice_email($name, $message)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2686,7 +2712,7 @@ function get_notice_email($name, $message)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2700,6 +2726,8 @@ function get_notice_email($name, $message)
 
 function get_dispute_email($name, $service, $schedule, $order)
 {
+	include 'constants.php';
+
 	return '<body style="background: #F9F9F9;">
         	<div style="background-color:#F9F9F9;">
         	<div style="margin:0px auto;max-width:640px;background:transparent;">
@@ -2790,7 +2818,7 @@ function get_dispute_email($name, $service, $schedule, $order)
         			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
         			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-        			<a href="https://www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			<a href="https://' . $SUBDOMAIN . 'www.helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
         			</div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
@@ -2803,6 +2831,8 @@ function get_dispute_email($name, $service, $schedule, $order)
 
 function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total, $providerId)
 {
+	include 'constants.php';
+	
 	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -3250,7 +3280,7 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
           <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
             <tr>
               <td class="email-masthead">
-                <a href="https://helphog.com/results?search=' . $service . '" class="f-fallback email-masthead_name">
+                <a href="https://' . $SUBDOMAIN . 'helphog.com/results?search=' . $service . '" class="f-fallback email-masthead_name">
                 ' . $service . '
               </a>
               </td>
@@ -3307,7 +3337,7 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
                           </tr>
                         </table>
                         <p>For future orders with the same provider use #' . $providerId . ' at checkout.</p>
-                        <p>If you have any questions about this receipt, simply reply to this email or reach out to our <a href="helphog.com/contact">support team</a> for help.</p>
+                        <p>If you have any questions about this receipt, simply reply to this email or reach out to our <a href="' . $SUBDOMAIN . 'helphog.com/contact">support team</a> for help.</p>
                         <p>Cheers,
                           <br>The HelpHog Team</p>
                         <!-- Action -->

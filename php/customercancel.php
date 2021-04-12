@@ -76,7 +76,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($is_post_request) {
                 echo 'error?message=This+order+has+already+been+canceled';
             } else {
-                echo '<script>window.location.href = "https://helphog.com/error?message=This+order+has+already+been+canceled";</script>';
+                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=This+order+has+already+been+canceled";</script>';
             }
 
 
@@ -85,7 +85,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($is_post_request) {
                 echo 'ordererror';
             } else {
-                echo '<script>window.location.href = "https://helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
+                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
             }
 
         } else {
@@ -177,7 +177,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($is_post_request) {
                 echo 'ordercanceled';
             } else {
-                echo '<script>window.location.href = "https://helphog.com/ordercanceled";</script>';
+                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/ordercanceled";</script>';
             }
 
         }

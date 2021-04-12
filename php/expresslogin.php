@@ -17,7 +17,7 @@ if (isset($_POST["session"])) {
     
     $loginlink = $stripe->accounts->createloginLink(
         $stripe_acc,
-        ['redirect_url' => 'https://helphog.com/provider']
+        ['redirect_url' => 'https://' . $SUBDOMAIN . 'helphog.com/provider']
     );
     
     echo $loginlink->url;

@@ -24,9 +24,9 @@ if (isset($_GET["email"]) && isset($_GET["secret"])) {
         $stmt = $db->prepare($sql);
         $params = array("y", $email);
         $stmt->execute($params);
-        echo '<script>window.location.href = "https://helphog.com/success?message=You+have+successfully+registered+for+HelpHog!&link=signin&content=you+can+now+login+here";</script>';
+        echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?message=You+have+successfully+registered+for+HelpHog!&link=signin&content=you+can+now+login+here";</script>';
     } else {
-        echo '<script>window.location.href = "https://helphog.com/404";</script>';
+        echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/404";</script>';
     }
     
     

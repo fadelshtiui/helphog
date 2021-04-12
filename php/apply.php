@@ -116,8 +116,8 @@ function create_stripe_account($email, $db) {
     
     $account_links = \Stripe\AccountLink::create([
       'account' => $account_id,
-      'refresh_url' => 'https://helphog.com/quickapply',
-      'return_url' => 'https://helphog.com/php/completeapp.php',
+      'refresh_url' => 'https://' + $SUBDOMAIN + 'helphog.com/quickapply',
+      'return_url' => 'https://' + $SUBDOMAIN + 'helphog.com/php/completeapp.php',
       'type' => 'account_onboarding'
     ]);
     
