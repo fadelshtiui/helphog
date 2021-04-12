@@ -28,6 +28,8 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
 
 function &check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId, $session)
 {
+    include 'constants.php';
+    
     $json = new stdClass();
     $json->availability = '';
     $json->error = '';
