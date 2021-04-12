@@ -38,5 +38,5 @@ function cancel() {
     const urlParams = new URLSearchParams(queryString)
     const orderNumber = urlParams.get('ordernumber')
     const secret = urlParams.get('secret')
-    window.location = "https://" + SUBDOMAIN + "helphog.com/php/customercancel.php?ordernumber=" + orderNumber + "&secret=" + secret
+    window.location = "php/customercancel.php?ordernumber=" + orderNumber + "&secret=" + secret
 }
