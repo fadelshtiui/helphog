@@ -104,6 +104,8 @@ function upload_resume($email) {
 }
 
 function create_stripe_account($email, $db) {
+    include 'constants.php';
+    
     $account = \Stripe\Account::create([
       'country' => 'US',
       'type' => 'express',
