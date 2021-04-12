@@ -1,4 +1,4 @@
-var stripe = Stripe('pk_test_51H77jdJsNEOoWwBJ6SbYEnMmPPCnGhzuVXyWzoUE3UYIpC3jTqrSUg3XjqFoswJ9Eh4cfrrVTDcGkgsmB68Ii59800u7xkwABp');
+var stripe = Stripe('pk_live_51H77jdJsNEOoWwBJ7Rhp3s4qxRaio4fFXEhm9FcJ7cazHkTbyFENYLXhLqZKdUBoCIT5QO77odFxkwKhkYqZ48La000JNX6geu');
 
 var elements = stripe.elements();
 var cardElement = elements.create('card');

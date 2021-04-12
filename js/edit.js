@@ -724,7 +724,7 @@ async function stripe(service, duration, people, cost) {
      let tz = jstz.determine();
      let timezone = tz.name();
 
-     var stripe = Stripe("pk_test_51H77jdJsNEOoWwBJ6SbYEnMmPPCnGhzuVXyWzoUE3UYIpC3jTqrSUg3XjqFoswJ9Eh4cfrrVTDcGkgsmB68Ii59800u7xkwABp");
+     var stripe = Stripe("pk_live_51H77jdJsNEOoWwBJ7Rhp3s4qxRaio4fFXEhm9FcJ7cazHkTbyFENYLXhLqZKdUBoCIT5QO77odFxkwKhkYqZ48La000JNX6geu");
      // The items the customer wants to buy
      var purchase = {
           items: [

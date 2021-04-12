@@ -50,7 +50,7 @@ if (isset($_POST["session"])) {
                     $stripe_acc = $row["stripe_acc"];
                 }
                             
-                $stripe = new \Stripe\StripeClient('sk_test_51H77jdJsNEOoWwBJR4lupAfmJ6ZLABBPCWvwiNqv99a9rr0mfhyNZ1L823ae56gIxJLUEZKDvXKepbCN1lIwPXp200KKA5Ni5p');
+                $stripe = new \Stripe\StripeClient('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');
                 $response = $stripe->accounts->delete(
                     $stripe_acc,
                     []
