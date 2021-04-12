@@ -4,7 +4,7 @@ include 'common.php';
 
 $db = establish_database();
 
-$result = $db->query("SELECT * FROM orders;");
+$result = $db->query("SELECT * FROM {$DB_PREFIX}orders;");
 foreach ($result as $row) {
     $order_number = $row["order_number"];
     $service = $row["service"];

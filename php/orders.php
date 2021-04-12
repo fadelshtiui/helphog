@@ -11,7 +11,7 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
 
         $email = "";
 
-        $stmnt = $db->prepare("SELECT email FROM login WHERE session = ?;");
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
         $stmnt->execute(array($post_session));
         foreach($stmnt->fetchAll() as $row) {
             $email = $row['email'];
@@ -19,7 +19,7 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
 
         $response = new \stdClass();
         $orders_array = array();
-        $stmnt = $db->prepare("SELECT * FROM orders WHERE customer_email = ? ORDER BY timestamp;");
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE customer_email = ? ORDER BY timestamp;");
         $stmnt->execute(array($email));
         foreach($stmnt->fetchAll() as $row) {
 
@@ -50,7 +50,7 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
             if ($row['status'] != 'pe' ) {
 
                 $entry->provider = "";
-                $stmnt = $db->prepare("SELECT firstname, id FROM login WHERE email = ?;");
+                $stmnt = $db->prepare("SELECT firstname, id FROM {$DB_PREFIX}login WHERE email = ?;");
                 $stmnt->execute(array($row["client_email"]));
                 foreach($stmnt->fetchAll() as $row2) {
                     $entry->provider = $row2['firstname'];

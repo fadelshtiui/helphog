@@ -10,7 +10,7 @@ if (isset($_GET["email"]) && isset($_GET["secret"])) {
     
     $found = false;
     
-    $stmnt = $db->prepare("SELECT verify_key FROM login WHERE email = ?;");
+    $stmnt = $db->prepare("SELECT verify_key FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($email));
     foreach($stmnt->fetchAll() as $row) {
         if ($row['verify_key'] === $verify_key) {
@@ -20,11 +20,11 @@ if (isset($_GET["email"]) && isset($_GET["secret"])) {
     
     if ($found) {
         $db = establish_database();
-        $sql = "UPDATE login SET verified = ?  WHERE email = ?";
+        $sql = "UPDATE {$DB_PREFIX}login SET verified = ?  WHERE email = ?";
         $stmt = $db->prepare($sql);
         $params = array("y", $email);
         $stmt->execute($params);
-        echo '<script>window.location.href = "https://helphog.com/success?message=You+have+successfully+registered+for+HelpHog!&link=signin&content=you+can+now+login+here";</script>';
+        echo '<script>window.location.href = "https://helphog.com/success?message=You+have+successfully+registered+for+HelpHog!&link=signin&content=you+can+now+{$DB_PREFIX}login+here";</script>';
     } else {
         echo '<script>window.location.href = "https://helphog.com/404";</script>';
     }

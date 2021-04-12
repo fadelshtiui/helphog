@@ -75,7 +75,7 @@ foreach ($stmnt->fetchAll() as $row) {
      $available = 0.5;
 
      $all_emails = array();
-     $stmnt = $db->prepare("SELECT email FROM login WHERE services LIKE ?;");
+     $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE services LIKE ?;");
      $stmnt->execute(array('%' . $service . '%'));
      foreach ($stmnt->fetchAll() as $row) {
           array_push($all_emails, $row["email"]);
@@ -111,7 +111,7 @@ foreach ($stmnt->fetchAll() as $row) {
 
           $session = $_POST['session'];
 
-          $stmnt = $db->prepare("SELECT address, state, city, zip, radius FROM login WHERE session = ?;");
+          $stmnt = $db->prepare("SELECT address, state, city, zip, radius FROM {$DB_PREFIX}login WHERE session = ?;");
           $stmnt->execute(array($session));
           $radius = 0;
           $address = "";
@@ -160,7 +160,7 @@ foreach ($stmnt->fetchAll() as $row) {
                $available = 0;
                foreach ($all_emails as $email) {
                     $allzeros = false;
-                    $stmnt = $db->prepare("SELECT availability, phone, timezone FROM login WHERE email = ?;");
+                    $stmnt = $db->prepare("SELECT availability, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($email));
                     foreach($stmnt->fetchAll() as $row) {
                         $full_availability = $row['availability'];

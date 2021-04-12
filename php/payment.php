@@ -172,7 +172,7 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
         $order_number = (time() + mt_rand()) % 100000;
         if ($order_number >= 10000) {
             $unique = true;
-            $result = $db->query("SELECT order_number FROM orders");
+            $result = $db->query("SELECT order_number FROM {$DB_PREFIX}orders");
             foreach ($result as $row) {
                 if ($order_number == $row["order_number"]) {
                     $unique = false;
@@ -239,7 +239,7 @@ function checkAcc(array $creds): bool
         }
     }
 
-    $stmnt = $db->prepare("SELECT banned FROM login WHERE email = ?;");
+    $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($email));
     foreach ($stmnt->fetchAll() as $row) {
         if ($row["banned"] == "y") {

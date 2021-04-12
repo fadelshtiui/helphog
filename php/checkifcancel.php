@@ -15,10 +15,10 @@ if (isset($_POST["ordernumber"]) && (isset($_POST['secret']) || isset($_POST['se
     $sql = "";
     $params = array();
     if (isset($_POST['session']) && validate_customer($order_number, $session)) {
-        $sql = "SELECT * FROM orders WHERE order_number = ?;";
+        $sql = "SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;";
         $params = array($order_number);
     } else {
-        $sql = "SELECT * FROM orders WHERE order_number = ? AND cancel_key = ?;";
+        $sql = "SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ? AND cancel_key = ?;";
         $params = array($order_number, $cancel_key);
     }
     

@@ -17,7 +17,7 @@ if (isset($_POST["service"]) && isset($_POST["id"])) {
     }
 
     $available = 0;
-    $stmnt2 = $db->prepare("SELECT availability FROM login WHERE type='Business' AND services LIKE ?;");
+    $stmnt2 = $db->prepare("SELECT availability FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ?;");
     $stmnt2->execute(array('%' . $service . '%'));
     foreach($stmnt2->fetchAll() as $row2) {
         if (strpos($row2['availability'], '1') !== false) {

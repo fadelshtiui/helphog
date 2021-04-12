@@ -10,7 +10,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
             
             $target = "../../uploads/receipts/" . $order_number;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target . '.' . $info)) {
-                $sql = "UPDATE orders SET uploaded = ? WHERE order_number = ?";
+                $sql = "UPDATE {$DB_PREFIX}orders SET uploaded = ? WHERE order_number = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($info, $order_number);
                 $stmt->execute($params);
@@ -52,7 +52,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
                 if (floatval($confidence) < 0.75){
                     echo "Receipt image quality was too poor, please upload a clearer picture of the receipt";
                 }else{
-                    $sql = "UPDATE orders SET expenditure = ? WHERE order_number = ?";
+                    $sql = "UPDATE {$DB_PREFIX}orders SET expenditure = ? WHERE order_number = ?";
                     $stmt = $db->prepare($sql);
                     $params = array($body->totalAmount->data, $order_number);
                     $stmt->execute($params);

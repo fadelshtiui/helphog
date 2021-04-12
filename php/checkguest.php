@@ -23,13 +23,13 @@ if (isset($_POST["email"]) && isset($_POST["phone"])){
         $phone_error = "Phone number is empty";
     }
         
-    $login = $db->query("SELECT email, phone FROM login;");
+    $login = $db->query("SELECT email, phone FROM {$DB_PREFIX}login;");
     foreach ($login as $row) {
         if ($row["email"] == $email) {
-            $email_error = "Email found, please login";
+            $email_error = "Email found, please {$DB_PREFIX}login";
         }
         if ($row["phone"] == $phone) {
-            $phone_error = "Phone found, please login";
+            $phone_error = "Phone found, please {$DB_PREFIX}login";
         }
     }
     

@@ -29,7 +29,7 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
             
             $name = "";
             $to_send = "";
-            $stmnt = $db->prepare("SELECT * FROM login WHERE session = ?;");
+            $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ?;");
             $stmnt->execute(array($session));
             foreach($stmnt->fetchAll() as $row) {
                 
@@ -52,9 +52,9 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
                 
             }
             
-            $sql = "UPDATE login SET address = :address, city = :city, zip = :zip, state = :state  WHERE session = :session";
+            $sql = "UPDATE {$DB_PREFIX}login SET address = :address, city = :city, zip = :zip, state = :state  WHERE session = :session";
             if ($no_zip) {
-                $sql = "UPDATE login SET address = :address, city = :city, zip = :zip, state = :state, work_zip = :work_zip  WHERE session = :session";
+                $sql = "UPDATE {$DB_PREFIX}login SET address = :address, city = :city, zip = :zip, state = :state, work_zip = :work_zip  WHERE session = :session";
             }
             $stmt = $db->prepare($sql);
             
@@ -65,19 +65,19 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
             $stmt->execute($params);
             
             if ($no_address) {
-                $sql = "UPDATE login SET work_address = ? WHERE session = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET work_address = ? WHERE session = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($address, $session);
                 $stmt->execute($params);
             }
             if ($no_city) {
-                $sql = "UPDATE login SET work_city = ? WHERE session = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET work_city = ? WHERE session = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($city, $session);
                 $stmt->execute($params);
             }
             if ($no_state) {
-                $sql = "UPDATE login SET work_state = ? WHERE session = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET work_state = ? WHERE session = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($state, $session);
                 $stmt->execute($params);

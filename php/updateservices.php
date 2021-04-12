@@ -23,7 +23,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["service
     		}
 		}
 		
-		$sql = "UPDATE login SET services = ? WHERE email = ?";
+		$sql = "UPDATE {$DB_PREFIX}login SET services = ? WHERE email = ?";
         $stmt = $db->prepare($sql);
         $params = array($services_string, $email);
         $stmt->execute($params);

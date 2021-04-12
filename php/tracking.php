@@ -10,7 +10,7 @@ if (isset($_POST["order"]) && isset($_POST['email'])) {
     $response = new \stdClass();
     
     $found = false;
-    $result = $db->query("SELECT order_number FROM orders");
+    $result = $db->query("SELECT order_number FROM {$DB_PREFIX}orders");
     foreach($result as $row) {
         if ($row["order_number"] == $order) {
             $found = true;
@@ -25,7 +25,7 @@ if (isset($_POST["order"]) && isset($_POST['email'])) {
     } else {
         
         $found = false;
-        $stmnt = $db->prepare("SELECT customer_email FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT customer_email FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             if ($email == $row['customer_email']) {
@@ -43,7 +43,7 @@ if (isset($_POST["order"]) && isset($_POST['email'])) {
             $service = "";
             $status = "";
             $cancelled = "false";
-            $stmnt = $db->prepare("SELECT service, status FROM orders WHERE order_number = ?;");
+            $stmnt = $db->prepare("SELECT service, status FROM {$DB_PREFIX}orders WHERE order_number = ?;");
             $stmnt->execute(array($order));
             foreach($stmnt->fetchAll() as $row) {
                 $service = $row['service'];

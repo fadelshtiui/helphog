@@ -31,7 +31,7 @@ if (isset($_POST["firstname"]) && isset($_POST["lastname"]) && isset($_POST["ema
         
         if ($create_account == 'true') {
             
-            $sql = "INSERT INTO login (firstname, lastname, email, password, phone, type, verified, zip, verify_key) VALUES (:firstname, :lastname, :email, :password, :phone, :type, :verified, :zip, :verify_key);";
+            $sql = "INSERT INTO {$DB_PREFIX}login (firstname, lastname, email, password, phone, type, verified, zip, verify_key) VALUES (:firstname, :lastname, :email, :password, :phone, :type, :verified, :zip, :verify_key);";
             $stmt = $db->prepare($sql);
             $params = array("firstname" => $firstname, "lastname" => $lastname, "email" => $email, "password" => password_hash($password, PASSWORD_DEFAULT), "phone" => $phone, "type" => "Personal", "verified" => "n", "zip" => $zip, "verify_key" => $secret_key);
             $stmt->execute($params);

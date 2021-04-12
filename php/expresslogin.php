@@ -9,13 +9,13 @@ if (isset($_POST["session"])) {
     $db = establish_database();
     $session = trim($_POST["session"]);
     $stripe_acc = "";
-    $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE session = ?;");
+    $stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE session = ?;");
     $stmnt->execute(array($session));
     foreach($stmnt->fetchAll() as $row) {
         $stripe_acc = $row['stripe_acc'];
     }
     
-    $loginlink = $stripe->accounts->createLoginLink(
+    $loginlink = $stripe->accounts->create{$DB_PREFIX}loginLink(
         $stripe_acc,
         ['redirect_url' => 'https://helphog.com/provider']
     );

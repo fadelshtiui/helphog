@@ -65,7 +65,7 @@ function &payment($order)
 	$wage = "";
 	$prorated = "";
 	$worked_time = 0;
-	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$sales_tax_percent = $row['sales_tax_percent'];
@@ -132,7 +132,7 @@ function pay_provider($order_number)
 	$schedule = "";
 	$secondary_providers = "";
 	$provider_email = "";
-	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order_number));
 	foreach ($stmnt->fetchAll() as $row) {
 		$service = $row["service"];
@@ -149,7 +149,7 @@ function pay_provider($order_number)
 	if ($payment_info->customer_payment < 0.50 && $status != 'pd' && $status == 'mc') {
 
 		$name = "";
-		$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($customer_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$name = ' ' . $row['firstname'];
@@ -168,7 +168,7 @@ function pay_provider($order_number)
 			[]
 		);
 
-		$sql1 = "UPDATE orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
+		$sql1 = "UPDATE {$DB_PREFIX}orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
 		$stmt1 = $db->prepare($sql1);
 		$params1 = array(0, $order_number);
 		$stmt1->execute($params1);
@@ -177,7 +177,7 @@ function pay_provider($order_number)
 		$intent->capture(['amount_to_capture' => ceil($payment_info->customer_payment * 100)]);
 
 		$stripe_acc = "";
-		$stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($provider_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$stripe_acc = $row['stripe_acc'];
@@ -195,7 +195,7 @@ function pay_provider($order_number)
 		foreach ($providers as $provider) {
 			if ($provider != "") {
 				$secondary_stripe_acc = "";
-				$stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
+				$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
 				$stmnt->execute(array($provider));
 				foreach ($stmnt->fetchAll() as $row) {
 					$secondary_stripe_acc = $row["stripe_acc"];
@@ -210,7 +210,7 @@ function pay_provider($order_number)
 			}
 		}
 
-		$sql = "UPDATE orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
+		$sql = "UPDATE {$DB_PREFIX}orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
 		$stmt = $db->prepare($sql);
 		$params = array($payment_info->tax_collected, $order_number);
 		$stmt->execute($params);
@@ -222,7 +222,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 	$db = establish_database();
 	$name = "";
 	$alerts = "";
-	$stmnt = $db->prepare("SELECT firstname, alerts FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT firstname, alerts FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($client));
 	foreach ($stmnt->fetchAll() as $row) {
 		$name = ' ' . $row['firstname'];
@@ -250,7 +250,7 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 	$db = establish_database();
 
 	$alerts = "";
-	$stmnt = $db->prepare("SELECT alerts FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT alerts FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	foreach ($stmnt->fetchAll() as $row) {
 		$alerts = $row['alerts'];
@@ -329,7 +329,7 @@ function user_exists($session)
 {
 	$db = establish_database();
 
-	$result = $db->query("SELECT session FROM login;");
+	$result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
 	foreach ($result as $row) {
 		if (hash_equals($row['session'], $session)) {
 			return true;
@@ -345,13 +345,13 @@ function validate_customer($order, $session)
 	$db = establish_database();
 
 	$customer_email = "";
-	$stmnt = $db->prepare("SELECT customer_email FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT customer_email FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$customer_email = $row['customer_email'];
 	}
 
-	$stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($customer_email));
 	foreach ($stmnt->fetchAll() as $row) {
 		if (hash_equals($row['session'], $session)) {
@@ -367,7 +367,7 @@ function validate_customer_phone($order, $phone)
 	$db = establish_database();
 
 	$customer_phone = "";
-	$stmnt = $db->prepare("SELECT customer_phone FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT customer_phone FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		if (hash_equals($row['customer_phone'], $phone)) {
@@ -383,7 +383,7 @@ function address_works_for_provider($address, $email, $orderTime)
 
 	$db = establish_database();
 	$distanceMatrix = new \stdClass();
-	$stmnt = $db->prepare("SELECT work_address, work_state, work_city, work_zip, radius FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT work_address, work_state, work_city, work_zip, radius FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	$radius = 0;
 	$work_address = "";
@@ -425,7 +425,7 @@ function validate_provider_email($order, $email)
 {
 	$db = establish_database();
 
-	$stmnt = $db->prepare("SELECT client_email FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT client_email FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		if (hash_equals($row['client_email'], $email)) {
@@ -441,7 +441,7 @@ function validate_provider($order, $session)
 	$db = establish_database();
 
 	$client_email = "";
-	$stmnt = $db->prepare("SELECT client_email, secondary_providers FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT client_email, secondary_providers FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$client_email = $row['client_email'];
@@ -461,7 +461,7 @@ function validate_provider($order, $session)
 	}
 
 	foreach ($all_providers as $provider) {
-		$stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($provider));
 		foreach ($stmnt->fetchAll() as $row) {
 			if (hash_equals($row['session'], $session)) {
@@ -477,7 +477,7 @@ function validate_user($email, $session)
 {
 	$db = establish_database();
 	$customer_email = "";
-	$stmnt = $db->prepare("SELECT session FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	foreach ($stmnt->fetchAll() as $row) {
 		if (hash_equals($row['session'], $session)) {
@@ -520,7 +520,7 @@ function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm
 	if ($email == "") {
 		$email_error = "empty";
 	}
-	$result = $db->query("SELECT email FROM login;");
+	$result = $db->query("SELECT email FROM {$DB_PREFIX}login;");
 	foreach ($result as $row) {
 		if ($email === $row['email']) {
 			$email_error = "found";
@@ -554,7 +554,7 @@ function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm
 	if ($phone == "") {
 		$phone_error = "empty";
 	}
-	$result = $db->query("SELECT phone FROM login;");
+	$result = $db->query("SELECT phone FROM {$DB_PREFIX}login;");
 	foreach ($result as $row) {
 		if ($phone === $row['phone']) {
 			$phone_error = "found";
@@ -579,7 +579,7 @@ function pause_order($order)
 	$db = establish_database();
 
 	$time = gmdate('y-m-d H:i:s');
-	$sql = "UPDATE orders SET pause = ?, currently_paused = ? WHERE order_number = ?";
+	$sql = "UPDATE {$DB_PREFIX}orders SET pause = ?, currently_paused = ? WHERE order_number = ?";
 	$stmt = $db->prepare($sql);
 	$params = array($time, 'y', $order);
 	$stmt->execute($params);
@@ -590,14 +590,14 @@ function resume_order($order)
 	$db = establish_database();
 
 	$time = gmdate('y-m-d H:i:s');
-	$sql = "UPDATE orders SET resume = ?, currently_paused = ? WHERE order_number = ?";
+	$sql = "UPDATE {$DB_PREFIX}orders SET resume = ?, currently_paused = ? WHERE order_number = ?";
 	$stmt = $db->prepare($sql);
 	$params = array($time, 'n', $order);
 	$stmt->execute($params);
 
 	$start_actual = "";
 	$end_actual = "";
-	$stmnt = $db->prepare("SELECT pause, resume FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT pause, resume FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$start_actual = $row['pause'];
@@ -609,7 +609,7 @@ function resume_order($order)
 	$seconds_diff = $ts2 - $ts1;
 
 	$oldtimeactual = "";
-	$stmnt = $db->prepare("SELECT paused_time FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT paused_time FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$oldtimeactual = $row['paused_time'];
@@ -617,7 +617,7 @@ function resume_order($order)
 
 	$new_time = $seconds_diff + $oldtimeactual;
 
-	$sql = "UPDATE orders SET paused_time = ? WHERE order_number = ?";
+	$sql = "UPDATE {$DB_PREFIX}orders SET paused_time = ? WHERE order_number = ?";
 	$stmt = $db->prepare($sql);
 	$params = array($new_time, $order);
 	$stmt->execute($params);
@@ -631,7 +631,7 @@ function start_stop_order($order)
 
 	$status = "";
 	$schedule = "";
-	$stmnt = $db->prepare("SELECT status, schedule FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT status, schedule FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$status = $row['status'];
@@ -645,9 +645,9 @@ function start_stop_order($order)
 
 		$sql = "";
 		if ($status == "st") {
-			$sql = "UPDATE orders SET end = ?, status = 'en' WHERE order_number = ?";
+			$sql = "UPDATE {$DB_PREFIX}orders SET end = ?, status = 'en' WHERE order_number = ?";
 		} else if ($status == "cl") {
-			$sql = "UPDATE orders SET start = ?, status = 'st' WHERE order_number = ?";
+			$sql = "UPDATE {$DB_PREFIX}orders SET start = ?, status = 'st' WHERE order_number = ?";
 		}
 
 		if ($sql != "") {
@@ -664,7 +664,7 @@ function start_stop_order($order)
 function getId($email)
 {
 	$db = establish_database();
-	$stmnt = $db->prepare("SELECT id FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT id FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	foreach ($stmnt->fetchAll() as $row) {
 		$providerId = $row['id'];
@@ -688,7 +688,7 @@ function mark_completed($order, $message)
 	$client_email = "";
 	$tz = "";
 	$disputes = 0;
-	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$service = $row['service'];
@@ -709,7 +709,7 @@ function mark_completed($order, $message)
 	if ($disputes < 3) {
 		$name = "";
 		$phone = "";
-		$stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($customer_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$name = " " . $row['firstname'];
@@ -761,7 +761,7 @@ function mark_completed($order, $message)
 			$amount = $cost;
 		}
 
-		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
+		send_email($customer_email, "{$DB_PREFIX}orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
 
 		$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 
@@ -781,7 +781,7 @@ For future orders with the same provider use #' . $providerId . ' at checkout.';
 		send_text($customer_phone, $message);
 
 		$current_timestamp = gmdate("Y-m-d H:i:s");
-		$sql = "UPDATE orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
+		$sql = "UPDATE {$DB_PREFIX}orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
 		$stmt = $db->prepare($sql);
 		$params = array('mc', $current_timestamp, $order);
 		$stmt->execute($params);
@@ -810,7 +810,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 	$found = false;
 	$cancelled = true;
 	$wage = '';
-	$stmnt = $db->prepare("SELECT wage, duration, accept_key, status, clicked FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT wage, duration, accept_key, status, clicked FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order_number));
 	foreach ($stmnt->fetchAll() as $row) {
 		if ($row['accept_key'] === $accept_key) {
@@ -844,7 +844,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 	}
 
-	$sql = "UPDATE orders SET clicked = ? WHERE order_number = ?";
+	$sql = "UPDATE {$DB_PREFIX}orders SET clicked = ? WHERE order_number = ?";
 	$stmt = $db->prepare($sql);
 	$params = array($new_clicked, $order_number);
 	$stmt->execute($params);
@@ -858,14 +858,14 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 
 		$client_email = "";
-		$stmnt = $db->prepare("SELECT client_email FROM orders WHERE order_number = ?;");
+		$stmnt = $db->prepare("SELECT client_email FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
 		foreach ($stmnt->fetchAll() as $row) {
 			$client_email = $row['client_email'];
 		}
 
 		$client_phone = "";
-		$stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($client_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$client_phone = $row['phone'];
@@ -874,7 +874,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		$first_provider = ($client_email == "");
 
 		$people = 1;
-		$stmnt = $db->prepare("SELECT people FROM orders WHERE order_number = ?;");
+		$stmnt = $db->prepare("SELECT people FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
 		foreach ($stmnt->fetchAll() as $row) {
 			$people = $row['people'];
@@ -885,7 +885,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 
 		$secondary_providers = "";
-		$stmnt = $db->prepare("SELECT secondary_providers FROM orders WHERE order_number = ?;");
+		$stmnt = $db->prepare("SELECT secondary_providers FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
 		foreach ($stmnt->fetchAll() as $row) {
 			$secondary_providers = $row['secondary_providers'];
@@ -921,7 +921,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 					if ($num_secondary + 2 == $people) { // plus 1 for primary, and 1 for person currently claiming
 
-						$sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+						$sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?";
 						$stmt = $db->prepare($sql);
 						$params = array("cl", $order_number);
 						$stmt->execute($params);
@@ -932,7 +932,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 							$name = "";
 							$phone = "";
-							$stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+							$stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
 							$stmnt->execute(array($curr_email));
 							foreach ($stmnt->fetchAll() as $row) {
 								$name = $row['firstname'];
@@ -949,7 +949,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
 					}
 
-					$sql = "UPDATE orders SET secondary_providers = ?  WHERE order_number = ?";
+					$sql = "UPDATE {$DB_PREFIX}orders SET secondary_providers = ?  WHERE order_number = ?";
 					$stmt = $db->prepare($sql);
 					$params = array($new_secondary, $order_number);
 					$stmt->execute($params);
@@ -963,7 +963,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 			$replacing_primary_provider = ($secondary_providers != "" && count(explode(',', $secondary_providers)) + 1 == $people);
 
 			if ($people == 1 || $replacing_primary_provider) {
-				$sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+				$sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?";
 				$stmt = $db->prepare($sql);
 				$params = array("cl", $order_number);
 				$stmt->execute($params);
@@ -976,7 +976,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 					$name = "";
 					$phone = "";
-					$stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+					$stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
 					$stmnt->execute(array($curr_email));
 					foreach ($stmnt->fetchAll() as $row) {
 						$name = $row['firstname'];
@@ -986,7 +986,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 					$message .= $name . " (" . $phone . ")\n";
 				}
 
-				$stmnt = $db->prepare("SELECT phone FROM login WHERE email = ?;");
+				$stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}login WHERE email = ?;");
 				$stmnt->execute(array($email));
 				foreach ($stmnt->fetchAll() as $row) {
 					$client_phone = $row['phone'];
@@ -999,7 +999,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
 			}
 
-			$sql = "UPDATE orders SET client_email = ? WHERE order_number = ?";
+			$sql = "UPDATE {$DB_PREFIX}orders SET client_email = ? WHERE order_number = ?";
 			$stmt = $db->prepare($sql);
 			$params = array($email, $order_number);
 			$stmt->execute($params);
@@ -1032,7 +1032,7 @@ function dispute_order($order_number)
 	$schedule = "";
 	$tz = "";
 	$order_disputes = 0;
-	$stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order_number));
 	foreach ($stmnt->fetchAll() as $row) {
 		$service = $row['service'];
@@ -1051,7 +1051,7 @@ function dispute_order($order_number)
 
 		$email_found = false;
 		$disputes = 0;
-		$result = $db->query("SELECT email, disputes FROM login;");
+		$result = $db->query("SELECT email, disputes FROM {$DB_PREFIX}login;");
 		foreach ($result as $row) {
 			if ($customer_email == $row['email']) {
 				$email_found = true;
@@ -1059,7 +1059,7 @@ function dispute_order($order_number)
 			}
 		}
 
-		$table = "login";
+		$table = "{$DB_PREFIX}login";
 		if (!$email_found) {
 			$result = $db->query("SELECT phone, disputes FROM guests;");
 			foreach ($result as $row) {
@@ -1080,7 +1080,7 @@ function dispute_order($order_number)
 
 			//banning
 			$num_orders = 0;
-			$orders = $db->query("SELECT * FROM orders;");
+			$orders = $db->query("SELECT * FROM {$DB_PREFIX}orders;");
 			foreach ($orders as $order) {
 				if ($order["customer_phone"] == $customer_phone) {
 					$num_orders++;
@@ -1091,7 +1091,7 @@ function dispute_order($order_number)
 				// bans users if more that 50% of their orders are disputed
 				if ($disputes / $num_orders > 0.5) {
 					if ($email_found) {
-						$sql = "UPDATE login SET banned = ? WHERE email = ?";
+						$sql = "UPDATE {$DB_PREFIX}login SET banned = ? WHERE email = ?";
 						$stmt = $db->prepare($sql);
 						$params = array('y', $customer_email);
 						$stmt->execute($params);
@@ -1106,7 +1106,7 @@ function dispute_order($order_number)
 		}
 
 		$order_disputes += 1;
-		$sql = "UPDATE orders SET status = ?, been_disputed = 'y', disputes = ? WHERE order_number = ?";
+		$sql = "UPDATE {$DB_PREFIX}orders SET status = ?, been_disputed = 'y', disputes = ? WHERE order_number = ?";
 		$stmt = $db->prepare($sql);
 		$params = array('di', $order_disputes, $order_number);
 		$stmt->execute($params);
@@ -1127,7 +1127,7 @@ function dispute_order($order_number)
 
 		for ($i = 0; $i < count($all_emails); $i++) {
 			$name = "";
-			$stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+			$stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
 			$stmnt->execute(array($all_emails[$i]));
 			foreach ($stmnt->fetchAll() as $row) {
 				$name = ' ' . $row['firstname'];
@@ -1170,7 +1170,7 @@ function check_session($post_session)
 	$db = establish_database();
 	$found = false;
 	if ($post_session != "") {
-		$sessions = $db->query("SELECT session FROM login;");
+		$sessions = $db->query("SELECT session FROM {$DB_PREFIX}login;");
 		foreach ($sessions as $session) {
 			if (hash_equals($post_session, $session[0])) {
 				$found = true;
@@ -1184,7 +1184,7 @@ function get_order_status($order)
 {
 	$db = establish_database();
 	$order_status = "nf";
-	$result = $db->query("SELECT order_number FROM orders;");
+	$result = $db->query("SELECT order_number FROM {$DB_PREFIX}orders;");
 	$found = false;
 	foreach ($result as $row) {
 		if ($order === $row['order_number']) {
@@ -1192,7 +1192,7 @@ function get_order_status($order)
 		}
 	}
 	if ($found) {
-		$stmnt = $db->prepare("SELECT status FROM orders WHERE order_number = ?;");
+		$stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order));
 		foreach ($stmnt->fetchAll() as $row) {
 			$order_status = $row['status'];
@@ -1213,7 +1213,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	$customer_email = "";
 	$customer_phone = "";
 	$client_phone = "";
-	$stmnt = $db->prepare("SELECT service, schedule, address, customer_email, message, customer_phone, cost, wage FROM orders WHERE order_number = ?;");
+	$stmnt = $db->prepare("SELECT service, schedule, address, customer_email, message, customer_phone, cost, wage FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order_number));
 	foreach ($stmnt->fetchAll() as $row) {
 		$service = $row['service'];
@@ -1235,7 +1235,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	$name = "";
 	$client_phone = "";
 	$alerts = "";
-	$stmnt = $db->prepare("SELECT firstname, phone, alerts, timezone FROM login WHERE email = ?;");
+	$stmnt = $db->prepare("SELECT firstname, phone, alerts, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
 	foreach ($stmnt->fetchAll() as $row) {
 		$name = ' ' . $row['firstname'];

@@ -14,7 +14,7 @@ if (isset($_POST["session"])) {
     if ($found) {
         $response->validated = "true";
         
-        $stmnt = $db->prepare("SELECT * FROM login WHERE session = ?;");
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ?;");
         $stmnt->execute(array($post_session));
         foreach($stmnt->fetchAll() as $row) {
             

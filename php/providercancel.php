@@ -32,7 +32,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
         $timezone = "";
         $zip = "";
         $secondary_providers = "";
-        $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order_number));
         foreach($stmnt->fetchAll() as $row) {
             $service = $row['service'];
@@ -62,14 +62,14 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
         }
 
         $cancelling_provider = "";
-        $stmnt = $db->prepare("SELECT email FROM login WHERE session = ?;");
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
         $stmnt->execute(array($session));
         foreach($stmnt->fetchAll() as $row) {
             $cancelling_provider = $row['email'];
         }
 
         $cancels = 0;
-        $stmnt = $db->prepare("SELECT cancels FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT cancels FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($cancelling_provider));
         foreach($stmnt->fetchAll() as $row) {
             $cancels = $row['cancels'];
@@ -80,7 +80,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             banning($cancels, $cancelling_provider);
         }
 
-        $sql = "UPDATE login SET cancels = ? WHERE email = ?;";
+        $sql = "UPDATE {$DB_PREFIX}login SET cancels = ? WHERE email = ?;";
         $stmt = $db->prepare($sql);
         $params = array($cancels, $cancelling_provider);
         $stmt->execute($params);
@@ -95,13 +95,13 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             );
 
             $name = "";
-            $stmnt = $db->prepare("SELECT firstname, timezone FROM login WHERE email = ?;");
+            $stmnt = $db->prepare("SELECT firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
             foreach($stmnt->fetchAll() as $row) {
                 $name = ' ' . $row['firstname'];
             }
 
-            $sql = "UPDATE orders SET status = ? WHERE order_number = ?;";
+            $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
             $params = array("pc", $order_number);
             $stmt->execute($params);
@@ -128,7 +128,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             foreach ($re_notify_list as $email) {
 
                 if ($email != "" && $email != $cancelling_provider) {
-                    $stmnt = $db->prepare("SELECT phone, timezone FROM login WHERE email = ?;");
+                    $stmnt = $db->prepare("SELECT phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($email));
                     foreach($stmnt->fetchAll() as $row) {
                         $entry = new stdClass();
@@ -156,7 +156,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             }
 
             if ($role == "primary") {
-                $sql = "UPDATE orders SET client_email = ?, status = ? WHERE order_number = ?;";
+                $sql = "UPDATE {$DB_PREFIX}orders SET client_email = ?, status = ? WHERE order_number = ?;";
                 $stmt = $db->prepare($sql);
                 $params = array("", "pe", $order_number);
                 $stmt->execute($params);
@@ -180,7 +180,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
                     $updated_string = "";
                 }
 
-                $sql = "UPDATE orders SET secondary_providers = ?, status = ? WHERE order_number = ?";
+                $sql = "UPDATE {$DB_PREFIX}orders SET secondary_providers = ?, status = ? WHERE order_number = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($updated_string, 'pe', $order_number);
                 $stmt->execute($params);
@@ -201,7 +201,7 @@ function banning($cancels, $client_email) {
     $db = establish_database();
 
     $name = "";
-    $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+    $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($client_email));
     foreach($stmnt->fetchAll() as $row) {
         $name = ' ' . $row['firstname'];
@@ -211,7 +211,7 @@ function banning($cancels, $client_email) {
         $note = "Our system has noticed several order cancellations on your behalf. We ask you not to claim orders if you are unable to fulfill them. Further cancellations will result in the suspension of your provider account.";
     }
     if ($cancels == '3'){
-        $sql = "UPDATE login SET type = ?, banned = 'y' WHERE email = ?;";
+        $sql = "UPDATE {$DB_PREFIX}login SET type = ?, banned = 'y' WHERE email = ?;";
         $stmt = $db->prepare($sql);
         $params = array("Personal", $client_email);
         $stmt->execute($params);

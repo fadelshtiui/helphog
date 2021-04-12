@@ -19,7 +19,7 @@ if (isset($_POST["session"])) {
         
         $email = "";
         $type = "";
-        $stmnt = $db->prepare("SELECT type, email FROM login WHERE session = ?;");
+        $stmnt = $db->prepare("SELECT type, email FROM {$DB_PREFIX}login WHERE session = ?;");
         $stmnt->execute(array($session));
         foreach($stmnt->fetchAll() as $row) {
             $type = $row["type"];
@@ -30,7 +30,7 @@ if (isset($_POST["session"])) {
         
         if ($type == "Business") {
             
-            $stmnt = $db->prepare("SELECT status FROM orders WHERE client_email = ? OR secondary_providers LIKE ? OR customer_email = ?;");
+            $stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? OR customer_email = ?;");
             $stmnt->execute(array($email, '%' . $email . '%', $email));
             foreach($stmnt->fetchAll() as $row) {
                 if ($row['status'] != 'pd' && $row["status"] != 'ac' && $row["status"] != 'cc' && $row["status"] != 'pc') {
@@ -45,7 +45,7 @@ if (isset($_POST["session"])) {
             } else {
                 
                 $stripe_acc = "";
-                $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE session = ?;");
+                $stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE session = ?;");
                 $stmnt->execute(array($session));
                 foreach($stmnt->fetchAll() as $row) {
                     $stripe_acc = $row["stripe_acc"];
@@ -60,14 +60,14 @@ if (isset($_POST["session"])) {
                 if ($response->deleted == true) {
                     
                     // clear all provider info from primary orders
-                    $sql = "UPDATE orders SET client_email = ?, clicked = '' WHERE client_email = ?;";
+                    $sql = "UPDATE {$DB_PREFIX}orders SET client_email = ?, clicked = '' WHERE client_email = ?;";
                     $placeholder = "Provider Account Deleted";
                     $stmt = $db->prepare($sql);
                     $params = array($placeholder, $email);
                     $stmt->execute($params);
                     
                     // clear all provider info from secondary orders
-                    $stmnt = $db->prepare("SELECT order_number, secondary_providers FROM orders WHERE secondary_providers LIKE ?;");
+                    $stmnt = $db->prepare("SELECT order_number, secondary_providers FROM {$DB_PREFIX}orders WHERE secondary_providers LIKE ?;");
                     $stmnt->execute(array('%' . $emai . '%'));
                     foreach($stmnt->fetchAll() as $row) {
                         $secondary_providers_array = explode(",", $row["secondary_providers"]);
@@ -86,21 +86,21 @@ if (isset($_POST["session"])) {
                             $updated_string = "";
                         }
                         
-                        $sql = "UPDATE orders SET secondary_providers = ?, clicked = '' WHERE order_number = ?";
+                        $sql = "UPDATE {$DB_PREFIX}orders SET secondary_providers = ?, clicked = '' WHERE order_number = ?";
                         $stmt = $db->prepare($sql);
                         $params = array($updated_string, $row["order_number"]);
                         $stmt->execute($params);
                     }
                     
                     // clear all orders provider made as customer
-                    $sql = "UPDATE orders SET customer_email = ?, address = ?, customer_phone = ?, city = '', state = '', zip = '', street_address = '' WHERE customer_email = ?";
+                    $sql = "UPDATE {$DB_PREFIX}orders SET customer_email = ?, address = ?, customer_phone = ?, city = '', state = '', zip = '', street_address = '' WHERE customer_email = ?";
                     $placeholder = "Customer Account Deleted";
                     $stmt = $db->prepare($sql);
                     $params = array($placeholder, $placeholder, $placeholder, $email);
                     $stmt->execute($params);
                         
-                    // clear login table of provider info
-                    $sql = "DELETE FROM login WHERE session = ?";
+                    // clear {$DB_PREFIX}login table of provider info
+                    $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                     $stmt = $db->prepare($sql);
                     $params = array($session);
                     $stmt->execute($params);
@@ -115,7 +115,7 @@ if (isset($_POST["session"])) {
             
         } else {
             
-            $stmnt = $db->prepare("SELECT status FROM orders WHERE customer_email = ?;");
+            $stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE customer_email = ?;");
             $stmnt->execute(array($email));
             foreach($stmnt->fetchAll() as $row) {
                 if ($row['status'] != 'pd' && $row['status'] != 'mc' && $row['status'] != 'ac' && $row['status'] != 'pc' && $row['status'] != 'cc') {
@@ -136,14 +136,14 @@ if (isset($_POST["session"])) {
                 $stmt->execute($params);
                 
                 // clear all customer info from orders
-                $sql = "UPDATE orders SET customer_email = ?, address = ?, customer_phone = ?, city = '', state = '', zip = '', street_address = '' WHERE customer_email = ?";
+                $sql = "UPDATE {$DB_PREFIX}orders SET customer_email = ?, address = ?, customer_phone = ?, city = '', state = '', zip = '', street_address = '' WHERE customer_email = ?";
                 $placeholder = "Customer Account Deleted";
                 $stmt = $db->prepare($sql);
                 $params = array($placeholder, $placeholder, $placeholder, $email);
                 $stmt->execute($params);
                 
-                // clear login table
-                $sql = "DELETE FROM login WHERE session = ?";
+                // clear {$DB_PREFIX}login table
+                $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($session);
                 $stmt->execute($params);

@@ -59,7 +59,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
 
     if ($providerId != 'none') {
         $providerexists = false;
-        $stmnt = $db->prepare("SELECT firstname, email FROM login WHERE type = 'Business' AND services LIKE ? AND id = ?;");
+        $stmnt = $db->prepare("SELECT firstname, email FROM {$DB_PREFIX}login WHERE type = 'Business' AND services LIKE ? AND id = ?;");
         $stmnt->execute(array('%' . $service . '%', $providerId));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
@@ -75,7 +75,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     } else {
 
-        $stmnt = $db->prepare("SELECT email FROM login WHERE type='Business' AND services LIKE ?;");
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ?;");
         $stmnt->execute(array('%' . $service . '%'));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
@@ -129,7 +129,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         for ($j = 0; $j < 168; $j++) {
             $full_availability .= '0';
         }
-        $stmnt = $db->prepare("SELECT availability, phone, timezone FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT availability, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($curr_email));
         foreach ($stmnt->fetchAll() as $row) {
             $provider_tz = $row['timezone'];
@@ -158,7 +158,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
 
 
         // check for overlapping orders
-        $stmnt = $db->prepare("SELECT * FROM orders WHERE (client_email = ? OR secondary_providers LIKE ?) AND schedule LIKE ?;");
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE (client_email = ? OR secondary_providers LIKE ?) AND schedule LIKE ?;");
         $stmnt->execute(array($curr_email, '%' . $curr_email . '%', $sql_schedule . '%'));
         foreach ($stmnt->fetchAll() as $row) {
 

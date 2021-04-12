@@ -16,14 +16,14 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     $number_error = "";
     
     $name = "";
-    $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+    $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($email));
     foreach($stmnt->fetchAll() as $row) {
         $name = $row['firstname'];
     }
     
     $found = false;
-    $result = $db->query("SELECT email FROM login;");
+    $result = $db->query("SELECT email FROM {$DB_PREFIX}login;");
     foreach ($result as $row) {
         if ($email === $row['email']) {
             $found = true;
@@ -41,7 +41,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     } else {
         
         $found = false;
-        $stmnt = $db->prepare("SELECT password FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT password FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($email));
         foreach($stmnt->fetchAll() as $row) {
             if (password_verify($password, $row['password'])) {
@@ -68,7 +68,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     }
     
     $found = false;
-    $stmnt = $db->prepare("SELECT forgot FROM login WHERE email = ?;");
+    $stmnt = $db->prepare("SELECT forgot FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($email));
     foreach($stmnt->fetchAll() as $row) {
         if ($number = $row['forgot']) {
@@ -82,7 +82,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
         $number_error = "true";
     }
     if ($email_error == "" && $password_error == "" && $confirm_error == "" && $number_error == "") {
-        $sql = "UPDATE login SET password = ?, forgot = '' WHERE email = ?";
+        $sql = "UPDATE {$DB_PREFIX}login SET password = ?, forgot = '' WHERE email = ?";
         $stmt = $db->prepare($sql);
         $params = array(password_hash($password, PASSWORD_DEFAULT), $email);
         $stmt->execute($params);

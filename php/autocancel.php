@@ -10,7 +10,7 @@ $stripe = new \Stripe\StripeClient(
 
 
 $db = establish_database();
-$sql = "SELECT * FROM orders;";
+$sql = "SELECT * FROM {$DB_PREFIX}orders;";
 $result = $db->query($sql);
 
 foreach ($result as $row) {
@@ -60,7 +60,7 @@ foreach ($result as $row) {
                 $primary_work_phone = "";
                 $name = "";
                 $timezone = "";
-                $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM login WHERE email = ?;");
+                $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                 $stmnt->execute(array($client_email));
                 foreach($stmnt->fetchAll() as $row) {
                     $primary_work_phone = $row['work_phone'];
@@ -83,7 +83,7 @@ foreach ($result as $row) {
                     $work_phone = "";
                     $name2 = "";
                     $timezone = "";
-                    $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM login WHERE email = ?;");
+                    $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($email));
                     foreach($stmnt->fetchAll() as $row) {
                         $work_phone = $row['work_phone'];
@@ -102,7 +102,7 @@ foreach ($result as $row) {
 
             $name3 = "";
             $timezone = "";
-            $stmnt = $db->prepare("SELECT firstname, timezone FROM login WHERE email = ?;");
+            $stmnt = $db->prepare("SELECT firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
             foreach($stmnt->fetchAll() as $row) {
                 $name3 = ' ' . $row['firstname'];
@@ -113,7 +113,7 @@ foreach ($result as $row) {
             $utc->setTimezone(new DateTimeZone($tz));
             $schedule = $utc->format('F j, Y, g:i a');
 
-            $sql = "UPDATE orders SET status = ? WHERE order_number = ?;";
+            $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
             $params = array("ac", $order_number);
             $stmt->execute($params);

@@ -17,7 +17,7 @@ $db = establish_database();
 
 $email = "";
 $type = "Personal";
-$stmnt = $db->prepare("SELECT email, type FROM login WHERE phone = ?;");
+$stmnt = $db->prepare("SELECT email, type FROM {$DB_PREFIX}login WHERE phone = ?;");
 $stmnt->execute(array($formatted_phone));
 foreach ($stmnt->fetchAll() as $row) {
     $email = $row['email'];
@@ -28,7 +28,7 @@ if ($email == "") {
     $result = $db->query("SELECT * FROM guests;");
     foreach ($result as $row) {
         if ($row['phone'] == $formatted_phone) {
-            $stmnt = $db->prepare("SELECT customer_email FROM orders WHERE customer_phone = ?;");
+            $stmnt = $db->prepare("SELECT customer_email FROM {$DB_PREFIX}orders WHERE customer_phone = ?;");
             $stmnt->execute(array($formatted_phone));
             foreach ($stmnt->fetchAll() as $row) {
                 $email = $row['customer_email'];
@@ -48,7 +48,7 @@ if (trim(strtolower($body)) == 'dispute') {
     $now = gmdate('Y-m-d H:i:s');
 
     $orders_array = array();
-    $stmnt = $db->prepare("SELECT * FROM orders WHERE customer_phone = ?;");
+    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE customer_phone = ?;");
     $stmnt->execute(array($formatted_phone));
     foreach ($stmnt->fetchAll() as $row) {
         if (minutes_since($row['end']) <= 1440) {
@@ -105,7 +105,7 @@ if (trim(strtolower($body)) == 'dispute') {
 
                 $status = "";
                 $within_24_hours = false;
-                $stmnt = $db->prepare("SELECT end, status FROM orders WHERE order_number = ?;");
+                $stmnt = $db->prepare("SELECT end, status FROM {$DB_PREFIX}orders WHERE order_number = ?;");
                 $stmnt->execute(array($pieces[1]));
                 foreach ($stmnt->fetchAll() as $row) {
                     if (minutes_since($row['end']) <= 1440) {
@@ -141,7 +141,7 @@ if (trim(strtolower($body)) == 'dispute') {
     $customer_email = "";
     $customer_phone = "";
     $count = 0;
-    $stmnt = $db->prepare("SELECT service, customer_email, customer_phone, order_number FROM orders WHERE client_email = ? AND status = 'en';");
+    $stmnt = $db->prepare("SELECT service, customer_email, customer_phone, order_number FROM {$DB_PREFIX}orders WHERE client_email = ? AND status = 'en';");
     $stmnt->execute(array($email));
     foreach ($stmnt->fetchAll() as $row) {
         $service = $row['service'];
@@ -189,7 +189,7 @@ if (trim(strtolower($body)) == 'dispute') {
         } else {
 
             $status = "";
-            $stmnt = $db->prepare("SELECT status FROM orders WHERE order_number = ?;");
+            $stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE order_number = ?;");
             $stmnt->execute(array($pieces[1]));
             foreach ($stmnt->fetchAll() as $row) {
                 $status = $row['status'];
@@ -226,7 +226,7 @@ if (trim(strtolower($body)) == 'dispute') {
     $order_number = "none";
 
     $timezone = "";
-    $stmnt = $db->prepare("SELECT timezone FROM login WHERE email = ?;");
+    $stmnt = $db->prepare("SELECT timezone FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($email));
     foreach ($stmnt->fetchAll() as $row) {
         $timezone = $row["timezone"];
@@ -234,7 +234,7 @@ if (trim(strtolower($body)) == 'dispute') {
 
     $status = "";
     $currently_paused = "";
-    $stmnt = $db->prepare("SELECT * FROM orders WHERE client_email = ?;");
+    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ?;");
     $stmnt->execute(array($email));
     foreach ($stmnt->fetchAll() as $row) {
 

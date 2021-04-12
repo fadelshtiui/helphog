@@ -7,7 +7,7 @@ if (isset($_POST["timezone"]) && isset($_POST["session"])) {
     $db = establish_database();
     
     if (check_session($session)) {
-        $sql = "UPDATE login SET timezone = ? WHERE session = ?";
+        $sql = "UPDATE {$DB_PREFIX}login SET timezone = ? WHERE session = ?";
         $stmt = $db->prepare($sql);
         $params = array(tzOffsetToName($timezone), $session);
         $stmt->execute($params);

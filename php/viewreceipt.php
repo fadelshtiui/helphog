@@ -9,7 +9,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['image_key'])) {
     
     $db = establish_database();
 
-    $stmnt = $db->prepare("SELECT image_key FROM orders WHERE order_number = ?;");
+    $stmnt = $db->prepare("SELECT image_key FROM {$DB_PREFIX}orders WHERE order_number = ?;");
     $stmnt->execute(array($order));
     foreach($stmnt->fetchAll() as $row) {
         if (hash_equals($image_key, $row['image_key'])) {
@@ -20,7 +20,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['image_key'])) {
     if ($validated) {
 
         $uploaded = "";
-        $stmnt = $db->prepare("SELECT uploaded FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT uploaded FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $uploaded = $row['uploaded'];

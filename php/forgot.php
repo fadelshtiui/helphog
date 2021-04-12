@@ -6,7 +6,7 @@ if (isset($_POST["email"])) {
     $email_error = "";
     $email = trim($_POST["email"]);
     $name = "";
-    $result = $db->query("SELECT firstname, email FROM login;");
+    $result = $db->query("SELECT firstname, email FROM {$DB_PREFIX}login;");
     $found = false;
     foreach ($result as $row) {
         if ($email === $row['email']) {
@@ -22,7 +22,7 @@ if (isset($_POST["email"])) {
     } else {
         $random_hash = "" . bin2hex(openssl_random_pseudo_bytes(128));
                 
-        $sql = "UPDATE login SET forgot = ? WHERE email = ?";
+        $sql = "UPDATE {$DB_PREFIX}login SET forgot = ? WHERE email = ?";
         $stmt = $db->prepare($sql);
         $params = array($random_hash, $email);
         $stmt->execute($params);

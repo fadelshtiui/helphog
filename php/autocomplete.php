@@ -10,7 +10,7 @@ $customer_phone = "";
 $end = "";
 $order = "";
 $completed = "";
-$sql = "SELECT * FROM orders;";
+$sql = "SELECT * FROM {$DB_PREFIX}orders;";
 $result = $db->query($sql);
 
 foreach ($result as $row) {

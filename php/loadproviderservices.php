@@ -16,7 +16,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
 		$db = establish_database();
 
         $services = "";
-        $stmnt = $db->prepare("SELECT services FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT services FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($email));
         foreach($stmnt->fetchAll() as $row) {
             $services = $row['services'];

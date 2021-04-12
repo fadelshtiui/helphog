@@ -20,7 +20,7 @@ if (isset($_POST['tz'])) {
 
         $email = trim($_POST["email"]);
         $found = false;
-        $result = $db->query("SELECT email FROM login WHERE type='Business';");
+        $result = $db->query("SELECT email FROM {$DB_PREFIX}login WHERE type='Business';");
         foreach ($result as $row) {
             if ($email === $row['email']) {
                 $found = true;
@@ -36,7 +36,7 @@ if (isset($_POST['tz'])) {
             $password = trim($_POST["password"]);
 
             $found = false;
-            $stmnt = $db->prepare("SELECT password FROM login WHERE email = ?;");
+            $stmnt = $db->prepare("SELECT password FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($email));
             foreach($stmnt->fetchAll() as $row) {
                 if (password_verify($password, $row['password'])) {
@@ -50,12 +50,12 @@ if (isset($_POST['tz'])) {
                 $password_error = "true";
             } else {
                 $session = "" . bin2hex(openssl_random_pseudo_bytes(256));
-                $sql = "UPDATE login SET session = ? WHERE email = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET session = ? WHERE email = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($session, $_POST["email"]);
                 $stmt->execute($params);
 
-                $account_sql = "SELECT * FROM login WHERE email = ?;";
+                $account_sql = "SELECT * FROM {$DB_PREFIX}login WHERE email = ?;";
                 $params = array($email);
                 $validated = true;
             }
@@ -70,7 +70,7 @@ if (isset($_POST['tz'])) {
         $session_error = "";
         if (check_session($session)) {
 
-            $account_sql = "SELECT * FROM login WHERE session = ?;";
+            $account_sql = "SELECT * FROM {$DB_PREFIX}login WHERE session = ?;";
             $validated = true;
             $params = array($session);
 
@@ -130,7 +130,7 @@ if ($validated) {
         $email = $row["email"];
     }
 
-    $stmnt = $db->prepare("SELECT * FROM orders WHERE client_email = ? OR secondary_providers LIKE ?;");
+    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ?;");
 
     $stmnt->execute(array($email, '%' . $email . '%'));
     foreach($stmnt->fetchAll() as $row) {
@@ -160,7 +160,7 @@ if ($validated) {
                     array_push($providers, $row["client_email"]);
             }
             for ($i = 0; $i < sizeof($providers); $i++){
-                $stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+                $stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
                 $stmnt->execute(array($providers[$i]));
                 foreach($stmnt->fetchAll() as $row2) {
                     $string = $row2["firstname"] . ": " . preg_replace("/^1?(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row2["phone"]);

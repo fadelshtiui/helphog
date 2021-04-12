@@ -24,7 +24,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
 
     if (isset($_GET['ordernumber']) && isset($_GET['secret'])) {
 
-        $stmnt = $db->prepare("SELECT cancel_key FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT cancel_key FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             if ($row["cancel_key"] === trim($_GET['secret'])) {
@@ -51,7 +51,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         $secondary_provider = "";
         $customerEmail = "";
         $people = "";
-        $stmnt = $db->prepare("SELECT * FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $service = $row["service"];
@@ -65,7 +65,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         }
 
         $customerName = "";
-        $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($customerEmail));
         foreach($stmnt->fetchAll() as $row) {
             $customerName = ' ' . $row['firstname'];
@@ -93,7 +93,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $tz = "";
             $providerName = "";
             $phone = "";
-            $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM login WHERE email = ?;");
+            $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($providerEmail));
             foreach($stmnt->fetchAll() as $row) {
                 $providerName = ' ' . $row['firstname'];
@@ -119,7 +119,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                     $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. Since the customer canceled within 24 hours of the scheduled date, you will be receiving a $10 compensation. We apologize for the inconvience.';
 
                     $stripe_acc = "";
-                    $stmnt = $db->prepare("SELECT stripe_acc FROM login WHERE email = ?;");
+                    $stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($providerEmail));
                     foreach ($stmnt->fetchAll() as $row) {
                         $stripe_acc = $row["stripe_acc"];
@@ -156,7 +156,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
 
                     $phonenumber = "";
                     $name = "";
-                    $stmnt = $db->prepare("SELECT firstname, phone FROM login WHERE email = ?;");
+                    $stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($provider));
                     foreach($stmnt->fetchAll() as $row) {
                         $phonenumber = $row['phone'];
@@ -169,7 +169,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             
             send_email($customerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($customerMessage, $customerName));
 
-            $sql = "UPDATE orders SET status = 'cc' WHERE order_number = ?;";
+            $sql = "UPDATE {$DB_PREFIX}orders SET status = 'cc' WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
             $params = array($order);
             $stmt->execute($params);

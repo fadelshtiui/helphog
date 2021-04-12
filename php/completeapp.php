@@ -27,7 +27,7 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
         $id = (time() + mt_rand()) % 100000;
         if ($id >= 10000) {
             $unique = true;
-            $result = $db->query("SELECT id FROM login");
+            $result = $db->query("SELECT id FROM {$DB_PREFIX}login");
             foreach ($result as $row) {
                 if ($id == $row["id"]) {
                     $unique = false;
@@ -37,7 +37,7 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
         }
     }
 
-    $sql = "INSERT INTO login (firstname, lastname, email, password, phone, type, verified, zip, work_zip, work_phone, work_email, stripe_acc, verify_key, timezone, id) VALUES (:firstname, :lastname, :email, :password, :phone, :type, :verified, :zip, :work_zip, :work_phone, :work_email, :stripe_acc, :verify_key, :timezone, :id);";
+    $sql = "INSERT INTO {$DB_PREFIX}login (firstname, lastname, email, password, phone, type, verified, zip, work_zip, work_phone, work_email, stripe_acc, verify_key, timezone, id) VALUES (:firstname, :lastname, :email, :password, :phone, :type, :verified, :zip, :work_zip, :work_phone, :work_email, :stripe_acc, :verify_key, :timezone, :id);";
     $stmt = $db->prepare($sql);
     $params = array("firstname" => $firstname, "lastname" => $lastname, "email" => $email, "password" => $password, "phone" => $phone, "type" => "Personal", "verified" => "n", "zip" => $zip, "work_zip" => $zip, "work_phone" => $phone, "work_email" => $email, "stripe_acc" => $stripe, "verify_key" => $secret_key, "timezone" => $tz, "id" => $id);
     $stmt->execute($params);
@@ -60,7 +60,7 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
     $zip = $_SESSION["zip"];
     $tz = $_SESSION['tz'];
 
-    $sql = "UPDATE login SET stripe_acc = :stripe_acc, timezone = :timezone WHERE email = :email";
+    $sql = "UPDATE {$DB_PREFIX}login SET stripe_acc = :stripe_acc, timezone = :timezone WHERE email = :email";
     $stmt = $db->prepare($sql);
     $params = array("email" => $email, "stripe_acc" => $stripe, "timezone" => $tz);
     $stmt->execute($params);
@@ -83,7 +83,7 @@ function update_radius($radius, $email, $workfield, $db) {
         $radius = "100";
     }
 
-    $sql = "UPDATE login SET workfield = ?, radius = ? WHERE email = ?";
+    $sql = "UPDATE {$DB_PREFIX}login SET workfield = ?, radius = ? WHERE email = ?";
     $stmt = $db->prepare($sql);
     $params = array($workfield, $radius, $email);
     $stmt->execute($params);

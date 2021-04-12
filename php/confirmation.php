@@ -24,7 +24,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
     $orig_duration = intval($_SESSION["duration"]);
 
 
-    $result = $db->query("SELECT order_cookie FROM orders;");
+    $result = $db->query("SELECT order_cookie FROM {$DB_PREFIX}orders;");
     $found = false;
     foreach ($result as $row) {
         if ($order === $row['order_cookie']) {
@@ -82,7 +82,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             $response->cost = $price;
             $response->wage = $wage;
             $found = false;
-            $result = $db->query("SELECT email FROM login;");
+            $result = $db->query("SELECT email FROM {$DB_PREFIX}login;");
             foreach ($result as $row) {
                 if ($customer_email === $row['email']) {
                     $found = true;
@@ -101,7 +101,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
             if ($found && $street_address != "Remote (online)") {
 
-                $sql = "UPDATE login SET zip = ?, address = ?, city = ?, state = ? WHERE email = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET zip = ?, address = ?, city = ?, state = ? WHERE email = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($_SESSION['zip'], $street_address, $city, $state, $customer_email);
                 $stmt->execute($params);
@@ -112,7 +112,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             $cancel_key = '' . bin2hex(openssl_random_pseudo_bytes(128));
             $image_key = '' . bin2hex(openssl_random_pseudo_bytes(128));
 
-            $sql = "INSERT INTO orders (order_number, customer_email, timestamp, schedule, address, service, message, cost, customer_phone, client_email, wage, order_cookie, duration, people, intent, status, prorated, accept_key, cancel_key, timezone, cancel_buffer, image_key, sales_tax_percent, street_address, city, state, zip) VALUES (:order_number, :customer_email, :timestamp, :schedule, :address, :service, :message, :price, :customer_phone, :client_email, :wage, :order_cookie, :duration, :people, :intent, :status, :prorated, :accept_key, :cancel_key, :timezone, :cancel_buffer, :image_key, :sales_tax_percent, :street_address, :city, :state, :zip);";
+            $sql = "INSERT INTO {$DB_PREFIX}orders (order_number, customer_email, timestamp, schedule, address, service, message, cost, customer_phone, client_email, wage, order_cookie, duration, people, intent, status, prorated, accept_key, cancel_key, timezone, cancel_buffer, image_key, sales_tax_percent, street_address, city, state, zip) VALUES (:order_number, :customer_email, :timestamp, :schedule, :address, :service, :message, :price, :customer_phone, :client_email, :wage, :order_cookie, :duration, :people, :intent, :status, :prorated, :accept_key, :cancel_key, :timezone, :cancel_buffer, :image_key, :sales_tax_percent, :street_address, :city, :state, :zip);";
 
             $time = date('m-d-y H:i:s');
             $stmt = $db->prepare($sql);
@@ -160,7 +160,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             }
 
             $name = "";
-            $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+            $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
             foreach ($stmnt->fetchAll() as $row) {
                 $name = ' ' . $row['firstname'];

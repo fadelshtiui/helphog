@@ -19,7 +19,7 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
         
         $email = "";
         $zip = "";
-        $stmnt = $db->prepare("SELECT * FROM login WHERE session = ?;");
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ?;");
         $stmnt->execute(array($session));
         foreach($stmnt->fetchAll() as $row) {
             $email = $row["email"];
@@ -62,7 +62,7 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
     $_SESSION['tz'] = $tz;
     
     $found = false;
-    $sql = "SELECT email FROM login";
+    $sql = "SELECT email FROM {$DB_PREFIX}login";
     $result = $db->query($sql);
     foreach ($result as $row) {
         if ($email == $row['email']) {

@@ -11,7 +11,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     $password = trim($_POST["password"]);
     
     $found = false;
-    $result = $db->query("SELECT email FROM login;");
+    $result = $db->query("SELECT email FROM {$DB_PREFIX}login;");
     foreach ($result as $row) {
         if ($email === $row['email']) {
             $found = true;
@@ -25,7 +25,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     } else {
         
         $found = false;
-        $stmnt = $db->prepare("SELECT password FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT password FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($email));
         foreach($stmnt->fetchAll() as $row) {
             if (password_verify($password, $row['password'])) {
@@ -39,7 +39,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
             $password_error = "true";
         } else {
             
-            $stmnt = $db->prepare("SELECT verified FROM login WHERE email = ?;");
+            $stmnt = $db->prepare("SELECT verified FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($email));
             foreach($stmnt->fetchAll() as $row) {
                 $response->verified = $row["verified"];
@@ -51,7 +51,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
             while (!$unique) {
                 $session = "" . bin2hex(openssl_random_pseudo_bytes(256));
                 $unique = true;
-                $result = $db->query("SELECT session FROM login");
+                $result = $db->query("SELECT session FROM {$DB_PREFIX}login");
                 foreach ($result as $row) {
                     if ($session == $row["session"]) {
                         $unique = false;
@@ -60,7 +60,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
             }
             
             $response->session = $session;
-            $sql = "UPDATE login SET session = ? WHERE email = ?";
+            $sql = "UPDATE {$DB_PREFIX}login SET session = ? WHERE email = ?";
             $stmt = $db->prepare($sql);
             $params = array($session, $email);
             $stmt->execute($params);

@@ -13,7 +13,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         $intent = "";
         $schedule = "";
         $tz = "";
-        $stmnt = $db->prepare("SELECT intent, service, customer_email, schedule, timezone FROM orders WHERE order_number = ?;");
+        $stmnt = $db->prepare("SELECT intent, service, customer_email, schedule, timezone FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
         foreach($stmnt->fetchAll() as $row) {
             $service = $row['service'];
@@ -24,7 +24,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         }
 
         $name = "";
-        $stmnt = $db->prepare("SELECT firstname FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($customer_email));
         foreach($stmnt->fetchAll() as $row) {
             $name = ' ' . $row['firstname'];
@@ -35,7 +35,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
 
         send_email($customer_email, "no-reply@helphog.com", "Task Refunded", get_refund_email($name, $service, $order, $local_date->format('m\-d\-y \a\t g:ia')));
 
-        $sql = "UPDATE orders SET status = ? WHERE order_number = ?";
+        $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array('re', $order);
         $stmt->execute($params);

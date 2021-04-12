@@ -14,7 +14,7 @@ if (isset($_POST["distance"]) && isset($_POST["city"]) && isset($_POST["state"])
     $address = trim($_POST['address']);
     
     $email = "";
-    $stmnt = $db->prepare("SELECT email FROM login WHERE session = ?;");
+    $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
     $stmnt->execute(array($session));
     foreach($stmnt->fetchAll() as $row) {
         $email = $row['email'];
@@ -32,7 +32,7 @@ if (isset($_POST["distance"]) && isset($_POST["city"]) && isset($_POST["state"])
             echo "Full address required";
             return;
         } else if ($zip_error == "") {
-            $sql = "UPDATE login SET radius = ?, work_address = ?, work_city = ?, work_state = ?, work_zip = ? WHERE session = ?";
+            $sql = "UPDATE {$DB_PREFIX}login SET radius = ?, work_address = ?, work_city = ?, work_state = ?, work_zip = ? WHERE session = ?";
             $stmt = $db->prepare($sql);
             $params = array($distance, $address, $city, $state, $zip, $session);
             $stmt->execute($params); 

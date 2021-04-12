@@ -6,7 +6,7 @@ use Twilio\Rest\Client;
 
 $db = establish_database();
 
-$result = $db->query("SELECT * FROM orders");
+$result = $db->query("SELECT * FROM {$DB_PREFIX}orders");
 
 foreach($result as $row) {
 
@@ -20,7 +20,7 @@ foreach($result as $row) {
         
         $phone = "";
         $tz = "";
-        $stmnt = $db->prepare("SELECT phone, timezone FROM login WHERE email = ?;");
+        $stmnt = $db->prepare("SELECT phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($row["client_email"]));
         foreach($stmnt->fetchAll() as $row) {
             $phone = $row['phone'];
@@ -37,7 +37,7 @@ foreach($result as $row) {
         $client = new Client($sid, $token);
         $client->messages->create('+1' . $phone, array('from' => '+12532593451', 'body' => 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minute(s).'));
         
-        $sql = "UPDATE orders SET reminded = ? WHERE order_number = ?";
+        $sql = "UPDATE {$DB_PREFIX}orders SET reminded = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array('y', $order_number);
         $stmt->execute($params);
