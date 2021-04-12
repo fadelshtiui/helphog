@@ -2,7 +2,7 @@
 include 'common.php';
 
 $stripe = new \Stripe\StripeClient(
-  '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'
+    json_decode(file_get_contents("stripe.json"))->be_key
 );
 
 if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tzoffset']) && isset($_POST['role'])) {

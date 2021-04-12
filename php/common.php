@@ -2,7 +2,7 @@
 
 require __DIR__ . '/stripe-php-master/init.php';
 // This is your real test secret API key.
-\Stripe\Stripe::setApiKey('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');
+\Stripe\Stripe::setApiKey(json_decode(file_get_contents("stripe.json"))->be_key);
 require __DIR__ . '/twilio-php-master/src/Twilio/autoload.php';
 
 use Twilio\TwiML\MessagingResponse;
@@ -121,7 +121,7 @@ function pay_provider($order_number)
 {
 
 	$stripe = new \Stripe\StripeClient(
-		'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'
+		json_decode(file_get_contents("stripe.json"))->be_key
 	);
 
 	$db = establish_database();
