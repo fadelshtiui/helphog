@@ -776,7 +776,7 @@ If there\'s an issue with the quality of service provided, you may dispute this 
 For future orders with the same provider use #' . $providerId . ' at checkout.';
 
 
-		send_text($phone, $message);
+		send_text($customer_phone, $message);
 
 		$current_timestamp = gmdate("Y-m-d H:i:s");
 		$sql = "UPDATE orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
