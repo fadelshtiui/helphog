@@ -790,7 +790,7 @@ function mark_completed($order, $message)
 			$amount = $cost;
 		}
 
-		send_email($customer_email, "{$DB_PREFIX}orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
+		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
 
 		$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 

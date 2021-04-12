@@ -99,7 +99,7 @@ if (isset($_POST["session"])) {
                     $params = array($placeholder, $placeholder, $placeholder, $email);
                     $stmt->execute($params);
                         
-                    // clear {$DB_PREFIX}login table of provider info
+                    // clear login table of provider info
                     $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                     $stmt = $db->prepare($sql);
                     $params = array($session);
@@ -142,7 +142,7 @@ if (isset($_POST["session"])) {
                 $params = array($placeholder, $placeholder, $placeholder, $email);
                 $stmt->execute($params);
                 
-                // clear {$DB_PREFIX}login table
+                // clear login table
                 $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                 $stmt = $db->prepare($sql);
                 $params = array($session);

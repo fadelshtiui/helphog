@@ -15,7 +15,7 @@ if (isset($_POST["session"])) {
         $stripe_acc = $row['stripe_acc'];
     }
     
-    $loginlink = $stripe->accounts->create{$DB_PREFIX}loginLink(
+    $loginlink = $stripe->accounts->createloginLink(
         $stripe_acc,
         ['redirect_url' => 'https://helphog.com/provider']
     );
