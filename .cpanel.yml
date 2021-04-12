@@ -5,9 +5,9 @@ deployment:
     - export BETAPATH=/home/regiuzkk/beta.helphog.com/
     - /bin/rm -rf $DEPLOYPATH/*
     - /bin/cp -r * $DEPLOYPATH
-    - /bin/cp /home/regiuzkk/stripe-api-keys/live/keys.php $DEPLOYPATH/php
-    - /bin/cp /home/regiuzkk/stripe-api-keys/live/keys.js $DEPLOYPATH/js
+    - /bin/cp /home/regiuzkk/constants/live/constants.php $DEPLOYPATH/php
+    - /bin/cp /home/regiuzkk/constants/live/keys.js $DEPLOYPATH/js
     - /bin/rm -rf $BETAPATH/*
     - /bin/cp -r * $BETAPATH
-    - /bin/cp /home/regiuzkk/stripe-api-keys/test/keys.php $BETAPATH/php
-    - /bin/cp /home/regiuzkk/stripe-api-keys/test/keys.js $BETAPATH/js
+    - /bin/cp /home/regiuzkk/constants/test/constants.php $BETAPATH/php
+    - /bin/cp /home/regiuzkk/constants/test/keys.js $BETAPATH/js

@@ -1,6 +1,5 @@
 <?php
 include 'common.php';
-include 'keys.php';
 
 $stripe = new \Stripe\StripeClient(
     $STRIPE_API_KEY

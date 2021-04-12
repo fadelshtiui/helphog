@@ -1,6 +1,5 @@
 <?php
 include 'common.php';
-include 'keys.php';
 
 use Twilio\TwiML\MessagingResponse;
 use Twilio\Rest\Client;

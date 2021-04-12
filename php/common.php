@@ -1,6 +1,6 @@
 <?php
 
-include 'keys.php';
+include 'constants.php';
 
 require __DIR__ . '/stripe-php-master/init.php';
 // This is your real test secret API key.

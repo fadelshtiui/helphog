@@ -1,7 +1,6 @@
 <?php
 
 include 'common.php';
-include 'keys.php';
 
 if (isset($_POST["session"])) {
     
