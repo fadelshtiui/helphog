@@ -11,4 +11,3 @@ deployment:
     - /bin/cp -r * $BETAPATH
     - /bin/cp /home/regiuzkk/stripe-api-keys/test/stripe.json $BETAPATH/php
     - /bin/cp /home/regiuzkk/stripe-api-keys/test/keys.js $BETAPATH/js
-    - /bin/chmod $DEPLOYPATH/php/stripe.json 600
