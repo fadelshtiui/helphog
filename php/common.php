@@ -163,9 +163,6 @@ function pay_provider($order_number)
 
 		$schedule = $local_date->format('m\-d\-y \a\t g:ia');
 
-		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
-
-
 		$stripe->paymentIntents->cancel(
 			trim($payment_info->intent),
 			[]
@@ -175,6 +172,8 @@ function pay_provider($order_number)
 		$stmt1 = $db->prepare($sql1);
 		$params1 = array(0, $order_number);
 		$stmt1->execute($params1);
+		
+		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
 		$intent->capture(['amount_to_capture' => ceil($payment_info->customer_payment * 100)]);
