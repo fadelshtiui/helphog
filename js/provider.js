@@ -991,6 +991,7 @@ let preloaded = false;
 
 					startStopButton.nextElementSibling.innerText = "CANCEL";
 					startStopButton.nextElementSibling.classList.remove("primary-green")
+					startStopButton.nextElementSibling.classList.remove("secondary")
 					startStopButton.nextElementSibling.classList.add("primary-red")
 					startStopButton.nextElementSibling.onclick = cancelOrder
 
