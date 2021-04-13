@@ -807,11 +807,11 @@ let preloaded = false;
 			qs(".modal-wrapper").classList.add('hidden')
 		}
 		qs(".modal-wrapper").classList.remove('hidden')
+		let ordernumber = this.dataset.ordernumber;
 
 		id('yes').onclick = function () {
 
 			let data = new FormData();
-			let ordernumber = this.dataset.ordernumber;
 			data.append("ordernumber", ordernumber);
 			data.append('session', getSession());
 			let url = "php/refund.php";
@@ -947,7 +947,7 @@ let preloaded = false;
 		}
 
 		let data = new FormData();
-		data.append("ordernumber", ordernumber);
+		data.append("ordernumber", this.dataset.ordernumber);
 		data.append("session", getSession());
 
 		// this.classList.toggle("paused");
