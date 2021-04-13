@@ -3,6 +3,7 @@
 window.addEventListener('load', function () {
      AOS.init();
      setTimeout(AOS.refresh, 500);
+     id('change').play();
 })
 
 class StickyNavigation {
