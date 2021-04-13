@@ -177,7 +177,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($is_post_request) {
                 echo 'ordercanceled';
             } else {
-                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/ordercanceled";</script>';
+                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/verify?Your+order+has+been+cancelled.+You+should+receive+an+email+shortly+confirming+the+cancelation.&email=none";</script>';
             }
 
         }
