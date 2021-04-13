@@ -1,13 +1,17 @@
 <?php
 include 'common.php';
 
+$stripe = new \Stripe\StripeClient(
+    $STRIPE_API_KEY
+);
+
 if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     $db = establish_database();
     $order = trim($_POST["ordernumber"]);
     $session = trim($_POST['session']);
 
     if (validate_provider($order, $session)) {
-
+        
         $service = "";
         $customer_email = "";
         $intent = "";
@@ -32,6 +36,11 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
 
         $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
         $local_date->setTimezone(new DateTimeZone($tz));
+
+        $stripe->paymentIntents->cancel(
+          $intent,
+          []
+        );
 
         send_email($customer_email, "no-reply@helphog.com", "Task Refunded", get_refund_email($name, $service, $order, $local_date->format('m\-d\-y \a\t g:ia')));
 
