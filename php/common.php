@@ -456,15 +456,15 @@ function validate_provider($order, $session)
     include 'constants.php';
     
 	$db = establish_database();
+	$all_providers = array();
 
-	$client_email = "";
 	$stmnt = $db->prepare("SELECT client_email, secondary_providers FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
 		$client_email = $row['client_email'];
 		$secondary_providers = $row['secondary_providers'];
 
-		$all_providers = array();
+		
 		if ($client_email != "") {
 			array_push($all_providers, $client_email);
 		}
@@ -476,7 +476,7 @@ function validate_provider($order, $session)
 			}
 		}
 	}
-
+	
 	foreach ($all_providers as $provider) {
 		$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($provider));
@@ -1366,7 +1366,7 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
         			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ',</h2>
-        			<p>Your request for ' . $service . ' has been submitted. Our respondent will contact you via email/text shortly.</p>
+        			<p>Your request for ' . $service . ' has been completed. Our respondent will contact you via email/text shortly.</p>
                     <p>Quality of service is our priority, so if you are not satisfied with your service or have any questions, please reply to this email (support@helphog.com) so we can resolve any issues.</p>
               <br>
         			<p><span style="color: #1c2029;">Order Number:  </span>' . $order_number . '</p>
