@@ -1821,7 +1821,7 @@ function get_claim_email($service, $schedule, $location, $client, $order_number,
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
         			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ',</h2>
-        			<p>There was a service request in your area. To claim this job please check over the details and then click the claim task button below.</p>
+        			<p>There was a service request in your area. To claim this job please check over the details and then click the claim task button below. Please ignore this email if you are unable to provide this service for whatever reason. Visit the <a href="https://' . $SUBDOMAIN . 'helphog.com/provider">provider portal</a> to modify your notification preferences.</p>
         			<p><span style="color: #1c2029;">Message:  </span>' . $customer_message . '</p>
                     <p><span style="color: #1c2029;">Service: </span>' . $service . '</p>
                     <p><span style="color: #1c2029;">Date: </span>' . $schedule . '</p>
