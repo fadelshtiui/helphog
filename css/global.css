@@ -176,6 +176,7 @@ i.success {
 a.standard {
   text-decoration: none;
   color: #0275d8;
+  cursor: pointer;
 }
 
 a.standard:active {
