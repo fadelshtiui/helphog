@@ -369,6 +369,7 @@
                     let availabilityTitle = ce('p')
                     availabilityTitle.classList.add('profile__stats__title')
                     availabilityTitle.innerText = 'First hour'
+                    availabilityTitle.style.width = '89px';
                     availabilityTitle.style.marginLeft = '-19px';
 
                     let availabilityValue = ce('h5')
