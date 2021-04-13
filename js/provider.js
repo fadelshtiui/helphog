@@ -747,7 +747,8 @@ let preloaded = false;
 		let ordernumber = this.dataset.ordernumber;
 
 		resetModal()
-		id('first').innerText = "Please verify that all necessary receipts are attached of any additional expenditures."
+		id('first').innerText = "Are you sure you would like to mark the order as completed?"
+		id('warning-message').innerText = "Please only mark completed if the requested work has been finished."
 		id('yes').innerText = "Mark Completed"
 		id('yes').classList.add('primary-green')
 		id('no').innerText = "No, go back"
