@@ -11,12 +11,12 @@ html{
             animation: fadein 2s;
 }
 
-center{
-    margin-top: -5%;
-}
-
 #notLoading{
     display:none;
+}
+
+center {
+    margin-top: -5%;
 }
 
 
@@ -52,13 +52,9 @@ center{
 
 .arrow {
   box-sizing: border-box;
+  font-size: 2vw;
   height: 5vw;
-  width: 5vw;
-  border-style: solid;
-  border-color: black;
-  border-width: 0px 1px 1px 0px;
-  transform: rotate(135deg);
-  transition: border-width 150ms ease-in-out;
+  width: 15vw;
   margin-left: 3%;
   margin-top: 3%;
 }
