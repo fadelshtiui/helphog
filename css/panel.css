@@ -199,10 +199,9 @@
 #address_display {
     height: 60px;
     font-weight: 500;
-    font-size: 19px;
 }
 
-#timestamp_display, #price_display, #hours_display, #start_display, #end_display {
+#timestamp_display, #hours_display {
     height: 50px;
     font-weight: 500;
     font-size: 19px;
