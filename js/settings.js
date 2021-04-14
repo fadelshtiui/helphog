@@ -191,33 +191,22 @@
         }
     }
 
-    function resetModal() {
-        id('first').innerHTML = ""
-        id('warning-message').innerHTML = ""
-
-        id('yes').classList.remove('primary-green')
-        id('yes').classList.remove('primary-red')
-        id('yes').classList.remove('secondary')
-        id('yes').classList.remove('hidden')
-        id('yes').onclick = function () { };
-        id('yes').innerText = ""
-
-        id('no').classList.remove('primary-green')
-        id('no').classList.remove('primary-red')
-        id('no').classList.remove('secondary')
-        id('yes').classList.remove('hidden')
-        id('no').onclick = function () { };
-        id('no').innerText = ""
-    }
-
 
 })();
 
 function addressUpdate() {
 
     if (id("address").innerText == '' || id("current-city").innerText == '' || id("current-zip").innerText == '' || id("current-state").innerText == '') {
+        resetModal()
         id('warning-message').innerText = "Please enter a full address."
+        id('no').classList.add('hidden')
+        let warningIcon = ce('i')
+        warningIcon.classList.add('fa-exclamation-circle', 'warning', 'fas')
+        id('first').appendChild(warningIcon)
+        id('yes').innerText = "OK, Close Modal"
+        id('yes').classList.add('secondary');
         qs('.modal-wrapper').classList.remove('hidden')
+
         return
     }
 
@@ -235,4 +224,23 @@ function addressUpdate() {
         // .then(handleAddressResponse)
         .catch(console.log);
 
+}
+
+function resetModal() {
+    id('first').innerHTML = ""
+    id('warning-message').innerHTML = ""
+
+    id('yes').classList.remove('primary-green')
+    id('yes').classList.remove('primary-red')
+    id('yes').classList.remove('secondary')
+    id('yes').classList.remove('hidden')
+    id('yes').onclick = function () { };
+    id('yes').innerText = ""
+
+    id('no').classList.remove('primary-green')
+    id('no').classList.remove('primary-red')
+    id('no').classList.remove('secondary')
+    id('yes').classList.remove('hidden')
+    id('no').onclick = function () { };
+    id('no').innerText = ""
 }

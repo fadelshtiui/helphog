@@ -124,6 +124,7 @@ if ($validated) {
 
         $time = new DateTimeZone($row['timezone']);
         $response->offset = $time->getOffset($utc) / 3600;
+        $response->tz = $row['timezone'];
 
         $response->session = $session;
 
@@ -212,5 +213,3 @@ if ($validated) {
 
 header('Content-type: application/json');
 print json_encode($response);
-
-?>

@@ -1334,10 +1334,10 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-                                            <div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Service Requested</div>        																		<!--[if mso | IE]>
+                                            <div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Service Requested</div>        																		<!--[if mso | IE]>
         																	</td>
         																</tr>
         															</table>
@@ -1452,10 +1452,10 @@ function get_signup_email($email, $firstname, $secret_key)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Get Verified on He!pHog</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Get Verified on He!pHog</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -1562,10 +1562,10 @@ function get_reset_email($email, $random_hash, $name)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Reset Your Password</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Reset Your Password</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -1672,10 +1672,10 @@ function get_claimed_email($customer_message, $service, $schedule, $address, $pr
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Your Service Report</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Your Service Report</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -1788,10 +1788,10 @@ function get_claim_email($service, $schedule, $location, $client, $order_number,
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Service Requested</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Service Requested</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -1904,10 +1904,10 @@ function get_address_email($to_send, $name)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Address Changed</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Address Changed</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2011,10 +2011,10 @@ function get_cancel_email($name, $service, $order_number, $schedule)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color: white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2117,10 +2117,10 @@ function noProviderFound($service, $order, $schedule, $name)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2223,10 +2223,10 @@ function noPartnersFound($service, $order, $schedule, $name)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2328,10 +2328,10 @@ function customer_cancel($message, $name)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;>
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2434,10 +2434,10 @@ function get_refund_email($name, $service, $order, $schedule)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Refunded</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Refunded</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2539,10 +2539,10 @@ function sendNoChargeEmail($service, $order_number, $schedule, $name)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Refunded</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Refunded</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2644,10 +2644,10 @@ function get_notice_email($name, $message)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Notice</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Notice</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>
@@ -2750,10 +2750,10 @@ function get_dispute_email($name, $service, $schedule, $order)
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
-        																		<div style="cursor:auto;color:transparent;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Disputed</div>
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Disputed</div>
         																		<!--[if mso | IE]>
         																	</td>
         																</tr>

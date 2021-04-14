@@ -337,7 +337,7 @@ let preloaded = false;
 	function displayResults(response) {
 		var timezones = document.getElementById('timezone');
 		for (var i = 0; i < timezones.length; i++) {
-			if (timezones.options[i].value == response.offset) {
+			if (timezones.options[i].value == response.tz) {
 				timezones.options[i].selected = true;
 				break;
 			}
@@ -692,7 +692,7 @@ let preloaded = false;
 						if (order.status == "en" || order.status == "di") {
 							button2.innerText = "REFUND CUSTOMER";
 							button2.onclick = refund;
-						} else if (order.currently_paused == 'y' || order.status == 'st'){
+						} else if (order.currently_paused == 'y' || order.status == 'st') {
 							button2.onclick = pauseResume
 						} else {
 							button2.onclick = cancelOrder;

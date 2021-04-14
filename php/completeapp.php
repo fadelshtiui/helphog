@@ -70,7 +70,7 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
     send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
 
 
-    echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'www.helphog.com/verify?message=Your+application+has+been+submitted.+Please+be+on+the+lookout+for+an+email+from+our+hiring+team.+Check+your+junk+folder+if+you+don%27t+see+our+email+within+24+hours.";</script>';
+    echo '<script>window.location.href = "https://www.' . $SUBDOMAIN . 'helphog.com/verify?message=Your+application+has+been+submitted.+Please+be+on+the+lookout+for+an+email+from+our+hiring+team.+Check+your+junk+folder+if+you+don%27t+see+our+email+within+24+hours.";</script>';
 
 } else {
 
@@ -79,6 +79,8 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
 }
 
 function update_radius($radius, $email, $workfield, $db) {
+    include 'constants.php';
+    
     if ($radius + 0 > 100) {
         $radius = "100";
     }

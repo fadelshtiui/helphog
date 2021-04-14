@@ -9,35 +9,8 @@ if (isset($_POST["timezone"]) && isset($_POST["session"])) {
     if (check_session($session)) {
         $sql = "UPDATE {$DB_PREFIX}login SET timezone = ? WHERE session = ?";
         $stmt = $db->prepare($sql);
-        $params = array(tzOffsetToName($timezone), $session);
+        $params = array($timezone, $session);
         $stmt->execute($params);
     }
 
 }
-
-function tzOffsetToName($offset, $isDst = null) {
-    if ($isDst === null) {
-        $isDst = date('I');
-    }
-
-    $offset *= 3600;
-    $zone    = timezone_name_from_abbr('', $offset, $isDst);
-
-    if ($zone === false) {
-        foreach (timezone_abbreviations_list() as $abbr) {
-            foreach ($abbr as $city) {
-                if ((bool)$city['dst'] === (bool)$isDst && strlen($city['timezone_id']) > 0 && $city['offset'] == $offset) {
-                    $zone = $city['timezone_id'];
-                    break;
-                }
-            }
-
-            if ($zone !== false) {
-                break;
-            }
-        }
-    }
-   
-    return $zone;
-}
-?>
