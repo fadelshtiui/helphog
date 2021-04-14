@@ -33,7 +33,7 @@ if (isset($_POST["session"])) {
             $stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? OR customer_email = ?;");
             $stmnt->execute(array($email, '%' . $email . '%', $email));
             foreach($stmnt->fetchAll() as $row) {
-                if ($row['status'] != 'pd' && $row["status"] != 'ac' && $row["status"] != 'cc' && $row["status"] != 'pc') {
+                if ($row['status'] != 'pd' && $row["status"] != 'ac' && $row["status"] != 'cc' && $row["status"] != 'pc' && row["status"] != "re") {
                     $has_active_orders = true;
                 }
             }
