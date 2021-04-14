@@ -235,7 +235,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 .pac-item {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 1rem;
 }
 
 .pac-selected {
