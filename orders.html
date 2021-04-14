@@ -68,7 +68,7 @@
 		</div>
 	</div>
 	<div class="content">
-		<div class="header">
+		<div class="header" style="padding-bottom: 51px">
 			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
 			<ul id="navigation">
 				<div id="signed-in-nav" class="hidden">
@@ -243,8 +243,7 @@
 										<td width="10%" class="text-xs-left" style='font-weight:300;'>Work
 											Ended: <br>{{
 											props.item.ended }}</td>
-										<td v-if="props.item.provider != ''"
-											 width="10%" class="text-xs-left"
+										<td v-if="props.item.provider != ''" width="10%" class="text-xs-left"
 											style='font-weight:300;'>Provder ID:<br><a>{{
 												props.item.providerId }}</a></td>
 										<td v-else width="10%" class="text-xs-left"
