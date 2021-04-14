@@ -118,7 +118,7 @@ if (isset($_POST["session"])) {
             $stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE customer_email = ?;");
             $stmnt->execute(array($email));
             foreach($stmnt->fetchAll() as $row) {
-                if ($row['status'] != 'pd' && $row['status'] != 'mc' && $row['status'] != 'ac' && $row['status'] != 'pc' && $row['status'] != 'cc' && row['status'] != 're') {
+                if ($row['status'] != 'pd' && $row['status'] != 'mc' && $row['status'] != 'ac' && $row['status'] != 'pc' && $row['status'] != 'cc' && $row['status'] != 're') {
                     $has_active_orders = true;
                 }
             }
