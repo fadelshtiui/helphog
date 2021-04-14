@@ -61,6 +61,8 @@ window.addEventListener('load', function () {
           if (loginOpen || guestOpen) {
                $('.modal-content').slideToggle();
           }
+          id('guest').disabled = false
+          id('login').disabled = false
      });
 
      id("close").onclick = function () {
