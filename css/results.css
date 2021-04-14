@@ -422,10 +422,10 @@ a.button.accent3:active, a.button.accent3:focus, a.button.accent3.active, input.
 .tooltip {
   cursor: pointer;
   position: relative;
-  display: block;
   width: 100%;
   text-align: center;
   z-index: 10;
+  margin-left: 3px;
 }
 
 .tooltip span {
@@ -435,11 +435,11 @@ a.button.accent3:active, a.button.accent3:focus, a.button.accent3.active, input.
 .tooltip:after {
   content: attr(data-tooltip);
   background: var(--neutralShade2);
-  max-width: 90%;
-  width: auto;
+  width: 100px;
   position: absolute;
   left: 0;
   right: 0;
+  z-index: 900;
   margin: auto;
   opacity: 0;
   height: auto;
@@ -448,6 +448,7 @@ a.button.accent3:active, a.button.accent3:focus, a.button.accent3.active, input.
   border-radius: var(--borderRadius);
   color: var(--foregroundColor);
   text-align: center;
+  display:block;
 }
 
 .tooltip.dark:after {
@@ -1031,7 +1032,7 @@ input.variation+label {
   .results-section.results--grid .profile {
     width: 100%;
     margin: auto;
-    overflow: hidden;
+    overflow: visible;
     grid: 340px auto auto/repeat(3, minmax(80px, 1fr));
     grid-gap: 10px;
   }
