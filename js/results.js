@@ -371,7 +371,16 @@
                     availabilityTitle.innerText = 'First hour'
                     availabilityTitle.style.width = '89px';
                     availabilityTitle.style.marginLeft = '-19px';
-
+                    
+                    let toolTipContainer = ce('span')
+                    toolTipContainer.classList.add('tooltip', 'top');
+                    let tooltip = ce('span')
+                    let iCircle = ce('i')
+                    iCircle.classList.add('icon-info')
+                    tooltip.appendChild(iCircle);
+                    toolTipContainer.appendChild(tooltip);
+                    
+                    
                     let availabilityValue = ce('h5')
                     availabilityValue.classList.add('profile__stats__info')
                     availabilityValue.innerText = 'Unavailable'
@@ -381,16 +390,20 @@
 
                     if (service.prorated == 'y') {
                          availabilityValue.innerText = 'Prorated';
+                         toolTipContainer.dataset.tooltip = "If your order takes less than 1 hour, you will be charged for exactly that amount of time.";
                     }
 
                     if (service.wage == 'per') {
                          rateValue.innerText = 'Flat'
                          availabilityValue.innerText = 'Full';
+                         toolTipContainer.dataset.tooltip = "If your order takes less than 1 hour, you will be charged for 1 hour.";
 
                     } else { // service.wage == 'hour'
                          rateValue.innerText = 'Hourly'
                          priceValue.innerText = priceValue.innerText + "/hr"
                     }
+                    
+                    availabilityValue.appendChild(toolTipContainer)
 
 
                     priceContainer.appendChild(priceTitle)
