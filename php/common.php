@@ -1365,17 +1365,17 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
         			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ',</h2>
-        			<p>Your request for ' . $service . ' has been completed. Our respondent will contact you via email/text shortly.</p>
-                    <p>Quality of service is our priority, so if you are not satisfied with your service or have any questions, please reply to this email (support@helphog.com) so we can resolve any issues.</p>
+        			<p style="color:black">Your request for ' . $service . ' has been completed. Our respondent will contact you via email/text shortly.</p>
+                    <p style="color:black">Quality of service is our priority, so if you are not satisfied with your service or have any questions, please reply to this email (support@helphog.com) so we can resolve any issues.</p>
               <br>
-        			<p><span style="color: #1c2029;">Order Number:  </span>' . $order_number . '</p>
-        			<p><span style="color: #1c2029;">Message:  </span>' . $customer_message . '</p>
-                    <p><span style="color: #1c2029;">Service: </span>' . $service . '</p>
-                    <p><span style="color: #1c2029;">Date: </span>' . $schedule . '</p>
-                    <p><span style="color: #1c2029;">Address:  </span>' . $address . '</p>
-                    <p><span style="color: #1c2029;">Providers:  </span>' . $providers . $provider . '</p>
-                    <p><span style="color: #1c2029;">Subtotal:  </span>' . $subtotal . '</p>
-                    <p><span style="color: #1c2029;">Maximum Cost:  </span>' . $cost . '</p>
+        			<p style="color:black"><span style="color: #1c2029;">Order Number:  </span>' . $order_number . '</p>
+        			<p style="color:black"><span style="color: #1c2029;">Message:  </span>' . $customer_message . '</p>
+                    <p style="color:black"><span style="color: #1c2029;">Service: </span>' . $service . '</p>
+                    <p style="color:black"><span style="color: #1c2029;">Date: </span>' . $schedule . '</p>
+                    <p style="color:black"><span style="color: #1c2029;">Address:  </span>' . $address . '</p>
+                    <p style="color:black"><span style="color: #1c2029;">Providers:  </span>' . $providers . $provider . '</p>
+                    <p style="color:black"><span style="color: #1c2029;">Subtotal:  </span>' . $subtotal . '</p>
+                    <p style="color:black"><span style="color: #1c2029;">Maximum Cost:  </span>' . $cost . '</p>
                     </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#e47d68"><a href="https://www.' . $SUBDOMAIN . 'helphog.com/cancel?ordernumber=' . $order_number . '&secret=' . $cancel_key . '" style="text-decoration:none;line-height:100%;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
                Cancel Order
                </a></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
