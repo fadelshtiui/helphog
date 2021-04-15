@@ -10,7 +10,7 @@ $stripe = new \Stripe\StripeClient(
 
 $db = establish_database();
 
-if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['ordernumber']) && isset($_POST['session']) ) {
+if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['ordernumber']) && isset($_POST['session'])) {
 
     $order = "";
     if (isset($_GET['ordernumber'])) {
@@ -26,19 +26,17 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
 
         $stmnt = $db->prepare("SELECT cancel_key FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             if ($row["cancel_key"] === trim($_GET['secret'])) {
                 $validated = true;
             }
         }
-
     }
 
     if (isset($_POST['ordernumber']) && isset($_POST['session'])) {
 
         $validated = validate_customer($order, trim($_POST['session']));
         $is_post_request = true;
-
     }
 
     if ($validated) {
@@ -53,7 +51,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         $people = "";
         $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
         $stmnt->execute(array($order));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             $service = $row["service"];
             $schedule = $row["schedule"];
             $status = $row["status"];
@@ -67,7 +65,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
         $customerName = "";
         $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($customerEmail));
-        foreach($stmnt->fetchAll() as $row) {
+        foreach ($stmnt->fetchAll() as $row) {
             $customerName = ' ' . $row['firstname'];
         }
 
@@ -78,8 +76,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             } else {
                 echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=This+order+has+already+been+canceled";</script>';
             }
-
-
         } else if ($status == "st") {
 
             if ($is_post_request) {
@@ -87,7 +83,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             } else {
                 echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
             }
-
         } else {
 
             $tz = "";
@@ -95,17 +90,17 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             $phone = "";
             $stmnt = $db->prepare("SELECT firstname, timezone, phone FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($providerEmail));
-            foreach($stmnt->fetchAll() as $row) {
+            foreach ($stmnt->fetchAll() as $row) {
                 $providerName = ' ' . $row['firstname'];
                 $tz = $row['timezone'];
                 $phone = $row['phone'];
             }
-            
+
             $customer_local_date;
 
             $amount = 0;
             $payment_info = payment($order);
-            
+
             $customer_local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
             $customer_local_date->setTimezone(new DateTimeZone($customer_timezone));
 
@@ -126,39 +121,38 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                     }
 
                     $transfer = \Stripe\Transfer::create([
-                      "amount" => 1000,
-                      "currency" => "usd",
-                      "destination" => $stripe_acc,
-                      "description" => $service . " (" . $order . ")",
-                      "transfer_group" => '{' . $order . '}',
+                        "amount" => 1000,
+                        "currency" => "usd",
+                        "destination" => $stripe_acc,
+                        "description" => $service . " (" . $order . ")",
+                        "transfer_group" => '{' . $order . '}',
                     ]);
-
                 }
-                $customerMessage = 'Your service request for ' . $service . ' (' . $order .') on ' . $customer_local_date->format("F j, Y, g:i a") . ' has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
+                $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $customer_local_date->format("F j, Y, g:i a") . ' has been canceled. The refund will appear in your bank statement within 5-10 business days. Since you canceled your task within 24 hours of the scheduled start time, you are billed a one-time fee of $' . $amount . '.';
             } else {
                 $customerMessage = 'Your service request for ' . $service . ' (' . $order . ') on ' . $customer_local_date->format("F j, Y, g:i a") . ' has been canceled. The full refund will appear in your bank statement within 5-10 business days.';
                 $stripe->paymentIntents->cancel(
-                  trim($payment_info->intent),
-                  []
+                    trim($payment_info->intent),
+                    []
                 );
             }
 
-           
-            if ($providerEmail != ""){
+
+            if ($providerEmail != "") {
 
                 send_email($providerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $providerName));
 
-                sendTextProvider($service, $order, $phone, $local_date->format("F j, Y, g:i a"));
+                sendTextProvider($service, $order, $phone, $customer_local_date->format("F j, Y, g:i a"));
             }
-            if ($secondary_providers != ""){
-                $providers = explode("," , $secondary_providers);
-                foreach ($providers as $provider){
+            if ($secondary_providers != "") {
+                $providers = explode(",", $secondary_providers);
+                foreach ($providers as $provider) {
 
                     $phonenumber = "";
                     $name = "";
                     $stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($provider));
-                    foreach($stmnt->fetchAll() as $row) {
+                    foreach ($stmnt->fetchAll() as $row) {
                         $phonenumber = $row['phone'];
                         $name = ' ' . $row['firstname'];
                     }
@@ -166,7 +160,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                     sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
                 }
             }
-            
+
             send_email($customerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($customerMessage, $customerName));
 
             $sql = "UPDATE {$DB_PREFIX}orders SET status = 'cc' WHERE order_number = ?;";
@@ -179,9 +173,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             } else {
                 echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/verify?Your+order+has+been+cancelled.+You+should+receive+an+email+shortly+confirming+the+cancelation.&email=none";</script>';
             }
-
         }
-
     } else {
         echo 'invalid parameters';
     }
@@ -189,7 +181,8 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
     echo 'missing parameters';
 }
 
-function sendTextProvider($service, $order, $phonenumber, $schedule){
+function sendTextProvider($service, $order, $phonenumber, $schedule)
+{
     $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
     $token = '18a458337ffdfd10617571e495314311';
     $client = new Client($sid, $token);
