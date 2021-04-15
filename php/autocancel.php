@@ -32,20 +32,27 @@ foreach ($result as $row) {
     $tz = $row["timezone"];
     $cancel_buffer = $row['cancel_buffer'];
 
-    if ($status == "pe") {
+    if ($status == "pe" || $status == 'cl') {
 
         $needsToBeCancelled = false;
-        if (minutes_until($row["schedule"]) < $cancel_buffer) {
-            if ($client_email == "") {
-                $needsToBeCancelled = true;
-            } else if ($people > 1) {
-                if ($secondary_providers == "") {
+
+        if ($status == 'pe') {
+            if (minutes_until($row["schedule"]) < $cancel_buffer) {
+                if ($client_email == "") {
                     $needsToBeCancelled = true;
-                }
-                if (count(explode(',', $secondary_providers)) + 1 < $people) {
-                    $needsToBeCancelled = true;
+                } else if ($people > 1) {
+                    if ($secondary_providers == "") {
+                        $needsToBeCancelled = true;
+                    }
+                    if (count(explode(',', $secondary_providers)) + 1 < $people) {
+                        $needsToBeCancelled = true;
+                    }
                 }
             }
+        }
+
+        if ($status == 'cl' && minutes_since($schedule) > 120) {
+            $needsToBeCancelled = true;
         }
 
         if ($needsToBeCancelled) {
