@@ -1324,17 +1324,17 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         							<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
         								<![endif]-->
         								<div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
-        									<div style="margin:0px auto;max-width:640px;background:#7289DA url(https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) top center / cover no-repeat;">
+        									<div style="margin:0px auto;max-width:640px;">
         										<!--[if mso | IE]>
         										<v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
         											<![endif]-->
-        											<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#7289DA url(../images/emaillogo.png) top center / cover no-repeat;" align="center" border="0" background="https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+        											<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%; align="center" border="0";">
         												<tbody>
-        													<tr style="background-color:white;">
+        													<tr>
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr>
+        																<tr style="background-color:white;">
         																	<td style="vertical-align:undefined;width:640px;">
         																		<![endif]-->
                                             <div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Service Requested</div>        																		<!--[if mso | IE]>
