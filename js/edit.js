@@ -359,7 +359,7 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
      let response = await fetch(url, { method: "POST", body: data })
      await checkStatus(response);
      response = await response.json();
-     if (response.error == 'Provider with the inputed ID does not exist or does not provide this service' || response.error == 'The selected provider is unavailable for this order') {
+     if (response.error == 'Provider with the inputted ID does not exist or does not provide this service' || response.error == 'The selected provider is unavailable for this order') {
           id("errorlabel").classList.remove("hidden");
           if (id('numpeople').value != 1) {
                id("errorlabel").classList.add("hidden");
