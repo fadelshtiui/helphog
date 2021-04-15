@@ -76,14 +76,14 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             } else {
                 echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=This+order+has+already+been+canceled";</script>';
             }
-        } else if ($status == "st") {
+        } else if ($status == "st" || ($status != "pe" && $status != "cl")) {
 
             if ($is_post_request) {
                 echo 'ordererror';
             } else {
                 echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
             }
-        } else {
+        } else { // $status == "pe" || $status == "cl"
 
             $tz = "";
             $providerName = "";
