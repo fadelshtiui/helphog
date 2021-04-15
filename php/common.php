@@ -1334,8 +1334,8 @@ function get_confirmation_email($order_number, $cost, $service, $name, $schedule
         														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
         															<!--[if mso | IE]>
         															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-        																<tr style="background-color:white;">
-        																	<td style="vertical-align:undefined;width:640px;">
+        																<tr>
+        																	<td style="vertical-align:undefined;width:640px;background-color:white;">
         																		<![endif]-->
                                             <div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Service Requested</div>        																		<!--[if mso | IE]>
         																	</td>
