@@ -51,8 +51,11 @@ foreach ($result as $row) {
             }
         }
 
+        $provider_never_started = false;
+
         if ($status == 'cl' && minutes_since($schedule) > 120) {
             $needsToBeCancelled = true;
+            $provider_never_started = true;
         }
 
         if ($needsToBeCancelled) {
@@ -79,8 +82,13 @@ foreach ($result as $row) {
                 $utc->setTimezone(new DateTimeZone($timezone));
                 $schedule = $utc->format('F j, Y, g:i a');
 
-                send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name));
-                sendTextProvider($service, $order_number, $primary_work_phone, $schedule);
+                if($provider_never_started){
+                    send_email($client_email, "no-reply@helphog.com", "Task Cancelled", provider_never_started($service, $order_number, $schedule, $name));
+                }else{
+                    send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name));
+                }
+
+                sendTextProvider($service, $order_number, $primary_work_phone, $schedule, $provider_never_started);
 
             }
 
@@ -102,8 +110,14 @@ foreach ($result as $row) {
                     $utc->setTimezone(new DateTimeZone($timezone));
                     $schedule = $utc->format('F j, Y, g:i a');
 
-                    sendTextProvider($service, $order_number, $work_phone, $schedule);
-                    send_email($email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name2));
+                    sendTextProvider($service, $order_number, $work_phone, $schedule, $provider_never_started);
+
+                    if($provider_never_started){
+                        send_email($client_email, "no-reply@helphog.com", "Task Cancelled", provider_never_started($service, $order_number, $schedule, $name2));
+                    }else{
+                        send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name2));
+                    }
+
                 }
             }
 
@@ -125,9 +139,13 @@ foreach ($result as $row) {
             $params = array("ac", $order_number);
             $stmt->execute($params);
 
-            sendTextCustomer($service, $order_number, $customer_phone, $schedule);
+            sendTextCustomer($service, $order_number, $customer_phone, $schedule, $provider_never_started);
 
-            send_email($customer_email, "no-reply@helphog.com", "Order Cancelled", noProviderFound($service, $order_number, $schedule, $name3));
+            if($provider_never_started){
+                send_email($client_email, "no-reply@helphog.com", "Task Cancelled", provider_never_started($service, $order_number, $schedule, $name3));
+            }else{
+                send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $schedule, $name3));
+            }
 
         }
 
@@ -135,19 +153,33 @@ foreach ($result as $row) {
 
 }
 
-function sendTextCustomer($service, $order, $phonenumber, $schedule){
+function sendTextCustomer($service, $order, $phonenumber, $schedule, $provider_never_started){
+
+    if ($provider_never_started){
+        $message = ' was canceled because the provider has not started working on your order. The refund will appear in your bank statement within 5-10 business days.';
+    }else{
+        $message = ' was canceled because the service provider was not located in time. We apologize for the inconvenience.';
+    }
+
     $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
     $token = '18a458337ffdfd10617571e495314311';
     $client = new Client($sid, $token);
-    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your order for ' . $service . ' (' . $order . ') on ' . $schedule . ' was canceled because the service provider was not located in time. We apologize for the inconvenience.'));
+    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your order for ' . $service . ' (' . $order . ') on ' . $schedule . $message));
 
 }
 
-function sendTextProvider($service, $order, $phonenumber, $schedule){
+function sendTextProvider($service, $order, $phonenumber, $schedule, $provider_never_started){
+
+    if ($provider_never_started){
+        $message = ' was canceled because the primary provider has not started working on the order.';
+    }else{
+        $message = ' was canceled because one or more of the secondary providers were not located for this task';
+    }
+
     $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
     $token = '18a458337ffdfd10617571e495314311';
     $client = new Client($sid, $token);
-    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . ' was canceled because one or more of the secondary providers were not located for this task'));
+    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . $message));
 
 }
 

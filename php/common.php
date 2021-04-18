@@ -57,7 +57,7 @@ function send_text($phonenumber, $message)
 function &payment($order)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$result = new \stdClass();
 	$sales_tax_percent = 0;
@@ -172,7 +172,7 @@ function pay_provider($order_number)
 		$stmt1 = $db->prepare($sql1);
 		$params1 = array(0, $order_number);
 		$stmt1->execute($params1);
-		
+
 		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
@@ -222,7 +222,7 @@ function pay_provider($order_number)
 function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$name = "";
 	$alerts = "";
@@ -333,7 +333,7 @@ function minutes_since($time)
 function user_exists($session)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
@@ -350,7 +350,7 @@ function user_exists($session)
 function validate_customer($order, $session)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$customer_email = "";
@@ -374,7 +374,7 @@ function validate_customer($order, $session)
 function validate_customer_phone($order, $phone)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$customer_phone = "";
@@ -436,7 +436,7 @@ function address_works_for_provider($address, $email, $orderTime)
 function validate_provider_email($order, $email)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$stmnt = $db->prepare("SELECT client_email FROM {$DB_PREFIX}orders WHERE order_number = ?;");
@@ -453,7 +453,7 @@ function validate_provider_email($order, $email)
 function validate_provider($order, $session)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$all_providers = array();
 
@@ -463,7 +463,7 @@ function validate_provider($order, $session)
 		$client_email = $row['client_email'];
 		$secondary_providers = $row['secondary_providers'];
 
-		
+
 		if ($client_email != "") {
 			array_push($all_providers, $client_email);
 		}
@@ -475,7 +475,7 @@ function validate_provider($order, $session)
 			}
 		}
 	}
-	
+
 	foreach ($all_providers as $provider) {
 		$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($provider));
@@ -492,7 +492,7 @@ function validate_provider($order, $session)
 function validate_user($email, $session)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$customer_email = "";
 	$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -509,7 +509,7 @@ function validate_user($email, $session)
 function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm, $phone)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$first_name_error = "";
@@ -609,7 +609,7 @@ function pause_order($order)
 function resume_order($order)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$time = gmdate('y-m-d H:i:s');
@@ -688,7 +688,7 @@ function start_stop_order($order)
 function getId($email)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$stmnt = $db->prepare("SELECT id FROM {$DB_PREFIX}login WHERE email = ?;");
 	$stmnt->execute(array($email));
@@ -701,7 +701,7 @@ function getId($email)
 function mark_completed($order, $message)
 {
     include 'constants.php';
-    
+
 	$payment_info = payment($order);
 
 	$db = establish_database();
@@ -1050,7 +1050,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 function dispute_order($order_number)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 
 	$service = "";
@@ -1179,7 +1179,7 @@ function dispute_order($order_number)
 function &establish_database()
 {
     include 'constants.php';
-    
+
 	$host = 'localhost';
 	$dbname = 'regiuzkk_help';
 	$user = 'regiuzkk_help';
@@ -1201,7 +1201,7 @@ function &establish_database()
 function check_session($post_session)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$found = false;
 	if ($post_session != "") {
@@ -1218,7 +1218,7 @@ function check_session($post_session)
 function get_order_status($order)
 {
     include 'constants.php';
-    
+
 	$db = establish_database();
 	$order_status = "nf";
 	$result = $db->query("SELECT order_number FROM {$DB_PREFIX}orders;");
@@ -2090,6 +2090,112 @@ function get_cancel_email($name, $service, $order_number, $schedule)
 ';
 }
 
+function provider_never_started($name, $service, $order_number, $schedule)
+{
+	include 'constants.php';
+
+	return '<body style="background: #F9F9F9;">
+        	<div style="background-color:#F9F9F9;">
+        	<div style="margin:0px auto;max-width:640px;background:transparent;">
+        		<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0">
+        		<tbody>
+        			<tr>
+        				<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 0px;">
+        					<!--[if mso | IE]>
+        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        						<tr>
+        							<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        								<![endif]-->
+        								<div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
+        									<div style="margin:0px auto;max-width:640px;background:#7289DA url(https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) top center / cover no-repeat;">
+        										<!--[if mso | IE]>
+        										<v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+        											<![endif]-->
+        											<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#7289DA url(../images/emaillogo.png) top center / cover no-repeat;" align="center" border="0" background="https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+        												<tbody>
+        													<tr>
+        														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
+        															<!--[if mso | IE]>
+        															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        																<tr style="background-color: white;">
+        																	<td style="vertical-align:undefined;width:640px;">
+        																		<![endif]-->
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Task Cancelled</div>
+        																		<!--[if mso | IE]>
+        																	</td>
+        																</tr>
+        															</table>
+        															<![endif]-->
+        														</td>
+        													</tr>
+        												</tbody>
+        											</table>
+        											<!--[if mso | IE]>
+        										</v:textbox>
+        										</v:rect>
+        										<![endif]-->
+        									</div>
+        									<!--[if mso | IE]>
+        							</td>
+        						</tr>
+        					</table>
+        					<![endif]-->
+        					<!--[if mso | IE]>
+        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0px auto;max-width:640px;background:#ffffff;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 70px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
+        			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
+        			<p>Unfortunately, your order of ' . $service . ' (' . $order_number . ') on ' . $schedule . ' has been cancelled. Your provider has not started working on your order. The refund will appear in your bank statement within 5-10 business days.</p>
+        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--></div><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;"><div style="font-size:1px;line-height:12px;">&nbsp;</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0 auto;max-width:640px;background:#ffffff;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden;"><table cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;font-size:0px;padding:0px;"><!--[if mso | IE]>
+        			<table border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:30px 70px 0px 70px;" align="center"><div style="cursor:auto;color: #1ecd97;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:18px;line-height:16px;text-align:center;">If you have any other questions/concerns, please contact us:</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:14px 70px 30px 70px;" align="center"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:22px;text-align:center;">
+        			(425) 640-3926 or support@helphog.com
+        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
+        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        	</div>
+        </body>
+';
+}
+
 function noProviderFound($service, $order, $schedule, $name)
 {
 	include 'constants.php';
@@ -2831,7 +2937,7 @@ function get_dispute_email($name, $service, $schedule, $order)
 function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total, $providerId)
 {
 	include 'constants.php';
-	
+
 	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>

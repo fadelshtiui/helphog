@@ -145,6 +145,8 @@ function taxCode(array $items): string
 
 function createOrder($paymentIntent, $order_info, array $items, $taxRate)
 {
+    include 'constants.php';
+
     global $db;
     $entry = $items[0];
 
@@ -226,6 +228,8 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
 
 function checkAcc(array $creds): bool
 {
+    include 'constants.php';
+
     $db = establish_database();
     $entry = $creds[0];
     $email = $entry->email;

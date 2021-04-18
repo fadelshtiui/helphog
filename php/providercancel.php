@@ -198,6 +198,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
 }
 
 function banning($cancels, $client_email) {
+    include 'constants.php';
+
     $db = establish_database();
 
     $name = "";
