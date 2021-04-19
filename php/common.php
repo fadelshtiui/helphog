@@ -2090,7 +2090,7 @@ function get_cancel_email($name, $service, $order_number, $schedule)
 ';
 }
 
-function provider_never_started($name, $service, $order_number, $schedule)
+function provider_never_started($service, $order_number, $schedule, $name)
 {
 	include 'constants.php';
 
