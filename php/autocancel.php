@@ -31,6 +31,7 @@ foreach ($result as $row) {
     $status = $row["status"];
     $tz = $row["timezone"];
     $cancel_buffer = $row['cancel_buffer'];
+    $customer_timezone = $row['timezone'];
 
     if ($status == "pe" || $status == 'cl') {
 
@@ -124,16 +125,14 @@ foreach ($result as $row) {
             }
 
             $name3 = "";
-            $timezone = "";
             $stmnt = $db->prepare("SELECT firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
             foreach($stmnt->fetchAll() as $row) {
                 $name3 = ' ' . $row['firstname'];
-                $timezone = $row['timezone'];
             }
 
             $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-            $utc->setTimezone(new DateTimeZone($tz));
+            $utc->setTimezone(new DateTimeZone($customer_timezone));
             $schedule = $utc->format('F j, Y, g:i a');
 
             $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?;";
