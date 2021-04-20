@@ -86,37 +86,33 @@ function &payment($order)
 			$worked_time = ($seconds_diff / 3600);
 		}
 	}
+	
 	$result->wage = $wage;
 	$result->duration = $duration;
 	$result->worked_time = $worked_time;
 
-	$decimal_percent = $sales_tax_percent / 100.0;
-	$max_withdraw = 0;
-	$tax_collected = 0;
-	if ($wage == "hour") {
-		$max_payment_before_tax = $duration * $cost * $people;
-	} else {
-		$max_payment_before_tax = $cost * $people;
-	}
-	$tax_collected = round($max_payment_before_tax * $decimal_percent, 2);
-	$max_withdraw = round($max_payment_before_tax + $tax_collected, 2);
+	$total_before_tax = $cost * $people;
+	$provider_payout = $cost * 0.9;
 
 	if ($wage == "hour") {
-		if ($worked_time < 1 && $prorated == "n") { // round up non prorated tasks up to cost of 1 hour
+		if ($worked_time < 1 && $prorated == "n") {
 			$worked_time = 1;
 		}
-		$total_before_tax = $worked_time * $cost * $people;
-		$tax_collected = round($total_before_tax * $decimal_percent, 2);
-		$result->customer_payment = round($total_before_tax + $tax_collected, 2);
-		$result->provider_payout = $worked_time * $cost * 0.9;
-		$result->total_before_tax = $total_before_tax;
-	} else {
-		$result->total_before_tax = $max_payment_before_tax;
-		$result->customer_payment = $max_withdraw;
-		$result->provider_payout = $cost * 0.9;
+		if ($worked_time > $duration) {
+			$worked_time = $duration;
+		}
+		
+		$total_before_tax *= $worked_time;
+		$provider_payout *= $worked_time;
+		
 	}
-	$result->tax_collected = $tax_collected;
 
+	$tax_collected = round($total_before_tax * ($sales_tax_percent / 100.0), 2);
+
+	$result->customer_payment = round($total_before_tax + $tax_collected, 2);
+	$result->provider_payout = $provider_payout;
+	$result->total_before_tax = $total_before_tax;
+	$result->tax_collected = $tax_collected;
 
 	return $result;
 }
