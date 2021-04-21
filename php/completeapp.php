@@ -21,25 +21,9 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
 
     $secret_key = "" . bin2hex(openssl_random_pseudo_bytes(256));
 
-    $id;
-    $unique = false;
-    while (!$unique) {
-        $id = (time() + mt_rand()) % 100000;
-        if ($id >= 10000) {
-            $unique = true;
-            $result = $db->query("SELECT id FROM {$DB_PREFIX}login");
-            foreach ($result as $row) {
-                if ($id == $row["id"]) {
-                    $unique = false;
-                    break;
-                }
-            }
-        }
-    }
-
-    $sql = "INSERT INTO {$DB_PREFIX}login (firstname, lastname, email, password, phone, type, verified, zip, work_zip, work_phone, work_email, stripe_acc, verify_key, timezone, id) VALUES (:firstname, :lastname, :email, :password, :phone, :type, :verified, :zip, :work_zip, :work_phone, :work_email, :stripe_acc, :verify_key, :timezone, :id);";
+    $sql = "INSERT INTO {$DB_PREFIX}login (firstname, lastname, email, password, phone, type, verified, zip, work_zip, work_phone, work_email, stripe_acc, verify_key, timezone) VALUES (:firstname, :lastname, :email, :password, :phone, :type, :verified, :zip, :work_zip, :work_phone, :work_email, :stripe_acc, :verify_key, :timezone);";
     $stmt = $db->prepare($sql);
-    $params = array("firstname" => $firstname, "lastname" => $lastname, "email" => $email, "password" => $password, "phone" => $phone, "type" => "Personal", "verified" => "n", "zip" => $zip, "work_zip" => $zip, "work_phone" => $phone, "work_email" => $email, "stripe_acc" => $stripe, "verify_key" => $secret_key, "timezone" => $tz, "id" => $id);
+    $params = array("firstname" => $firstname, "lastname" => $lastname, "email" => $email, "password" => $password, "phone" => $phone, "type" => "Personal", "verified" => "n", "zip" => $zip, "work_zip" => $zip, "work_phone" => $phone, "work_email" => $email, "stripe_acc" => $stripe, "verify_key" => $secret_key, "timezone" => $tz);
     $stmt->execute($params);
 
     update_radius($radius, $email, $workfield, $db);
@@ -85,10 +69,31 @@ function update_radius($radius, $email, $workfield, $db) {
         $radius = "100";
     }
 
-    $sql = "UPDATE {$DB_PREFIX}login SET workfield = ?, radius = ? WHERE email = ?";
+    $sql = "UPDATE {$DB_PREFIX}login SET workfield = ?, radius = ?, id = ? WHERE email = ?";
     $stmt = $db->prepare($sql);
-    $params = array($workfield, $radius, $email);
+    $params = array($workfield, $radius, generate_provider_id($db), $email);
     $stmt->execute($params);
+}
+
+function generate_provider_id($db) {
+    include 'constants.php';
+    
+    $id;
+    $unique = false;
+    while (!$unique) {
+        $id = (time() + mt_rand()) % 100000;
+        if ($id >= 10000) {
+            $unique = true;
+            $result = $db->query("SELECT id FROM {$DB_PREFIX}login");
+            foreach ($result as $row) {
+                if ($id == $row["id"]) {
+                    $unique = false;
+                    break;
+                }
+            }
+        }
+    }
+    return $id;
 }
 
 ?>
