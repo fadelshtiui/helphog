@@ -29,12 +29,6 @@
 
     });
 
-    function toggleAddressView() {
-        id('locationField').classList.remove('hidden')
-        id('addressDisplay').classList.add('hidden')
-        id('autocomplete').classList.remove('hidden')
-    }
-
     function goHome() {
         window.location.href = '/'
     }
@@ -194,9 +188,15 @@
 
 })();
 
+function toggleAddressView() {
+    id('locationField').classList.remove('hidden')
+    id('addressDisplay').classList.add('hidden')
+    id('autocomplete').classList.remove('hidden')
+}
+
 function addressUpdate() {
 
-    if (id("address").innerText == '' || id("current-city").innerText == '' || id("current-zip").innerText == '' || id("current-state").innerText == '') {
+    if (id("current-address").innerText == '' || id("current-city").innerText == '' || id("current-zip").innerText == '' || id("current-state").innerText == '') {
         resetModal()
         id('warning-message').innerText = "Please enter a full address."
         id('no').classList.add('hidden')
@@ -206,8 +206,13 @@ function addressUpdate() {
         id('yes').innerText = "OK, Close Modal"
         id('yes').classList.add('secondary');
         qs('.modal-wrapper').classList.remove('hidden')
-
-        return
+        id("current-address").innerText = '';
+        id("current-city").innerText == '';
+        id("current-zip").innerText == '';
+        id("current-state").innerText == '';
+        toggleAddressView();
+        id('autocomplete').value = '';
+        return;
     }
 
     let data = new FormData();
