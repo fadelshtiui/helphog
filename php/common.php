@@ -3529,8 +3529,8 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
                                   <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $cost) . '</span></td>
                                 </tr>
                                 <tr>
-                                 <td width="80%" class="purchase_item"><span class="f-fallback">Sales Tax</span></td>
-                                 <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $tax) . ' (' . $tax_rate . '%)</span></td>
+                                 <td width="80%" class="purchase_item"><span class="f-fallback">Sales Tax (' . $tax_rate . '%)</span></td>
+                                 <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $tax) . '</span></td>
                                 </tr>
                                 <tr>
                                   <td width="80%" class="purchase_footer" valign="middle">
