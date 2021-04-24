@@ -44,8 +44,8 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
     $utc->setTimezone(new DateTimeZone('UTC'));
     $t = time();
 
-    // check if day is greater than or equal to 6 days in the future
-    if (minutes_until($utc->format('Y-m-d')) >= (1440 * 6)) {
+    // check if day is greater than or equal to 5 days in the future
+    if (minutes_until($utc->format('Y-m-d')) >= (1440 * 5)) {
         $result = "";
         for ($i = 0; $i < 24; $i++) {
             $result .= '0';
