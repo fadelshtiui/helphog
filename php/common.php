@@ -86,7 +86,7 @@ function &payment($order)
 			$worked_time = ($seconds_diff / 3600);
 		}
 	}
-	
+
 	$result->wage = $wage;
 	$result->duration = $duration;
 	$result->worked_time = $worked_time;
@@ -101,10 +101,10 @@ function &payment($order)
 		if ($worked_time > $duration) {
 			$worked_time = $duration;
 		}
-		
+
 		$total_before_tax *= $worked_time;
 		$provider_payout *= $worked_time;
-		
+
 	}
 
 	$tax_collected = round($total_before_tax * ($sales_tax_percent / 100.0), 2);
@@ -712,6 +712,7 @@ function mark_completed($order, $message)
 	$client_email = "";
 	$tz = "";
 	$disputes = 0;
+	$tax_rate = 0.00;
 	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
@@ -725,6 +726,7 @@ function mark_completed($order, $message)
 		$schedule = $row['schedule'];
 		$client_email = $row['client_email'];
 		$tz = $row['timezone'];
+		$tax_rate = $row['sales_tax_percent'];
 	}
 
 	$providerId = getId($client_email);
@@ -785,7 +787,7 @@ function mark_completed($order, $message)
 			$amount = $cost;
 		}
 
-		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId));
+		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId, $tax_rate));
 
 		$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 
@@ -793,7 +795,7 @@ function mark_completed($order, $message)
 
 Subtotal      -  $' .  money_format('%.2n', $amount) . '
 
-Sales tax     -  $' . $tax_collected . '
+Sales tax (' . $tax_rate . '%) -  $' . $tax_collected . '
 
 Total Amount  -  $' . $customer_payment . '
 
@@ -3035,7 +3037,7 @@ function get_dispute_email($name, $service, $schedule, $order)
         </body>';
 }
 
-function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total, $providerId)
+function get_receipt($name, $service, $order_number, $schedule, $description, $cost, $tax, $total, $providerId, $tax_rate)
 {
 	include 'constants.php';
 
@@ -3528,7 +3530,7 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
                                 </tr>
                                 <tr>
                                  <td width="80%" class="purchase_item"><span class="f-fallback">Sales Tax</span></td>
-                                 <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $tax) . '</span></td>
+                                 <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">$' . money_format('%.2n', $tax) . ' (' . $tax_rate . '%)</span></td>
                                 </tr>
                                 <tr>
                                   <td width="80%" class="purchase_footer" valign="middle">
