@@ -197,31 +197,4 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
     echo 'missing parameters';
 }
 
-function banning($cancels, $client_email) {
-    include 'constants.php';
-
-    $db = establish_database();
-
-    $name = "";
-    $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
-    $stmnt->execute(array($client_email));
-    foreach($stmnt->fetchAll() as $row) {
-        $name = ' ' . $row['firstname'];
-    }
-
-    if ($cancels == '2'){
-        $note = "Our system has noticed several order cancellations on your behalf. We ask you not to claim orders if you are unable to fulfill them. Further cancellations will result in the suspension of your provider account.";
-    }
-    if ($cancels == '3'){
-        $sql = "UPDATE {$DB_PREFIX}login SET type = ?, banned = 'y' WHERE email = ?;";
-        $stmt = $db->prepare($sql);
-        $params = array("Personal", $client_email);
-        $stmt->execute($params);
-        $note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
-    }
-
-    send_email($client_email, "no-reply@helphog.com", "Account Notice", get_notice_email($name, $note));
-
-}
-
 ?>
