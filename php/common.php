@@ -128,6 +128,7 @@ function pay_provider($order_number)
 	$db = establish_database();
 
 	$service = "";
+	$tz = "";
 	$schedule = "";
 	$secondary_providers = "";
 	$provider_email = "";
