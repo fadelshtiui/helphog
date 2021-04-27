@@ -259,7 +259,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 
 	if ($alerts == "email" || $alerts == "both") {
 
-		$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
+		$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
 		$local_time->setTimezone(new DateTimeZone($tz));
 
 		if ($address == "Remote (online)") {
@@ -285,7 +285,7 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 		$alerts = $row['alerts'];
 	}
 
-	$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
+	$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
 	$local_time->setTimezone(new DateTimeZone($tz));
 	$t = time();
 

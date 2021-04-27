@@ -109,9 +109,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
             $local_date->setTimezone(new DateTimeZone($tz));
 
-            $schedule = $local_date->format('m\-d\-y \a\t g:ia');
-
-            send_email($customer_email, "admin@helphog.com", "Order Cancelled", get_cancel_email($name, $service, $order_number, $schedule));
+            send_email($customer_email, "admin@helphog.com", "Order Cancelled", get_cancel_email($name, $service, $order_number, $local_date->format('m\-d\-y \a\t g:ia')));
 
             echo 'task cancelled';
 
