@@ -77,6 +77,7 @@
 		id('service').innerText = response.service
 		if (response.cancelled == "true") {
 			id("canceled").style.display = "block";
+			$('*[data-state="label-created"]').hide();
 			$('*[data-state="picked-up"]').hide();
 			$('*[data-state="transit"]').hide();
 			$('*[data-state="delivered"]').hide();
