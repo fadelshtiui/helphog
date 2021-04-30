@@ -200,7 +200,7 @@ function pay_provider($order_number)
 		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-		$intent->capture(['amount_to_capture' => ceil($payment_info->customer_payment * 100)]);
+		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
 		$stripe_acc = "";
 		$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
