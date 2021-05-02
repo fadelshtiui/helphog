@@ -34,7 +34,9 @@
           }
      }
 
-     function reset() {
+     async function reset() {
+          qs('.buttonloadicon').classList.remove('hidden')
+          id('reset-btn').disabled = true
           let data = new FormData();
           let email = id("email").value.toLowerCase();
           let password = id("password").value;
@@ -45,11 +47,16 @@
           data.append("confirm", confirm);
           data.append("number", number);
           let url = "php/reset.php"
-          fetch(url, { method: "POST", body: data })
-               .then(checkStatus)
-               .then(res => res.json())
-               .then(handleResponse)
-               .catch(console.log);
+          try {
+               let res = await fetch(url, { method: "POST", body: data })
+               await checkStatus(res)
+               res = await res.json()
+               handleResponse(res)
+          } catch (err) {
+               console.error(err)
+          }
+          qs('.buttonloadicon').classList.add('hidden')
+          id('reset-btn').disabled = false
      }
 
      function handleResponse(response) {
