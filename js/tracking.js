@@ -77,6 +77,10 @@
 		id('service').innerText = response.service
 		if (response.cancelled == "true") {
 			id("canceled").style.display = "block";
+			$('*[data-state="label-created"]').hide();
+			$('*[data-state="picked-up"]').hide();
+			$('*[data-state="transit"]').hide();
+			$('*[data-state="delivered"]').hide();
 		} else if (response['status'] == "pe") {
 			$('*[data-state="picked-up"]').hide();
 			$('*[data-state="transit"]').hide();

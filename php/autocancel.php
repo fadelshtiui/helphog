@@ -57,6 +57,18 @@ foreach ($result as $row) {
         if ($status == 'cl' && minutes_since($schedule) > 120) {
             $needsToBeCancelled = true;
             $provider_never_started = true;
+
+            $cancels = 0;
+            $stmnt = $db->prepare("SELECT cancels FROM {$DB_PREFIX}login WHERE email = ?;");
+            $stmnt->execute(array($client_email));
+            foreach($stmnt->fetchAll() as $row) {
+                $cancels = $row['cancels'];
+            }
+
+            $cancels = $cancels + 1;
+            if ($cancels > 1){
+                banning($cancels, $client_email);
+            }
         }
 
         if ($needsToBeCancelled) {

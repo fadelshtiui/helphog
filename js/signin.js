@@ -8,6 +8,7 @@
         const urlParams = new URLSearchParams(queryString)
         if (urlParams.get('redirect') && urlParams.get('redirect') == 'quickapply') {
             id('extra-prompt').classList.remove('hidden')
+            qs('.message').classList.add('hidden')
         }
 
         id("login-btn").onclick = login;

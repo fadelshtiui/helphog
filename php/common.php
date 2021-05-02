@@ -18,8 +18,35 @@ require 'PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer-master/src/SMTP.php';
 
 ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+# error_reporting(E_ALL);
 error_reporting(E_ERROR | E_PARSE);
+
+function banning($cancels, $client_email) {
+    include 'constants.php';
+
+    $db = establish_database();
+
+    $name = "";
+    $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
+    $stmnt->execute(array($client_email));
+    foreach($stmnt->fetchAll() as $row) {
+        $name = ' ' . $row['firstname'];
+    }
+
+    if ($cancels == '2'){
+        $note = "Our system has noticed several order cancellations on your behalf. We ask you not to claim orders if you are unable to fulfill them. Further cancellations will result in the suspension of your provider account.";
+    }
+    if ($cancels == '3'){
+        $sql = "UPDATE {$DB_PREFIX}login SET type = ?, banned = 'y' WHERE email = ?;";
+        $stmt = $db->prepare($sql);
+        $params = array("Personal", $client_email);
+        $stmt->execute($params);
+        $note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
+    }
+
+    send_email($client_email, "no-reply@helphog.com", "Account Notice", get_notice_email($name, $note));
+
+}
 
 function send_email($to, $from, $subject, $message)
 {
@@ -128,6 +155,7 @@ function pay_provider($order_number)
 	$db = establish_database();
 
 	$service = "";
+	$tz = "";
 	$schedule = "";
 	$secondary_providers = "";
 	$provider_email = "";
@@ -172,7 +200,7 @@ function pay_provider($order_number)
 		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
 	} else {
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-		$intent->capture(['amount_to_capture' => ceil($payment_info->customer_payment * 100)]);
+		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
 		$stripe_acc = "";
 		$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -231,7 +259,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 
 	if ($alerts == "email" || $alerts == "both") {
 
-		$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
+		$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
 		$local_time->setTimezone(new DateTimeZone($tz));
 
 		if ($address == "Remote (online)") {
@@ -257,7 +285,7 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 		$alerts = $row['alerts'];
 	}
 
-	$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
+	$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
 	$local_time->setTimezone(new DateTimeZone($tz));
 	$t = time();
 
