@@ -21,31 +21,31 @@ ini_set('display_errors', 'On');
 # error_reporting(E_ALL);
 error_reporting(E_ERROR | E_PARSE);
 
-function banning($cancels, $client_email) {
-    include 'constants.php';
+function banning($cancels, $client_email)
+{
+	include 'constants.php';
 
-    $db = establish_database();
+	$db = establish_database();
 
-    $name = "";
-    $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
-    $stmnt->execute(array($client_email));
-    foreach($stmnt->fetchAll() as $row) {
-        $name = ' ' . $row['firstname'];
-    }
+	$name = "";
+	$stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
+	$stmnt->execute(array($client_email));
+	foreach ($stmnt->fetchAll() as $row) {
+		$name = ' ' . $row['firstname'];
+	}
 
-    if ($cancels == '2'){
-        $note = "Our system has noticed several order cancellations on your behalf. We ask you not to claim orders if you are unable to fulfill them. Further cancellations will result in the suspension of your provider account.";
-    }
-    if ($cancels == '3'){
-        $sql = "UPDATE {$DB_PREFIX}login SET type = ?, banned = 'y' WHERE email = ?;";
-        $stmt = $db->prepare($sql);
-        $params = array("Personal", $client_email);
-        $stmt->execute($params);
-        $note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
-    }
+	if ($cancels == '2') {
+		$note = "Our system has noticed several order cancellations on your behalf. We ask you not to claim orders if you are unable to fulfill them. Further cancellations will result in the suspension of your provider account.";
+	}
+	if ($cancels == '3') {
+		$sql = "UPDATE {$DB_PREFIX}login SET type = ?, banned = 'y' WHERE email = ?;";
+		$stmt = $db->prepare($sql);
+		$params = array("Personal", $client_email);
+		$stmt->execute($params);
+		$note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
+	}
 
-    send_email($client_email, "no-reply@helphog.com", "Account Notice", get_notice_email($name, $note));
-
+	send_email($client_email, "no-reply@helphog.com", "Account Notice", get_notice_email($name, $note));
 }
 
 function send_email($to, $from, $subject, $message)
@@ -83,7 +83,7 @@ function send_text($phonenumber, $message)
 
 function &payment($order)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$result = new \stdClass();
@@ -131,7 +131,6 @@ function &payment($order)
 
 		$total_before_tax *= $worked_time;
 		$provider_payout *= $worked_time;
-
 	}
 
 	$tax_collected = round($total_before_tax * ($sales_tax_percent / 100.0), 2);
@@ -146,7 +145,7 @@ function &payment($order)
 
 function pay_provider($order_number)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$stripe = new \Stripe\StripeClient(
 		$STRIPE_API_KEY
@@ -245,7 +244,7 @@ function pay_provider($order_number)
 
 function send_new_task_email($client, $price, $ordernumber, $duration, $secret_key, $tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$name = "";
@@ -259,7 +258,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 
 	if ($alerts == "email" || $alerts == "both") {
 
-		$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+		$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
 		$local_time->setTimezone(new DateTimeZone($tz));
 
 		if ($address == "Remote (online)") {
@@ -274,7 +273,7 @@ function send_new_task_email($client, $price, $ordernumber, $duration, $secret_k
 
 function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message, $duration, $secret_key, $tz, $people, $schedule, $tzoffset, $address, $city, $state, $zip, $service)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -285,7 +284,7 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 		$alerts = $row['alerts'];
 	}
 
-	$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+	$local_time = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($tzoffset));
 	$local_time->setTimezone(new DateTimeZone($tz));
 	$t = time();
 
@@ -356,7 +355,7 @@ function minutes_since($time)
 
 function user_exists($session)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -373,7 +372,7 @@ function user_exists($session)
 
 function validate_customer($order, $session)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -397,7 +396,7 @@ function validate_customer($order, $session)
 
 function validate_customer_phone($order, $phone)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -415,7 +414,7 @@ function validate_customer_phone($order, $phone)
 
 function address_works_for_provider($address, $email, $orderTime)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$distanceMatrix = new \stdClass();
@@ -459,7 +458,7 @@ function address_works_for_provider($address, $email, $orderTime)
 
 function validate_provider_email($order, $email)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -476,7 +475,7 @@ function validate_provider_email($order, $email)
 
 function validate_provider($order, $session)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$all_providers = array();
@@ -515,7 +514,7 @@ function validate_provider($order, $session)
 
 function validate_user($email, $session)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$customer_email = "";
@@ -532,7 +531,7 @@ function validate_user($email, $session)
 
 function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm, $phone)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -619,7 +618,7 @@ function &validate_form($firstname, $lastname, $email, $password, $zip, $confirm
 
 function pause_order($order)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -632,7 +631,7 @@ function pause_order($order)
 
 function resume_order($order)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -672,7 +671,7 @@ function resume_order($order)
 
 function start_stop_order($order)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$time = gmdate('y-m-d H:i:s');
@@ -711,7 +710,7 @@ function start_stop_order($order)
 
 function getId($email)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$stmnt = $db->prepare("SELECT id FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -724,7 +723,7 @@ function getId($email)
 
 function mark_completed($order, $message)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$payment_info = payment($order);
 
@@ -823,9 +822,9 @@ function mark_completed($order, $message)
 
 Subtotal      -  $' .  money_format('%.2n', $amount) . '
 
-Sales tax (' . $tax_rate . '%) -  $' . $tax_collected . '
+Sales tax (' . $tax_rate . '%) -  $' . money_format('%.2n', $tax_collected) . '
 
-Total Amount  -  $' . $customer_payment . '
+Total Amount  -  $' . money_format('%.2n', $customer_payment) . '
 
 If there\'s an issue with the quality of service provided, you may dispute this order by texting back DISPUTE.
 
@@ -857,7 +856,7 @@ For future orders with the same provider use #' . $providerId . ' at checkout.';
  */
 function claim_order($email, $order_number, $accept_key, $mobile)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -1075,7 +1074,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 function dispute_order($order_number)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 
@@ -1204,7 +1203,7 @@ function dispute_order($order_number)
 
 function &establish_database()
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$host = 'localhost';
 	$dbname = 'regiuzkk_help';
@@ -1226,7 +1225,7 @@ function &establish_database()
 
 function check_session($post_session)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$found = false;
@@ -1243,7 +1242,7 @@ function check_session($post_session)
 
 function get_order_status($order)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$db = establish_database();
 	$order_status = "nf";
@@ -1266,7 +1265,7 @@ function get_order_status($order)
 
 function send_claimed_notification($order_number, $email, $type, $db, $duration)
 {
-    include 'constants.php';
+	include 'constants.php';
 
 	$wage = "";
 	$customer_message = "";
