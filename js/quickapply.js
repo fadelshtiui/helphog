@@ -38,7 +38,7 @@
         }
     }
 
-    function submit() {
+    async function submit() {
         // $('.btn').button('loading');
 
         let session = "";
@@ -78,12 +78,21 @@
             data.append('radius', radius)
             data.append('tz', timezone);
 
+            qs('.buttonloadicon').classList.remove('hidden')
+            id('submit').disabled = true;
+
             let url = "php/apply.php";
-            fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
-                .then(checkStatus)
-                .then(res => res.text())
-                .then(handleResponse)
-                .catch(console.log);
+            try {
+                let res = await fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
+                await checkStatus(res)
+                res = await res.text()
+                handleResponse(res)
+            } catch (err) {
+                console.error(err)
+            }
+
+            qs('.buttonloadicon').classList.add('hidden')
+            id('submit').disabled = false;
         }
     }
 
