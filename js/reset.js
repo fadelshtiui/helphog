@@ -101,7 +101,7 @@
           if (response.emailerror == "" && response.passworderror == "" && response.confirmerror == "" && response.numbererror == "") {
                id('warning-message').innerText = "Error occured. Please retry clicking on the reset link you received."
                let warningIcon = ce('i')
-               warningIcon.classList.add('fas', 'fa-check-circle', 'success')
+               warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
                id('first').innerHTML = ''
                id('first').appendChild(warningIcon)
                qs('.modal-wrapper').classList.remove('hidden')
