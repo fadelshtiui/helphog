@@ -61,8 +61,6 @@ foreach ($stmnt->fetchAll() as $row) {
      $entry->remote = $row["remote"];
      $entry->prorated = $row["prorated"];
 
-     error_log($row["prorated"]);
-
      $category = $row["category"];
 
      $entry->category = $category;
@@ -83,7 +81,7 @@ foreach ($stmnt->fetchAll() as $row) {
 
      $full_address = "";
 
-     if (isset($_POST['city']) || isset($_POST['state']) || isset($_POST['address']) || isset($_POST['zip'])) { // manual address
+     if (isset($_POST['city']) || isset($_POST['state']) || isset($_POST['address'])) { // manual address
 
           $city = trim($_POST['city']);
           $address = trim($_POST['address']);
@@ -157,24 +155,35 @@ foreach ($stmnt->fetchAll() as $row) {
                $available = 1;
                $num_available++;
           } else if ($full_address != "") {
+
                $available = 0;
                foreach ($all_emails as $email) {
                     $allzeros = false;
                     $stmnt = $db->prepare("SELECT availability, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($email));
-                    foreach($stmnt->fetchAll() as $row) {
-                        $full_availability = $row['availability'];
-                        if (strpos($full_availability, '1') === false) {
-                          $allzeros = true;
-                        }
+                    foreach ($stmnt->fetchAll() as $row) {
+                         $full_availability = $row['availability'];
+                         if (strpos($full_availability, '1') === false) {
+                              $allzeros = true;
+                         }
                     }
-                    if(!$allzeros){
-                        $google_response = address_works_for_provider($full_address, $email, time());
-                        if ($google_response->within) {
-                             $available = 1;
-                             $num_available++;
-                             break;
-                        }
+
+
+                    if (!$allzeros) {
+
+                         $t = time();
+
+                         error_log('full address: ' . $full_address);
+                         error_log('email: ' . $email);
+                         error_log('time: ' . $t);
+
+                         $google_response = address_works_for_provider(trim($full_address), trim($email), $t);
+
+                         if ($google_response->within) {
+                              $available = 1;
+                              $num_available++;
+                              break;
+                         }
                     }
                }
           }
@@ -182,18 +191,17 @@ foreach ($stmnt->fetchAll() as $row) {
 
 
      $entry->available = $available;
-     
-     if ($entry->available == 1) {
-         $services->push($entry);
-     } else {
-         $services->add(0, $entry);
-     }
 
+     if ($entry->available == 1) {
+          $services->push($entry);
+     } else {
+          $services->add(0, $entry);
+     }
 }
 
 $services_array = array();
 while (!$services->isEmpty()) {
-    array_push($services_array, $services->pop());
+     array_push($services_array, $services->pop());
 }
 
 $response->available = $num_available;
