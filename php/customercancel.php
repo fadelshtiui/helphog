@@ -140,8 +140,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 );
             }
 
-            $provider_local_date;
-
             if ($providerEmail != "") {
 
                 $provider_local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
@@ -157,12 +155,18 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                     if ($provider != "") {
                         $phonenumber = "";
                         $name = "";
-                        $stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
+                        $tz = "";
+                        $stmnt = $db->prepare("SELECT firstname, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                         $stmnt->execute(array($provider));
                         foreach ($stmnt->fetchAll() as $row) {
                             $phonenumber = $row['phone'];
                             $name = ' ' . $row['firstname'];
+                            $tz = $row['timezone'];
                         }
+
+                        $provider_local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+                        $provider_local_date->setTimezone(new DateTimeZone($tz));
+
                         send_email($provider, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $name));
                         sendTextProvider($service, $order, $phonenumber, $provider_local_date->format("F j, Y, g:i a"));
                     }
