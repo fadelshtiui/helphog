@@ -1009,7 +1009,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 					$stmt->execute($params);
 
 					send_claimed_notification($order_number, $email, "secondary", $db, $duration);
-					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
+					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?message=You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
 				}
 			}
 		} else { // first provider
