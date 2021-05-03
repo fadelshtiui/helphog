@@ -420,6 +420,7 @@ let preloaded = false;
 			let orders = response.orders;
 			let counter = 0;
 			if (orders && orders.length > 0) {
+
 				for (let i = 0; i < orders.length; i++) {
 
 
@@ -705,6 +706,17 @@ let preloaded = false;
 						button2.style.width = "90%"
 						button.style.padding = "15px"
 
+						let loadingIcon1 = ce('i')
+						loadingIcon1.classList.add('fa', 'fa-circle-o-notch', 'fa-spin', 'buttonloadicon', 'hidden')
+						let loadingIcon2 = ce('i')
+						loadingIcon2.classList.add('fa', 'fa-circle-o-notch', 'fa-spin', 'buttonloadicon', 'hidden')
+
+						button.prepend(loadingIcon1)
+						button2.prepend(loadingIcon2)
+
+						button.id = "top-button"
+						button2.id = "bottom-button"
+
 						if (order.role == "primary") {
 							button2.dataset.role = 'primary';
 							action.appendChild(button);
@@ -759,40 +771,45 @@ let preloaded = false;
 			qs(".modal-wrapper").classList.add('hidden')
 		}
 
-		id('yes').onclick = function () {
+		id('yes').onclick = async function () {
 
-			id('loading').classList.remove('hidden')
 			let data = new FormData();
 
 			data.append("ordernumber", ordernumber);
 			data.append("session", getSession());
 			let url = "php/markcompleted.php";
-			fetch(url, { method: "POST", body: data })
-				.then(checkStatus)
-				.then(res => res.json())
-				.then(function (response) {
-					if (response.error == "") {
-						location.reload();
-					} else {
 
-						resetModal()
-						let warningIcon = ce('i')
-						warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
-						id('first').appendChild(warningIcon)
-						id('warning-message').innerText = response.error
-						id('no').classList.add('hidden')
-						id('yes').innerText = "OK, Close Modal"
-						id('yes').classList.add('secondary')
-						id('yes').onclick = function () {
-							qs(".modal-wrapper").classList.add('hidden')
-						}
-						qs(".modal-wrapper").classList.remove('hidden')
-						id('loading').classList.add('hidden')
-
+			qs('#top-button i').classList.remove('hidden')
+			id('#top-button').disabled = true;
+			id('#bottom-button').disabled = true;
+			try {
+				let response = await fetch(url, { method: "POST", body: data })
+				await checkStatus(res)
+				response = await res.json()
+				if (response.error == "") {
+					location.reload();
+				} else {
+					resetModal()
+					let warningIcon = ce('i')
+					warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+					id('first').appendChild(warningIcon)
+					id('warning-message').innerText = response.error
+					id('no').classList.add('hidden')
+					id('yes').innerText = "OK, Close Modal"
+					id('yes').classList.add('secondary')
+					id('yes').onclick = function () {
+						qs(".modal-wrapper").classList.add('hidden')
 					}
+					qs(".modal-wrapper").classList.remove('hidden')
 
-				})
-				.catch(console.log);
+				}
+			} catch (err) {
+				console.error(err)
+			}
+			qs('#top-button i').classList.add('hidden')
+			id('#top-button').disabled = false;
+			id('#bottom-button').disabled = false;
+
 		}
 	}
 
@@ -810,18 +827,28 @@ let preloaded = false;
 		qs(".modal-wrapper").classList.remove('hidden')
 		let ordernumber = this.dataset.ordernumber;
 
-		id('yes').onclick = function () {
+		id('yes').onclick = async function () {
+
+			qs('#bottom-button i').classList.remove('hidden')
+			id('#top-button').disabled = true;
+			id('#bottom-button').disabled = true;
 
 			let data = new FormData();
 			data.append("ordernumber", ordernumber);
 			data.append('session', getSession());
 			let url = "php/refund.php";
-			fetch(url, { method: "POST", body: data })
-				.then(checkStatus)
-				.then(function (response) {
-					location.reload();
-				})
-				.catch(console.log);
+			try {
+				let res = await fetch(url, { method: "POST", body: data })
+				await checkStatus(res)
+				location.reload();
+			} catch (err) {
+				console.error(err)
+			}
+
+			qs('#bottom-button i').classList.add('hidden')
+			id('#top-button').disabled = false;
+			id('#bottom-button').disabled = false;
+
 		}
 	}
 
@@ -830,6 +857,7 @@ let preloaded = false;
 		let role = this.dataset.role
 		let ordernumber = this.dataset.ordernumber;
 
+		resetModal();
 		id('first').innerText = "Are you sure that you would like to cancel the task?"
 		id('warning-message').innerText = "Please only cancel under extenuating circumstances."
 
@@ -844,8 +872,7 @@ let preloaded = false;
 
 		qs('.modal-wrapper').classList.remove('hidden')
 
-		id('yes').onclick = function () {
-			id('loading').classList.remove('hidden')
+		id('yes').onclick = async function () {
 			let data = new FormData();
 
 			let tz = jstz.determine();
@@ -855,13 +882,39 @@ let preloaded = false;
 			data.append("tzoffset", timezone);
 			data.append('role', role)
 			let url = "php/providercancel.php";
-			fetch(url, { method: "POST", body: data })
-				.then(checkStatus)
-				.then(res => res.text())
-				.then(function (response) {
+
+			qs('#bottom-button i').classList.remove('hidden')
+			id('#top-button').disabled = true;
+			id('#bottom-button').disabled = true;
+
+			try {
+				let res = await fetch(url, { method: "POST", body: data })
+				await checkStatus(res)
+				res = await res.text()
+				if (res == "already started") {
+					resetModal();
+
+					let warningIcon = ce('i')
+					warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+					id('first').appendChild(warningIcon)
+					id('warning-message').innerText = "The primary provider has already started working. You can no longer cancel this order."
+					id('no').classList.add('hidden')
+					id('yes').innerText = "OK, Close Modal"
+					id('yes').classList.add('secondary')
+					qs(".modal-wrapper").classList.remove('hidden')
+
+				} else {
 					location.reload();
-				})
-				.catch(console.log);
+				}
+			} catch (err) {
+				console.error(err);
+			}
+
+			qs('#bottom-button i').classList.add('hidden')
+			id('#top-button').disabled = false;
+			id('#bottom-button').disabled = false;
+
+
 		}
 	}
 
@@ -895,10 +948,10 @@ let preloaded = false;
 
 				startStopButton.classList.remove("primary-green")
 				startStopButton.classList.add("primary-red");
-				startStopButton.innerText = "STOP";
+				startStopButton.childNodes[1].data = "STOP";
 				startStopButton.onclick = toggle;
 
-				startStopButton.nextElementSibling.innerText = "PAUSE";
+				startStopButton.nextElementSibling.childNodes[1].data = "PAUSE";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove("primary-red")
 				startStopButton.nextElementSibling.classList.add("secondary");
@@ -926,10 +979,10 @@ let preloaded = false;
 
 				startStopButton.classList.remove("primary-red");
 				startStopButton.classList.add("primary-green");
-				startStopButton.innerText = "MARK COMPLETED";
+				startStopButton.childNodes[1].data = "MARK COMPLETED";
 				startStopButton.onclick = markCompleted;
 
-				startStopButton.nextElementSibling.innerText = "REFUND CUSTOMER";
+				startStopButton.nextElementSibling.childNodes[1].data = "REFUND CUSTOMER";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove('secondary')
 				startStopButton.nextElementSibling.classList.add("primary-red")
@@ -954,9 +1007,9 @@ let preloaded = false;
 		// this.classList.toggle("paused");
 
 		if (type == "PAUSE") {
-			this.innerText = "RESUME";
+			this.childNodes[1].data = "RESUME";
 		} else {
-			this.innerText = "PAUSE";
+			this.childNodes[1].data = "PAUSE";
 		}
 
 		this.onclick = pauseResume
@@ -985,12 +1038,12 @@ let preloaded = false;
 					id('yes').classList.add('secondary')
 					qs(".modal-wrapper").classList.remove('hidden')
 
-					startStopButton.innerText = "START";
+					startStopButton.childNodes[1].data = "START";
 					startStopButton.classList.remove("primary-red")
 					startStopButton.classList.add("primary-green")
 					startStopButton.onclick = toggle;
 
-					startStopButton.nextElementSibling.innerText = "CANCEL";
+					startStopButton.nextElementSibling.childNodes[1].data = "CANCEL";
 					startStopButton.nextElementSibling.classList.remove("primary-green")
 					startStopButton.nextElementSibling.classList.remove("secondary")
 					startStopButton.nextElementSibling.classList.add("primary-red")
