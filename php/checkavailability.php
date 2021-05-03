@@ -77,7 +77,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     } else {
 
-        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ?;");
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ? AND banned = 'n';");
         $stmnt->execute(array('%' . $service . '%'));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
