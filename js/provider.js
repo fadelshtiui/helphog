@@ -809,8 +809,8 @@ let preloaded = false;
 			let url = "php/markcompleted.php";
 
 			qs('#top-button i').classList.remove('hidden')
-			id('#top-button').disabled = true;
-			id('#bottom-button').disabled = true;
+			id('top-button').disabled = true;
+			id('bottom-button').disabled = true;
 			try {
 			    let response = await fetch(url, { method: "POST", body: data })
     			await checkStatus(res)
@@ -836,8 +836,8 @@ let preloaded = false;
 			    console.error(err)
 			}
 			qs('#top-button i').classList.add('hidden')
-			id('#top-button').disabled = false;
-			id('#bottom-button').disabled = false;
+			id('top-button').disabled = false;
+			id('bottom-button').disabled = false;
 
 		}
 	}
@@ -859,8 +859,8 @@ let preloaded = false;
 		id('yes').onclick = async function () {
 
 		    qs('#bottom-button i').classList.remove('hidden')
-			id('#top-button').disabled = true;
-			id('#bottom-button').disabled = true;
+			id('top-button').disabled = true;
+			id('bottom-button').disabled = true;
 
 			let data = new FormData();
 			data.append("ordernumber", ordernumber);
@@ -875,8 +875,8 @@ let preloaded = false;
 			}
 
 			qs('#bottom-button i').classList.add('hidden')
-			id('#top-button').disabled = false;
-			id('#bottom-button').disabled = false;
+			id('top-button').disabled = false;
+			id('bottom-button').disabled = false;
 
 		}
 	}
@@ -913,8 +913,8 @@ let preloaded = false;
 			let url = "php/providercancel.php";
 
 			qs('#bottom-button i').classList.remove('hidden')
-			id('#top-button').disabled = true;
-			id('#bottom-button').disabled = true;
+			id('top-button').disabled = true;
+			id('bottom-button').disabled = true;
 
 			try {
 			    let res = await fetch(url, { method: "POST", body: data })
@@ -940,8 +940,8 @@ let preloaded = false;
 			}
 
 			qs('#bottom-button i').classList.add('hidden')
-			id('#top-button').disabled = false;
-			id('#bottom-button').disabled = false;
+			id('top-button').disabled = false;
+			id('bottom-button').disabled = false;
 
 
 		}
