@@ -919,20 +919,30 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 
 		$client_phone = "";
-		$stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}login WHERE email = ?;");
+          $timezone = "";
+		$stmnt = $db->prepare("SELECT phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($client_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$client_phone = $row['phone'];
+               $tz = $row['timezone'];
 		}
 
 		$first_provider = ($client_email == "");
 
 		$people = 1;
-		$stmnt = $db->prepare("SELECT people FROM {$DB_PREFIX}orders WHERE order_number = ?;");
+          $service = "";
+          $schedule = "";
+		$stmnt = $db->prepare("SELECT people, schedule, service FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
 		foreach ($stmnt->fetchAll() as $row) {
 			$people = $row['people'];
+               $service = $row['service'];
+               $schedule= $row['schedule'];
 		}
+
+          $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+     	$local_date->setTimezone(new DateTimeZone($tz));
+          $schedule = $local_date->format("F j, Y, g:i a");
 
 		if ($email == $client_email) {
 			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
@@ -981,7 +991,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$stmt->execute($params);
 
 						$secondary_providers_array = explode(',', $new_secondary);
-						$message = "Here are the providers you will be working with:\n";
+						$message = "You will be working on ' . $service . ' (' . $order_number . ') on  ' . $schedule . ' with :\n";
 						foreach ($secondary_providers_array as $curr_email) {
 
 							$name = "";
@@ -1025,7 +1035,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 			if ($replacing_primary_provider) {
 				$secondary_providers_array = explode(',', $secondary_providers);
-				$message = "Here are the providers you will be working with:\n";
+				$message = "You will be working on ' . $service . ' (' . $order_number . ') on  ' . $schedule . ' with :\n";
 				foreach ($secondary_providers_array as $curr_email) {
 
 					$name = "";
