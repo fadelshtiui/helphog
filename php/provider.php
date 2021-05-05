@@ -202,7 +202,11 @@ if ($validated) {
 
         $payment_info = payment($row["order_number"]);
 
-        $entry->revenue = money_format('%.2n', $payment_info->provider_payout);
+        if (round($payment_info->provider_payout) < 0.50){
+            $entry->revenue = "Payment waived (<\$0.50)";
+        }else{
+            $entry->revenue = money_format('%.2n', $payment_info->provider_payout);
+        }
 
         array_push($orders_array, $entry);
     }
