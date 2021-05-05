@@ -116,7 +116,6 @@ function &payment($order)
 
 	$result->wage = $wage;
 	$result->duration = $duration;
-	$result->worked_time = $worked_time;
 
 	$total_before_tax = $cost * $people;
 	$provider_payout = $cost * 0.9;
@@ -132,6 +131,8 @@ function &payment($order)
 		$total_before_tax *= $worked_time;
 		$provider_payout *= $worked_time;
 	}
+
+	$result->worked_time = $worked_time;
 
 	$tax_collected = round($total_before_tax * ($sales_tax_percent / 100.0), 2);
 
