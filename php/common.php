@@ -198,7 +198,8 @@ function pay_provider($order_number)
 
 		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
 	} else {
-		
+		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
+		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
 		$stripe_acc = "";
 		$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -812,9 +813,6 @@ function mark_completed($order, $message)
 			$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
 			$amount = $cost;
 		}
-		
-		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
 		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId, $tax_rate));
 
@@ -926,7 +924,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		foreach ($stmnt->fetchAll() as $row) {
 			$client_phone = $row['phone'];
 		}
-		
+
         $tz = "";
 		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($email));
