@@ -18,7 +18,7 @@
           return grecaptcha && grecaptcha.getResponse().length !== 0;
      }
 
-     function signUp() {
+     async function signUp() {
           if (isCaptchaChecked()) {
                // $('.btn').button('loading');
                let data = new FormData();
@@ -39,11 +39,21 @@
                data.append("sendemail", true)
                data.append("createaccount", true)
                let url = "php/signup.php";
-               fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
-                    .then(checkStatus)
-                    .then(res => res.json())
-                    .then(handleResponse)
-                    .catch(console.log);
+
+               qs('.buttonloadicon').classList.remove('hidden')
+               qs('.primary-green').disabled = true
+               try {
+                    let res = await fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
+                    await checkStatus(res)
+                    res = await res.json()
+                    handleResponse(res)
+
+               } catch (err) {
+                    console.error(err)
+               }
+               qs('.buttonloadicon').classList.add('hidden')
+               qs('.primary-green').disabled = false
+
           } else {
                id('warning-message').innerText = "Please check the reCAPTCHA box."
                qs('.modal-wrapper').classList.remove('hidden')

@@ -71,7 +71,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     $stmnt = $db->prepare("SELECT forgot FROM {$DB_PREFIX}login WHERE email = ?;");
     $stmnt->execute(array($email));
     foreach($stmnt->fetchAll() as $row) {
-        if ($number = $row['forgot']) {
+        if ($number == $row['forgot']) {
             $found = true;
         }
     }
@@ -98,4 +98,3 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     header('Content-type: application/json');
     print json_encode($response);
 }
-?>

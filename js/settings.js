@@ -130,51 +130,55 @@
             qs('.modal-wrapper').classList.add('hidden')
         }
         qs('.modal-wrapper').classList.remove('hidden')
-        id('yes').onclick = function () {
+        id('yes').onclick = async function () {
+
+            qs('.buttonloadicon').classList.remove('hidden')
+            id('delete').disabled = true;
 
             let data = new FormData();
             data.append("session", getSession());
             let url = "php/deleteaccount.php";
-            fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
-                .then(checkStatus)
-                .then(res => res.json())
-                .then(handleDeleteResponse)
-                .catch(console.log);
+            try {
+                let res = await fetch(url, { method: "POST", body: data })
+                await checkStatus(res)
+                res = await res.json()
+                handleDeleteResponse(res)
+            } catch (err) {
+                console.error(err)
+            }
+
+            qs('.buttonloadicon').classList.add('hidden')
+            id('delete').disabled = false;
 
         }
     }
 
     function handleDeleteResponse(response) {
-        let warningIcon = ce('i')
-        warningIcon.classList.add('fas')
+        let icon = ce('i')
+        icon.classList.add('fas')
+        resetModal()
+        id('no').classList.add('hidden')
+        id('yes').classList.add('secondary')
+        id('yes').innerText = "OK, Close Modal"
         if (response.sessionerror == "true") {
-            resetModal()
-            id('no').classList.add('hidden')
             id('warning-message').innerText = "Please log out and try again.";
-            warningIcon.classList.add('fa-exclamation-circle', 'warning')
-            id('first').appendChild(warningIcon)
+            icon.classList.add('fa-exclamation-circle', 'warning')
+            id('first').appendChild(icon)
             qs('.modal-wrapper').classList.remove('hidden')
         } else if (response.stripeerror == "true") {
-            resetModal()
-            id('no').classList.add('hidden')
             id('warning-message').innerText = "Please make sure your Stripe balance is zero before deleting your account."
-            warningIcon.classList.add('fa-exclamation-circle', 'warning')
-            id('first').appendChild(warningIcon)
+            icon.classList.add('fa-exclamation-circle', 'warning')
+            id('first').appendChild(icon)
             qs('.modal-wrapper').classList.remove('hidden')
         } else if (response.ordererror == "true") {
-            resetModal()
-            id('no').classList.add('hidden')
             id('warning-message').innerText = "Please make sure you have no active orders before deleting your account."
-            warningIcon.classList.add('fa-exclamation-circle', 'warning')
-            id('first').appendChild(warningIcon)
+            icon.classList.add('fa-exclamation-circle', 'warning')
+            id('first').appendChild(icon)
             qs('.modal-wrapper').classList.remove('hidden')
         } else {
-            resetModal()
-            id('no').classList.add('hidden')
-            warningIcon.classList.add('fa-check-circle', 'warning')
-            id('first').appendChild(warningIcon)
+            icon.classList.add('fa-check-circle', 'success')
+            id('first').appendChild(icon)
             id('yes').innerText = "OK, go home"
-            id('yes').classList.add('secondary')
             id('yes').onclick = function () {
                 window.location.replace("/");
             }

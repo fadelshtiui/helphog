@@ -109,7 +109,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
             $local_date->setTimezone(new DateTimeZone($tz));
 
-            send_email($customer_email, "admin@helphog.com", "Order Cancelled", get_cancel_email($name, $service, $order_number, $local_date->format('m\-d\-y \a\t g:ia')));
+            // send_email($customer_email, "admin@helphog.com", "Order Cancelled", get_cancel_email($name, $service, $order_number, $local_date->format('m\-d\-y \a\t g:ia')));
 
             echo 'task cancelled';
 
@@ -148,8 +148,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
             foreach ($contact as $provider) {
 
                 if (address_works_for_provider($address, $provider->email, $departureTime)->within) {
-                    send_new_task_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz, $schedule, $tzoffset, $address, $city, $state, $zip, $service, $message);
-                    send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $message, $duration, $accept_key, $provider->tz, $people, $schedule, $tzoffset, $address, $city, $state, $zip, $service);
+                    send_new_task_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz, $schedule, 'UTC', $address, $city, $state, $zip, $service, $message);
+                    send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $message, $duration, $accept_key, $provider->tz, $people, $schedule, 'UTC', $address, $city, $state, $zip, $service);
                 }
             }
 
@@ -194,5 +194,3 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
 } else {
     echo 'missing parameters';
 }
-
-?>

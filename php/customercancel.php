@@ -111,6 +111,9 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
                 $intent->capture(['amount_to_capture' => $amount * 100]);
                 if ($providerEmail != '' && $secondary_providers == '') {
+
+                    error_log('entered correct branch');
+
                     $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. Since the customer canceled within 24 hours of the scheduled date, you will be receiving a $10 compensation. We apologize for the inconvience.';
 
                     $stripe_acc = "";
@@ -137,8 +140,10 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 );
             }
 
-
             if ($providerEmail != "") {
+
+                $provider_local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+                $provider_local_date->setTimezone(new DateTimeZone($tz));
 
                 send_email($providerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $providerName));
 
@@ -147,17 +152,24 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($secondary_providers != "") {
                 $providers = explode(",", $secondary_providers);
                 foreach ($providers as $provider) {
+                    if ($provider != "") {
+                        $phonenumber = "";
+                        $name = "";
+                        $tz = "";
+                        $stmnt = $db->prepare("SELECT firstname, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
+                        $stmnt->execute(array($provider));
+                        foreach ($stmnt->fetchAll() as $row) {
+                            $phonenumber = $row['phone'];
+                            $name = ' ' . $row['firstname'];
+                            $tz = $row['timezone'];
+                        }
 
-                    $phonenumber = "";
-                    $name = "";
-                    $stmnt = $db->prepare("SELECT firstname, phone FROM {$DB_PREFIX}login WHERE email = ?;");
-                    $stmnt->execute(array($provider));
-                    foreach ($stmnt->fetchAll() as $row) {
-                        $phonenumber = $row['phone'];
-                        $name = ' ' . $row['firstname'];
+                        $provider_local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+                        $provider_local_date->setTimezone(new DateTimeZone($tz));
+
+                        send_email($provider, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $name));
+                        sendTextProvider($service, $order, $phonenumber, $provider_local_date->format("F j, Y, g:i a"));
                     }
-                    send_email($provider, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $name));
-                    sendTextProvider($service, $order, $phonenumber, $local_date->format("F j, Y, g:i a"));
                 }
             }
 

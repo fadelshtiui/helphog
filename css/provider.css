@@ -1095,3 +1095,7 @@ th {
 .modal {
   display: block;
 }
+
+.buttonloadicon {
+  position: initial;
+}

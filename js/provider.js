@@ -420,6 +420,7 @@ let preloaded = false;
 			let orders = response.orders;
 			let counter = 0;
 			if (orders && orders.length > 0) {
+
 				for (let i = 0; i < orders.length; i++) {
 
 
@@ -553,93 +554,122 @@ let preloaded = false;
 						section2.appendChild(wageType);
 
 						if (order.secondary_providers_string.length != 0) {
-							let coworkers = ce("h1");
-							coworkers.textContent = "Co-workers";
-							section2.appendChild(coworkers);
+
+						}
+
+						let section3 = ce("div");
+						section3.classList.add("section");
+
+                        if (order.secondary_providers_string.length == 0){
+    						let image3 = ce("i");
+    						image3.classList.add('fas', "fa-upload", "active-order-icon")
+
+    						let documents = ce("h1");
+    						documents.textContent = "Upload Documents";
+
+    						let attach = ce("h5");
+    						attach.classList.add("attach-message")
+
+    						attach.textContent = "Attach receipt(s) of any additional expenditures spent on the task:";
+
+    						if (order.expenditure > 0) { // have already uploaded***
+
+    						}
+
+    						let form = ce("div");
+    						form.classList.add("expenditure");
+
+    						let choosefilediv = ce("div");
+    						choosefilediv.id = "choose-file-div";
+
+    						let choosefileinput = ce("input");
+    						choosefileinput.addEventListener("click", function () {
+    							this.style.color = 'black'
+    						});
+
+    						choosefileinput.classList.add("choose-file");
+    						choosefileinput.type = "file";
+    						choosefilediv.appendChild(choosefileinput);
+
+    						let expenditurediv = ce("div");
+
+    						let expenditurebutton = ce("button");
+    						expenditurebutton.dataset.ordernumber = order.order_number;
+    						expenditurebutton.classList.add("secondary");
+    						expenditurebutton.style.marginTop = "15px"
+    						expenditurebutton.style.width = "90%";
+    						// expenditurebutton.type = "submit";
+    						expenditurebutton.name = "upload";
+    						expenditurebutton.innerText = "UPLOAD";
+    						expenditurebutton.disabled = true;
+
+    						if (order.expenditure > 0) {
+    							attach.textContent = "We have processed your extra expenditures for a total of $" + order.expenditure
+    							attach.classList.add('done-loading')
+    							expenditurebutton.innerText = "RE-UPLOAD";
+
+    						}
+    						expenditurebutton.onclick = upload;
+
+    						expenditurediv.appendChild(expenditurebutton);
+
+    						if (order.role == "primary") {
+    							form.appendChild(choosefilediv);
+    							form.appendChild(expenditurediv);
+    						}
+
+
+    						section3.appendChild(image3);
+    						section3.appendChild(documents);
+    						if (order.role == "primary") {
+    							section3.appendChild(attach);
+    							section3.appendChild(form);
+    						} else {
+    							let notifyMessage = ce("h3");
+    							notifyMessage.style.fontSize = "20px";
+    							notifyMessage.style.padding = "22px"
+    							notifyMessage.style.color = "blue";
+    							notifyMessage.innerText = "See the primary provider of your group to upload task expenses/receipts.";
+    							section3.appendChild(notifyMessage);
+    						}
+                        }else{
+                            let image3 = ce("i");
+    						image3.classList.add('fas', "fa-users", "active-order-icon")
+
+    						let documents = ce("h1");
+    						documents.textContent = "Partners";
+
+    						let form = ce("div");
+    						form.classList.add("expenditure");
+
+    						let choosefilediv = ce("div");
+    						choosefilediv.id = "choose-file-div";
+
+    						let choosefileinput = ce("input");
+    						choosefileinput.addEventListener("click", function () {
+    							this.style.color = 'black'
+    						});
+
+    						choosefileinput.classList.add("choose-file");
+    						choosefileinput.type = "file";
+    						choosefilediv.appendChild(choosefileinput);
+
+    						section3.appendChild(image3);
+    						section3.appendChild(documents);
 
 							for (let i = 0; i < order.secondary_providers_string.length; i++) {
 								let coworkersContact = ce("h5");
 								coworkersContact.style.color = 'black';
 								coworkersContact.style.fontWeight = "400";
 								coworkersContact.textContent = order.secondary_providers_string[i];
-								section2.appendChild(coworkersContact);
+								section3.appendChild(coworkersContact);
 							}
-						}
-
-						let section3 = ce("div");
-						section3.classList.add("section");
-
-						let image3 = ce("i");
-						image3.classList.add('fas', "fa-upload", "active-order-icon")
-
-						let documents = ce("h1");
-						documents.textContent = "Upload Documents";
-
-						let attach = ce("h5");
-						attach.classList.add("attach-message")
-
-						attach.textContent = "Attach receipt(s) of any additional expenditures spent on the task:";
-
-						if (order.expenditure > 0) { // have already uploaded***
-
-						}
-
-						let form = ce("div");
-						form.classList.add("expenditure");
-
-						let choosefilediv = ce("div");
-						choosefilediv.id = "choose-file-div";
-
-						let choosefileinput = ce("input");
-						choosefileinput.addEventListener("click", function () {
-							this.style.color = 'black'
-						});
-
-						choosefileinput.classList.add("choose-file");
-						choosefileinput.type = "file";
-						choosefilediv.appendChild(choosefileinput);
-
-						let expenditurediv = ce("div");
-
-						let expenditurebutton = ce("button");
-						expenditurebutton.dataset.ordernumber = order.order_number;
-						expenditurebutton.classList.add("secondary");
-						expenditurebutton.style.marginTop = "15px"
-						expenditurebutton.style.width = "90%";
-						// expenditurebutton.type = "submit";
-						expenditurebutton.name = "upload";
-						expenditurebutton.innerText = "UPLOAD";
-						expenditurebutton.disabled = true;
-
-						if (order.expenditure > 0) {
-							attach.textContent = "We have processed your extra expenditures for a total of $" + order.expenditure
-							attach.classList.add('done-loading')
-							expenditurebutton.innerText = "RE-UPLOAD";
-
-						}
-						expenditurebutton.onclick = upload;
-
-						expenditurediv.appendChild(expenditurebutton);
-
-						if (order.role == "primary") {
-							form.appendChild(choosefilediv);
-							form.appendChild(expenditurediv);
-						}
 
 
-						section3.appendChild(image3);
-						section3.appendChild(documents);
-						if (order.role == "primary") {
-							section3.appendChild(attach);
-							section3.appendChild(form);
-						} else {
-							let notifyMessage = ce("h3");
-							notifyMessage.style.fontSize = "20px";
-							notifyMessage.style.padding = "22px"
-							notifyMessage.style.color = "blue";
-							notifyMessage.innerText = "See the primary provider of your group to upload task expenses/receipts.";
-							section3.appendChild(notifyMessage);
-						}
+
+
+
+                        }
 
 
 
@@ -705,6 +735,17 @@ let preloaded = false;
 						button2.style.width = "90%"
 						button.style.padding = "15px"
 
+						let loadingIcon1 = ce('i')
+						loadingIcon1.classList.add('fa', 'fa-circle-o-notch', 'fa-spin', 'buttonloadicon', 'hidden')
+						let loadingIcon2 = ce('i')
+						loadingIcon2.classList.add('fa', 'fa-circle-o-notch', 'fa-spin', 'buttonloadicon', 'hidden')
+
+						button.prepend(loadingIcon1)
+						button2.prepend(loadingIcon2)
+
+						button.id = "top-button"
+						button2.id = "bottom-button"
+
 						if (order.role == "primary") {
 							button2.dataset.role = 'primary';
 							action.appendChild(button);
@@ -759,40 +800,45 @@ let preloaded = false;
 			qs(".modal-wrapper").classList.add('hidden')
 		}
 
-		id('yes').onclick = function () {
+		id('yes').onclick = async function () {
 
-			id('loading').classList.remove('hidden')
 			let data = new FormData();
 
 			data.append("ordernumber", ordernumber);
 			data.append("session", getSession());
 			let url = "php/markcompleted.php";
-			fetch(url, { method: "POST", body: data })
-				.then(checkStatus)
-				.then(res => res.json())
-				.then(function (response) {
-					if (response.error == "") {
-						location.reload();
-					} else {
 
-						resetModal()
-						let warningIcon = ce('i')
-						warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
-						id('first').appendChild(warningIcon)
-						id('warning-message').innerText = response.error
-						id('no').classList.add('hidden')
-						id('yes').innerText = "OK, Close Modal"
-						id('yes').classList.add('secondary')
-						id('yes').onclick = function () {
-							qs(".modal-wrapper").classList.add('hidden')
-						}
-						qs(".modal-wrapper").classList.remove('hidden')
-						id('loading').classList.add('hidden')
+			qs('#top-button i').classList.remove('hidden')
+			id('top-button').disabled = true;
+			id('bottom-button').disabled = true;
+			try {
+			    let response = await fetch(url, { method: "POST", body: data })
+    			await checkStatus(res)
+    			response = await res.json()
+    			if (response.error == "") {
+    				location.reload();
+    			} else {
+    				resetModal()
+    				let warningIcon = ce('i')
+    				warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+    				id('first').appendChild(warningIcon)
+    				id('warning-message').innerText = response.error
+    				id('no').classList.add('hidden')
+    				id('yes').innerText = "OK, Close Modal"
+    				id('yes').classList.add('secondary')
+    				id('yes').onclick = function () {
+    					qs(".modal-wrapper").classList.add('hidden')
+    				}
+    				qs(".modal-wrapper").classList.remove('hidden')
 
-					}
+    			}
+			} catch (err) {
+			    console.error(err)
+			}
+			qs('#top-button i').classList.add('hidden')
+			id('top-button').disabled = false;
+			id('bottom-button').disabled = false;
 
-				})
-				.catch(console.log);
 		}
 	}
 
@@ -810,18 +856,28 @@ let preloaded = false;
 		qs(".modal-wrapper").classList.remove('hidden')
 		let ordernumber = this.dataset.ordernumber;
 
-		id('yes').onclick = function () {
+		id('yes').onclick = async function () {
+
+		    qs('#bottom-button i').classList.remove('hidden')
+			id('top-button').disabled = true;
+			id('bottom-button').disabled = true;
 
 			let data = new FormData();
 			data.append("ordernumber", ordernumber);
 			data.append('session', getSession());
 			let url = "php/refund.php";
-			fetch(url, { method: "POST", body: data })
-				.then(checkStatus)
-				.then(function (response) {
-					location.reload();
-				})
-				.catch(console.log);
+			try {
+			    let res = await fetch(url, { method: "POST", body: data })
+    		    await checkStatus(res)
+    			location.reload();
+			} catch (err) {
+			    console.error(err)
+			}
+
+			qs('#bottom-button i').classList.add('hidden')
+			id('top-button').disabled = false;
+			id('bottom-button').disabled = false;
+
 		}
 	}
 
@@ -830,6 +886,7 @@ let preloaded = false;
 		let role = this.dataset.role
 		let ordernumber = this.dataset.ordernumber;
 
+        resetModal();
 		id('first').innerText = "Are you sure that you would like to cancel the task?"
 		id('warning-message').innerText = "Please only cancel under extenuating circumstances."
 
@@ -844,8 +901,7 @@ let preloaded = false;
 
 		qs('.modal-wrapper').classList.remove('hidden')
 
-		id('yes').onclick = function () {
-			id('loading').classList.remove('hidden')
+		id('yes').onclick = async function () {
 			let data = new FormData();
 
 			let tz = jstz.determine();
@@ -855,13 +911,39 @@ let preloaded = false;
 			data.append("tzoffset", timezone);
 			data.append('role', role)
 			let url = "php/providercancel.php";
-			fetch(url, { method: "POST", body: data })
-				.then(checkStatus)
-				.then(res => res.text())
-				.then(function (response) {
-					location.reload();
-				})
-				.catch(console.log);
+
+			qs('#bottom-button i').classList.remove('hidden')
+			id('top-button').disabled = true;
+			id('bottom-button').disabled = true;
+
+			try {
+			    let res = await fetch(url, { method: "POST", body: data })
+    			await checkStatus(res)
+    			res = await res.text()
+    			if (res == "already started") {
+    			    resetModal();
+
+    			    let warningIcon = ce('i')
+					warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+					id('first').appendChild(warningIcon)
+					id('warning-message').innerText = "The primary provider has already started working. You can no longer cancel this order."
+					id('no').classList.add('hidden')
+					id('yes').innerText = "OK, Close Modal"
+					id('yes').classList.add('secondary')
+					qs(".modal-wrapper").classList.remove('hidden')
+
+    			} else {
+    			    location.reload();
+    			}
+			} catch (err) {
+			    console.error(err);
+			}
+
+			qs('#bottom-button i').classList.add('hidden')
+			id('top-button').disabled = false;
+			id('bottom-button').disabled = false;
+
+
 		}
 	}
 
@@ -895,10 +977,10 @@ let preloaded = false;
 
 				startStopButton.classList.remove("primary-green")
 				startStopButton.classList.add("primary-red");
-				startStopButton.innerText = "STOP";
+				startStopButton.childNodes[1].data = "STOP";
 				startStopButton.onclick = toggle;
 
-				startStopButton.nextElementSibling.innerText = "PAUSE";
+				startStopButton.nextElementSibling.childNodes[1].data = "PAUSE";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove("primary-red")
 				startStopButton.nextElementSibling.classList.add("secondary");
@@ -926,10 +1008,10 @@ let preloaded = false;
 
 				startStopButton.classList.remove("primary-red");
 				startStopButton.classList.add("primary-green");
-				startStopButton.innerText = "MARK COMPLETED";
+				startStopButton.childNodes[1].data = "MARK COMPLETED";
 				startStopButton.onclick = markCompleted;
 
-				startStopButton.nextElementSibling.innerText = "REFUND CUSTOMER";
+				startStopButton.nextElementSibling.childNodes[1].data = "REFUND CUSTOMER";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove('secondary')
 				startStopButton.nextElementSibling.classList.add("primary-red")
@@ -954,9 +1036,9 @@ let preloaded = false;
 		// this.classList.toggle("paused");
 
 		if (type == "PAUSE") {
-			this.innerText = "RESUME";
+			this.childNodes[1].data = "RESUME";
 		} else {
-			this.innerText = "PAUSE";
+			this.childNodes[1].data = "PAUSE";
 		}
 
 		this.onclick = pauseResume
@@ -985,12 +1067,12 @@ let preloaded = false;
 					id('yes').classList.add('secondary')
 					qs(".modal-wrapper").classList.remove('hidden')
 
-					startStopButton.innerText = "START";
+					startStopButton.childNodes[1].data = "START";
 					startStopButton.classList.remove("primary-red")
 					startStopButton.classList.add("primary-green")
 					startStopButton.onclick = toggle;
 
-					startStopButton.nextElementSibling.innerText = "CANCEL";
+					startStopButton.nextElementSibling.childNodes[1].data = "CANCEL";
 					startStopButton.nextElementSibling.classList.remove("primary-green")
 					startStopButton.nextElementSibling.classList.remove("secondary")
 					startStopButton.nextElementSibling.classList.add("primary-red")

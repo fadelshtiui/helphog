@@ -13,15 +13,15 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
     $remote = trim($_POST['remote']);
     $updatecontactlist = trim($_POST['updatecontactlist']);
     $providerId = trim($_POST["id"]);
-    
+
     if (isset($_POST['session'])) {
         $session = trim($_POST["session"]);
     } else {
         $session = "";
     }
-    
+
     $result = check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId, $session);
-    
+
     header('Content-Type: application/json');
     echo json_encode($result);
 }
@@ -29,7 +29,7 @@ if (isset($_POST["service"]) && isset($_POST["address"]) && isset($_POST["schedu
 function &check_availability($service, $schedule, $address, $post_duration, $numpeople, $tz, $remote, $updatecontactlist, $providerId, $session)
 {
     include 'constants.php';
-    
+
     $json = new stdClass();
     $json->availability = '';
     $json->error = '';
@@ -77,7 +77,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     } else {
 
-        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ?;");
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ? AND banned = 'n';");
         $stmnt->execute(array('%' . $service . '%'));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
@@ -160,19 +160,27 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
 
 
         // check for overlapping orders
-        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE (client_email = ? OR secondary_providers LIKE ?) AND schedule LIKE ?;");
-        $stmnt->execute(array($curr_email, '%' . $curr_email . '%', $sql_schedule . '%'));
+        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE (client_email = ? OR secondary_providers LIKE ?);");
+        $stmnt->execute(array($curr_email, '%' . $curr_email . '%'));
         foreach ($stmnt->fetchAll() as $row) {
 
-            $order_time = new DateTime(date('Y-m-d H:i:s', strtotime($row["schedule"])), new DateTimeZone('UTC'));
+            $local_date = new DateTime(date('Y-m-d', strtotime($schedule)), new DateTimeZone($tz));
 
-            $duration = $row['duration'];
+            $temp_order_time = new DateTime(date('Y-m-d H:i:s', strtotime($row["schedule"])), new DateTimeZone('UTC'));
+            $temp_order_time->setTimezone(new DateTimeZone($tz));
 
-            $time = intval($order_time->format('G'));
-            $dow = 24 * $order_time->format('w');
+            if ($temp_order_time->format('Y-m-d') ==  $local_date->format('Y-m-d')) {
 
-            for ($j = $dow + $time; $j < $dow + $time + $duration; $j++) {
-                $full_availability[$j] = '0';
+                $order_time = new DateTime(date('Y-m-d H:i:s', strtotime($row["schedule"])), new DateTimeZone('UTC'));
+
+                $duration = $row['duration'];
+
+                $time = intval($order_time->format('G'));
+                $dow = 24 * intval($order_time->format('w'));
+
+                for ($j = $dow + $time; $j < $dow + $time + $duration; $j++) {
+                    $full_availability[$j] = '0';
+                }
             }
         }
 
@@ -237,7 +245,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
             $final_result .= '0';
         }
     }
-    
+
     $json->availability = $final_result;
 
     return $json;

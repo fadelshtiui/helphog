@@ -67,7 +67,7 @@ foreach ($result as $row) {
 
             $cancels = $cancels + 1;
             if ($cancels > 1){
-                banning($cancels, $client_email);
+                // banning($cancels, $client_email);
             }
         }
 
@@ -75,11 +75,6 @@ foreach ($result as $row) {
             error_log($order_number);
 
             $payment_info = payment($order_number);
-
-            $stripe->paymentIntents->cancel(
-                trim($payment_info->intent),
-                []
-            );
 
             if ($client_email != "") {
                 $primary_work_phone = "";
@@ -109,14 +104,19 @@ foreach ($result as $row) {
             foreach (explode(',', $secondary_providers) as $email) {
                 if ($email != "") {
                     $work_phone = "";
+                    $phone = "";
                     $name2 = "";
                     $timezone = "";
-                    $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
+                    $stmnt = $db->prepare("SELECT work_phone, phone, firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($email));
                     foreach ($stmnt->fetchAll() as $row) {
                         $work_phone = $row['work_phone'];
+                        if ($work_phone == ""){
+                            $work_phone = $row['phone'];
+                        }
                         $name2 = ' ' . $row['firstname'];
                         $timezone = $row['timezone'];
+
                     }
 
                     $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
@@ -142,10 +142,10 @@ foreach ($result as $row) {
             $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
             $utc->setTimezone(new DateTimeZone($customer_timezone));
 
-            $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?;";
-            $stmt = $db->prepare($sql);
-            $params = array("ac", $order_number);
-            $stmt->execute($params);
+             $stripe->paymentIntents->cancel(
+                trim($payment_info->intent),
+                []
+            );
 
             sendTextCustomer($service, $order_number, $customer_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
 
@@ -154,6 +154,12 @@ foreach ($result as $row) {
             } else {
                 send_email($customer_email, "no-reply@helphog.com", "Task Cancelled", noProviderFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name3));
             }
+
+            $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?;";
+            $stmt = $db->prepare($sql);
+            $params = array("ac", $order_number);
+            $stmt->execute($params);
+
         }
     }
 }

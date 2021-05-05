@@ -15,17 +15,25 @@
     });
 
 
-    function reset() {
+    async function reset() {
         if (isCaptchaChecked()) {
             let data = new FormData();
             let email = id("email").value.toLowerCase();
             data.append("email", email);
             let url = "php/forgot.php";
-            fetch(url, { method: "POST", body: data, mode: 'cors', credentials: 'include' })
-                .then(checkStatus)
-                .then(res => res.json())
-                .then(handleResponse)
-                .catch(console.log);
+
+            qs('.buttonloadicon').classList.remove('hidden')
+            id("reset-password").disabled = true;
+            try {
+                let res = await fetch(url, { method: "POST", body: data })
+                await checkStatus(res)
+                res = await res.json();
+                handleResponse(res)
+            } catch (err) {
+                console.error(err)
+            }
+            qs('.buttonloadicon').classList.add('hidden')
+            id("reset-password").disabled = false;
         } else {
             id('warning-message').innerText = "Please check the reCAPTCHA box."
             qs('.modal-wrapper').classList.remove('hidden')
