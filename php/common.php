@@ -919,12 +919,17 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 
 		$client_phone = "";
-          $timezone = "";
-		$stmnt = $db->prepare("SELECT phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($client_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$client_phone = $row['phone'];
-               $tz = $row['timezone'];
+		}
+
+        $tz = "";
+		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE email = ?;");
+		$stmnt->execute(array($email));
+		foreach ($stmnt->fetchAll() as $row) {
+			$tz = $row['timezone'];
 		}
 
 		$first_provider = ($client_email == "");
@@ -939,7 +944,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
                $service = $row['service'];
                $schedule= $row['schedule'];
 		}
-
+        error_log($tz);
           $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
      	$local_date->setTimezone(new DateTimeZone($tz));
           $schedule = $local_date->format("F j, Y, g:i a");
@@ -991,7 +996,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$stmt->execute($params);
 
 						$secondary_providers_array = explode(',', $new_secondary);
-						$message = "You will be working on ' . $service . ' (' . $order_number . ') on  ' . $schedule . ' with :\n";
+						$message = 'You will be working on ' . $service . ' (' . $order_number . ') on  ' . $schedule . ' with :\n';
 						foreach ($secondary_providers_array as $curr_email) {
 
 							$name = "";
@@ -1035,7 +1040,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 			if ($replacing_primary_provider) {
 				$secondary_providers_array = explode(',', $secondary_providers);
-				$message = "You will be working on ' . $service . ' (' . $order_number . ') on  ' . $schedule . ' with :\n";
+				$message = 'You will be working on ' . $service . ' (' . $order_number . ') on  ' . $schedule . ' with :\n';
 				foreach ($secondary_providers_array as $curr_email) {
 
 					$name = "";
