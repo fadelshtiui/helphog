@@ -812,10 +812,10 @@ let preloaded = false;
 			id('top-button').disabled = true;
 			id('bottom-button').disabled = true;
 			try {
-			    let response = await fetch(url, { method: "POST", body: data })
+			    let res = await fetch(url, { method: "POST", body: data })
     			await checkStatus(res)
-    			response = await res.json()
-    			if (response.error == "") {
+    			res = await res.json()
+    			if (res.error == "") {
     				location.reload();
     			} else {
     				resetModal()
@@ -1090,6 +1090,8 @@ let preloaded = false;
 		id("end_display").innerText = this.dataset.end;
 		if (this.dataset.revenue == 'Refunded') {
 			id("revenue_display").innerText = this.dataset.revenue;
+		}else if (this.dataset.revenue.includes("Payment waived")){
+		    id("revenue_display").innerText = this.dataset.revenue;
 		} else {
 			id("revenue_display").innerText = "$" + this.dataset.revenue;
 		}
