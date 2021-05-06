@@ -116,6 +116,7 @@ function &payment($order)
 
 	$result->wage = $wage;
 	$result->duration = $duration;
+	$result->worked_time = $worked_time;
 
 	$total_before_tax = $cost * $people;
 	$provider_payout = $cost * 0.9;
@@ -131,8 +132,6 @@ function &payment($order)
 		$total_before_tax *= $worked_time;
 		$provider_payout *= $worked_time;
 	}
-
-	$result->worked_time = $worked_time;
 
 	$tax_collected = round($total_before_tax * ($sales_tax_percent / 100.0), 2);
 
@@ -997,7 +996,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$stmt->execute($params);
 
 						$secondary_providers_array = explode(',', $new_secondary);
-						$message = "You will be working on " . $service . " (" . $order_number . ") on  " . $schedule . " with :\n";
+						$message = "You will be working on " . $service . " (" . $order_number . ") on  " . $schedule . " with: \n";
 						foreach ($secondary_providers_array as $curr_email) {
 
 							$name = "";
@@ -1041,7 +1040,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 			if ($replacing_primary_provider) {
 				$secondary_providers_array = explode(',', $secondary_providers);
-				$message = "You will be working on " . $service . " (" . $order_number . ") on  " . $schedule . " with :\n";
+				$message = "One or more of your partners have been replaced. You will now be working on " . $service . " (" . $order_number . ") on  " . $schedule . " with: \n";
 				foreach ($secondary_providers_array as $curr_email) {
 
 					$name = "";
