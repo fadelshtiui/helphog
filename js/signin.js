@@ -55,7 +55,8 @@
             id('warning-message').innerText = "Your account has not yet been verified. Please check your email for a verification email."
             qs('.modal-wrapper').classList.remove('hidden')
         } else if (response.emailerror == "" && response.passworderror == "") {
-            document.cookie = "session=" + response.session + ";";
+
+            setCookie("session", response.session, 365)
             let queryString = window.location.search
             const urlParams = new URLSearchParams(queryString)
             if (urlParams.get('redirect')) {
@@ -64,6 +65,13 @@
                 window.location = '/'
             }
         }
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      var expires = "expires="+ d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 
 })();
