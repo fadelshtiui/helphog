@@ -3544,8 +3544,8 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>Hi' . $name . ',</h1>
-                        <p>Thanks for using HelpHog. This email is the receipt for your purchase. No payment is due.</p>
-                        <p>This purchase will appear as &quotHELPHOG - Service&quot on your bank statement.</p>
+                        <p>Thanks for using HelpHog. Your order has been marked completed the provider. This email is the receipt for your purchase. No payment is due.</p>
+                        <p>This purchase will appear as &quotHELPHOG.COM&quot on your bank statement.</p>
 
                         <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
