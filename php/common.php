@@ -172,32 +172,7 @@ function pay_provider($order_number)
 
 	$payment_info = payment($order_number);
 
-	if ($payment_info->customer_payment < 0.50 && $status != 'pd' && $status == 'mc') {
-
-		$name = "";
-		$stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
-		$stmnt->execute(array($customer_email));
-		foreach ($stmnt->fetchAll() as $row) {
-			$name = ' ' . $row['firstname'];
-		}
-
-		$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-		$local_date->setTimezone(new DateTimeZone($tz));
-
-		$schedule = $local_date->format('m\-d\-y \a\t g:ia');
-
-		$stripe->paymentIntents->cancel(
-			trim($payment_info->intent),
-			[]
-		);
-
-		$sql1 = "UPDATE {$DB_PREFIX}orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
-		$stmt1 = $db->prepare($sql1);
-		$params1 = array(0, $order_number);
-		$stmt1->execute($params1);
-
-		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
-	} else {
+	if ($payment_info->customer_payment >= 0.50) {
 
 		$stripe_acc = "";
 		$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -723,6 +698,10 @@ function mark_completed($order, $message)
 {
 	include 'constants.php';
 
+	$stripe = new \Stripe\StripeClient(
+		$STRIPE_API_KEY
+	);
+
 	$payment_info = payment($order);
 
 	$db = establish_database();
@@ -757,7 +736,6 @@ function mark_completed($order, $message)
 	}
 
 	$providerId = getId($client_email);
-
 
 	if ($disputes < 3) {
 		$name = "";
@@ -812,12 +790,28 @@ function mark_completed($order, $message)
 			$amount = $cost;
 		}
 
-		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
+		if ($payment_info->customer_payment < 0.5) {
+			$stripe->paymentIntents->cancel(
+				trim($payment_info->intent),
+				[]
+			);
 
-		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId, $tax_rate));
+			$sql = "UPDATE {$DB_PREFIX}orders SET tax_collected = ?, status = 'pd' WHERE order_number = ?";
+			$stmt = $db->prepare($sql);
+			$params = array(0, $order);
+			$stmt->execute($params);
 
-		$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
+			send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
+		} else {
+
+			if ($last_mc != "0000-00-00 00:00:00") { // first time mark completed
+				$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
+				$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
+			}
+
+			send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId, $tax_rate));
+
+			$message = $service . ' (' . $order . ') on ' . $schedule  . ' has been marked completed. Here is the order summary:
 
 ' . $subtotal . '
 
@@ -831,18 +825,14 @@ If there\'s an issue with the quality of service provided, you may dispute this 
 
 For future orders with the same provider use #' . $providerId . ' at checkout.';
 
-        if ($last_mc != "0000-00-00 00:00:00") { // first time mark completed
-            $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-		    $intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
-        }
+			send_text($customer_phone, $message);
 
-		send_text($customer_phone, $message);
-
-		$current_timestamp = gmdate("Y-m-d H:i:s");
-		$sql = "UPDATE {$DB_PREFIX}orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
-		$stmt = $db->prepare($sql);
-		$params = array('mc', $current_timestamp, $order);
-		$stmt->execute($params);
+			$current_timestamp = gmdate("Y-m-d H:i:s");
+			$sql = "UPDATE {$DB_PREFIX}orders SET status = ?, mc_timestamp = ? WHERE order_number = ?";
+			$stmt = $db->prepare($sql);
+			$params = array('mc', $current_timestamp, $order);
+			$stmt->execute($params);
+		}
 
 		return true;
 	} else {
@@ -905,7 +895,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 			$client_phone = $row['phone'];
 		}
 
-        $tz = "";
+		$tz = "";
 		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($email));
 		foreach ($stmnt->fetchAll() as $row) {
@@ -915,18 +905,18 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		$first_provider = ($client_email == "");
 
 		$people = 1;
-        $service = "";
-        $schedule = "";
+		$service = "";
+		$schedule = "";
 		$stmnt = $db->prepare("SELECT people, schedule, service FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
 		foreach ($stmnt->fetchAll() as $row) {
-            $people = $row['people'];
-            $service = $row['service'];
-            $schedule= $row['schedule'];
+			$people = $row['people'];
+			$service = $row['service'];
+			$schedule = $row['schedule'];
 		}
-        $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
-     	$local_date->setTimezone(new DateTimeZone($tz));
-        $schedule = $local_date->format("F j, Y, g:i a");
+		$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+		$local_date->setTimezone(new DateTimeZone($tz));
+		$schedule = $local_date->format("F j, Y, g:i a");
 
 		if ($email == $client_email) {
 			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Oops!+Looks+like+you+already+claimed+this+order";</script>';
@@ -942,7 +932,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		if (!$first_provider) {
 
 			if ($people == 1) {
-			    update_clicked_list($clicked, $email, $order_number);
+				update_clicked_list($clicked, $email, $order_number);
 
 				return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 			} else {
@@ -959,7 +949,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				}
 
 				if ($num_secondary + 1 >= $people) {
-				    update_clicked_list($clicked, $email, $order_number);
+					update_clicked_list($clicked, $email, $order_number);
 
 					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 				} else {
@@ -1071,11 +1061,12 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 	return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 }
 
-function update_clicked_list($clicked, $email, $order_number) {
-    include 'constants.php';
+function update_clicked_list($clicked, $email, $order_number)
+{
+	include 'constants.php';
 
-    $db = establish_database();
-    $new_clicked = "";
+	$db = establish_database();
+	$new_clicked = "";
 	$already_clicked = false;
 	if ($clicked == "") {
 		$new_clicked = $email;
