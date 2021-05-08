@@ -34,6 +34,8 @@ function handleResponse(response) {
 }
 
 function cancel() {
+    id('cancel').disabled = true;
+    qs('button i').classList.remove('hidden')
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
     const orderNumber = urlParams.get('ordernumber')
