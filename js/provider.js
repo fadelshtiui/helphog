@@ -822,7 +822,7 @@ let preloaded = false;
     				let warningIcon = ce('i')
     				warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
     				id('first').appendChild(warningIcon)
-    				id('warning-message').innerText = response.error
+    				id('warning-message').innerText = res.error
     				id('no').classList.add('hidden')
     				id('yes').innerText = "OK, Close Modal"
     				id('yes').classList.add('secondary')
