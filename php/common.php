@@ -867,7 +867,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 	$clicked = '';
 	$found = false;
-	$cancelled = true;
+	$cancelled = false;
 	$wage = '';
 	$stmnt = $db->prepare("SELECT wage, duration, accept_key, status, clicked FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order_number));
@@ -875,38 +875,13 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		if ($row['accept_key'] === $accept_key) {
 			$found = true;
 		}
-		if ($row['status'] == 'pe') {
-			$cancelled = false;
+		if ($row['status'] == 'ac' || $row['status'] == 'cc' || $row['status'] == 'pc') {
+			$cancelled = true;
 		}
 		$duration = $row['duration'];
 		$wage = $row['wage'];
 		$clicked = $row['clicked'];
 	}
-
-	$new_clicked = "";
-	$already_clicked = false;
-	if ($clicked == "") {
-		$new_clicked = $email;
-	} else {
-		$re_notify_list = explode(',', $clicked);
-
-		foreach ($re_notify_list as $clicked_email) {
-			if ($email == $clicked_email) {
-				$already_clicked = true;
-				break;
-			}
-		}
-		if (!$already_clicked) {
-			$new_clicked = $clicked . ',' . $email;
-		} else {
-			$new_clicked = $clicked;
-		}
-	}
-
-	$sql = "UPDATE {$DB_PREFIX}orders SET clicked = ? WHERE order_number = ?";
-	$stmt = $db->prepare($sql);
-	$params = array($new_clicked, $order_number);
-	$stmt->execute($params);
 
 	if ($found && !$cancelled) {
 
@@ -940,22 +915,24 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		$first_provider = ($client_email == "");
 
 		$people = 1;
-          $service = "";
-          $schedule = "";
+        $service = "";
+        $schedule = "";
 		$stmnt = $db->prepare("SELECT people, schedule, service FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 		$stmnt->execute(array($order_number));
 		foreach ($stmnt->fetchAll() as $row) {
-			$people = $row['people'];
-               $service = $row['service'];
-               $schedule= $row['schedule'];
+            $people = $row['people'];
+            $service = $row['service'];
+            $schedule= $row['schedule'];
 		}
-        error_log($tz);
-          $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
+        $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
      	$local_date->setTimezone(new DateTimeZone($tz));
-          $schedule = $local_date->format("F j, Y, g:i a");
+        $schedule = $local_date->format("F j, Y, g:i a");
 
 		if ($email == $client_email) {
-			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+		    error_log('you are the primary');
+			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Oops!+Looks+like+you+already+claimed+this+order";</script>';
+		} else {
+		    error_log('you are not the primary');
 		}
 
 		$secondary_providers = "";
@@ -968,11 +945,13 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		if (!$first_provider) {
 
 			if ($people == 1) {
+			    update_clicked_list($clicked, $email, $order_number);
+			    
 				return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 			} else {
 
 				if (strpos($secondary_providers, $email) !== false) {
-					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Oops!+Looks+like+you+already+claimed+this+order";</script>';
 				}
 
 				$num_secondary = 0;
@@ -983,6 +962,8 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				}
 
 				if ($num_secondary + 1 >= $people) {
+				    update_clicked_list($clicked, $email, $order_number);
+				    
 					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 				} else {
 
@@ -1086,10 +1067,44 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?message=You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
 		}
 	}
+	update_clicked_list($clicked, $email, $order_number);
 	if ($mobile) {
 		return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobiledecline";</script>';
 	}
 	return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+}
+
+function update_clicked_list($clicked, $email, $order_number) {
+    include 'constants.php';
+    
+    error_log('email: ' . $email);
+    error_log('order: ' . $order_number);
+    error_log('clicked: ' . $clicked);
+    $db = establish_database();
+    $new_clicked = "";
+	$already_clicked = false;
+	if ($clicked == "") {
+		$new_clicked = $email;
+	} else {
+		$re_notify_list = explode(',', $clicked);
+
+		foreach ($re_notify_list as $clicked_email) {
+			if ($email == $clicked_email) {
+				$already_clicked = true;
+				break;
+			}
+		}
+		if (!$already_clicked) {
+			$new_clicked = $clicked . ',' . $email;
+		} else {
+			$new_clicked = $clicked;
+		}
+	}
+	
+	$sql = "UPDATE {$DB_PREFIX}orders SET clicked = ? WHERE order_number = ?";
+	$stmt = $db->prepare($sql);
+	$params = array($new_clicked, $order_number);
+	$stmt->execute($params);
 }
 
 function dispute_order($order_number)
