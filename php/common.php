@@ -781,8 +781,6 @@ function mark_completed($order, $message)
 
 		$schedule = $local_date->format('m\-d\-y \a\t g:ia');
 
-		error_log("customer payment" . $customer_payment . "tax" . $tax_collected . "duration" . $duration . "total_before_tax" . $total_before_tax);
-
 		$price = $cost;
 
 		if ($wage == "hour") {
@@ -808,7 +806,7 @@ function mark_completed($order, $message)
 		$amount = 0;
 		if ($wage == "hour") {
 			$subtotal = $people . " " . $peopleText . " at $" . money_format('%.2n', $orig_price) . "/hr (" . number_format((float)$duration, 2, '.', '') . " hours)";
-			$amount = $total_before_tax;
+			$amount = round($total_before_tax, 2);
 		} else {
 			$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
 			$amount = $cost;
