@@ -801,7 +801,7 @@ function mark_completed($order, $message)
 			$params = array(0, $order);
 			$stmt->execute($params);
 
-			send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
+			send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order, $schedule, $name));
 		} else {
 
 			if ($last_mc != "0000-00-00 00:00:00") { // first time mark completed
