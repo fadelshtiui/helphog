@@ -257,8 +257,6 @@ if (trim(strtolower($body)) == 'dispute') {
 
         if (trim(strtolower($body)) == 'begin') {
 
-            error_log('starting order...');
-
             if ($status == "cl") {
 
                 $start_result = start_stop_order($order_number);

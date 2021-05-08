@@ -77,7 +77,6 @@ foreach ($result as $row) {
         }
 
         if ($needsToBeCancelled) {
-            error_log($order_number);
 
             $payment_info = payment($order_number);
 

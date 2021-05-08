@@ -929,10 +929,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
         $schedule = $local_date->format("F j, Y, g:i a");
 
 		if ($email == $client_email) {
-		    error_log('you are the primary');
 			return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Oops!+Looks+like+you+already+claimed+this+order";</script>';
-		} else {
-		    error_log('you are not the primary');
 		}
 
 		$secondary_providers = "";
@@ -1077,9 +1074,6 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 function update_clicked_list($clicked, $email, $order_number) {
     include 'constants.php';
     
-    error_log('email: ' . $email);
-    error_log('order: ' . $order_number);
-    error_log('clicked: ' . $clicked);
     $db = establish_database();
     $new_clicked = "";
 	$already_clicked = false;

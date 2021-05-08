@@ -112,8 +112,6 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 $intent->capture(['amount_to_capture' => $amount * 100]);
                 if ($providerEmail != '' && $secondary_providers == '') {
 
-                    error_log('entered correct branch');
-
                     $providerMessage = 'We are informing you that the order for ' . $service . ' (' . $order . ') has been canceled by the customer. Since the customer canceled within 24 hours of the scheduled date, you will be receiving a $10 compensation. We apologize for the inconvience.';
 
                     $stripe_acc = "";

@@ -173,10 +173,6 @@ foreach ($stmnt->fetchAll() as $row) {
 
                          $t = time();
 
-                         error_log('full address: ' . $full_address);
-                         error_log('email: ' . $email);
-                         error_log('time: ' . $t);
-
                          $google_response = address_works_for_provider(trim($full_address), trim($email), $t);
 
                          if ($google_response->within) {

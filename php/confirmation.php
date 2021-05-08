@@ -155,8 +155,6 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
             $price = "$" . $price;
             
-            error_log($sales_tax_percent);
-
             if ($sales_tax_percent != 0.00){
                 
                 $price = $price . ' + tax (' . $sales_tax_percent .')';
@@ -198,8 +196,6 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
                 $provider = ' (#' . $providerId . ')';
             }
             
-            error_log('full string: ' . $price);
-
             send_email($customer_email, "no-reply@helphog.com", "Order Confirmation", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key, $provider));
 
             $response->firstname = $name;
