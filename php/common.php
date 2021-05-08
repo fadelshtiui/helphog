@@ -198,8 +198,6 @@ function pay_provider($order_number)
 
 		send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order_number, $schedule, $name));
 	} else {
-		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
-		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
 		$stripe_acc = "";
 		$stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -739,6 +737,7 @@ function mark_completed($order, $message)
 	$client_email = "";
 	$tz = "";
 	$disputes = 0;
+	$last_mc = "";
 	$tax_rate = 0.00;
 	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
@@ -754,6 +753,7 @@ function mark_completed($order, $message)
 		$client_email = $row['client_email'];
 		$tz = $row['timezone'];
 		$tax_rate = $row['sales_tax_percent'];
+		$last_mc = $row['mc_timestamp'];
 	}
 
 	$providerId = getId($client_email);
@@ -813,6 +813,9 @@ function mark_completed($order, $message)
 			$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
 			$amount = $cost;
 		}
+		
+		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
+		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
 		send_email($customer_email, "orders@helphog.com", "Receipt for " . $service, get_receipt($name, $service, $order, $schedule, $subtotal, $amount, $tax_collected, $customer_payment, $providerId, $tax_rate));
 
@@ -830,6 +833,10 @@ If there\'s an issue with the quality of service provided, you may dispute this 
 
 For future orders with the same provider use #' . $providerId . ' at checkout.';
 
+        if ($last_mc != "0000-00-00 00:00:00") { // first time mark completed
+            $intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
+		    $intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
+        }
 
 		send_text($customer_phone, $message);
 
