@@ -811,7 +811,7 @@ function mark_completed($order, $message)
 			$subtotal = $people . " " . $peopleText . " for $" . money_format('%.2n', $price);
 			$amount = $cost;
 		}
-		
+
 		$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
 		$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 
@@ -943,7 +943,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 			if ($people == 1) {
 			    update_clicked_list($clicked, $email, $order_number);
-			    
+
 				return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 			} else {
 
@@ -960,7 +960,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 				if ($num_secondary + 1 >= $people) {
 				    update_clicked_list($clicked, $email, $order_number);
-				    
+
 					return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 				} else {
 
@@ -1073,7 +1073,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 function update_clicked_list($clicked, $email, $order_number) {
     include 'constants.php';
-    
+
     $db = establish_database();
     $new_clicked = "";
 	$already_clicked = false;
@@ -1094,7 +1094,7 @@ function update_clicked_list($clicked, $email, $order_number) {
 			$new_clicked = $clicked;
 		}
 	}
-	
+
 	$sql = "UPDATE {$DB_PREFIX}orders SET clicked = ? WHERE order_number = ?";
 	$stmt = $db->prepare($sql);
 	$params = array($new_clicked, $order_number);
@@ -3558,8 +3558,8 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>Hi' . $name . ',</h1>
-                        <p>Thanks for using HelpHog. Your order has been marked completed the provider. This email is the receipt for your purchase. No payment is due.</p>
-                        <p>This purchase will appear as &quotHELPHOG.COM&quot on your bank statement.</p>
+                        <p>Thanks for using HelpHog. Your order has been marked completed by the provider. This email is the receipt for your purchase. No payment is due.</p>
+                        <p>This purchase will appear as "HELPHOG.COM" on your bank statement.</p>
 
                         <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
