@@ -121,7 +121,9 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
     $curr_local_time = new DateTime("now", $local_time_zone);
     $offset = $local_time_zone->getOffset($curr_utc_time) / 3600;
     $offset = $offset * -1;
-
+    
+    $start_index = 24 * intval($utc->format('w')) + $offset;
+    
     for ($i = 0; $i < count($available_emails); $i++) {
         $curr_email = $available_emails[$i];
 
@@ -239,7 +241,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
 
     $final_result = "";
     for ($i = $start_index; $i < $start_index + 24; $i++) {
-        if ($combined_availability[$i] >= $numpeople) {
+        if ($combined_availability[$i % 168] >= $numpeople) {
             $final_result .= '1';
         } else {
             $final_result .= '0';
