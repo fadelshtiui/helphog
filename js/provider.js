@@ -913,7 +913,9 @@ let preloaded = false;
 			let url = "php/providercancel.php";
 
 			qs('#bottom-button i').classList.remove('hidden')
-			id('top-button').disabled = true;
+			if (id('top-button')) {
+			    id('top-button').disabled = true;
+			}
 			id('bottom-button').disabled = true;
 
 			try {
@@ -940,7 +942,10 @@ let preloaded = false;
 			}
 
 			qs('#bottom-button i').classList.add('hidden')
-			id('top-button').disabled = false;
+			if (id('top-button')) {
+			    id('top-button').disabled = true;
+			}
+			
 			id('bottom-button').disabled = false;
 
 
