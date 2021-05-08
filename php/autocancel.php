@@ -67,8 +67,13 @@ foreach ($result as $row) {
 
             $cancels = $cancels + 1;
             if ($cancels > 1){
-                // banning($cancels, $client_email);
+                banning($cancels, $client_email);
             }
+            
+            $sql = "UPDATE {$DB_PREFIX}login SET cancels = ? WHERE email = ?;";
+            $stmt = $db->prepare($sql);
+            $params = array($cancels, $client_email);
+            $stmt->execute($params);
         }
 
         if ($needsToBeCancelled) {
