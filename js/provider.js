@@ -748,9 +748,6 @@ let preloaded = false;
 						button2.prepend(loadingIcon2)
 						button2.append(button2Text)
 
-						button.id = "top-button"
-						button2.id = "bottom-button"
-
 						if (order.role == "primary") {
 							button2.dataset.role = 'primary';
 							action.appendChild(button);
@@ -792,6 +789,8 @@ let preloaded = false;
 
 		let ordernumber = this.dataset.ordernumber;
 
+		let buttonClicked = this;
+
 		resetModal()
 		id('first').innerText = "Are you sure you would like to mark the order as completed?"
 		id('warning-message').innerText = "Please only mark completed if the requested work has been finished."
@@ -813,9 +812,9 @@ let preloaded = false;
 			data.append("session", getSession());
 			let url = "php/markcompleted.php";
 
-			qs('#top-button i').classList.remove('hidden')
-			id('top-button').disabled = true;
-			id('bottom-button').disabled = true;
+			buttonClicked.firstElementChild.classList.remove('hidden')
+			buttonClicked.disabled = true;
+			buttonClicked.nextElementSibling.disabled = true;
 			try {
 				let res = await fetch(url, { method: "POST", body: data })
 				await checkStatus(res)
@@ -840,9 +839,9 @@ let preloaded = false;
 			} catch (err) {
 				console.error(err)
 			}
-			qs('#top-button i').classList.add('hidden')
-			id('top-button').disabled = false;
-			id('bottom-button').disabled = false;
+			buttonClicked.firstElementChild.classList.add('hidden')
+			buttonClicked.disabled = false;
+			buttonClicked.nextElementSibling.disabled = false;
 
 		}
 	}
@@ -861,11 +860,13 @@ let preloaded = false;
 		qs(".modal-wrapper").classList.remove('hidden')
 		let ordernumber = this.dataset.ordernumber;
 
+		let buttonClicked = this;
+
 		id('yes').onclick = async function () {
 
-			qs('#bottom-button i').classList.remove('hidden')
-			id('top-button').disabled = true;
-			id('bottom-button').disabled = true;
+			buttonClicked.firstElementChild.classList.remove('hidden')
+			buttonClicked.disabled = true;
+			buttonClicked.previousElementSibling.disabled = true;
 
 			let data = new FormData();
 			data.append("ordernumber", ordernumber);
@@ -879,9 +880,9 @@ let preloaded = false;
 				console.error(err)
 			}
 
-			qs('#bottom-button i').classList.add('hidden')
-			id('top-button').disabled = false;
-			id('bottom-button').disabled = false;
+			buttonClicked.firstElementChild.classList.add('hidden')
+			buttonClicked.disabled = false;
+			buttonClicked.previousElementSibling.disabled = false;
 
 		}
 	}
@@ -890,6 +891,8 @@ let preloaded = false;
 
 		let role = this.dataset.role
 		let ordernumber = this.dataset.ordernumber;
+
+		let buttonClicked = this;
 
 		resetModal();
 		id('first').innerText = "Are you sure that you would like to cancel the task?"
@@ -917,11 +920,11 @@ let preloaded = false;
 			data.append('role', role)
 			let url = "php/providercancel.php";
 
-			qs('#bottom-button i').classList.remove('hidden')
-			if (id('top-button')) {
-				id('top-button').disabled = true;
+			buttonClicked.firstElementChild.classList.remove('hidden')
+			buttonClicked.disabled = true;
+			if (buttonClicked.previousElementSibling) {
+				buttonClicked.previousElementSibling.disabled = true;
 			}
-			id('bottom-button').disabled = true;
 
 			try {
 				let res = await fetch(url, { method: "POST", body: data })
@@ -946,12 +949,11 @@ let preloaded = false;
 				console.error(err);
 			}
 
-			qs('#bottom-button i').classList.add('hidden')
-			if (id('top-button')) {
-				id('top-button').disabled = true;
+			buttonClicked.firstElementChild.classList.add('hidden')
+			buttonClicked.disabled = false;
+			if (buttonClicked.previousElementSibling) {
+				buttonClicked.previousElementSibling.disabled = false;
 			}
-
-			id('bottom-button').disabled = false;
 
 
 		}
@@ -966,7 +968,7 @@ let preloaded = false;
 
 		let startStopButton = this;
 
-		if (startStopButton.firstElementChild.innerText == "START") {
+		if (startStopButton.lastElementChild.innerText == "START") {
 
 			resetModal()
 			id('first').innerText = "Are you sure you would like to start?"
@@ -987,10 +989,10 @@ let preloaded = false;
 
 				startStopButton.classList.remove("primary-green")
 				startStopButton.classList.add("primary-red");
-				startStopButton.firstElementChild.innerText = "STOP";
+				startStopButton.lastElementChild.innerText = "STOP";
 				startStopButton.onclick = toggle;
 
-				startStopButton.nextElementSibling.firstElementChild.innerText = "PAUSE";
+				startStopButton.nextElementSibling.lastElementChild.innerText = "PAUSE";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove("primary-red")
 				startStopButton.nextElementSibling.classList.add("secondary");
@@ -1018,10 +1020,10 @@ let preloaded = false;
 
 				startStopButton.classList.remove("primary-red");
 				startStopButton.classList.add("primary-green");
-				startStopButton.firstElementChild.innerText = "MARK COMPLETED";
+				startStopButton.lastElementChild.innerText = "MARK COMPLETED";
 				startStopButton.onclick = markCompleted;
 
-				startStopButton.nextElementSibling.firstElementChild.innerText = "REFUND CUSTOMER";
+				startStopButton.nextElementSibling.lastElementChild.innerText = "REFUND CUSTOMER";
 				startStopButton.nextElementSibling.classList.remove("primary-green")
 				startStopButton.nextElementSibling.classList.remove('secondary')
 				startStopButton.nextElementSibling.classList.add("primary-red")
@@ -1033,7 +1035,7 @@ let preloaded = false;
 	}
 
 	function pauseResume() {
-		let type = this.firstElementChild.innerText;
+		let type = this.lastElementChild.innerText;
 		let url = "php/pause.php";
 		if (type == "RESUME") {
 			url = "php/resume.php"
@@ -1046,9 +1048,9 @@ let preloaded = false;
 		// this.classList.toggle("paused");
 
 		if (type == "PAUSE") {
-			this.firstElementChild.innerText = "RESUME";
+			this.lastElementChild.innerText = "RESUME";
 		} else {
-			this.firstElementChild.innerText = "PAUSE";
+			this.lastElementChild.innerText = "PAUSE";
 		}
 
 		this.onclick = pauseResume
@@ -1077,12 +1079,12 @@ let preloaded = false;
 					id('yes').classList.add('secondary')
 					qs(".modal-wrapper").classList.remove('hidden')
 
-					startStopButton.firstElementChild.innerText = "START";
+					startStopButton.lastElementChild.innerText = "START";
 					startStopButton.classList.remove("primary-red")
 					startStopButton.classList.add("primary-green")
 					startStopButton.onclick = toggle;
 
-					startStopButton.nextElementSibling.firstElementChild.innerText = "CANCEL";
+					startStopButton.nextElementSibling.lastElementChild.innerText = "CANCEL";
 					startStopButton.nextElementSibling.classList.remove("primary-green")
 					startStopButton.nextElementSibling.classList.remove("secondary")
 					startStopButton.nextElementSibling.classList.add("primary-red")
