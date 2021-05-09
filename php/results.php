@@ -49,7 +49,7 @@ foreach ($stmnt->fetchAll() as $row) {
      $remote = $row['remote'];
 
      $entry->src = '../assets/images/service-placeholder.jpg';
-     $image_name = '../assets/images/' . str_replace(' ', '-', strtolower($service)) . '.jpg';
+     $image_name = '../assets/images/' . $row['metaphonetext'] . '.jpg';
      if (is_file($image_name)) {
           $entry->src = $image_name;
      }
