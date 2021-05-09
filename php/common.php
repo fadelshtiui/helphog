@@ -815,9 +815,9 @@ function mark_completed($order, $message)
 
 ' . $subtotal . '
 
-Subtotal      -  $' .  money_format('%.2n', $amount) . '
+Subtotal  -  $' .  money_format('%.2n', $amount) . '
 
-Sales tax (' . $tax_rate . '%) -  $' . money_format('%.2n', $tax_collected) . '
+Sales tax (' . $tax_rate . '%)  -  $' . money_format('%.2n', $tax_collected) . '
 
 Total Amount  -  $' . money_format('%.2n', $customer_payment) . '
 
