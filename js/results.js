@@ -336,6 +336,9 @@
                     infoContainer.appendChild(description)
 
                     result.appendChild(infoContainer)
+                    
+                    let bottomRowContainer = ce('div')
+                    bottomRowContainer.classList.add('bottom-row')
 
                     let priceContainer = ce('div')
                     priceContainer.classList.add('profile__stats')
@@ -348,8 +351,6 @@
                     let priceValue = ce('h5')
                     priceValue.innerText = '$' + service.cost
                     // priceValue.style.marginLeft = '28px';
-
-                    result.appendChild(priceContainer)
 
                     let rateContainer = ce('div')
                     rateContainer.classList.add('profile__stats')
@@ -371,7 +372,7 @@
                     availabilityTitle.innerText = 'First hour'
                     availabilityTitle.style.width = '89px';
                     availabilityTitle.style.marginLeft = '-19px';
-
+                    
                     let toolTipContainer = ce('span')
                     toolTipContainer.classList.add('tooltip', 'top');
                     let tooltip = ce('span')
@@ -379,8 +380,8 @@
                     iCircle.classList.add('icon-info')
                     tooltip.appendChild(iCircle);
                     toolTipContainer.appendChild(tooltip);
-
-
+                    
+                    
                     let availabilityValue = ce('h5')
                     availabilityValue.classList.add('profile__stats__info')
                     availabilityValue.innerText = 'Unavailable'
@@ -404,7 +405,7 @@
                          rateValue.innerText = 'Hourly'
                          priceValue.innerText = priceValue.innerText + "/hr"
                     }
-
+                    
                     availabilityValue.appendChild(toolTipContainer)
 
 
@@ -416,9 +417,12 @@
 
                     availabilityContainer.appendChild(availabilityTitle)
                     availabilityContainer.appendChild(availabilityValue)
-
-                    result.appendChild(rateContainer)
-                    result.appendChild(availabilityContainer)
+                    
+                    bottomRowContainer.appendChild(priceContainer)
+                    bottomRowContainer.appendChild(rateContainer)
+                    bottomRowContainer.appendChild(availabilityContainer)
+                    
+                    result.appendChild(bottomRowContainer)
 
                     let buttonContainer = ce('profile__cta')
                     buttonContainer.classList.add('profile__cta')
