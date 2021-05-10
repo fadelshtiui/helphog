@@ -1124,6 +1124,10 @@ input.variation+label {
   }
 }
 
+.address .location {
+  margin: 0px;
+}
+
 .hidden {
   display: none;
 }
