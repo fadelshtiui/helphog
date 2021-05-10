@@ -57,7 +57,7 @@ main {
 main {
   font-size: 16px;
   width: 90%;
-  margin: 3em auto 0;
+  margin: 0 auto 0;
   max-width: 1500px;
   color: var(--foregroundColor);
   text-align: left;
@@ -240,12 +240,15 @@ input:disabled~* {
   background-color: #e1f5fe;
 }
 
-#autocomplete {
+#autocomplete, #zip-input {
   font-weight: 500;
   font-size: 18px;
   line-height: 1.2;
   width: 55%;
   height: 30px;
+  margin-bottom: 1em;
+  border: none;
+  border-bottom: 0.5px solid black;
 }
 
 #highlight {

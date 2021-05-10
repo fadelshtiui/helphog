@@ -5,4 +5,7 @@
      .tooltip:after {
           left: -5.5em;
      }
+     .modal {
+          width: 90%;
+     }
 }

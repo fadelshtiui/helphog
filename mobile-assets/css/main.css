@@ -2885,6 +2885,63 @@ button.secondary:hover {
 	margin-right: 8px;
 }
 
+/* Custom Confirmation Popup */
+
+.modal-wrapper {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .5);
+	z-index: 99;
+}
+
+.modal {
+	width: 500px;
+	padding: 35px 25px;
+	background: white;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	border-radius: 10px;
+	z-index: 100;
+	height: fit-content;
+}
+
+.modal>.header {
+	font-size: 24px;
+	font-weight: 300;
+	margin-bottom: 20px;
+	border: none;
+}
+
+.modal>.content {
+	font-size: 17px;
+	line-height: 27px;
+	margin-bottom: 30px;
+}
+
+.modal>.actions {
+	display: flex;
+}
+
+.modal>.actions>button {
+	margin: 5px;
+	z-index: 101;
+	width: 100%;
+}
+
+i.warning {
+	font-size: 40px;
+	color: #DB2828;
+}
+
+i.success {
+	font-size: 40px;
+	color: #1ecd97;
+}
+
 /* JS classes */
 
 .hidden {
