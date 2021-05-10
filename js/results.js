@@ -89,7 +89,7 @@
           }
 
           if (urlParams.get('category')) {
-            id('category-filters').classList.add('hidden')
+               id('category-filters').classList.add('hidden')
           }
 
           fetchResults(searchURL, data)
@@ -243,13 +243,13 @@
                     if (response.counts[counter.dataset.category]) {
                          counter.innerText = response.counts[counter.dataset.category];
                          count++;
-                    }else{
-                        counter.parentElement.classList.add('hidden')
+                    } else {
+                         counter.parentElement.classList.add('hidden')
                     }
 
                }
-               if(count <= 1){
-                   id('category-filters').classList.add('hidden');
+               if (count <= 1) {
+                    id('category-filters').classList.add('hidden');
                }
 
                id('total').innerText = response.services.length;
@@ -280,6 +280,7 @@
                     infoContainer.classList.add('profile__info')
 
                     let title = ce('h3')
+                    title.classList.add('third-level-heading')
                     title.innerText = service.service
 
                     let x = 70
@@ -336,7 +337,7 @@
                     infoContainer.appendChild(description)
 
                     result.appendChild(infoContainer)
-                    
+
                     let bottomRowContainer = ce('div')
                     bottomRowContainer.classList.add('bottom-row')
 
@@ -349,6 +350,7 @@
                     priceTitle.innerText = 'Price'
 
                     let priceValue = ce('h5')
+                    priceValue.classList.add('fifth-level-heading')
                     priceValue.innerText = '$' + service.cost
                     // priceValue.style.marginLeft = '28px';
 
@@ -361,6 +363,7 @@
                     // rateTitle.style.marginLeft = '-5px';
 
                     let rateValue = ce('h5')
+                    rateValue.classList.add('fifth-level-heading')
                     rateValue.classList.add('profile__stats__info')
                     // rateValue.style.marginLeft = '-5px';
 
@@ -370,9 +373,9 @@
                     let availabilityTitle = ce('p')
                     availabilityTitle.classList.add('profile__stats__title')
                     availabilityTitle.innerText = 'First hour'
-                    availabilityTitle.style.width = '89px';
-                    availabilityTitle.style.marginLeft = '-19px';
-                    
+                    // availabilityTitle.style.width = '89px';
+                    // availabilityTitle.style.marginLeft = '-19px';
+
                     let toolTipContainer = ce('span')
                     toolTipContainer.classList.add('tooltip', 'top');
                     let tooltip = ce('span')
@@ -380,20 +383,21 @@
                     iCircle.classList.add('icon-info')
                     tooltip.appendChild(iCircle);
                     toolTipContainer.appendChild(tooltip);
-                    
-                    
+
+
                     let availabilityValue = ce('h5')
+                    availabilityValue.classList.add('fifth-level-heading')
                     availabilityValue.classList.add('profile__stats__info')
                     availabilityValue.innerText = 'Unavailable'
-                    availabilityValue.style.marginLeft = '-19px';
+                    // availabilityValue.style.marginLeft = '-19px';
 
                     availabilityValue.innerText = 'Full';
 
                     if (service.prorated == 'y') {
                          availabilityValue.innerText = 'Prorated';
                          toolTipContainer.dataset.tooltip = "If your order takes less than 1 hour, you will be charged for exactly that amount of time.";
-                    }else{
-                        toolTipContainer.dataset.tooltip = "If your order takes less than 1 hour, you will be charged for 1 hour.";
+                    } else {
+                         toolTipContainer.dataset.tooltip = "If your order takes less than 1 hour, you will be charged for 1 hour.";
 
                     }
 
@@ -405,7 +409,7 @@
                          rateValue.innerText = 'Hourly'
                          priceValue.innerText = priceValue.innerText + "/hr"
                     }
-                    
+
                     availabilityValue.appendChild(toolTipContainer)
 
 
@@ -417,11 +421,11 @@
 
                     availabilityContainer.appendChild(availabilityTitle)
                     availabilityContainer.appendChild(availabilityValue)
-                    
+
                     bottomRowContainer.appendChild(priceContainer)
                     bottomRowContainer.appendChild(rateContainer)
                     bottomRowContainer.appendChild(availabilityContainer)
-                    
+
                     result.appendChild(bottomRowContainer)
 
                     let buttonContainer = ce('profile__cta')

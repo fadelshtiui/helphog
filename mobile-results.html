@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <title>Results</title>
+
+     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+
+     <link rel="stylesheet" href="css/resultscssimported.css" type="text/css">
+     <link rel='stylesheet'
+          href='https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css'>
+     <link rel="stylesheet" href="css/results.css" type="text/css">
+     <link rel="stylesheet" href="css/google.css" type="text/css" />
+     <link rel="stylesheet" href="css/loading.css">
+     <link rel="stylesheet" href="css/all.css">
+     <link rel="stylesheet" href="mobile-assets/css/main.css">
+
+     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+     <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
+          defer></script>
+     <script src="js/google.js"></script>
+     <script src="js/common.js"></script>
+     <script src="js/results.js"></script>
+     <script src="js/loading.js"></script>
+
+</head>
+
+<body>
+     <div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
+          <div class='modal'>
+               <div class='header'>
+                    <span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
+               </div>
+               <div class='content'>
+                    <span id="warning-message"></span>
+               </div>
+               <div class='actions'>
+                    <button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
+                         class="secondary">OK, Close Modal</button>
+               </div>
+          </div>
+     </div>
+     <a id="scroll-to-zip" href="#logo" class='hidden'></a>
+     <div id="loading" class="loading hidden">
+          <div>
+               <div class="c1"></div>
+               <div class="c2"></div>
+               <div class="c3"></div>
+               <div class="c4"></div>
+          </div>
+     </div>
+
+     <div id="page-wrapper">
+
+          <header id="header" class="alt">
+               <nav id="nav">
+                    <ul>
+                         <li class="current"><a href="/">home</a></li>
+                         <li><a href="contact">contact</a></li>
+                         <li class="submenu">
+                              <a href="">actions</a>
+                              <ul id="actions">
+                                   <li><a data-path="settings" href="settings">settings</a></li>
+                                   <li><a data-path="provider" href="provider">provider portal</a></li>
+                                   <li><a data-path="orders" href="orders">orders</a></li>
+                                   <li><a data-path="signout">sign out</a></li>
+
+                                   <li><a data-path="tracking" href="tracking">track orders</a></li>
+                                   <li><a data-path="registration" href="registration">sign up</a></li>
+                                   <li><a data-path="signin" href="signin">login</a></li>
+                              </ul>
+                         </li>
+                    </ul>
+               </nav>
+          </header>
+
+          <main id="main" class="hidden" style="margin-top:100px;">
+               <style scoped>
+               </style>
+               <section class="results-header">
+                    <h1 id="top-heading">Here's what you're looking for.</h1>
+                    <div class="results-header__option">
+                         <a href="/"> &lt; search again</a>
+                    </div>
+               </section>
+               <div class="filter-section__wrapper">
+                    <section class="filter-section">
+                         <h3>Filters</h3>
+                         <div id="highlight">
+                              <div id="availability-filters" class="filters">
+                                   <h5 class="filters__title">Location</h5>
+                                   <div class="address">
+                                        <div id="address-updater">
+                                             <div id="locationField">
+                                                  <input id="autocomplete" placeholder="Enter your location"
+                                                       type="text" />
+                                             </div>
+                                             <div id="addressDisplay" class="locationDisplay">
+                                                  <span id="current-address"></span>
+                                                  <br class="address-spacing">
+                                                  <span id="current-city"></span><span id="city-state-comma">,
+                                                  </span><span id="current-state"></span>
+                                                  <br class="address-spacing">
+                                                  <span id="current-zip"></span>
+                                                  <br>
+                                             </div>
+                                             <profile__cta class="profile__cta location"><button class="secondary"
+                                                       id="edit">Edit</button>
+                                             </profile__cta>
+                                        </div>
+                                        <div id="zip-updater">
+                                             <div id="locationFieldGuest">
+                                                  <input id="zip-input" type="number" placeholder="Enter Zipcode">
+                                             </div>
+                                             <profile__cta class="profile__cta location"><a class="addressbutton"
+                                                       id="update">Update</a>
+                                             </profile__cta>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div id="category-filters" class="filters">
+                              <h5 class="filters__title">Category</h5>
+                              <div class="filters__item">
+                                   <div class="checkbox">
+                                        <input id="checkbox-0" type="checkbox" data-category="all" checked />
+                                        <label for="checkbox-0">All<span class="box"></span></label>
+                                   </div>
+                                   <span id="total" class="badge status-primary">0</span>
+                              </div>
+                         </div>
+                         <div id="availability-filters" class="filters">
+                              <h5 class="filters__title">Availability</h5>
+                              <div class="filters__item">
+                                   <div class="checkbox">
+                                        <input id="checkbox-98" type="checkbox" data-availability="filter" />
+                                        <label for="checkbox-98">Available<span class="box"></span></label>
+                                   </div>
+                                   <span id="only-available" class="badge status-primary">0</span>
+                              </div>
+                              <div class="filters__item">
+                                   <div class="checkbox">
+                                        <input id="checkbox-99" type="checkbox" checked data-availability="all" />
+                                        <label for="checkbox-99">Show All<span class="box"></span></label>
+                                   </div>
+                                   <span id="show-all" class="badge status-primary">0</span>
+                              </div>
+                         </div>
+                    </section>
+               </div>
+               <section class="results-section results--grid">
+                    <!--<div class="profile">-->
+                    <!--  <div class="profile__image"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/dog.png" alt="Doggo"/></div>-->
+                    <!--  <div class="profile__info">-->
+                    <!--    <h3>Doggo Dogg</h3>-->
+                    <!--    <p class="profile__info__extra">A very good boi that loves playing fetch and ice-cream! Gentle with everyone. Scared of the rain.</p>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__stats">-->
+                    <!--    <p class="profile__stats__title">Availability</p>-->
+                    <!--    <h5 class="profile__stats__info">Available</h5>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__stats">-->
+                    <!--    <p class="profile__stats__title">Price</p>-->
+                    <!--    <h5>$24/hr</h5>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__stats">-->
+                    <!--    <p class="profile__stats__title">Rate</p>-->
+                    <!--    <h5 class="profile__stats__info">Hourly</h5>-->
+                    <!--  </div>-->
+                    <!--  <div class="profile__cta"><a class="button">Adopt Doggo!</a></div>-->
+                    <!--</div>-->
+               </section>
+          </main>
+          <table id="address" style="display:none;">
+               <tr>
+                    <td class="label">Street Address</td>
+                    <td class="slimField">
+                         <input class="field" id="street_number" disabled="true" />
+                    </td>
+                    <td class="wideField" colspan="2">
+                         <input class="field" id="route" disabled="true" />
+                    </td>
+               </tr>
+               <tr>
+                    <td class="label">City</td>
+                    <td class="wideField" colspan="3">
+                         <input class="field" id="locality" disabled="true" />
+                    </td>
+               </tr>
+               <tr>
+                    <td class="label">State</td>
+                    <td class="slimField">
+                         <input class="field" id="administrative_area_level_1" disabled="true" />
+                    </td>
+                    <td class="label">Zip code</td>
+                    <td class="wideField">
+                         <input class="field" id="postal_code" disabled="true" />
+                    </td>
+               </tr>
+               <tr>
+                    <td class="label">Country</td>
+                    <td class="wideField" colspan="3">
+                         <input class="field" id="country" disabled="true" />
+                    </td>
+               </tr>
+          </table>
+          <footer id="footer">
+               <ul class="copyright">
+                    <li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
+                    <li><a href="privacy">Privacy Policy</a></li>
+                    <li><a href="terms">Terms of Use</a></li>
+                    <li><a href="cookie">Cookie Policy</a></li>
+               </ul>
+          </footer>
+     </div>
+     <!-- partial -->
+</body>
+
+</html>

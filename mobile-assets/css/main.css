@@ -85,10 +85,6 @@ html {
 	box-sizing: inherit;
 }
 
-body {
-	background: #f3f6fa;
-}
-
 body.is-preload *, body.is-preload *:before, body.is-preload *:after {
 	-moz-animation: none !important;
 	-webkit-animation: none !important;
@@ -119,7 +115,6 @@ a {
 	transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 	color: #0275d8;
 	text-decoration: none;
-	border-bottom: dotted 1px;
 }
 
 a:hover {
@@ -2222,10 +2217,6 @@ input[type="button"].small, input[type="submit"].small, input[type="reset"].smal
 /* Main */
 
 #main {
-	background-image: url("images/dark-tl.svg"), url("images/dark-tr.svg"), url("images/dark-bl.svg"), url("images/dark-br.svg");
-	background-position: top left, top right, bottom left, bottom right;
-	background-repeat: no-repeat;
-	background-size: 25em;
 	padding: 7em 0;
 }
 
@@ -2272,6 +2263,11 @@ body.index #main {
 	color: #7c8081;
 	padding: 5em 5em 10em 5em;
 	text-align: center;
+	font-size: 1em;
+}
+
+#footer>li {
+	list-style-type: none;
 }
 
 #footer .copyright {
