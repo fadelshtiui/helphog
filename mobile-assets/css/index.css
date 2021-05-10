@@ -2,9 +2,10 @@
     font-size: 3em;
 }
 
-#categories > button {
+#categories>button {
     color: black;
     margin: 0.5em;
+    width: 45%;
 }
 
 #categories {
@@ -17,7 +18,7 @@
     max-width: 1000px;
 }
 
-.inner > article > input {
+.inner>article>input {
     font-size: 0.8em;
 }
 
@@ -29,4 +30,10 @@
 
 video {
     margin-bottom: 1em;
+}
+
+@media screen and (max-width: 736px) {
+    #categories>button {
+        width: 100%;
+    }
 }
