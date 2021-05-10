@@ -60,7 +60,7 @@ function fillInAddress() {
   id('current-zip').innerText = id('postal_code').value
   id('city-state-comma').classList.remove('hidden')
 
-  if (window.location.pathname == '/results' || window.location.pathname == '/details') {
+  if (window.location.pathname == '/results' || window.location.pathname == '/details' || window.location.pathname == '/mobile-results') {
     reloadResults();
   }
   if (window.location.pathname == '/edit') {
@@ -85,7 +85,7 @@ function reloadResults() {
   let queryString = window.location.search
   const urlParams = new URLSearchParams(queryString)
 
-  if (window.location.pathname == '/results') {
+  if (window.location.pathname == '/results' || window.location.pathname == '/mobile-results') {
     if (urlParams.get('category')) {
       url += 'category=' + urlParams.get('category')
     } else {

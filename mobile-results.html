@@ -5,19 +5,25 @@
      <meta charset="UTF-8">
      <title>Results</title>
 
+     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
      <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 
      <link rel="stylesheet" href="css/resultscssimported.css" type="text/css">
-     <link rel='stylesheet'
-          href='https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css'>
+     <!--<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css'>-->
      <link rel="stylesheet" href="css/results.css" type="text/css">
      <link rel="stylesheet" href="css/google.css" type="text/css" />
      <link rel="stylesheet" href="css/loading.css">
      <link rel="stylesheet" href="css/all.css">
      <link rel="stylesheet" href="mobile-assets/css/main.css">
+     <link rel="stylesheet" href="mobile-assets/css/results.css">
 
-     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+     <noscript>
+          <link rel="stylesheet" href="mobile-assets/css/noscript.css" />
+     </noscript>
+
+     <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>-->
+     <!--<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>-->
      <script
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
           defer></script>
@@ -29,29 +35,29 @@
 </head>
 
 <body>
-     <div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
-          <div class='modal'>
-               <div class='header'>
-                    <span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
-               </div>
-               <div class='content'>
-                    <span id="warning-message"></span>
-               </div>
-               <div class='actions'>
-                    <button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
-                         class="secondary">OK, Close Modal</button>
-               </div>
-          </div>
-     </div>
-     <a id="scroll-to-zip" href="#logo" class='hidden'></a>
-     <div id="loading" class="loading hidden">
-          <div>
-               <div class="c1"></div>
-               <div class="c2"></div>
-               <div class="c3"></div>
-               <div class="c4"></div>
-          </div>
-     </div>
+     <!--<div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">-->
+     <!--     <div class='modal'>-->
+     <!--          <div class='header'>-->
+     <!--               <span id="first"><i class="fas fa-exclamation-circle warning"></i></span>-->
+     <!--          </div>-->
+     <!--          <div class='content'>-->
+     <!--               <span id="warning-message"></span>-->
+     <!--          </div>-->
+     <!--          <div class='actions'>-->
+     <!--               <button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"-->
+     <!--                    class="secondary">OK, Close Modal</button>-->
+     <!--          </div>-->
+     <!--     </div>-->
+     <!--</div>-->
+     <!--<a id="scroll-to-zip" href="#logo" class='hidden'></a>-->
+     <!--<div id="loading" class="loading hidden">-->
+     <!--     <div>-->
+     <!--          <div class="c1"></div>-->
+     <!--          <div class="c2"></div>-->
+     <!--          <div class="c3"></div>-->
+     <!--          <div class="c4"></div>-->
+     <!--     </div>-->
+     <!--</div>-->
 
      <div id="page-wrapper">
 
@@ -77,9 +83,8 @@
                </nav>
           </header>
 
-          <main id="main" class="hidden" style="margin-top:100px;">
-               <style scoped>
-               </style>
+          <main id="main" class="hidden">
+
                <section class="results-header">
                     <h1 id="top-heading">Here's what you're looking for.</h1>
                     <div class="results-header__option">
@@ -90,7 +95,7 @@
                     <section class="filter-section">
                          <h3>Filters</h3>
                          <div id="highlight">
-                              <div id="availability-filters" class="filters">
+                              <div class="filters">
                                    <h5 class="filters__title">Location</h5>
                                    <div class="address">
                                         <div id="address-updater">
@@ -107,17 +112,17 @@
                                                   <span id="current-zip"></span>
                                                   <br>
                                              </div>
-                                             <profile__cta class="profile__cta location"><button class="secondary"
-                                                       id="edit">Edit</button>
-                                             </profile__cta>
+                                             <div class="profile__cta location">
+                                                  <button class="secondary" id="edit">Edit</button>
+                                             </div>
                                         </div>
                                         <div id="zip-updater">
                                              <div id="locationFieldGuest">
                                                   <input id="zip-input" type="number" placeholder="Enter Zipcode">
                                              </div>
-                                             <profile__cta class="profile__cta location"><a class="addressbutton"
+                                             <div class="profile__cta location"><a class="addressbutton"
                                                        id="update">Update</a>
-                                             </profile__cta>
+                                             </div>
                                         </div>
                                    </div>
                               </div>
@@ -216,6 +221,15 @@
                </ul>
           </footer>
      </div>
+
+     <script src="mobile-assets/js/jquery.min.js"></script>
+     <script src="mobile-assets/js/jquery.dropotron.min.js"></script>
+     <script src="mobile-assets/js/jquery.scrolly.min.js"></script>
+     <script src="mobile-assets/js/jquery.scrollex.min.js"></script>
+     <script src="mobile-assets/js/browser.min.js"></script>
+     <script src="mobile-assets/js/breakpoints.min.js"></script>
+     <script src="mobile-assets/js/util.js"></script>
+     <script src="mobile-assets/js/main.js"></script>
      <!-- partial -->
 </body>
 

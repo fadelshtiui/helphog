@@ -909,6 +909,10 @@ input.variation+label {
   padding: 20px 25px 0;
 }
 
+.profile__info__extra {
+  text-align: left;
+}
+
 .profile__stats {
   display: flex;
   flex-direction: column;
