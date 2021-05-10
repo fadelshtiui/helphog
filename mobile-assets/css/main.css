@@ -124,6 +124,7 @@ a {
 
 a:hover {
 	border-bottom-color: transparent;
+	cursor: pointer;
 }
 
 strong, b {
@@ -2886,4 +2887,10 @@ button.secondary:hover {
 .buttonloadicon {
 	margin-left: -12px;
 	margin-right: 8px;
+}
+
+/* JS classes */
+
+.hidden {
+	display: none !important;
 }

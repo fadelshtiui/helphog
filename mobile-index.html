@@ -13,6 +13,7 @@
      </noscript>
      <link rel="stylesheet" href="mobile-assets/css/index.css" />
 
+     <script src="js/common.js"></script>
      <script src="mobile-assets/js/index.js"></script>
 </head>
 
@@ -24,14 +25,18 @@
                <nav id="nav">
                     <ul>
                          <li class="current"><a href="/">home</a></li>
-                         <li><a href="#">contact</a></li>
+                         <li><a href="contact">contact</a></li>
                          <li class="submenu">
                               <a href="#">actions</a>
-                              <ul>
-                                   <li><a href="tracking">track orders</a></li>
-                                   <li><a href="register">register</a></li>
-                                   <li><a href="login">sign in</a></li>
+                              <ul id="actions">
+                                   <li><a data-path="settings" href="settings">settings</a></li>
+                                   <li><a data-path="provider" href="provider">provider portal</a></li>
+                                   <li><a data-path="orders" href="orders">orders</a></li>
+                                   <li><a data-path="signout">sign out</a></li>
 
+                                   <li><a data-path="tracking" href="tracking">track orders</a></li>
+                                   <li><a data-path="registration" href="registration">sign up</a></li>
+                                   <li><a data-path="signin" href="signin">login</a></li>
                               </ul>
                          </li>
                     </ul>
@@ -55,10 +60,11 @@
                     <p>
                          Premium Services On Demand
                     </p>
-                    <article>
-                         <input type="text" list="services" placeholder="I need help with...">
+                    <article id="search-container">
+                         <span id="search-icon" class="icon solid fa-search"></span>
+                         <input id="search-input" type="text" list="services" placeholder="I need help with...">
                          <datalist id="services">
-
+                              <!-- populated by js -->
                          </datalist>
                     </article>
 
@@ -66,12 +72,7 @@
                </div>
 
                <div id="categories">
-                    <button class="secondary">Automotive</button>
-                    <button class="secondary">Creative</button>
-                    <button class="secondary">Education</button>
-                    <button class="secondary">Household</button>
-                    <button class="secondary">Labor</button>
-                    <button class="secondary">Tech</button>
+                    <!-- populated by js -->
                </div>
 
           </section>
@@ -185,7 +186,7 @@
                          <div class="col-6 col-12-narrower">
 
                               <section>
-                                   <video id="change" controls poster="/assets/images/favicon.svg" none">
+                                   <video id="change" controls poster="/assets/images/favicon.svg" preload="none">
                                         <source src="assets/videos/registrationcomp.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                    </video>
@@ -198,7 +199,7 @@
                          <div class="col-6 col-12-narrower">
 
                               <section>
-                                   <video id="change" poster="images/favicon.svg" controls preload="none">
+                                   <video id="change" poster="/assets/images/favicon.svg" controls preload="none">
                                         <source src="assets/videos/iosyuh.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                    </video>
@@ -237,7 +238,11 @@
 
                <ul class="copyright">
                     <li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
+                    <li><a href="privacy">Privacy Policy</a></li>
+                    <li><a href="terms">Terms of Use</a></li>
+                    <li><a href="cookie">Cookie Policy</a></li>
                </ul>
+
 
           </footer>
 

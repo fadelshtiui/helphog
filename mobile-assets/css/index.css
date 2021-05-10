@@ -8,6 +8,19 @@
     width: 45%;
 }
 
+#search-container {
+    display: flex;
+    align-items: center;
+}
+
+#search-container>span {
+    left: 2em;
+}
+
+#search-container>input {
+    padding-left: 4em;
+}
+
 #categories {
     width: 50%;
     margin-left: auto;
@@ -35,5 +48,8 @@ video {
 @media screen and (max-width: 736px) {
     #categories>button {
         width: 100%;
+    }
+    #categories {
+        width: 65%;
     }
 }
