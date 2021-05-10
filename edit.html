@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <title>Order Details</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -19,6 +21,7 @@
   <link rel="stylesheet" href="css/popup.css">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/all.css">
+  <link rel="stylesheet" href="mobile-assets/css/edit.css">
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
@@ -160,7 +163,7 @@
           <div class="pure-u-1-1" id="two">
             <div class="wrapper wrapper__alpha">
               <h2 class="__alpha">Enter Address</h2>
-              <div class="content-area">
+              <div id="address-content-area" class="content-area">
 
                 <div id="locationField">
                   <input id="autocomplete" placeholder="Enter your location" type="text" />
@@ -748,7 +751,8 @@
                                   <span id="button-text">Place Order</span>
                                 </button>
                                 <div id="agreement">
-                                  By clicking place order, you agree to our <a class="standard" onclick="window.open('privacy')">privacy
+                                  By clicking place order, you agree to our <a class="standard"
+                                    onclick="window.open('privacy')">privacy
                                     policy</a> and <a class="standard" onclick="window.open('terms')">terms of use</a>.
                                 </div>
 

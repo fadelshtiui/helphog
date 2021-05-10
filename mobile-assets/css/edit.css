@@ -1,0 +1,13 @@
+@media screen and (max-width: 736px) {
+     .pure-g-r {
+          width: 90%;
+     }
+     #address-content-area {
+          height: 12em;
+     }
+     .column {
+          width: 5em;
+          flex: auto;
+          width: 45%;
+     }
+}
