@@ -2,4 +2,7 @@
      #top-heading {
           display: none;
      }
+     .tooltip:after {
+          left: -5.5em;
+     }
 }
