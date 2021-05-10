@@ -52,7 +52,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
         $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone($_SESSION['tzoffset']));
         $utc->setTimezone(new DateTimeZone('UTC'));
 
-        if (minutes_until($utc->format('Y-m-d H:i:s')) < 20) {
+        if (minutes_until($utc->format('Y-m-d H:i:s')) < 0) {
 
             $response->error = "waited very long before clicking place order";
         } else {
