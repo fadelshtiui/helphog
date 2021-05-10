@@ -1,0 +1,32 @@
+.inner h2 {
+    font-size: 3em;
+}
+
+#categories > button {
+    color: black;
+    margin: 0.5em;
+}
+
+#categories {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    max-width: 1000px;
+}
+
+.inner > article > input {
+    font-size: 0.8em;
+}
+
+#banner .inner {
+    width: 80%;
+    max-width: 700px;
+    margin-bottom: 1em;
+}
+
+video {
+    margin-bottom: 1em;
+}
