@@ -804,7 +804,7 @@ function mark_completed($order, $message)
 			send_email($customer_email, "no-reply@helphog.com", "Payment Waived", sendNoChargeEmail($service, $order, $schedule, $name));
 		} else {
 
-			if ($last_mc != "0000-00-00 00:00:00") { // first time mark completed
+			if ($last_mc == "0000-00-00 00:00:00") { // first time mark completed
 				$intent = \Stripe\PaymentIntent::retrieve(trim($payment_info->intent));
 				$intent->capture(['amount_to_capture' => round($payment_info->customer_payment * 100)]);
 			}
