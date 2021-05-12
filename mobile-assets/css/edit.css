@@ -9,5 +9,19 @@
           width: 5em;
           flex: auto;
           width: 45%;
+          padding-left: 0;
+          padding-top: 0.75em;
      }
+     .column button {
+        padding: 0;
+    }
+    #centerdiv {
+        width: 100%;
+    }
+    .modal {
+        width: 90%;
+    }
+    .pac-container {
+        top: 24em !important;
+    }
 }

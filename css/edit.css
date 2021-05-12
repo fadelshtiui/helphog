@@ -927,7 +927,14 @@ a.editbutton {
   flex: 1;
   margin: 7px;
   text-align: center;
+  padding-left: 0;
 }
+
+.column button {
+    padding: 0;
+}
+
+
 
 .available-column {
   background-color: #8080801f;

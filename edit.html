@@ -14,6 +14,7 @@
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css'>
   <link rel='stylesheet' href='https://cdn.linearicons.com/free/1.0.0/icon-font.min.css'>
 
+  <link rel="stylesheet" href="mobile-assets/css/main.css">
   <link rel="stylesheet" href="css/time.css">
   <link rel="stylesheet" href="css/edit.css">
   <link rel="stylesheet" href="css/footer.css">
@@ -21,7 +22,9 @@
   <link rel="stylesheet" href="css/popup.css">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/all.css">
+  
   <link rel="stylesheet" href="mobile-assets/css/edit.css">
+  
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
@@ -307,282 +310,283 @@
           </div>
         </div>
         <div class="pure-u-1-1" id="time-section">
-          <div id="choose-your-time" class="wrapper wrapper__delta timePicker">
-            <h2 class="__alpha">Choose Time</h2>
-            <div class='some-page-wrapper'>
-              <svg class="loader" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <circle class="internal-circle" cx="60" cy="60" r="30"></circle>
-                <circle class="external-circle" cx="60" cy="60" r="50"></circle>
-              </svg>
-              <div class='row' style="margin-left:0;">
-                <div class='row' style="margin-left:0;">
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="12:00 am" data-standardTime="00:00"
-                      data-availabilityValue="0">
-                      12:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="12:30 am" data-availabilityValue="0.5">
-                      12:30 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="1:00 am" data-availabilityValue="1">
-                      1:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="1:30 am" data-availabilityValue="1.5">
-                      1:30 am
-                    </button>
-                  </div>
-                </div>
-                <div class='row' style="margin-left:0;">
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="2:00 am" data-availabilityValue="2">
-                      2:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="2:30 am" data-availabilityValue="2.5">
-                      2:30 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="3:00 am" data-availabilityValue="3">
-                      3:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="3:30 am" data-availabilityValue="3.5">
-                      3:30 am
-                    </button>
-                  </div>
-                </div>
-                <div class='row' style="margin-left:0;">
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="4:00 am" data-availabilityValue="4">
-                      4:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="4:30 am" data-availabilityValue="4.5">
-                      4:30 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="5:00 am" data-availabilityValue="5">
-                      5:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="5:30 am" data-availabilityValue="5.5">
-                      5:30 am
-                    </button>
-                  </div>
-                </div>
-                <div class='row' style="margin-left:0;">
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="6:00 am" data-availabilityValue="6">
-                      6:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="6:30 am" data-availabilityValue="6.5">
-                      6:30 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="7:00 am" data-availabilityValue="7">
-                      7:00 am
-                    </button>
-                  </div>
-                  <div class='column'>
-                    <button class='timeslot available-column' data-militaryTime="7:30 am" data-availabilityValue="7.5">
-                      7:30 am
-                    </button>
-                  </div>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="8:00 am" data-availabilityValue="8">
-                    8:00 am
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="8:30 am" data-availabilityValue="8.5">
-                    8:30 am
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="9:00 am" data-availabilityValue="9">
-                    9:00 am
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="9:30 am" data-availabilityValue="9.5">
-                    9:30 am
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="10:00 am" data-availabilityValue="10">
-                    10:00 am
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="10:30 am" data-availabilityValue="10.5">
-                    10:30 am
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="11:00 am" data-availabilityValue="11">
-                    11:00 am
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="11:30 am" data-availabilityValue="11.5">
-                    11:30 am
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="12:00 pm" data-availabilityValue="12">
-                    12:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="12:30 pm" data-availabilityValue="12.5">
-                    12:30 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="1:00 pm" data-availabilityValue="13">
-                    1:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="1:30 pm" data-availabilityValue="13.5">
-                    1:30 pm
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="2:00 pm" data-availabilityValue="14">
-                    2:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="2:30 pm" data-availabilityValue="14.5">
-                    2:30 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="3:00 pm" data-availabilityValue="15">
-                    3:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="3:30 pm" data-availabilityValue="15.5">
-                    3:30 pm
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="4:00 pm" data-availabilityValue="16">
-                    4:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="4:30 pm" data-availabilityValue="16.5">
-                    4:30 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="5:00 pm" data-availabilityValue="17">
-                    5:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="5:30 pm" data-availabilityValue="17.5">
-                    5:30 pm
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="6:00 pm" data-availabilityValue="18">
-                    6:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="6:30 pm" data-availabilityValue="18.5">
-                    6:30 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="7:00 pm" data-availabilityValue="19">
-                    7:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="7:30 pm" data-availabilityValue="19.5">
-                    7:30 pm
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="8:00 pm" data-availabilityValue="20">
-                    8:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="8:30 pm" data-availabilityValue="20.5">
-                    8:30 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="9:00 pm" data-availabilityValue="21">
-                    9:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="9:30 pm" data-availabilityValue="21.5">
-                    9:30 pm
-                  </button>
-                </div>
-              </div>
-              <div class='row' style="margin-left:0;">
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="10:00 pm" data-availabilityValue="22">
-                    10:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="10:30 pm" data-availabilityValue="22.5">
-                    10:30 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="11:00 pm" data-availabilityValue="23">
-                    11:00 pm
-                  </button>
-                </div>
-                <div class='column'>
-                  <button class='timeslot available-column' data-militaryTime="11:30 pm" data-availabilityValue="23.5">
-                    11:30 pm
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        	<div id="choose-your-time" class="wrapper wrapper__delta timePicker">
+        		<h2 class="__alpha">Choose Time</h2>
+        		<div class='some-page-wrapper'>
+        			<svg class="loader" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        				<circle class="internal-circle" cx="60" cy="60" r="30"></circle>
+        				<circle class="external-circle" cx="60" cy="60" r="50"></circle>
+        			</svg>
+        			<div class='row' style="margin-left:0;">
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="12:00 am" data-standardTime="00:00"
+        							data-availabilityValue="0">
+        						12:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="12:30 am" data-availabilityValue="0.5">
+        						12:30 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="1:00 am" data-availabilityValue="1">
+        						1:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="1:30 am" data-availabilityValue="1.5">
+        						1:30 am
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="2:00 am" data-availabilityValue="2">
+        						2:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="2:30 am" data-availabilityValue="2.5">
+        						2:30 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="3:00 am" data-availabilityValue="3">
+        						3:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="3:30 am" data-availabilityValue="3.5">
+        						3:30 am
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="4:00 am" data-availabilityValue="4">
+        						4:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="4:30 am" data-availabilityValue="4.5">
+        						4:30 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="5:00 am" data-availabilityValue="5">
+        						5:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="5:30 am" data-availabilityValue="5.5">
+        						5:30 am
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="6:00 am" data-availabilityValue="6">
+        						6:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="6:30 am" data-availabilityValue="6.5">
+        						6:30 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="7:00 am" data-availabilityValue="7">
+        						7:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="7:30 am" data-availabilityValue="7.5">
+        						7:30 am
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row'>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="8:00 am" data-availabilityValue="8">
+        						8:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="8:30 am" data-availabilityValue="8.5">
+        						8:30 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="9:00 am" data-availabilityValue="9">
+        						9:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="9:30 am" data-availabilityValue="9.5">
+        						9:30 am
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="10:00 am" data-availabilityValue="10">
+        						10:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="10:30 am" data-availabilityValue="10.5">
+        						10:30 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="11:00 am" data-availabilityValue="11">
+        						11:00 am
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="11:30 am" data-availabilityValue="11.5">
+        						11:30 am
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="12:00 pm" data-availabilityValue="12">
+        						12:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="12:30 pm" data-availabilityValue="12.5">
+        						12:30 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="1:00 pm" data-availabilityValue="13">
+        						1:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="1:30 pm" data-availabilityValue="13.5">
+        						1:30 pm
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="2:00 pm" data-availabilityValue="14">
+        						2:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="2:30 pm" data-availabilityValue="14.5">
+        						2:30 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="3:00 pm" data-availabilityValue="15">
+        						3:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="3:30 pm" data-availabilityValue="15.5">
+        						3:30 pm
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="4:00 pm" data-availabilityValue="16">
+        						4:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="4:30 pm" data-availabilityValue="16.5">
+        						4:30 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="5:00 pm" data-availabilityValue="17">
+        						5:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="5:30 pm" data-availabilityValue="17.5">
+        						5:30 pm
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="6:00 pm" data-availabilityValue="18">
+        						6:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="6:30 pm" data-availabilityValue="18.5">
+        						6:30 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="7:00 pm" data-availabilityValue="19">
+        						7:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="7:30 pm" data-availabilityValue="19.5">
+        						7:30 pm
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="8:00 pm" data-availabilityValue="20">
+        						8:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="8:30 pm" data-availabilityValue="20.5">
+        						8:30 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="9:00 pm" data-availabilityValue="21">
+        						9:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="9:30 pm" data-availabilityValue="21.5">
+        						9:30 pm
+        						</button>
+        					</div>
+        				</div>
+        				<div class='row' style="margin-left:0;">
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="10:00 pm" data-availabilityValue="22">
+        						10:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="10:30 pm" data-availabilityValue="22.5">
+        						10:30 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="11:00 pm" data-availabilityValue="23">
+        						11:00 pm
+        						</button>
+        					</div>
+        					<div class='column'>
+        						<button class='timeslot available-column' data-militaryTime="11:30 pm" data-availabilityValue="23.5">
+        						11:30 pm
+        						</button>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
         </div>
-      </div>
       <div id="centerdiv">
         <button class="trigger_popup_fricc primary-green" id="button">Checkout</button>
         <div class="box">
@@ -834,90 +838,16 @@
     </div>
   </div>
 
-  <footer class="footer">
+  <footer id="footer">
+
+       <ul class="copyright">
+            <li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
+            <li><a href="privacy">Privacy Policy</a></li>
+            <li><a href="terms">Terms of Use</a></li>
+            <li><a href="cookie">Cookie Policy</a></li>
+       </ul>
 
 
-    <ul class="footer__nav">
-      <li class="nav__item">
-        <h12 class="nav__title">Contact</h12>
-
-        <address style="margin-top: -2px;">
-          +1 (425) 412-7423<br>
-
-          <a class="footer__btn" href="mailto:support@helphog.com">Email Us</a>
-        </address>
-      </li>
-      <li class="nav__item">
-        <h12 class="nav__title">Discover</h12>
-
-        <ul class="nav__ul">
-          <li>
-            <a href="signin?redirect=quickapply">Become a Provider</a>
-          </li>
-
-          <li>
-            <a href="signin">Login</a>
-          </li>
-
-          <li>
-            <a href="about">About Us</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="nav__item nav__item--extra">
-        <h12 class="nav__title">Services</h12>
-
-        <ul class="nav__ul nav__ul--extra">
-          <!--<li>-->
-          <!--  <a href="#">Automotive</a>-->
-          <!--</li>-->
-
-          <!--<li>-->
-          <!--  <a href="#">Creative</a>-->
-          <!--</li>-->
-
-          <!--<li>-->
-          <!--  <a href="#">Education</a>-->
-          <!--</li>-->
-
-          <!--<li>-->
-          <!--  <a href="#">Household</a>-->
-          <!--</li>-->
-
-          <!--<li>-->
-          <!--  <a href="#">Labor</a>-->
-          <!--</li>-->
-
-          <!--<li>-->
-          <!--  <a href="#">Tech</a>-->
-          <!--</li>-->
-        </ul>
-      </li>
-
-      <li class="nav__item">
-        <h12 class="nav__title">Legal</h12>
-
-        <ul class="nav__ul">
-          <li>
-            <a href="privacy">Privacy Policy</a>
-          </li>
-
-          <li>
-            <a href="terms">Terms of Use</a>
-          </li>
-
-          <li>
-            <a href="cookie">Cookie Policy</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-    <div class="legal">
-      <p>&copy; 2021 HelpHog LLC. All rights reserved.</p>
-
-    </div>
   </footer>
 </body>
 
