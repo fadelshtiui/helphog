@@ -1,0 +1,22 @@
+@media screen and (max-width: 736px) {
+    #top-heading {
+         display: none;
+    }
+    .tooltip:after {
+         left: -5.5em;
+    }
+    .modal {
+         width: 90%;
+    }
+    #navPanel {
+        text-align: left;
+        padding: 0;
+    }
+    .header {
+        display:none;
+    }
+}
+
+#header {
+   display: none;
+}

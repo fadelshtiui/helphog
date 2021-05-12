@@ -8,6 +8,14 @@ body {
   font-size: 14px;
 }
 
+body, html, #page-wrapper {
+    height: 100%;
+}
+
+#header {
+    display: none;
+}
+
 .error {
   color: red;
 }
