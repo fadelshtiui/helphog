@@ -380,9 +380,9 @@
 
                     let toolTipContainer = ce('span')
                     toolTipContainer.classList.add('tooltip', 'top');
-                    let tooltip = ce('span')
-                    let iCircle = ce('span')
-                    iCircle.classList.add('fa-question-circle', 'icon')
+                    let tooltip = ce('i')
+                    let iCircle = ce('i')
+                    iCircle.classList.add('fa-question-circle', 'fas')
                     tooltip.appendChild(iCircle);
                     toolTipContainer.appendChild(tooltip);
 
