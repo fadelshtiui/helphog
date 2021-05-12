@@ -8,18 +8,18 @@ async function populateNavigationBar() {
 
      let actions = []
      if (res.validated == "true") {
-          actions = ['orders', 'settings', 'signout']
+          actions = ['home', 'contact', 'orders', 'settings', 'signout']
 
           if (res.account.type == "Business") {
                actions.push('provider')
           }
      } else {
-          actions = ['tracking', 'registration', 'signin']
+          actions = ['home', 'contact', 'tracking', 'registration', 'signin']
      }
 
      let links = qsa('#actions li a')
      links.forEach(link => {
-          handleLink(link, actions, link.dataset.path, link.parentElement)
+          handleLink(link, actions, link.dataset.path, link.parentElement, res.validated)
      })
 
      for (let i = 0; i < actions.length; i++) {
@@ -29,23 +29,30 @@ async function populateNavigationBar() {
      let mobileLinks = qsa('#navPanel a')
      mobileLinks.forEach(link => {
 
-          handleLink(link, actions, link.href, link)
+          handleLink(link, actions, link.href, link, res.validated)
      })
 
 }
 
-function handleLink(link, actions, identifier, elementToHide) {
-
-     console.log(actions)
-
-     if (!actions.includes(identifier)) {
+function handleLink(link, actions, identifier, elementToHide, validated) {
+    
+    
+     if (identifier == 'signout' || identifier == "") {
+         
+         console.log('sign out link')
+         
+          link.addEventListener('click', function (e) {
+               e.stopPropagation();
+               e.preventDefault();
+               signOut();
+               console.log('signed out')
+          })
+          if (validated == "false") {
+              elementToHide.classList.add('hidden')
+          }
+     } else if (!actions.includes(identifier) && identifier != window.location.origin + '/') {
           elementToHide.classList.add('hidden')
      }
 
-     if (identifier == 'signout') {
-          link.addEventListener('click', function (e) {
-               e.preventDefault();
-               signOut();
-          })
-     }
+     
 }

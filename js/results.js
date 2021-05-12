@@ -32,6 +32,8 @@
                     id('update').click();
                }
           });
+          
+          populateNavigationBar();
 
 
      };
