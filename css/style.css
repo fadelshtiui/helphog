@@ -44,6 +44,10 @@ html {
   background-color: white;
 }
 
+html, body, .content {
+    height: 100%;
+}
+
 #location {
   height: 18px;
   width: 10px;
