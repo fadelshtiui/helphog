@@ -1,0 +1,12 @@
+@media screen and (max-width: 736px) {
+    #templateHeaderCell {
+        padding: 0 !important;
+    }
+    
+    #templateHeaderCell > table {
+        margin: 0 !important;
+    }
+    #mainTable {
+        padding-top: 3em !important;
+    }
+}
