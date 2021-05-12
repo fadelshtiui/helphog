@@ -1107,6 +1107,12 @@ dropdown ul li:nth-child(3):hover .fa {
   color: white;
 }
 
+#numpeople {
+    color: black;
+    padding: 0.25em;
+}
+
+
 .animate {
   -webkit-transition: all .3s;
   -moz-transition: all .3s;
@@ -1153,6 +1159,10 @@ dropdown ul li:nth-child(3):hover .fa {
   border-radius: 20px/50px;
   background-clip: padding-box;
   text-align: center;
+}
+
+table {
+    width: 568px;
 }
 
 .overlay {
