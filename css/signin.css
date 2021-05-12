@@ -42,17 +42,24 @@ a {
   opacity: 1.0;
 }
 
+#navPanel {
+    text-align: left;
+}
+
 h1 {
   font-size: 6em;
   color: white;
   /*margin-top: 10%;*/
   margin-bottom: 0px;
   text-align: center;
+  margin-top: 0.5em;
+}
+
+p {
+    text-align: center;
 }
 
 .login-page {
-  width: 360px;
-  /*padding: 1% 0 0;*/
   margin: auto;
 }
 
@@ -61,7 +68,8 @@ h1 {
   z-index: 1;
   background: #FFFFFF;
   max-width: 360px;
-  margin: 0 auto 100px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 45px;
   text-align: center;
   /*box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);*/

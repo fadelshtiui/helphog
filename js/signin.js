@@ -18,6 +18,8 @@
                 id("login-btn").click();
             }
         });
+        
+        populateNavigationBar();
     });
 
     function login() {
