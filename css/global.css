@@ -9,7 +9,7 @@ body, html {
 /* JavaScript toggle classes */
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 /* 

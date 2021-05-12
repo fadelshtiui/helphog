@@ -17,42 +17,32 @@ async function populateNavigationBar() {
           actions = ['home', 'contact', 'tracking', 'registration', 'signin']
      }
 
-     let links = qsa('#actions li a')
-     links.forEach(link => {
-          handleLink(link, actions, link.dataset.path, link.parentElement, res.validated)
-     })
-
      for (let i = 0; i < actions.length; i++) {
           actions[i] = window.location.origin + '/' + actions[i];
      }
+     
+     
 
      let mobileLinks = qsa('#navPanel a')
+     
      mobileLinks.forEach(link => {
+         
+         console.log(link.href)
 
-          handleLink(link, actions, link.href, link, res.validated)
+          if (link.href == "") { // sign out link doesn't have href
+              if (res.validated == "true") {
+                  link.addEventListener('click', function (e) {
+                       e.stopPropagation();
+                       e.preventDefault();
+                       signOut();
+                       console.log('signed out')
+                  })
+              } else {
+                  link.classList.add('hidden')
+              }
+         } else if (!actions.includes(link.href) && link.href != window.location.origin + '/') {
+              link.classList.add('hidden')
+         }
      })
 
-}
-
-function handleLink(link, actions, identifier, elementToHide, validated) {
-    
-    
-     if (identifier == 'signout' || identifier == "") {
-         
-         console.log('sign out link')
-         
-          link.addEventListener('click', function (e) {
-               e.stopPropagation();
-               e.preventDefault();
-               signOut();
-               console.log('signed out')
-          })
-          if (validated == "false") {
-              elementToHide.classList.add('hidden')
-          }
-     } else if (!actions.includes(identifier) && identifier != window.location.origin + '/') {
-          elementToHide.classList.add('hidden')
-     }
-
-     
 }
