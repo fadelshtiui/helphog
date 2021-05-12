@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Inconsolata');
+
+/* navigation Bar */
+
+#navigation {
+  font-size: 14px;
+  list-style-type: none;
+  box-sizing: content-box;
+  margin-top: 16px;
+  max-width: 80%;
+  float: right;
+}
+
+#navigation li {
+  /* display: inline; */
+  float: right;
+  padding-left: 2em;
+  padding-right: 2em;
+  opacity: 0.5;
+}
+
+#navigation li a {
+  color: black;
+  font-weight: bold;
+}
+
+#registration, #sign-in, #about {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+}
+
+#navigation li:hover {
+  opacity: 1.0;
+}
+
+#logo {
+  font-size: 2.4em;
+  color: #1ecd97;
+  position: absolute;
+  padding: 0.26em;
+  padding-left: 0.7em;
+  line-height: 1;
+}
+
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  width: 100%;
+  height: 51px;
+}

@@ -11,4 +11,15 @@
      #navPanel {
          text-align: left;
      }
+     .header {
+         display:none;
+     }
+}
+
+#header {
+    display: none;
+}
+
+#logo {
+    font-size: 2em;
 }
