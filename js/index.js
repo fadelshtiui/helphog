@@ -1,8 +1,8 @@
 (function () {
-     var iOS = /iPad|iPhone|iPod/.test(navigator.platform || "");
-     if (iOS === true) {
-          window.location.href = "helphog://"
-     }
+     //  var iOS = /iPad|iPhone|iPod/.test(navigator.platform || "");
+     //  if (iOS === true) {
+     //       window.location.href = "helphog://"
+     //  }
 
      var displayResults, findAll, maxResults, resultsOutput, searchInput;
      let services = [];
@@ -33,10 +33,10 @@
                let entry = ce('li');
                entry.textContent = word;
                entry.addEventListener('click', function () {
-                   let url = 'details?service=' + word + "&origin=search"
-                   if (getSession() == '' && getZip() != "") {
-                       url += '&zip=' + getZip()
-                   }
+                    let url = 'details?service=' + word + "&origin=search"
+                    if (getSession() == '' && getZip() != "") {
+                         url += '&zip=' + getZip()
+                    }
                     window.location = url;
                })
                resultsEl.appendChild(entry);
