@@ -29,11 +29,13 @@ var suggestion = ["I need my lawn mowed...", "Car needs an oil change...", "Need
           for (let i = 0; i < subcategories.length; i++) {
                subcategories[i].onclick = searchCategory;
           }
+
+          populateNavigationBar();
      });
 
      function searchCategory() {
-         let searchTerm = this.innerText;
-         let url = "results?category=" + this.innerText.toLowerCase()
+          let searchTerm = this.innerText;
+          let url = "results?category=" + this.innerText.toLowerCase()
           if (getSession() == "" && getZip() != "") { // not logged in and has saved zip cookie
                url += "&zip=" + getZip()
           }
@@ -48,8 +50,8 @@ var suggestion = ["I need my lawn mowed...", "Car needs an oil change...", "Need
           if (searchTerm != '') {
                let url = 'results?search=' + searchTerm
                if (getSession() == "" && getZip() != "") { // not logged in and has saved zip cookie
-                   url += "&zip=" + getZip()
-              }
+                    url += "&zip=" + getZip()
+               }
                window.location = url
           }
      }
