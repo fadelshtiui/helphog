@@ -16,6 +16,8 @@
                this.parentElement.parentElement.parentElement.classList.add('hidden');
           }
 
+          populateNavigationBar();
+
           id('exit-address').addEventListener('click', close)
           id('back').addEventListener('click', navigateBack)
           id('exit-zip').addEventListener('click', close)
@@ -98,7 +100,7 @@
                qs('.modal-wrapper button').innerText = "OK, Retry"
 
 
-                id('autocomplete').classList.add('hidden')
+               id('autocomplete').classList.add('hidden')
                id('warning-message').innerText = 'Please enter a valid US zip code.'
                qs('.modal-wrapper').classList.remove('hidden')
 
@@ -139,10 +141,10 @@
           } else {
                id('rate').innerText = 'Hourly'
                id('price').innerText = '$' + response.cost + "/hr"
-               if (response.prorated == 'y'){
-                   id('availability').innerText = 'Prorated';
-               }else{
-                   id('availability').innerText = 'Full';
+               if (response.prorated == 'y') {
+                    id('availability').innerText = 'Prorated';
+               } else {
+                    id('availability').innerText = 'Full';
                }
           }
 
@@ -253,14 +255,14 @@
           window.location = url
      }
 
-    //  function close() {
-    //       id('address-updater').classList.add('hidden')
-    //       id('zip-updater').classList.add('hidden')
-    //  }
+     //  function close() {
+     //       id('address-updater').classList.add('hidden')
+     //       id('zip-updater').classList.add('hidden')
+     //  }
 
      function openAddress() {
-         id('first').innerHTML = ""
-         id('first').innerText = "Enter your address to check availability in your area"
+          id('first').innerHTML = ""
+          id('first').innerText = "Enter your address to check availability in your area"
 
           id('autocomplete').classList.remove('hidden')
 
@@ -275,7 +277,7 @@
 
           id('warning-message').innerText = ""
           if (id('autocomplete')) {
-              id('autocomplete').classList.add('hidden')
+               id('autocomplete').classList.add('hidden')
           }
           let input = ce('input')
           input.id = 'zip-input'

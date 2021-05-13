@@ -3,10 +3,12 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>HelpHog</title>
+  <title>Details</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
-  
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" />
@@ -16,15 +18,21 @@
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
     defer></script>
+
+  <link rel="stylesheet" href="mobile-assets/css/header.css" />
+  <link rel="stylesheet" href="mobile-assets/css/footer.css" />
+
   <link rel="stylesheet" href="css/style.css" type="text/css" />
   <link rel="stylesheet" href="css/details.css" type="text/css" />
   <link rel="stylesheet" href="css/footer.css" type="text/css" />
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/all.css" />
+  <link rel="stylesheet" href="mobile-assets/css/details.css" />
 
 
   <script src="js/common.js"></script>
   <script src="js/loading.js"></script>
+  <script src="mobile-assets/js/common.js"></script>
   <script src="js/details.js"></script>
   <script src="js/google.js"></script>
 </head>
@@ -36,13 +44,37 @@
         <span id="first"></span>
       </div>
       <div class='content'>
-        <span id="warning-message"><input id="autocomplete" style="width: 80%;" placeholder="Enter your location" type="text" class="hidden" /></span>
+        <span id="warning-message"><input id="autocomplete" style="width: 80%;" placeholder="Enter your location"
+            type="text" class="hidden" /></span>
       </div>
       <div class='actions'>
         <button class="secondary">OK, Close Modal</button>
       </div>
     </div>
   </div>
+
+  <header id="header" class="alt">
+    <nav id="nav">
+      <ul>
+        <li class="current"><a href="/">home</a></li>
+        <li><a href="contact">contact</a></li>
+        <li class="submenu">
+          <a href="">actions</a>
+          <ul id="actions">
+            <li><a data-path="settings" href="settings">settings</a></li>
+            <li><a data-path="provider" href="provider">provider portal</a></li>
+            <li><a data-path="orders" href="orders">orders</a></li>
+            <li><a data-path="signout" href="signout">sign out</a></li>
+
+            <li><a data-path="tracking" href="tracking">track orders</a></li>
+            <li><a data-path="registration" href="registration">sign up</a></li>
+            <li><a data-path="signin" href="signin">login</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
   <div class="content">
     <div class="header">
       <div id="logo">
@@ -90,18 +122,22 @@
             <h3 id="service"></h3>
             <p id="description" class="profile__info__extra"></p>
           </div>
-          <div class="profile__stats">
-            <p class="profile__stats__title">Price</p>
-            <h5 id="price"></h5>
+          <div id="bottom-row" style="display: flex; justify-content: space-between; width: 100vh;">
+            <div class="profile__stats">
+              <p class="profile__stats__title">Price</p>
+              <h5 id="price"></h5>
+            </div>
+            <div class="profile__stats">
+              <p class="profile__stats__title">Rate</p>
+              <h5 id="rate" class="profile__stats__info"></h5>
+            </div>
+            <div class="profile__stats">
+              <p class="profile__stats__title">First Hour</p>
+              <h5 id="availability" class="profile__stats__info"></h5>
+            </div>
           </div>
-          <div class="profile__stats">
-            <p class="profile__stats__title">Rate</p>
-            <h5 id="rate" class="profile__stats__info"></h5>
-          </div>
-          <div class="profile__stats">
-            <p class="profile__stats__title">First Hour</p>
-            <h5 id="availability" class="profile__stats__info"></h5>
-          </div>
+
+
           <div class="profile__cta"><button class="primary-green" id="button"></button></div>
         </div>
       </section>
@@ -175,74 +211,22 @@
       </td>
     </tr>
   </table>
-  <footer class="footer">
-    <ul class="footer__nav">
-      <li class="nav__item">
-        <h12 class="nav__title">Contact</h12>
-        <address style="margin-top: -2px">
-          +1 (425) 412-7423<br />
-          <button onclick="window.open('mailto:support@helphog.com')" class="secondary" style="width: 120px;">Email
-            Us</button>
-        </address>
-      </li>
-      <li class="nav__item">
-        <h12 class="nav__title">Discover</h12>
-        <ul class="nav__ul">
-          <li>
-            <a href="signin?redirect=quickapply">Become a Provider</a>
-          </li>
-          <li>
-            <a href="signin">Login</a>
-          </li>
-          <li>
-            <a href="about">About Us</a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav__item nav__item--extra">
-        <h12 class="nav__title">Services</h12>
-        <ul class="nav__ul nav__ul--extra">
-          <!--<li>-->
-          <!--  <a href="#">Automotive</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Creative</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Education</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Household</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Labor</a>-->
-          <!--</li>-->
-          <!--<li>-->
-          <!--  <a href="#">Tech</a>-->
-          <!--</li>-->
-        </ul>
-      </li>
-      <li class="nav__item">
-        <h12 class="nav__title">Legal</h12>
-        <ul class="nav__ul">
-          <li>
-            <a href="privacy">Privacy Policy</a>
-          </li>
-          <li>
-            <a href="terms">Terms of Use</a>
-          </li>
-          <li>
-            <a href="cookie">Cookie Policy</a>
-          </li>
-        </ul>
-      </li>
+  <footer id="footer">
+    <ul class="copyright">
+      <li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
+      <li><a href="privacy">Privacy Policy</a></li>
+      <li><a href="terms">Terms of Use</a></li>
+      <li><a href="cookie">Cookie Policy</a></li>
     </ul>
-    <div class="legal">
-      <p>&copy; 2021 HelpHog LLC. All rights reserved.</p>
-    </div>
   </footer>
-  <!-- partial -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="mobile-assets/js/jquery.min.js"></script>
+  <script src="mobile-assets/js/jquery.dropotron.min.js"></script>
+  <script src="mobile-assets/js/jquery.scrolly.min.js"></script>
+  <script src="mobile-assets/js/jquery.scrollex.min.js"></script>
+  <script src="mobile-assets/js/browser.min.js"></script>
+  <script src="mobile-assets/js/breakpoints.min.js"></script>
+  <script src="mobile-assets/js/util.js"></script>
+  <script src="mobile-assets/js/main.js"></script>
 </body>
 
 </html>
