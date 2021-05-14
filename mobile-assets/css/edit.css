@@ -1,54 +1,53 @@
 @media screen and (max-width: 736px) {
     .pure-g-r {
-         width: 90%;
+        width: 90%;
     }
     #address-content-area {
-         height: 12em;
+        height: 12em;
     }
     .column {
-         width: 5em;
-         flex: auto;
-         width: 45%;
-         padding-left: 0;
-         padding-top: 0.75em;
+        width: 5em;
+        flex: auto;
+        width: 45%;
+        padding-left: 0;
+        padding-top: 0.75em;
+    }
+    #taskerinput {
+        width: 8em;
     }
     .column button {
-       padding: 0;
-   }
-   #centerdiv {
-       width: 100%;
-   }
-   .modal {
-       width: 90%;
-   }
-   .pac-container {
-       top: 24em !important;
-   }
-   .login-modal {
-       width: 90%;
-   }
-   .popup {
-       width: 100%;
-   }
-   #payment-form {
-       min-width: 0;
-       padding: 0;
-       margin-right: 0;
-       border: none;
-       box-shadow: none;
-   }
-   table {
-       margin: 0;
-   }
-   #mainTable {
-       padding: 0 !important;
-   }
-
-   #special-td {
-       min-width: 0;
-       width: fit-content;
-   }
+        padding: 0;
+    }
+    #centerdiv {
+        width: 100%;
+    }
+    .modal {
+        width: 90%;
+    }
+    .pac-container {
+        top: 24em !important;
+    }
+    .login-modal {
+        width: 90%;
+    }
+    .popup {
+        width: 100%;
+    }
+    #payment-form {
+        min-width: 0;
+        padding: 0;
+        margin-right: 0;
+        border: none;
+        box-shadow: none;
+    }
+    table {
+        margin: 0;
+    }
+    #mainTable {
+        padding: 0 !important;
+    }
+    #special-td {
+        min-width: 0;
+        width: fit-content;
+    }
 }
-
-/*
-table - 620
