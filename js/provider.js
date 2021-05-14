@@ -215,7 +215,7 @@ let preloaded = false;
 			id('first').appendChild(warningIcon)
 			id('warning-message').innerText = 'Please enter your full address and select it from the dropdown below'
 			id('no').classList.add('hidden')
-			id('yes').innerText = "OK, Close Modal"
+			id('yes').innerText = "OK"
 			qs(".modal-wrapper").classList.remove('hidden')
 			return;
 		}
@@ -257,7 +257,7 @@ let preloaded = false;
 			id('first').appendChild(warningIcon)
 			id('warning-message').innerText = message
 			id('no').classList.add('hidden')
-			id('yes').innerText = "OK, Close Modal"
+			id('yes').innerText = "OK"
 			qs(".modal-wrapper").classList.remove('hidden')
 		}
 	}
@@ -828,7 +828,7 @@ let preloaded = false;
 					id('first').appendChild(warningIcon)
 					id('warning-message').innerText = res.error
 					id('no').classList.add('hidden')
-					id('yes').innerText = "OK, Close Modal"
+					id('yes').innerText = "OK"
 					id('yes').classList.add('secondary')
 					id('yes').onclick = function () {
 						qs(".modal-wrapper").classList.add('hidden')
@@ -902,7 +902,7 @@ let preloaded = false;
 		id('yes').innerText = "Yes, cancel"
 
 		id('no').classList.add('secondary')
-		id('no').innerText = "No, close modal"
+		id('no').innerText = "No, keep order"
 		id('no').onclick = function () {
 			qs('.modal-wrapper').classList.add('hidden')
 		}
@@ -938,7 +938,7 @@ let preloaded = false;
 					id('first').appendChild(warningIcon)
 					id('warning-message').innerText = "The primary provider has already started working. You can no longer cancel this order."
 					id('no').classList.add('hidden')
-					id('yes').innerText = "OK, Close Modal"
+					id('yes').innerText = "OK"
 					id('yes').classList.add('secondary')
 					qs(".modal-wrapper").classList.remove('hidden')
 
@@ -1075,7 +1075,7 @@ let preloaded = false;
 					id('first').appendChild(warningIcon)
 					id('warning-message').innerText = response.error
 					id('no').classList.add('hidden')
-					id('yes').innerText = "OK, Close Modal"
+					id('yes').innerText = "OK"
 					id('yes').classList.add('secondary')
 					qs(".modal-wrapper").classList.remove('hidden')
 

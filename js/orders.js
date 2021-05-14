@@ -89,7 +89,7 @@ function handleResponse(response) {
 			id('first').appendChild(warningIcon)
 			id('second').innerText = 'You cannot cancel an order that is already in progress.'
 			id('yes').classList.add('hidden')
-			id('no').innerText = "OK, Close Modal"
+			id('no').innerText = "OK"
 			qs('.modal-wrapper').classList.remove('hidden')
 		} else {
 			// qs('.modal-wrapper').classList.add('hidden')
@@ -155,7 +155,7 @@ function openReviewPopup(orderNumber, name) {
 			id('first').appendChild(warningIcon)
 			id('second').innerText = 'Sorry, orders may only be disputed within 24 hours of completion.'
 			id('yes').classList.add('hidden')
-			id('no').innerText = "OK, Close Modal"
+			id('no').innerText = "OK"
 			qs('.modal-wrapper').classList.remove('hidden')
 			id('no').classList.remove('primary-red');
 			id('no').classList.add('secondary-orders');

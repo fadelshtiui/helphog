@@ -125,7 +125,7 @@
         id('first').innerText = 'Are you sure you want to delete your account?'
         id('warning-message').innerText = 'All your data will be removed and your account will be closed. If you are a provider, this action will delete your Stripe account.'
         id('no').classList.add('secondary')
-        id('no').innerText = "No, close modal"
+        id('no').innerText = "No, keep account"
         id('no').onclick = function () {
             qs('.modal-wrapper').classList.add('hidden')
         }
@@ -159,7 +159,7 @@
         resetModal()
         id('no').classList.add('hidden')
         id('yes').classList.add('secondary')
-        id('yes').innerText = "OK, Close Modal"
+        id('yes').innerText = "OK"
         if (response.sessionerror == "true") {
             id('warning-message').innerText = "Please log out and try again.";
             icon.classList.add('fa-exclamation-circle', 'warning')
@@ -207,7 +207,7 @@ function addressUpdate() {
         let warningIcon = ce('i')
         warningIcon.classList.add('fa-exclamation-circle', 'warning', 'fas')
         id('first').appendChild(warningIcon)
-        id('yes').innerText = "OK, Close Modal"
+        id('yes').innerText = "OK"
         id('yes').classList.add('secondary');
         qs('.modal-wrapper').classList.remove('hidden')
         id("current-address").innerText = '';
