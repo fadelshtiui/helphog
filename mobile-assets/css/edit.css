@@ -47,4 +47,15 @@
         min-width: 0;
         width: fit-content;
     }
+    
+    #popup1 * {
+        min-width: 0 !important;
+        width: fit-content !important;
+    }
+    
+    #card-element, #card-element > div {
+        width: 100% !important;
+    }
+    
+    
 }
