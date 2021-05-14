@@ -1,0 +1,17 @@
+@media screen and (max-width: 736px) {
+  #navPanel {
+    text-align: left;
+  }
+  .header {
+    display: none;
+  }
+  main {
+    width: 100% !important;
+  }
+  .results--grid {
+    width: fit-content;
+  }
+  #bottom-row {
+    width: fit-content !important;
+  }
+}
