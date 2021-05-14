@@ -8,26 +8,18 @@ async function populateNavigationBar() {
 
      let actions = []
      if (res.validated == "true") {
-          actions = ['home', 'contact', 'orders', 'settings', 'signout']
-
-          if (res.account.type == "Business") {
-               actions.push('provider')
-          }
+          actions = ['home', 'signout']
      } else {
-          actions = ['home', 'contact', 'tracking', 'registration', 'signin']
+          actions = ['home', 'signin']
      }
 
      for (let i = 0; i < actions.length; i++) {
           actions[i] = window.location.origin + '/' + actions[i];
      }
-     
-     
 
      let mobileLinks = qsa('#navPanel a')
      
      mobileLinks.forEach(link => {
-         
-         console.log(link.href)
 
           if (link.href == "") { // sign out link doesn't have href
               if (res.validated == "true") {
