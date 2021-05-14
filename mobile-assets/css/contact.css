@@ -27,4 +27,7 @@
     #footer {
         margin-top: 10em;
     }
+    .content {
+        height: fit-content;
+    }
 }
