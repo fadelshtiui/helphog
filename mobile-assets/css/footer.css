@@ -21,6 +21,7 @@ footer.major {
 #footer .copyright {
 	font-size: 0.8em;
 	line-height: 1em;
+	padding: 0;
 }
 
 #footer .copyright a {
