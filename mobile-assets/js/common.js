@@ -8,9 +8,9 @@ async function populateNavigationBar() {
 
      let actions = []
      if (res.validated == "true") {
-          actions = ['home', 'signout']
+          actions = ['home', 'contact', 'signout']
      } else {
-          actions = ['home', 'signin']
+          actions = ['home', 'contact', 'signin']
      }
 
      for (let i = 0; i < actions.length; i++) {

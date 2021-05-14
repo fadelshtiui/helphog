@@ -10,15 +10,14 @@ html {
      margin: 0 auto;
      margin-bottom: 10px;
      margin-top: 21px;
-     width: 550px;
+     max-width: 550px;
      font-size: 35px;
      color: #000000;
      padding: 25px;
 }
 
 #center {
-     width: 800px;
-     height: 500px;
+     max-width: 800px;
      margin: auto;
      margin-top: 4rem;
      margin-bottom: 6rem;
@@ -27,33 +26,39 @@ html {
      border-radius: 5px;
 }
 
+hr {
+    display: none;
+}
+
 .pointer {
     cursor: pointer;
 }
 
+#flex-container {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 3em;
+}
+
 #left {
-     width: 300px;
-     height: 500px;
-     float: left;
-     margin-left: 75px;
+     max-width: 300px;
+     max-height: 500px;
      border-radius: 15px;
      /*background-color: #f5f5f5;*/
      text-align: center;
 }
 
 #right {
-     width: 300px;
-     height: 500px;
-     float: right;
-     margin-right: 75px;
+     max-width: 300px;
+     max-height: 500px;
      border-radius: 15px;
      /*background-color: #f5f5f5;*/
      text-align: center;
 }
 
 .inner {
-     width: 250px;
-     height: 450px;
+     max-width: 250px;
+     max-height: 450px;
      border: 1px solid black;
      margin: auto;
      margin-top: 25px;
@@ -72,15 +77,15 @@ a {
 }
 
 img {
-     width: 200px;
-     height: 200px;
+     max-width: 200px;
+     max-height: 200px;
      margin-bottom: 20px;
 }
 
 .description {
      margin-left: auto;
      margin-right: auto;
-     width: 250px;
+     max-width: 250px;
      margin-bottom: 40px;
 }
 
@@ -107,8 +112,8 @@ img {
      margin: 110px auto;
      background-color: #FFF;
      position: relative;
-     height: 70px;
-     width: 100px;
+     max-height: 70px;
+     max-width: 100px;
      overflow: hidden;
 }
 
@@ -116,8 +121,8 @@ img {
      content: '';
      position: absolute;
      left: 50%;
-     height: 60px;
-     width: 60px;
+     max-height: 60px;
+     max-width: 60px;
      transform: rotate(45deg) skew(-5deg, -5deg);
      margin-left: -50px;
      height: 100px;
