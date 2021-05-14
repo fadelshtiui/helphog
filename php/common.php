@@ -718,6 +718,7 @@ function mark_completed($order, $message)
 	$disputes = 0;
 	$last_mc = "";
 	$tax_rate = 0.00;
+	$orig_duration = 0;
 	$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
 	$stmnt->execute(array($order));
 	foreach ($stmnt->fetchAll() as $row) {
@@ -733,6 +734,7 @@ function mark_completed($order, $message)
 		$tz = $row['timezone'];
 		$tax_rate = $row['sales_tax_percent'];
 		$last_mc = $row['mc_timestamp'];
+		$orig_duration = $row['duration'];
 	}
 
 	$providerId = getId($client_email);
@@ -752,6 +754,9 @@ function mark_completed($order, $message)
 		$customer_payment = $payment_info->customer_payment;
 		$tax_collected = $payment_info->tax_collected;
 		$duration =  $payment_info->worked_time;
+		if ($duration > $orig_duration) {
+		    $duration = $orig_duration;
+		}
 		$total_before_tax = $payment_info->total_before_tax;
 
 		$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
