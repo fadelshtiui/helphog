@@ -10,7 +10,8 @@ body {
 }
 
 #page-wrapper {
-    height: 100%;
+    height: fit-content;
+    min-height: 100%;
 }
 
 .bottom-row {

@@ -7,6 +7,7 @@
      window.onload = function () {
 
           id('loading').classList.remove('hidden');
+          id('footer').classList.remove('hidden');
           let availabilityFilters = qsa('#availability-filters input')
           for (let i = 0; i < availabilityFilters.length; i++) {
                availabilityFilters[i].onchange = filterAvailability;
