@@ -207,7 +207,7 @@ body {
 body {
   /*font-weight: 300;*/
   color: rgba(0, 0, 0, 0.7);
-  display: flex;
+  /*display: flex;*/
   justify-content: center;
   -webkit-user-select: none;
   -moz-user-select: none;
