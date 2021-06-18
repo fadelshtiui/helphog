@@ -37,6 +37,13 @@ async function populateAllServices() {
      let response = await fetch(url)
      await checkStatus(response)
      response = await response.json()
+     
+     response.sort(function(a,b) {
+		if (a.toUpperCase() > b.toUpperCase()) return 1;
+		else if (a.toUpperCase() < b.toUpperCase()) return -1;
+		else return 0;
+	 });
+     
      response.forEach(service => {
           let entry = ce('option');
           entry.innerText = service;
@@ -46,6 +53,8 @@ async function populateAllServices() {
 }
 
 async function load() {
+    
+     id('provider-services').innerHTML = ""
      let data = new FormData();
      data.append("password", id('password').value);
      data.append('email', id('email').value)
