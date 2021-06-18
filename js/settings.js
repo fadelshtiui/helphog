@@ -123,7 +123,7 @@
         id('yes').innerText = 'Yes, delete'
         id('yes').classList.add('primary-red')
         id('first').innerText = 'Are you sure you want to delete your account?'
-        id('warning-message').innerText = 'All your data will be removed and your account will be closed. If you are a provider, this action will delete your Stripe account.'
+        id('warning-message').innerText = 'All your data will be removed and your account will be closed. If you are a provider, this action will delete your payout account.'
         id('no').classList.add('secondary')
         id('no').innerText = "No, keep account"
         id('no').onclick = function () {
@@ -166,7 +166,7 @@
             id('first').appendChild(icon)
             qs('.modal-wrapper').classList.remove('hidden')
         } else if (response.stripeerror == "true") {
-            id('warning-message').innerText = "Please make sure your Stripe balance is zero before deleting your account."
+            id('warning-message').innerText = "Please make sure your payout balance is zero before deleting your account."
             icon.classList.add('fa-exclamation-circle', 'warning')
             id('first').appendChild(icon)
             qs('.modal-wrapper').classList.remove('hidden')
