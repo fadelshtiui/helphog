@@ -974,7 +974,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$stmt->execute($params);
 
 						$secondary_providers_array = explode(',', $new_secondary);
-						$message = "You will be working on " . $service . " (" . $order_number . ") on  " . $schedule . " with: \n";
+						$message = "You will be working on " . $service . " (" . $order_number . ") on " . $schedule . " with: \n";
 						foreach ($secondary_providers_array as $curr_email) {
 
 							$name = "";
@@ -1018,7 +1018,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 
 			if ($replacing_primary_provider) {
 				$secondary_providers_array = explode(',', $secondary_providers);
-				$message = "One or more of your partners have been replaced. You will now be working on " . $service . " (" . $order_number . ") on  " . $schedule . " with: \n";
+				$message = "One or more of your partners have been replaced. You will now be working on " . $service . " (" . $order_number . ") on " . $schedule . " with: \n";
 				foreach ($secondary_providers_array as $curr_email) {
 
 					$name = "";
