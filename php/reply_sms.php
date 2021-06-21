@@ -41,271 +41,149 @@ if ($email == "") {
     return;
 }
 
-$order_number = "none";
-
-if (trim(strtolower($body)) == 'dispute') {
-
-    $now = gmdate('Y-m-d H:i:s');
-
-    $orders_array = array();
-    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE customer_phone = ?;");
-    $stmnt->execute(array($formatted_phone));
-    foreach ($stmnt->fetchAll() as $row) {
-        if (minutes_since($row['end']) <= 1440) {
-            array_push($orders_array, $row);
-        }
-    }
-
-    if (count($orders_array) == 1) {
-
-        $order_info = payment($orders_array[0]["order_number"]);
-
-        if ($orders_array[0]["status"] == "re") {
-
-            $response->message("Error: this order has been refunded.");
-        } else if ($orders_array[0]["status"] != "mc") {
-
-            $response->message("Error: this order is not completed.");
-        } else {
-
-            dispute_order($orders_array[0]["order_number"]);
-
-            $response->message("The provider has been notified of your concern and should contact you shortly.");
-        }
-    } else if (count($orders_array) > 1) {
-
-        $message = "You have multiple orders within the last 24 hours. Please also include the order number of the order you would like to dispute:\n";
-        $message .= "Ex. \"dispute 12345\"\n\n";
-        for ($i = 0; $i < count($orders_array); $i++) {
-            $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($orders_array[$i]["schedule"])), new DateTimeZone('UTC'));
-            $local_date->setTimezone(new DateTimeZone($orders_array[$i]["timezone"]));
-            $message .= $orders_array[$i]["order_number"] . " " . $orders_array[$i]["service"] . " on " . $local_date->format("F j, Y, g:i a") . "\n";
-        }
-        $response->message($message);
-    } else {
-
-        $response->message("Error: you have no orders to dispute.");
-    }
-} else if (strpos(strtolower($body), 'dispute') !== false) {
-
-    $pieces = explode(' ', trim(strtolower($body)));
-    if (strtolower(trim($pieces[0])) != 'dispute' || strlen($pieces[1]) != 5 || count($pieces) != 2) {
-
-        $response->message("Error: incorrect usage. Format is: \"dispute order-number\"");
-    } else {
-
-        $order_info = payment(trim($pieces[1]));
-        $empty = new \stdClass();
-        if ($order_info == $empty) {
-
-            $response->message("Error: invalid order number.");
-        } else {
-
-            if (validate_customer_phone($pieces[1], $formatted_phone)) {
-
-                $status = "";
-                $within_24_hours = false;
-                $stmnt = $db->prepare("SELECT end, status FROM {$DB_PREFIX}orders WHERE order_number = ?;");
-                $stmnt->execute(array($pieces[1]));
-                foreach ($stmnt->fetchAll() as $row) {
-                    if (minutes_since($row['end']) <= 1440) {
-                        $within_24_hours = true;
-                        $status = $row['status'];
-                    }
-                }
-
-                if ($within_24_hours) {
-
-                    if ($status == 're') {
-
-                        $response->message("Error: this order has been refunded.");
-                    } else if ($status != 'mc') {
-
-                        $response->message("Error: this order is not completed.");
-                    } else {
-
-                        dispute_order($pieces[1]);
-
-                        $response->message("The provider has been notified of your concern and should contact you shortly.");
-                    }
-                } else {
-
-                    $response->message("Error: you must dispute tasks within 24 hours of completion.");
-                }
-            }
-        }
-    }
-} else if (trim(strtolower($body)) == "completed" && $type == "Business") {
-
-    $service = "";
-    $customer_email = "";
-    $customer_phone = "";
-    $count = 0;
-    $stmnt = $db->prepare("SELECT service, customer_email, customer_phone, order_number FROM {$DB_PREFIX}orders WHERE client_email = ? AND status = 'en';");
-    $stmnt->execute(array($email));
-    foreach ($stmnt->fetchAll() as $row) {
-        $service = $row['service'];
-        $customer_email = $row['customer_email'];
-        $customer_phone = $row['customer_phone'];
-        $order_number = $row['order_number'];
-        $count++;
-    }
-
-    if ($count == 0) {
-
-        $response->message("Error: you have no orders that can be marked completed.");
-    } else if ($count > 1) {
-
-        $message = "You have more than one order that has recently ended. Please also include the order number of the order you would like to mark as completed:\n";
-        $message .= "Ex. \"completed 12345\"\n\n";
-        $response->message($message);
-    } else {
-
-        $success = mark_completed($order_number, '');
-
-        if ($success) {
-
-            $response->message("Since this order has been disputed several times, our staff will now reach out to both you and the customer to resolve any issues.");
-        } else {
-
-            $response->message("Task completed.");
-        }
-    }
-} else if (strpos(strtolower($body), 'completed') !== false && $type == "Business") {
-
-    $pieces = explode(' ', trim(strtolower($body)));
-
-    if ($pieces[0] != 'completed' || strlen($pieces[1]) != 5 || count($pieces) != 2) {
-
-        $response->message("Error: incorrect usage. Format is: \"completed order-number\"");
-    } else {
-
-        $order_info = payment(trim($pieces[1]));
-        $empty = new \stdClass();
-
-        if ($order_info == $empty) {
-
-            $response->message("Error: invalid order number.");
-        } else {
-
-            $status = "";
-            $stmnt = $db->prepare("SELECT status FROM {$DB_PREFIX}orders WHERE order_number = ?;");
-            $stmnt->execute(array($pieces[1]));
-            foreach ($stmnt->fetchAll() as $row) {
-                $status = $row['status'];
-            }
-            if ($status == "mc") {
-
-                $response->message("Error: this task has already been marked completed.");
-            } else if ($status == "en") {
-
-                if (validate_provider_email($pieces[1], $email)) {
-
-                    $success = mark_completed($pieces[1], '');
-
-                    if ($success) {
-
-                        $response->message("Task completed.");
-                    } else {
-
-                        $response->message("Since this order has been disputed several times, our staff will now reach out to both you and the customer to resolve any issues.");
-                    }
-                } else {
-
-                    $response->message("Error: invalid order number.");
-                }
-            } else {
-
-                $response->message("Error: this task is still in progress. Text DONE to end your work-hours.");
-            }
-        }
-    }
-} else if ((trim(strtolower($body)) == 'done' || trim(strtolower($body)) == 'resume' || trim(strtolower($body)) == 'pause' || trim(strtolower($body)) == 'begin') && $type == "Business") {
-
-    $min_distance = 1000000;
-    $order_number = "none";
-
-    $timezone = "";
-    $stmnt = $db->prepare("SELECT timezone FROM {$DB_PREFIX}login WHERE email = ?;");
-    $stmnt->execute(array($email));
-    foreach ($stmnt->fetchAll() as $row) {
-        $timezone = $row["timezone"];
-    }
-
-    $status = "";
-    $currently_paused = "";
-    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ?;");
-    $stmnt->execute(array($email));
-    foreach ($stmnt->fetchAll() as $row) {
-
-        $service = $row["service"];
-        $curr_order_number = $row["order_number"];
-
-        if (minutes_until($row["schedule"]) < $min_distance && $row["end"] == "2019-02-18 01:53:14") {
-
-            $min_distance = minutes_until($row["schedule"]);
-            $order_number = $curr_order_number;
-            $currently_paused = $row["currently_paused"];
-            $status = $row['status'];
-        }
-    }
-
-    if ($order_number == "none") {
-
-        $response->message('Error: you have no active orders today');
-    } else {
-
-        if (trim(strtolower($body)) == 'begin') {
-
-            if ($status == "cl") {
-
-                $start_result = start_stop_order($order_number);
-                if ($start_result == "") {
-                    $response->message('Task started.');
-                } else {
-                    $response->message($start_result);
-                }
-            } else {
-
-                $response->message('Error: your task has already been started');
-            }
-        } else if (trim(strtolower($body)) == 'pause') {
-
-            if ($status == 'st' && $currently_paused == 'n') {
-
-                pause_order($order_number);
-                $response->message("Task Paused");
-            } else {
-
-                $response->message("Error: task has not been started yet.");
-            }
-        } else if (trim(strtolower($body)) == 'resume') {
-
-            if ($currently_paused == 'y') {
-
-                resume_order($order_number);
-                $response->message("Task Resumed");
-            } else {
-
-                $response->message("Error: this task is not currently paused.");
-            }
-        } else { // trim(strtolower($body)) == 'done'
-
-            if ($status == "st") {
-
-                start_stop_order($order_number);
-                $response->message("Task Ended");
-            } else {
-
-                $response->message("Error: this task has not yet been started.");
-            }
-        }
-    }
+$pieces = explode(' ', trim(strtolower($body)));
+$command = $pieces[0];
+$order_number = $pieces[1];
+    
+if (strtolower(strlen($order_number) != 5 || count($pieces) != 2)) { // incorrect format
+    
+    $response->message("Error: incorrect usage. Format is: COMMAND ORDER-NUMBER (Ex. START 12345)");
+    
 } else {
-    if ($type == "Personal") {
-        $response->message("Command not understood. Text DISPUTE to dispute an order.");
+    
+    $status = '';
+    $currently_paused = '';
+    $end = '';
+    $found = false;
+    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE order_number = ?;");
+    $stmnt->execute(array($order_number));
+    foreach ($stmnt->fetchAll() as $row) {
+        if ($order_number === $row['order_number']) {
+            $found = true;
+            $status = $row['status'];
+            $currently_paused = $row['currently_paused'];
+        }
+    }
+    
+    if (!$found) { // order number not found
+    
+        $response->message("Error: order number not found.");
+        
     } else {
-        $response->message("Command not understood. Text BEGIN to clock in, text PAUSE to pause your work-hours, text RESUME to resume your work-hours, text DONE to end your work-hours, and text COMPLETED to mark your order completed. If you are a customer, text DISPUTE to dispute an order.");
+    
+        if ($command == 'dispute') { // customer
+        
+            if (!validate_customer_phone($order_number, $formatted_phone)) {
+                $response->message("Error: you are not the customer of this order.");
+            } else if (minutes_since($end) <= 1440) {
+                $response->message("Error: you must dispute orders within 24 hours.");
+            } else if ($status == "re") {
+                $response->message("Error: this order has been refunded.");
+            } else if ($status == "mc") {
+                dispute_order($order_number);
+                $response->message("The provider has been notified of your concern and should contact you shortly.");
+            } else {
+                $response->message("Error: this order is not completed.");
+            } 
+            
+        } else { // provider
+            
+            if (!validate_provider_email($order_number, $email)) { // not their order
+            
+                $response->message("Error: you are not the provider of this task.");
+                
+            } else {
+        
+                if ($command == "complete") {
+
+                    if ($status == "mc") {
+                        $response->message("Error: this task has already been marked completed.");
+                    } else if ($status == "cl") {
+                        $response->message("Error: this task has not been started.");
+                    } else if ($status == "en") {
+                        $success = mark_completed($order_number, '');
+                        if ($success) {
+                            $response->message("Task completed.");
+                        } else {
+                            $response->message("Error: since this order has been disputed several times, our staff will now reach out to both you and the customer to resolve any issues.");
+                        }
+                    } else {
+                        $response->message("Error: this task is still in progress. Text STOP ORDER-NUMBER to end your work-hours.");
+                    }
+                    
+                    
+                } else if ($command == 'start') {
+                    
+                    if ($status == "mc") {
+                        $response->message('Error: this task has already been stopped.');
+                    } else if ($status == "di") {
+                        $response->message('Error: this task is currently disputed.');
+                    } else if ($status == "cl") {
+                        $start_result = start_stop_order($order_number);
+                        if ($start_result == "") {
+                            $response->message('Task started.');
+                        } else {
+                            $response->message($start_result);
+                        }
+                    } else {
+                        $response->message('Error: your task has already been started.');
+                    }
+                    
+                } else if ($command == 'pause') {
+                    
+                    if ($status == "mc") {
+                        $response->message('Error: this task has already been stopped.');
+                    } else if ($status == "di") {
+                        $response->message('Error: this task is currently disputed.');
+                    } else if ($status == 'st' && $currently_paused == 'n') {
+                        pause_order($order_number);
+                        $response->message("Task paused");
+                    } else if ($currently_paused == 'y'){
+                        $response->message("Error: task is already paused.");
+                    } else {
+                        $response->message("Error: task has not been started yet.");
+                    }
+                    
+                } else if ($command == 'resume') {
+                    
+                    if ($status == "di") {
+                        $response->message('Error: this task is currently disputed.');
+                    } else if ($currently_paused == 'y') {
+                        resume_order($order_number);
+                        $response->message("Task resumed.");
+                    } else if ($status == "en"){
+                        $response->message("Error: you cannot resume an order that has already been stopped.");
+                    } else if ($status == "mc"){
+                        $response->message("Error: you cannot resume an order that has already been completed.");
+                    } else {
+                        $response->message("Error: this task is not currently paused.");
+                    }
+                    
+                    
+                } else if ($command == "stop") {
+                    
+                    if ($status == "di") {
+                        $response->message('Error: this task is currently disputed.');
+                    } else if ($status == "st") {
+                        start_stop_order($order_number);
+                        $response->message("Task stopped.");
+                    } else if ($status == 'mc'){
+                        $response->message("Error: this task has already been stopped.");
+                    } else {
+                        $response->message("Error: this task has not been started yet.");
+                    }
+                    
+                } else {
+                    
+                    if ($type == "Personal") {
+                        $response->message("Command not understood. Text DISPUTE ORDER-NUMBER (Ex. DISPUTE 12345) to dispute an order.");
+                    } else {
+                        $response->message("Command not understood. The format of all commands is: COMMAND ORDER-NUMBER (Ex. START 12345). The list of all valid commands is: START to clock in, PAUSE to pause your work-hours, RESUME to resume your work-hours, STOP to end your work-hours, and COMPLETE to mark your order completed.");
+                    }
+                    
+                }
+            }
+        }
     }
 }
 
