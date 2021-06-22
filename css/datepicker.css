@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+.date-container {
+  max-width: 100%;
+  background-color: white;
+}
+
+.date-container .row{
+    display: block !important;
+}
+
+.date-wrapper {
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.bootstrap-datetimepicker-widget {
+	width: 100% !important;
+	max-width: none !important;
+}
+
+.col-sm-12{
+    padding:0px !important;
+    margin-top: 1.5em;
+}
+
+/* Ab hier für dich interessant :) */
+
+.bootstrap-datetimepicker-widget table td.active, .bootstrap-datetimepicker-widget table td.active:hover,
+.bootstrap-datetimepicker-widget table td span.active {
+  /* Hintergrundfarbe für die aktive Auswahl */
+	background-color: #6edab9;
+	color: #ffffff;
+}
+.bootstrap-datetimepicker-widget table td.today:before {
+  /* Dreieckfarbe für den aktuellen Tag */
+	border-bottom-color: #6edab9;
+}
+.bootstrap-datetimepicker-widget table td.active.today:before {
+  /* Dreieckfarbe, wenn aktueller Tag und Auswahl gleicher Tag ist */
+  border-bottom-color: #fff;
+}
+.bootstrap-datetimepicker-widget a {
+  /* Für das Kalender-Icon, das Uhrzeit-Icon und die Pfeile in der Uhrzeitauswahl*/
+  color: #6edab9;
+}
+.timepicker-picker .btn-primary {
+  /* Für den Button AM / PM*/
+  color: #fff;
+  background-color: #6edab9;
+  border-color: #6edab9;
+}
+
+th.picker-switch, th.dow, th.next, th.prev {
+    color: black !important;
+    text-align: center !important;
+    background-color: white !important;
+}
+
+
+td.day {
+    height: 42px !important;
+    border-radius: 5px !important;
+}
+
+td.active{
+    color: black !important;
+}

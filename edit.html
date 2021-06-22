@@ -9,6 +9,11 @@
 
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 
+
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css'>
+  <link rel="stylesheet" href="css/datepicker.css">
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css'>
@@ -25,11 +30,18 @@
   <link rel="stylesheet" href="css/all.css">
 
   <link rel="stylesheet" href="mobile-assets/css/edit.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js'></script>
+    <script src='https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js'></script>
+    <script  src="js/datepicker.js"></script>
 
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>-->
+  <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>-->
+  <!--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>-->
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
@@ -225,89 +237,19 @@
         <div class="pure-u-1-1" id="time-section">
           <div id="choose-your-time" class="wrapper wrapper__delta">
             <h2 class="__alpha">Choose Date</h2>
-            <div class="app-container" ng-app="dateTimeApp" ng-controller="dateTimeCtrl as ctrl" ng-cloak>
-              <div date-picker datepicker-title="Select Date" picktime="true" pickdate="true" pickpast="false"
-                mondayfirst="false" custom-message="You have selected" selecteddate="ctrl.selected_date"
-                updatefn="ctrl.updateDate(newdate)">
-                <div class="datepicker" ng-class="{
-								'am': timeframe == 'am',
-								'pm': timeframe == 'pm',
-								'compact': compact
-								}">
-                  <div class="datepicker-calendar">
-                    <div class="calendar-header">
-                      <div class="goback" ng-click="moveBack()" ng-if="pickdate">
-                        <svg width="30" height="30">
-                          <path fill="none" stroke="black" stroke-width="3" d="M19,6 l-9,9 l9,9" />
-                        </svg>
-                      </div>
-                      <div class="current-month-container">{{ currentViewDate.getFullYear() }} {{ currentMonthName() }}
-                      </div>
-                      <div class="goforward" ng-click="moveForward()" ng-if="pickdate">
-                        <svg width="30" height="30">
-                          <path fill="none" stroke="black" stroke-width="3" d="M11,6 l9,9 l-9,9" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="calendar-day-header">
-                      <span ng-repeat="day in days" class="day-label">{{ day.short }}</span>
-                    </div>
-                    <div class="calendar-grid" ng-class="{false: 'no-hover'}[pickdate]">
-                      <div ng-class="{'no-hover': !day.showday}" ng-repeat="day in month" class="datecontainer"
-                        ng-style="{'margin-left': calcOffset(day, $index)}" track by $index>
-                        <div class="datenumber" ng-class="{'day-selected': day.selected }" ng-click="selectDate(day)">
-                          {{ day.daydate }}
+            <div class="date-wrapper">
+              <div class="date-container">
+                <div class="row">
+                    <div class='col-sm-12'>
+                        <div class="form-group">
+                            <div id='datetimepicker'></div>
                         </div>
-                      </div>
                     </div>
-                  </div>
-                  <div class="timepicker" ng-if="picktime == 'true'">
-                    <div ng-class="{'am': timeframe == 'am', 'pm': timeframe == 'pm' }">
-                      <div class="timepicker-container-outer" selectedtime="time" timetravel>
-                        <div class="timepicker-container-inner">
-                          <div class="timeline-container" ng-mousedown="timeSelectStart($event)"
-                            sm-touchstart="timeSelectStart($event)">
-                            <div class="current-time">
-                              <div class="actual-time">{{ time }}</div>
-                            </div>
-                            <div class="timeline">
-                            </div>
-                            <div class="hours-container">
-                              <div class="hour-mark" ng-repeat="hour in getHours() track by $index"></div>
-                            </div>
-                          </div>
-                          <div class="display-time">
-                            <div class="decrement-time" ng-click="adjustTime('decrease')">
-                              <svg width="24" height="24">
-                                <path stroke="white" stroke-width="2" d="M8,12 h8" />
-                              </svg>
-                            </div>
-                            <div class="time" ng-class="{'time-active': edittime.active}">
-                              <input type="text" class="time-input" ng-model="edittime.input"
-                                ng-keydown="changeInputTime($event)"
-                                ng-focus="edittime.active = true; edittime.digits = [];"
-                                ng-blur="edittime.active = false" />
-                              <div class="formatted-time">{{ edittime.formatted }}</div>
-                            </div>
-                            <div class="increment-time" ng-click="adjustTime('increase')">
-                              <svg width="24" height="24">
-                                <path stroke="white" stroke-width="2" d="M12,7 v10 M7,12 h10" />
-                              </svg>
-                            </div>
-                          </div>
-                          <div class="am-pm-container">
-                            <div id="amclicky" class="am-pm-button" ng-click="changetime('am');">am</div>
-                            <div id="pmclicky" class="am-pm-button" ng-click="changetime('pm');">pm</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
+            <!-- partial -->
 
-            <script src="js/time.js"></script>
           </div>
         </div>
         <div class="pure-u-1-1" id="time-section">
@@ -792,7 +734,7 @@
           </center>
         </div>
       </div>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+      <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
       <div class="hover_bkgr_fricc">
         <span class="helper"></span>
         <div>
@@ -831,7 +773,7 @@
             </div>
           </div>
           <div class="overlay"></div>
-          <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+          <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>-->
           <!-- <script  src="js/popup.js"></script> -->
         </div>
       </div>

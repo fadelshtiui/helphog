@@ -377,6 +377,7 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
           callback(response.availability);
           removeLoader();
      }
+     return response;
 }
 
 function addLoader() {
