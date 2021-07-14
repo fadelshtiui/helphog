@@ -1,15 +1,18 @@
-window.addEventListener('load', async function () {
+window.addEventListener('load', init);
+
+async function init() {
   const MAX_DAYS_IN_FUTURE = 5;
   const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   let disabledDays = [];
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 5; i >= 0; i--) {
       let date = new Date();
-      date.setDate(date.getDate() + i)
+      let temp = new Date();
+      temp.setDate(date.getDate() + i)
 
-      id('dow').value = date.toDateString().substring(0, 3)
-      id('date').value = date.toDateString().substring(4, 15)
+      id('dow').value = temp.toDateString().substring(0, 3)
+      id('date').value = temp.toDateString().substring(4, 15)
 
       let response = await checkAvailability('false', updateTimePicker, false)
       if (!response.availability.includes("1")) {
@@ -21,6 +24,7 @@ window.addEventListener('load', async function () {
   // do some work to figiure out which days should be disabled
 
   let today = new Date();
+  console.log(today)
   let max = new Date();
   max.setDate(today.getDate() + MAX_DAYS_IN_FUTURE);
 
@@ -53,7 +57,8 @@ window.addEventListener('load', async function () {
 
     checkAvailability("false", updateTimePicker, false);
   });
-});
+  
+}
 
 function uncheckTimes() {
   let timeslots = qsa(".timeslot");

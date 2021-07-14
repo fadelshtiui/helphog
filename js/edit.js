@@ -39,7 +39,7 @@ window.addEventListener('load', function () {
           }
 
           loginOpen = true;
-          guestOpen = false;
+          guestOpen = false;d
 
           id('guest').disabled = false
           id('login').disabled = true
@@ -117,8 +117,8 @@ window.addEventListener('load', function () {
 
      let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-     id('dow').value = today.toDateString().substring(0, 3)
-     id('date').value = today.toDateString().substring(4, 15)
+    //  id('dow').value = today.toDateString().substring(0, 3)
+    //  id('date').value = today.toDateString().substring(4, 15)
 
      let timeslots = qsa('.timeslot')
      for (let i = 0; i < timeslots.length; i++) {
@@ -152,7 +152,7 @@ window.addEventListener('load', function () {
           checkAvailability('false', updateTimePicker, false);
      }
 
-     checkAvailability('false', updateTimePicker, false);
+    //  checkAvailability('false', updateTimePicker, false);
 
      id("submit-login").onclick = submitLogin;
 
