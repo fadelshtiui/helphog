@@ -188,6 +188,12 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
         $order_info->message = substr($order_info->message, 0, 1000);
     }
     session_start();
+    
+    if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']),"apple")) {
+        $cookieLifetime = 365 * 24 * 60 * 60; // A year in seconds
+        setcookie("ses_id",session_id(),time()+$cookieLifetime);
+    }
+    
     $_SESSION['order'] = $order_info->order;
     $_SESSION['service'] = $order_info->service;
     $_SESSION['customeremail'] = $order_info->customeremail;

@@ -6,6 +6,9 @@ $response = new stdClass();
 $response->ordernumber = "";
 $response->error = "none";
 
+if($_COOKIE['ses_id']){ // ios
+    session_id($_COOKIE['ses_id']);
+}
 session_start();
 
 if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_SESSION["service"]) && isset($_SESSION["schedule"]) && isset($_SESSION["address"]) && isset($_SESSION["zip"]) && isset($_SESSION["city"]) && isset($_SESSION["state"]) && isset($_SESSION["message"]) && isset($_SESSION["phone"]) && isset($_SESSION["order"]) && isset($_SESSION["people"]) && isset($_SESSION["duration"]) && isset($_SESSION["ordernumber"])) {
