@@ -58,6 +58,15 @@ async function init() {
     checkAvailability("false", updateTimePicker, false);
   });
   
+  // if date gets offset because of disabled days
+  let highlighted = new Date(document.querySelector('.active').dataset.day)
+  if (highlighted.getFullYear() != today.getFullYear() || highlighted.getMonth() != today.getMonth() || highlighted.getDate() != today.getDate()) {
+      id('dow').value = highlighted.toDateString().substring(0, 3)
+      id('date').value = highlighted.toDateString().substring(4, 15)
+      uncheckTimes();
+      checkAvailability("false", updateTimePicker, false);
+  }
+  
 }
 
 function uncheckTimes() {
