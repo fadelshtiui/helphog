@@ -84,29 +84,29 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     }
 
-    if ($remote == 'y') {
+    $available_emails = $all_emails;
 
-        $available_emails = $all_emails;
-    } else {
+    // only consider providers who are available in the address and can travel within order timeframe
 
-        // only consider providers who are available in the address and can travel within order timeframe
+    // if ($remote == 'y') {
 
-        $available_emails = array();
-        $durations = array();
+    //     $available_emails = $all_emails;
+    // } else {
 
-        foreach ($all_emails as $email) {
 
-            // if (address_works_for_provider($address, $email)) {
-            //     array_push($available_emails, $email);
-            // }
-            $distanceMatrix = address_works_for_provider($address, $email, $t);
-            if ($distanceMatrix->within) {
-                array_push($available_emails, $email);
-                array_push($durations, $distanceMatrix->traffic);
-            }
-        }
-    }
 
+    //     $available_emails = array();
+    //     $durations = array();
+
+    //     foreach ($all_emails as $email) {
+
+    //         $distanceMatrix = address_works_for_provider($address, $email, $t);
+    //         if ($distanceMatrix->within) {
+    //             array_push($available_emails, $email);
+    //             array_push($durations, $distanceMatrix->traffic);
+    //         }
+    //     }
+    // }
 
     $combined_availability = array();
     for ($i = 0; $i < 168; $i++) {
@@ -121,18 +121,19 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
     $curr_local_time = new DateTime("now", $local_time_zone);
     $offset = $local_time_zone->getOffset($curr_utc_time) / 3600;
     $offset = $offset * -1;
-    
+
     $start_index = 24 * intval($utc->format('w')) + $offset;
-    
+
     for ($i = 0; $i < count($available_emails); $i++) {
         $curr_email = $available_emails[$i];
 
         $phone = "";
+
         $full_availability = "";
         $provider_tz = "";
-        for ($j = 0; $j < 168; $j++) {
-            $full_availability .= '0';
-        }
+        // for ($j = 0; $j < 168; $j++) {
+        //     $full_availability .= '0';
+        // }
         $stmnt = $db->prepare("SELECT availability, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($curr_email));
         foreach ($stmnt->fetchAll() as $row) {
@@ -149,11 +150,12 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
 
 
             // account for travel time
-            $travelDurationIndexes = ceil($durations[$i] / 3600) + 1;
-            $duration_index = 24 * intval($curr_utc_time->format('w')) + intval($curr_utc_time->format('G'));
-            for ($k = $duration_index; $k < $duration_index + $travelDurationIndexes; $k++) {
-                $full_availability[$k] = '0';
-            }
+
+            // $travelDurationIndexes = ceil($durations[$i] / 3600) + 1;
+            // $duration_index = 24 * intval($curr_utc_time->format('w')) + intval($curr_utc_time->format('G'));
+            // for ($k = $duration_index; $k < $duration_index + $travelDurationIndexes; $k++) {
+            //     $full_availability[$k] = '0';
+            // }
         }
 
         $sql_schedule = $utc->format('Y-m-d');
