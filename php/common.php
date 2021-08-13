@@ -21,6 +21,10 @@ ini_set('display_errors', 'On');
 # error_reporting(E_ALL);
 error_reporting(E_ERROR | E_PARSE);
 
+function isMobileRequest() {
+    return (strpos($_SERVER['HTTP_USER_AGENT'], 'HelpHog/') !== false);
+}
+
 function banning($cancels, $client_email)
 {
 	include 'constants.php';
