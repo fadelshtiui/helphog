@@ -978,7 +978,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$stmt->execute($params);
 
 						$secondary_providers_array = explode(',', $new_secondary);
-						$message = "You will be working on " . $service . " (" . $order_number . ") on " . $schedule . " with:\n";
+						$message = "You will be working on " . $service . " (" . $order_number . ") on " . $schedule . " with: \n";
 						foreach ($secondary_providers_array as $curr_email) {
 
 							$name = "";
@@ -1067,7 +1067,12 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 	if ($mobile) {
 		return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobiledecline";</script>';
 	}
-	return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+	if ($cancelled) {
+	    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+this+order+has+been+cancelled";</script>';
+	} else {
+	    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
+	}
+	
 }
 
 function update_clicked_list($clicked, $email, $order_number)
