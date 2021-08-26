@@ -448,8 +448,8 @@ a.button.accent3:active, a.button.accent3:focus, a.button.accent3.active, input.
 
 .status-primary {
   z-index: -1;
-  background: var(--primaryShade1);
-  color: var(--primaryShade5);
+  background-color: #1ecd97;
+  color: white;
 }
 
 .status-primary:before, .status-primary:after {
