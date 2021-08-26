@@ -602,11 +602,12 @@ function guestLogin() {
 }
 
 function guestLoginHelper(response) {
-     if (response.emailerror != "") {
-          id("email-error").innerText = response.emailerror;
-     }
+     // hacky solution :(
      if (response.phoneerror != "") {
-          id("password-error").innerText = response.phoneerror;
+          id("email-error").innerText = "*" + response.phoneerror;
+     }
+     if (response.emailerror != "") {
+          id("password-error").innerText = "*" + response.emailerror;
      }
 
      if (response.emailerror == "" && response.phoneerror == "") {
