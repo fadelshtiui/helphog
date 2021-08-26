@@ -20,21 +20,25 @@ async function populateNavigationBar() {
      let mobileLinks = qsa('#navPanel a')
      
      mobileLinks.forEach(link => {
-
-          if (link.href == "") { // sign out link doesn't have href
-              if (res.validated == "true") {
-                  link.addEventListener('click', function (e) {
-                       e.stopPropagation();
-                       e.preventDefault();
-                       signOut();
-                       console.log('signed out')
-                  })
-              } else {
+         
+         if (link.innerText != "ACTIONS") {
+             if (link.href == "") { // sign out link doesn't have href
+                  if (res.validated == "true") {
+                      link.addEventListener('click', function (e) {
+                           e.stopPropagation();
+                           e.preventDefault();
+                           signOut();
+                           console.log('signed out')
+                      })
+                  } else {
+                      link.classList.add('hidden')
+                  }
+             } else if (!actions.includes(link.href) && link.href != window.location.origin + '/') {
                   link.classList.add('hidden')
-              }
-         } else if (!actions.includes(link.href) && link.href != window.location.origin + '/') {
-              link.classList.add('hidden')
+             }
          }
+
+          
      })
 
 }
