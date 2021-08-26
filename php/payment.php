@@ -53,7 +53,7 @@ function calculateTax($price, $taxCode, $order_info): array
         return array(0, 0);
     }
 
-    $client = TaxJar\Client::withApiKey('4c61ff0ad5ef3c49c6e65e86915aea6f');
+    $client = TaxJar\Client::withApiKey('ddde04d753440e2ab33b90052ccc2aed');
     $order_taxes = $client->taxForOrder([
         'to_zip' => $order_info->zip,
         'to_state' => $order_info->state,
@@ -188,12 +188,12 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate)
         $order_info->message = substr($order_info->message, 0, 1000);
     }
     session_start();
-    
+
     if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']),"apple")) {
         $cookieLifetime = 365 * 24 * 60 * 60; // A year in seconds
         setcookie("ses_id",session_id(),time()+$cookieLifetime);
     }
-    
+
     $_SESSION['order'] = $order_info->order;
     $_SESSION['service'] = $order_info->service;
     $_SESSION['customeremail'] = $order_info->customeremail;
