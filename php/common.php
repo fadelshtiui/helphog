@@ -978,7 +978,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$stmt->execute($params);
 
 						$secondary_providers_array = explode(',', $new_secondary);
-						$message = "You will be working on " . $service . " (" . $order_number . ") on " . $schedule . " with: \n";
+						$message = "You will be working on " . $service . " (" . $order_number . ") on " . $schedule . " with:\n";
 						foreach ($secondary_providers_array as $curr_email) {
 
 							$name = "";
