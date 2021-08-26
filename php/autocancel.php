@@ -196,7 +196,7 @@ function sendTextProvider($service, $order, $phonenumber, $schedule, $provider_n
     if ($provider_never_started) {
         $message = ' was canceled because the primary provider has not started working on the order.';
     } else {
-        $message = ' was canceled because one or more of the secondary providers were not located for this task';
+        $message = ' was canceled because one or more of the secondary providers were not located for this task.';
     }
 
     $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
