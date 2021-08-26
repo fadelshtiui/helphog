@@ -1,4 +1,4 @@
-@media screen and (max-width: 736px) {
+@media screen and (max-width: 900px) {
   #navPanel {
     text-align: left;
   }
@@ -13,5 +13,20 @@
   }
   #bottom-row {
     width: fit-content !important;
+  }
+  .modal>.actions {
+    margin-top: 20px;
+    margin-bottom: 0px;
+
+  }
+  .modal>.content {
+    margin-top: 10px;
+  }
+  .modal {
+      width: 80%;
+  }
+  #zip-input {
+      margin-top: 0px;
+      margin-bottom: 0px;
   }
 }
