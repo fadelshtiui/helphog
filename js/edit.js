@@ -39,7 +39,7 @@ window.addEventListener('load', function () {
           }
 
           loginOpen = true;
-          guestOpen = false;d
+          guestOpen = false;
 
           id('guest').disabled = false
           id('login').disabled = true
@@ -602,12 +602,11 @@ function guestLogin() {
 }
 
 function guestLoginHelper(response) {
-     // hacky solution :(
      if (response.phoneerror != "") {
-          id("email-error").innerText = "*" + response.phoneerror;
+          id("email-error").innerText = response.phoneerror;
      }
      if (response.emailerror != "") {
-          id("password-error").innerText = "*" + response.emailerror;
+          id("password-error").innerText = response.emailerror;
      }
 
      if (response.emailerror == "" && response.phoneerror == "") {
