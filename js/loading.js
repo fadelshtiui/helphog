@@ -2,7 +2,12 @@ window.addEventListener('load', function () {
 
      $('#loading-animation').css('display', 'none');
      $('#loading-animation').fadeIn(900);
-
+     
+     
+     if ($('footer')) {
+         $('footer').css('display', 'none');
+         $('footer').fadeIn(900);
+     }
      if ($('a')) {
           $('a').css('display', 'none');
           $('a').fadeIn(900);

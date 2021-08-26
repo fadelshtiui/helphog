@@ -1,8 +1,10 @@
 "use strict";
 
+
 window.addEventListener('load', function () {
      AOS.init();
      setTimeout(AOS.refresh, 500);
+     id('footer').classList.remove('hidden')
      id('change').play();
 })
 
