@@ -1072,7 +1072,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 	} else {
 	    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 	}
-	
+
 }
 
 function update_clicked_list($clicked, $email, $order_number)
@@ -1319,7 +1319,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 		$customer_email = $row['customer_email'];
 		$customer_message = $row['message'];
 		$customer_phone = $row['customer_phone'];
-		$price = "$" . $row['cost'];
+		$price = "$" . money_format('%.2n', $row['cost'] * 0.9);
 		$wage = $row['wage'];
 	}
 

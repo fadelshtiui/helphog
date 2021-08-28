@@ -125,9 +125,9 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             $orig_price = $price;
 
             if ($wage == "hour") {
-                $providerWage = "$" . $price . "/hr";
+                $providerWage = "$" .  money_format('%.2n', $price * 0.9) . "/hr";
             } else {
-                $providerWage = "$" . $price;
+                $providerWage = "$" . money_format('%.2n', $price * 0.9);
             }
 
             if ($wage == "hour") {
@@ -157,12 +157,12 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             }
 
             $price = "$" . $price;
-            
+
             if ($sales_tax_percent != 0.00){
-                
+
                 $price = $price . ' + tax (' . $sales_tax_percent .')';
             }
-            
+
             $name = "";
             $stmnt = $db->prepare("SELECT firstname FROM {$DB_PREFIX}login WHERE email = ?;");
             $stmnt->execute(array($customer_email));
@@ -198,7 +198,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             if ($providerId != "none"){
                 $provider = ' (#' . $providerId . ')';
             }
-            
+
             send_email($customer_email, "no-reply@helphog.com", "Order Confirmation", get_confirmation_email($order_number, $price, $service, $name, $schedule, $_SESSION["message"], $address, $people, $subtotal, $cancel_key, $provider));
 
             $response->firstname = $name;

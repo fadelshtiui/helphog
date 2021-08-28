@@ -182,7 +182,7 @@ if ($validated) {
         $entry->address = $row["address"];
         $entry->service = $row["service"];
         $entry->wage = $row["wage"];
-        $entry->price = $row["cost"];
+        $entry->price = money_format('%.2n', $row["cost"] * 0.9);
         $entry->customer_phone = $row["customer_phone"];
         $entry->satisfied = $row["satisfied"];
         $entry->rating = $row["rating"];
