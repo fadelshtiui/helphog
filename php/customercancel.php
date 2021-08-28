@@ -81,7 +81,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
             if ($is_post_request) {
                 echo 'ordererror';
             } else {
-                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+is+currently+is+in+progress";</script>';
+                echo '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry,+you+cannot+cancel+an+order+that+has+already+been+started";</script>';
             }
         } else { // $status == "pe" || $status == "cl"
 
