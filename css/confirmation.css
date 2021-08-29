@@ -56,6 +56,7 @@ center {
   height: 5vw;
   margin-left: 3%;
   margin-top: 3%;
+  margin-bottom: 3%;
 }
 
 .arrow:hover {
@@ -571,7 +572,7 @@ TEST EMAILS
     opacity:0;
   }
 	35% {
-		left: 41%; 
+		left: 41%;
 		-moz-transform:rotate(0deg);
 		-webkit-transform:rotate(0deg);
 		-o-transform:rotate(0deg);
@@ -579,18 +580,18 @@ TEST EMAILS
 		opacity:1;
 	}
 	65% {
-		left:59%; 
-		-moz-transform:rotate(0deg); 
-		-webkit-transform:rotate(0deg); 
+		left:59%;
+		-moz-transform:rotate(0deg);
+		-webkit-transform:rotate(0deg);
 		-o-transform:rotate(0deg);
-		transform:rotate(0deg); 
+		transform:rotate(0deg);
 		opacity:1;
 	}
 	100% {
-		left:100%; 
-		-moz-transform:rotate(-180deg); 
-		-webkit-transform:rotate(-180deg); 
-		-o-transform:rotate(-180deg); 
+		left:100%;
+		-moz-transform:rotate(-180deg);
+		-webkit-transform:rotate(-180deg);
+		-o-transform:rotate(-180deg);
 		transform:rotate(-180deg);
 		opacity:0;
 	}
@@ -598,24 +599,24 @@ TEST EMAILS
 
 @-moz-keyframes move {
 	0% {
-		left:0; 
+		left:0;
 		opacity:0;
 	}
 	35% {
-		left:41%; 
-		-moz-transform:rotate(0deg); 
+		left:41%;
+		-moz-transform:rotate(0deg);
 		transform:rotate(0deg);
 		opacity:1;
 	}
 	65% {
-		left:59%; 
-		-moz-transform:rotate(0deg); 
+		left:59%;
+		-moz-transform:rotate(0deg);
 		transform:rotate(0deg);
 		opacity:1;
 	}
 	100% {
-		left:100%; 
-		-moz-transform:rotate(-180deg); 
+		left:100%;
+		-moz-transform:rotate(-180deg);
 		transform:rotate(-180deg);
 		opacity:0;
 	}
@@ -623,50 +624,50 @@ TEST EMAILS
 
 @-webkit-keyframes move {
 	0% {
-		left:0; 
+		left:0;
 		opacity:0;
 	}
 	35% {
-		left:41%; 
-		-webkit-transform:rotate(0deg); 
-		transform:rotate(0deg); 
+		left:41%;
+		-webkit-transform:rotate(0deg);
+		transform:rotate(0deg);
 		opacity:1;
 	}
 	65% {
-		left:59%; 
-		-webkit-transform:rotate(0deg); 
-		transform:rotate(0deg); 
+		left:59%;
+		-webkit-transform:rotate(0deg);
+		transform:rotate(0deg);
 		opacity:1;
 	}
 	100% {
 		left:100%;
-		-webkit-transform:rotate(-180deg); 
-		transform:rotate(-180deg); 
+		-webkit-transform:rotate(-180deg);
+		transform:rotate(-180deg);
 		opacity:0;
 	}
 }
 
 @-o-keyframes move {
 	0% {
-		left:0; 
+		left:0;
 		opacity:0;
 	}
 	35% {
-		left:41%; 
-		-o-transform:rotate(0deg); 
-		transform:rotate(0deg); 
+		left:41%;
+		-o-transform:rotate(0deg);
+		transform:rotate(0deg);
 		opacity:1;
 	}
 	65% {
-		left:59%; 
-		-o-transform:rotate(0deg); 
-		transform:rotate(0deg); 
+		left:59%;
+		-o-transform:rotate(0deg);
+		transform:rotate(0deg);
 		opacity:1;
 	}
 	100% {
-		left:100%; 
-		-o-transform:rotate(-180deg); 
-		transform:rotate(-180deg); 
+		left:100%;
+		-o-transform:rotate(-180deg);
+		transform:rotate(-180deg);
 		opacity:0;
 	}
 }
