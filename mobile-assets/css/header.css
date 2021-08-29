@@ -325,11 +325,6 @@ header.special .icon:before {
 
 @media screen and (max-width: 1280px) {
 	/* Basic */
-	body, input, select, textarea {
-		font-size: 13pt;
-		letter-spacing: 0.025em;
-		line-height: 1.65em;
-	}
 	h1, h2, h3, h4, h5, h6 {
 		line-height: 1.5em;
 	}
