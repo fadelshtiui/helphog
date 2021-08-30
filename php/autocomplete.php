@@ -36,14 +36,23 @@ foreach ($result as $row) {
 
         $message = $service . ' (' . $order . ') on ' . $utc->format('F j, Y, g:i a') . ' has been marked completed by our system. If the support provided by the provider was inadequate you can dispute the transaction by texting back DISPUTE to this number.';
 
-        if ($status == 'st' && minutes_since($start) > ($duration * 60)) {
-            if ($currently_paused == 'y') {
-                resume_order($order);
-            }
+        $worked_minutes = minutes_since($start) - ($paused_time / 60);
+        if ($wage == "hour") {
+            $max_minutes = $duration * 60;
+        } else { // $wage == "per"
+            $max_minutes = 24 * 60;
+        }
+        $been_24_hours = minutes_since($schedule) > 1440;
+
+        if (($status == 'st' && $currently_paused == 'n') && $worked_minutes > $max_minutes) {
             start_stop_order($order);
         }
 
-        if ($status == 'en' && minutes_since($schedule) > 1440) {
+        if ($been_24_hours && ($status == 'en' || $currently_paused == 'y')) {
+            if ($currently_paused == 'y') {
+                resume_order($order);
+                start_stop_order($order);
+            }
             mark_completed($order, $message);
         }
     } catch (\Throwable $e) {
