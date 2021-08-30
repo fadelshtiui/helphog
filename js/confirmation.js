@@ -1,13 +1,21 @@
 "use strict";
 
+const FE_DEBUG = false;
+
 $(window).on('load', function () {
 
-    let url = "php/confirmation.php";
-    fetch(url, { method: "POST", body: null })
-        .then(checkStatus)
-        .then(res => res.json())
-        .then(handle)
-        .catch(console.log);
+    if (FE_DEBUG) {
+        $('#load').fadeOut(500);
+        $('#notLoading').delay(500).fadeIn(500);
+    } else {
+        let url = "php/confirmation.php";
+        fetch(url, { method: "POST", body: null })
+            .then(checkStatus)
+            .then(res => res.json())
+            .then(handle)
+            .catch(console.log);
+    }
+
 })
 
 function handle(response) {
@@ -37,7 +45,7 @@ function handle(response) {
     id("zip").innerText = response.zip;
 
     id("date").innerText = 'Date: ' + response.schedule;
-    if (response.providerId != "none"){
+    if (response.providerId != "none") {
         id("providerId").innerText = 'Selected Provider: #' + response.providerId;
     }
 
