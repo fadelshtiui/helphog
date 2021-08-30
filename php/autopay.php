@@ -17,7 +17,7 @@ foreach ($result as $row) {
 
         error_log($e->getMessage());
 
-        send_email('maksim_maxim@live.com', "no-reply@helphog.com", "FATAL ERROR - autocancel.php", $e->getMessage());
-        send_email('fadelshtiui@gmail.com', "no-reply@helphog.com", "FATAL ERROR - autocancel.php", $e->getMessage());
+        send_email('maksim_maxim@live.com', "no-reply@helphog.com", "FATAL ERROR - autopay.php (" . $row["order_number"] . ")", $e->getMessage());
+        send_email('fadelshtiui@gmail.com', "no-reply@helphog.com", "FATAL ERROR - autopay.php (" . $row["order_number"] . ")", $e->getMessage());
     }
 }
