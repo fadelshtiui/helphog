@@ -131,7 +131,7 @@ if ($validated) {
         $email = $row["email"];
     }
 
-$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? ORDER BY start;");
+$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? ORDER BY start DESC;");
 
     $stmnt->execute(array($email, '%' . $email . '%'));
     foreach($stmnt->fetchAll() as $row) {
