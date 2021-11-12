@@ -2,12 +2,18 @@ let guestOpen = false;
 let loginOpen = false;
 let providerId = 'none';
 let selected = false;
+let savePayment = true;
+let signedIn = false;
+let useCard = true;
+let paymentMethod;
 
 window.addEventListener('load', function () {
+    for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'none';
 
      $('.modal-content').slideToggle();
      id('city-state-comma').classList.add('hidden')
      qs(".loader").classList.add("hidden");
+    //  document.getElementById("card-check").checked = true;
 
      $('#guest').on('click', function () {
 
@@ -214,7 +220,22 @@ window.addEventListener('load', function () {
      }
      checkProviders();
 
+//      var checkbox1 = qs("input[name=save-card]");
+
+// 		checkbox1.addEventListener('change', function () {
+// 			checkbox();
+// 	});
+
 });
+
+function checkbox(){
+    var x = $("#email-notification").is(":checked");
+    if (!x){
+        savePayment = false;
+    }else{
+        savePayment = true;
+    }
+}
 
 function editAddress() {
      id('locationField').classList.remove('hidden')
@@ -494,11 +515,11 @@ async function validateInput() {
      response = await response.json();
 
      if (response.validated == "false") {
-
+          signedIn = false;
           $('.hover_bkgr_fricc').show();
 
      } else {
-
+          signedIn = true;
           initModal();
 
      }
@@ -545,6 +566,7 @@ function submitLoginHelper(response) {
 
           document.cookie = "session=" + response.session + ";";
           initModal();
+          signedIn = true;
      }
 }
 
@@ -613,7 +635,7 @@ function guestLoginHelper(response) {
           $('.hover_bkgr_fricc').hide();
           id("email-error").innerText = "";
           id("password-error").innerText = "";
-
+          signedIn = true;
           initModal();
      }
 
@@ -762,7 +784,6 @@ async function stripe(service, duration, people, cost) {
                providerId: providerId
           }
      };
-
      qs("button").disabled = true;
      fetch("php/payment.php", {
           method: "POST",
@@ -774,6 +795,7 @@ async function stripe(service, duration, people, cost) {
           .then(checkStatus)
           .then(res => res.json())
           .then(function (data) {
+
                var elements = stripe.elements();
                var style = {
                     base: {
@@ -810,18 +832,36 @@ async function stripe(service, duration, people, cost) {
                     el.classList.remove('notvisible');
 
                })
+
+               paymentMethod = {card: card} ;
+
+               $('#change').on('click', function () {
+                   for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'none';
+                   var z = document.getElementById("card-element");
+                   z.style.display = "block";
+                   useCard = true;
+                   paymentMethod = {card: card};
+                 });
+
+               if (data.payment_method != ''){
+                    for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'block';
+                    paymentMethod = data.payment_method;
+                    var z = document.getElementById("card-element");
+                    z.style.display = "none";
+                    id("card-type").innerText = data.card_brand.charAt(0).toUpperCase() + data.card_brand.slice(1);;
+                    id("last-four").innerText = "ending in " + data.last4;
+                   }
                form.addEventListener("submit", function (event) {
                     event.preventDefault();
-                    payWithCard(stripe, card, data.clientSecret);
+                    payWithCard(stripe, card, data.clientSecret, paymentMethod);
                });
+
           });
-     var payWithCard = function (stripe, card, clientSecret) {
+     var payWithCard = function (stripe, card, clientSecret, paymentMethod) {
           loading(true);
           stripe
                .confirmCardPayment(clientSecret, {
-                    payment_method: {
-                         card: card
-                    }
+                    payment_method: paymentMethod
                })
                .then(function (result) {
                     if (result.error) {
