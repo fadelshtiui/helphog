@@ -214,7 +214,6 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
 
                 send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $_SESSION["message"], $duration, $accept_key, $provider->tz, $people, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION['address'], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service']);
             }
-
             $response->ordernumber = $order_number;
         }
     } else {
