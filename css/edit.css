@@ -30,6 +30,10 @@ html {
   opacity: 0;
 }
 
+#agreement{
+    font-size: 14px;
+}
+
 #providerSelected {
   font-weight: bolder;
   margin-top: 13px;
@@ -1194,6 +1198,51 @@ table {
 .popup h2 {
   margin-top: 0;
   color: #333;
+}
+
+#saved-card{
+    border-radius: 4px 4px 0 0;
+    padding: 9px;
+    border: 1px solid rgba(50, 50, 93, 0.1);
+    height: 44px;
+    width: 100%;
+    background: white;
+}
+
+#card-type{
+    float:left;
+}
+
+#last-four{
+    float:right;
+}
+
+#save-card{
+    font-size:14px;
+    height:20px;
+    margin:10px;
+}
+
+#card-check{
+    float:left;
+    height:20px;
+    opacity: 80%;
+    width:20px;
+    margin:0;
+}
+
+#change{
+    float: right;
+    color: blue;
+    font-size: 14px;
+    padding: 2px;
+    margin-left: 10px;
+    cursor:pointer;
+}
+
+#checkbox-text{
+    float:left;
+    padding-left:9px;
 }
 
 .popup .close {
