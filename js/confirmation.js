@@ -3,7 +3,6 @@
 const FE_DEBUG = false;
 
 $(window).on('load', function () {
-
     if (FE_DEBUG) {
         $('#load').fadeOut(500);
         $('#notLoading').delay(500).fadeIn(500);
@@ -19,7 +18,6 @@ $(window).on('load', function () {
 })
 
 function handle(response) {
-
     if (response.error == "tried to refresh confirmation page") {
         window.location = '/'
     } else if (response.error == "missing session parameters") {
@@ -58,9 +56,11 @@ function handle(response) {
     if (response.taxrate != '') {
         id("taxRate").innerText = " + tax (" + response.taxrate + ")";
     }
-
+    setTimeout(function(){ id('footer').classList.remove('hidden')}, 500);
     $('#load').fadeOut(500);
     $('#notLoading').delay(500).fadeIn(500);
+
+
 
 }
 
