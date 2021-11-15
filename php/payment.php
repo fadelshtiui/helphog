@@ -32,6 +32,7 @@ try {
             'capture_method' => 'manual',
             'customer' => $customerId[0],
             'payment_method'=> $customerId[1],
+            'setup_future_usage' => 'on_session',
 
         ]);
 
