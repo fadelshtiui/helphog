@@ -113,6 +113,9 @@ if ($validated) {
         $response->alerts = $row["alerts"];
         $response->client_email = $row["client_email"];
         $response->providerId = $row["id"];
+        $response->services_offered = $row["services"];
+        $response->disputes = $row["disputes"];
+        $response->cancels = $row["cancels"];
 
         $utc_time_zone = new DateTimeZone('UTC');
         $local_time_zone = new DateTimeZone($tz);
@@ -132,6 +135,17 @@ if ($validated) {
     }
 
 $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? ORDER BY start DESC;");
+
+    $total_revenue = 0.0;
+    $active_disputes = 0;
+    $total_disputes = $response->disputes;
+    $dispute_percentage = 0.0;
+    $total_rating = 0;
+    $number_of_ratings = 0;
+    $active_orders = 0;
+    $total_cancels = 0;
+    $cancel_percentage = 0.0;
+    $completed_orders = 0;
 
     $stmnt->execute(array($email, '%' . $email . '%'));
     foreach($stmnt->fetchAll() as $row) {
@@ -205,11 +219,69 @@ $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? O
         if (round($payment_info->provider_payout) < 0.50){
             $entry->revenue = "Payment waived (<\$0.50)";
         }else{
+            $entry->revenue_raw = $payment_info->provider_payout;
             $entry->revenue = money_format('%.2n', $payment_info->provider_payout);
+            if($row["status"] == "pd"){
+                $total_revenue = $total_revenue + $entry->revenue;
+            }
+        }
+
+        error_log($entry->revenue);
+        error_log($entry->order_number);
+
+        $total_orders++;
+
+        if ($row["status"] == "pc" || $row["status"] == "cc" || $row["status"] == "ac"){
+            $total_cancels = $total_cancels + 1;
+        }
+
+        if ($row["rating"] != 0){
+            $number_of_ratings = $number_of_ratings + 1;
+            $total_ratings = $total_ratings + $row["rating"];
+        }
+
+        if($row["status"] == "di"){
+            $active_disputes = $active_disputes + 1;
+        }
+
+        if ($row["status"] == "cl" || $row["status"] == "st" || $row["status"] == "en"){
+            $active_orders = $active_orders + 1;
+        }
+
+        if ($total_disputes != 0.0){
+            $dispute_percentage = $total_disputes/$total_orders;
+        }else{
+            $dispute_percentage = 0.00;
+        }
+
+        if ($row["status"] == "pd" || $row["status" == "mc"]){
+            $completed_orders = $completed_orders + 1;
         }
 
         array_push($orders_array, $entry);
     }
+
+    if($total_ratings != 0){
+        $response->rating = money_format('%.2n', $total_ratings/$number_of_ratings) . " of 5";
+        error_log(money_format('%.2n', $total_ratings/$number_of_ratings));
+        error_log($total_ratings);
+        error_log($number_of_ratings);
+    }else{
+        $response->rating = "No reviews yet";
+    }
+
+    if($response->cancels != 0){
+        $response->cancel_percentage = $response->cancels/$total_orders;
+    }else{
+        $response->cancel_percentage = 0;
+    }
+
+    $response->revenue = money_format('%.2n', $total_revenue);
+    $response->active_disputes = $active_disputes;
+    $response->dispute_percentage = money_format('%.2n', $dispute_percentage);
+    $response->active_orders = $active_orders;
+    $response->total_orders = $total_orders;
+    $response->completed_orders = $completed_orders;
 
     $response->orders = $orders_array;
 
