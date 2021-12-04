@@ -22,6 +22,11 @@ i.warning-orders {
   color: #DB2828;
 }
 
+.theme--light.v-table {
+    color: rgba(0,0,0,.87);
+    background-color: transparent;
+}
+
 #logo a {
   color: #1ecd97;
   text-decoration: none;
