@@ -11,6 +11,16 @@ h4 {
   margin-top: 5px;
 }
 
+.stats{
+    margin:11.1328px;
+
+}
+
+i{
+    /*padding-top: 25px;*/
+    /*margin-bottom: 25px;*/
+}
+
 .active-order-icon {
   display: block;
   margin: auto;
