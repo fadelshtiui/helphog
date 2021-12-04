@@ -335,6 +335,7 @@ let preloaded = false;
 	}
 
 	function displayResults(response) {
+
 		var timezones = document.getElementById('timezone');
 		for (var i = 0; i < timezones.length; i++) {
 			if (timezones.options[i].value == response.tz) {
@@ -391,7 +392,6 @@ let preloaded = false;
 		if (percentage < 0) {
 			percentage = 0;
 		}
-		console.log(percentage)
 		percentage += 'px'
 		qs('.rangeslider-fill-lower').style.width = percentage;
 		qs('.rangeslider-thumb').style.left = percentage;
@@ -416,9 +416,13 @@ let preloaded = false;
 		}
 
 		if (!preloaded) {
-			preloaded = true;
+		    preloaded = true;
 			let orders = response.orders;
 			let counter = 0;
+			let currentYear = new Date().getFullYear()
+			const currentYearEarnings = new Array(12).fill(0.00);
+			const previousYearEarnings = new Array(12).fill(0.00);
+
 			if (orders && orders.length > 0) {
 
 				for (let i = 0; i < orders.length; i++) {
@@ -666,13 +670,7 @@ let preloaded = false;
 								section3.appendChild(coworkersContact);
 							}
 
-
-
-
-
 						}
-
-
 
 						let message = ce("div");
 						message.classList.add("message");
@@ -778,8 +776,141 @@ let preloaded = false;
 						let outer = qs(".content-card");
 						outer.appendChild(container);
 					}
+					let orderDate = new Date(order.schedule);
+					if (order.status == "pd"){
+					    if (orderDate.getFullYear() == currentYear){
+					        currentYearEarnings[orderDate.getMonth()] = currentYearEarnings[orderDate.getMonth()] + order.revenue_raw;
+					    } else if (orderDate.getFullYear() == currentYear -1){
+					        previousYearEarnings[orderDate.getMonth()] = currentpreviousYearEarnings[orderDate.getMonth()] + order.revenue_raw;
+					    }
+					}
 				}
 			}
+
+
+    	    //rendering graph
+    	    const ctx = document.getElementById('myChart');
+    	    const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    datasets: [{
+                        label: currentYear + ' Earnings ($)',
+                        data: currentYearEarnings,
+                        backgroundColor: [
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)'
+
+                        ],
+                        borderWidth: 1
+                    }, {
+                        label: (currentYear - 1) + ' Earnings ($)',
+                        data: previousYearEarnings,
+                        backgroundColor: [
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)'
+
+                        ],
+                        borderWidth: 1
+                    }],
+                },
+                defaults:{
+                    font: {
+                                    size: 17,
+                                    family:"'Poppins', sans-serif"
+                                }
+                },
+                options: {
+                    tooltips: {
+                        callback: function(value, index, values) {
+                                    return '$' + value;
+                                }
+                      },
+                    tension: 0.3,
+                    scales: {
+                         x: {
+                          grid: {
+                            display: false
+                          }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                // Include a dollar sign in the ticks
+                                callback: function(value, index, values) {
+                                    return '$' + value;
+                                }
+                            },
+                            grid: {
+                            display: false
+                          }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                // This more specific font property overrides the global property
+                                font: {
+                                    size: 17,
+                                    family:"'Poppins', sans-serif"
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+    	    id('total-revenue').innerText = "$" + response.revenue
+            id('dispute-percentage').innerText = response.dispute_percentage
+    	    id('rating').innerText = response.rating
+    	    id('services-offered').innerText = response.services_offered
+    	    id('cancels').innerText = response.cancels
 		}
 		qs(".container").classList.remove("hidden");
 
