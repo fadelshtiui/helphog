@@ -32,7 +32,6 @@ try {
             'capture_method' => 'manual',
             'customer' => $customerId[0],
             'payment_method'=> $customerId[1],
-            'setup_future_usage' => 'on_session',
 
         ]);
 
@@ -159,7 +158,7 @@ function calculateTax($price, $taxCode, $order_info): array
         return array(0, 0);
     }
 
-    $client = TaxJar\Client::withApiKey('e4332888e3463438895749896684a8e9');
+    $client = TaxJar\Client::withApiKey('61f4780bb09769ae874011f646aad80a');
     $order_taxes = $client->taxForOrder([
         'to_zip' => $order_info->zip,
         'to_state' => $order_info->state,
