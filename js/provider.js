@@ -422,6 +422,7 @@ let preloaded = false;
 			let currentYear = new Date().getFullYear()
 			const currentYearEarnings = new Array(12).fill(0.00);
 			const previousYearEarnings = new Array(12).fill(0.00);
+			let transcribedStatus = "";
 
 			if (orders && orders.length > 0) {
 
@@ -431,6 +432,7 @@ let preloaded = false;
 					let order = orders[i];
 
 					if (order.status == 'mc' || order.status == 're' || order.status == 'ac' || order.status == 'pc' || order.status == 'cc' || order.status == 'pd') {
+
 						counter++;
 						id("no-order-history").classList.add("hidden");
 						$('.dashboard-preview').show();
@@ -443,16 +445,41 @@ let preloaded = false;
 						service.innerText = "#" + order.order_number + ": " + order.service;
 
 						let customer = ce("h2");
-						customer.innerText = order.customer_email;
+						customer.innerText = order.schedule;
 						let span = ce("span");
-						span.innerText = "Date: " + order.schedule;
+
+						if (order.status == 'mc'){
+                            transcribedStatus = "Completed, awaiting validation"
+                            span.style.color = 'purple';
+                        }
+                        if (order.status == 're'){
+                            transcribedStatus = "Refunded"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'ac'){
+                            transcribedStatus = "Auto-canceled"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'pc'){
+                            transcribedStatus = "Canceled"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'cc'){
+                            transcribedStatus = "Customer canceled"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'pd'){
+                            transcribedStatus = "Paid"
+                            span.style.color = 'green';
+                        }
+						span.innerText = transcribedStatus;
 						element.appendChild(service);
 						element.appendChild(customer);
 						element.appendChild(span);
 						block.addEventListener("click", update);
 
 						block.dataset.order_number = order.order_number;
-						block.dataset.customer_email = "Phone Contact: " + order.customer_phone;
+						block.dataset.customer_email = "Customer Contact: " + formatPhoneNumber(order.customer_phone);
 						block.dataset.message = order.message;
 						block.dataset.timestamp = "Date: " + order.timestamp;
 						block.dataset.schedule = order.schedule;
@@ -480,6 +507,10 @@ let preloaded = false;
 						}
 					} else {
 						id("no-ongoing-orders").classList.add("hidden");
+						var active= document.getElementsByClassName('active');
+            			for (var j = 0; j < active.length; j++) {
+            				active[j].style.color = '#1ecd97';
+            			}
 						let container = ce("div");
 						container.classList.add("slider-card");
 
@@ -1354,5 +1385,14 @@ let preloaded = false;
 		id('no').onclick = null
 		id('no').innerText = ""
 	}
+
+	function formatPhoneNumber(phoneNumberString) {
+      var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+      var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+      if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+      }
+      return null;
+    }
 
 })();
