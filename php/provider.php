@@ -249,7 +249,7 @@ $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? O
         }
 
         if ($total_disputes != 0.0){
-            $dispute_percentage = $total_disputes/$total_orders;
+            $dispute_percentage = ($total_disputes/$total_orders) * 100;
         }else{
             $dispute_percentage = 0.00;
         }
