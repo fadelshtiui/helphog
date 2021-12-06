@@ -544,7 +544,7 @@ let preloaded = false;
 						let h52 = ce("h5");
 						h52.style.color = 'black';
 						h52.style.fontWeight = "400";
-						h52.textContent = order.customer_phone;
+						h52.textContent = formatPhoneNumber(order.customer_phone);
 
 						let h53 = ce("h5");
 						h53.style.color = 'black';
