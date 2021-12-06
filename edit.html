@@ -1,804 +1,942 @@
-<!DOCTYPE html>
-<html lang="en">
+let guestOpen = false;
+let loginOpen = false;
+let providerId = 'none';
+let selected = false;
+let savePayment = true;
+let signedIn = false;
+let useCard = true;
+let paymentMethod;
 
-<head>
-  <meta charset="UTF-8">
-  <title>Order Details</title>
+window.addEventListener('load', function () {
+    for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'none';
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+     $('.modal-content').slideToggle();
+     id('city-state-comma').classList.add('hidden')
+     qs(".loader").classList.add("hidden");
+    //  document.getElementById("card-check").checked = true;
 
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+     $('#guest').on('click', function () {
 
+          id("username").value = "";
+          id("password").value = "";
 
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
-  <link rel='stylesheet' href='https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css'>
-  <link rel="stylesheet" href="css/datepicker.css">
+          if (!loginOpen) {
+               $('.modal-content').slideToggle();
+          }
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css'>
-  <link rel='stylesheet' href='https://cdn.linearicons.com/free/1.0.0/icon-font.min.css'>
+          guestOpen = true;
+          loginOpen = false;
 
-  <link rel="stylesheet" href="mobile-assets/css/header.css">
-  <link rel="stylesheet" href="mobile-assets/css/footer.css">
-  <link rel="stylesheet" href="css/time.css">
-  <link rel="stylesheet" href="css/edit.css">
-  <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/loading.css">
-  <link rel="stylesheet" href="css/popup.css">
-  <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/all.css">
+          id('guest').disabled = true
+          id('login').disabled = false
 
-  <link rel="stylesheet" href="mobile-assets/css/edit.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+     });
 
-  <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js'></script>
-    <script src='https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js'></script>
-    <script  src="js/datepicker.js"></script>
+     $('.modal-content').slideToggle();
 
 
-  <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>-->
-  <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>-->
-  <!--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>-->
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw&callback=initAutocomplete&libraries=places"
-    defer></script>
+     $('#login').on('click', function () {
 
-  <script src="js/common.js"></script>
-  <script src="https://js.stripe.com/v3/"></script>
-  <script src="js/constants.js"></script>
-  <script src="js/edit.js" defer></script>
-  <script src="js/google.js"></script>
-</head>
+          id("username").value = "";
+          id("password").value = "";
 
-<body>
-    <div class="modal-wrapper hidden" onclick="this.classList.add('hidden')">
-      <div class='modal'>
-        <div class='header'>
-          <span id="first"><i class="fas fa-exclamation-circle warning"></i></span>
-        </div>
-        <div class='content'>
-          <span id="warning-message"></span>
-        </div>
-        <div class='actions'>
-          <button onclick="this.parentElement.parentElement.parentElement.classList.add('hidden');"
-            class="secondary">OK</button>
-        </div>
-      </div>
-    </div>
-  <div style="display:none;">
-    <p id="dow"></p>
-    <p id="date"></p>
-    <p id="order"></p>
-    <p id="time"></p>
-  </div>
-  <div class="content">
-    <div id="hide">
-      <div id="arrow" class="arrow"></div>
-      <div class="pure-g-r">
-        <!-- Billing & shipping address -->
-        <div class="pure-u-1-1" id="one">
-          <div class="wrapper wrapper__delta">
-            <h2 class="__alpha">Details</h2>
-            <div class="result">
-              <div class="description-left">
-                <div style="padding:21px;">
-                  <span id="bold">Service:</span><span class="service" id="first"> </span>
-                  <p style="line-height: 5px;"></p>
-                  <span id="bold">Description:</span><span class="description" id="second"></span>
-                  <div id="options">
-                    <label for="quantity" id="quantity-label">How many providers do you need to assist you with this
-                      task?</label>
-                    <div id="quantity" include="form-input-select()">
-                      <select id="numpeople" required>
-                        <!--
-                                      This is how we can do "placeholder" options.
-                                      note: "required" attribute is on the select
-                                    -->
-                        <option value="1" hidden>1 person</option>
+          if (!guestOpen) {
+               $('.modal-content').slideToggle();
+          }
 
-                        <!-- normal options -->
-                        <option value="1">1 person</option>
-                        <option value="2">2 people</option>
-                        <option value="3">3 people</option>
-                        <option value="4">4 people</option>
-                        <option value="5">5 people</option>
-                      </select>
-                    </div>
-                    <label for="quantity2" id="hourlabel">At most how long would you need this assistance for? <b>Note:
-                        The provider cannot assist you for longer than this duration.</b></label>
-                    <div id="quantity2" include="form-input-select()">
-                      <select id="duration" required>
-                        <!--
-                                      This is how we can do "placeholder" options.
-                                      note: "required" attribute is on the select
-                                    -->
-                        <option value="1" hidden>At most 1 hour</option>
+          loginOpen = true;
+          guestOpen = false;
 
-                        <!-- normal options -->
-                        <option value="1" selected>At most 1 hour</option>
-                        <option value="2">1-2 hours</option>
-                        <option value="3">2-3 hours</option>
-                        <option value="4">3-4 hours</option>
-                        <option value="5">4-5 hours</option>
-                        <option value="6">5-6 hours</option>
-                        <option value="7">6-7 hours</option>
-                        <option value="8">7-8 hours</option>
-                        <option value="9">8-9 hours</option>
-                        <!--<option value="8" selected>Until Completion</option>-->-->
-                      </select>
-                    </div>
-                  </div>
-                  <textarea id="message" cols="50" maxlength="1000"
-                    style="width: 100%; height: 69px; border-radius: 6px; resize: none;"
-                    placeholder="Please describe exactly what needs to be done..."></textarea>
-                  <a id="advanced-options">Advanced options</a>
-                  <div id="options-tab">
-                    <label for="quantity3" id="cancelbufferlabel">If your order is not claimed, we will automatically
-                      cancel it. How many
-                      hours before the scheduled time would you like to be notified?</label>
-                    <div id="quantity3" include="form-input-select()">
-                      <select id="cancelbuffer" required>
-                        <!--
-                                      This is how we can do "placeholder" options.
-                                      note: "required" attribute is on the select
-                                    -->
-                        <option value="0">Default</option>
+          id('guest').disabled = false
+          id('login').disabled = true
+     });
 
-                        <!-- normal options -->
-                        <option value="60">1 hour</option>
-                        <option value="120">2 hours</option>
-                        <option value="240">4 hours</option>
-                        <option value="480">8 hours</option>
-                        <option value="720">12 hours</option>
-                        <option value="1440">24 hours</option>
-                        <option value="2880">48 hours</option>
-                        <option value="4320">72 hours</option>
-                      </select>
-                    </div>
+     var x = document.getElementById("options-tab");
+     x.style.display = "none";
 
-                    <label for="taskerinputField" id="taskerlabel">Would like to have the same provider?</label>
-                    <div id="taskerinputField">
-                      <input id="taskerinput" placeholder="Provider ID#" type="text" />
-                      <label id="providerSelected" class="hidden" style="font-weight: bolder;"><span
-                          id="provider"></span> has been selected.</label>
-                      <button style="margin-left: 30px; width: 100px;" class="secondary hidden"
-                        id="removeprovider">Remove</button>
-                      <button style="margin-left: 30px; width: 100px;" class="secondary"
-                        id="checkprovider">Select</button>
-                    </div>
-                    <label id="errorlabel" class="hidden" style="margin-top: 10px;"></label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="pure-u-1-4" id="location">
-          <div class="pure-u-1-1" id="two">
-            <div class="wrapper wrapper__alpha">
-              <h2 class="__alpha">Enter Address</h2>
-              <div id="address-content-area" class="content-area">
+     $('#advanced-options').on('click', function () {
+          if (x.style.display === "none") {
+               x.style.display = "block";
+          } else {
+               x.style.display = "none";
+          }
+     });
 
-                <div id="locationField">
-                  <input id="autocomplete" placeholder="Enter your location" type="text" />
-                </div>
-                <div id="addressDisplay" class="locationDisplay">
-                  <span id="current-address"></span>
-                  <br class="address-spacing">
-                  <span id="current-city"></span><span id="city-state-comma">, </span><span id="current-state"></span>
-                  <br class="address-spacing">
-                  <span id="current-zip"></span>
-                  <br>
+     $('.popupCloseButton').click(function () {
+          $('.hover_bkgr_fricc').hide();
+          if (loginOpen || guestOpen) {
+               $('.modal-content').slideToggle();
+          }
+          id('guest').disabled = false
+          id('login').disabled = false
+     });
 
-                </div>
-                <div class="centering">
-                  <a class="editbutton" id="edit">Edit</a>
-                </div>
-                <table id="address" style="display: none;">
-                  <tr>
-                    <td class="label">Street Address</td>
-                    <td class="slimField">
-                      <input class="field" id="street_number" disabled="true" />
-                    </td>
-                    <td class="wideField" colspan="2">
-                      <input class="field" id="route" disabled="true" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="label">City</td>
-                    <td class="wideField" colspan="3">
-                      <input class="field" id="locality" disabled="true" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="label">State</td>
-                    <td class="slimField">
-                      <input class="field" id="administrative_area_level_1" disabled="true" />
-                    </td>
-                    <td class="label">Zip code</td>
-                    <td class="wideField">
-                      <input class="field" id="postal_code" disabled="true" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="label">Country</td>
-                    <td class="wideField" colspan="3">
-                      <input class="field" id="country" disabled="true" />
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+     id("close").onclick = function () {
+          document.documentElement.style.overflow = "overlay";
+          qs("#button").disabled = false;
+          //   var tdtag = qsa('.trtag')
+          //       tdtag.forEach(el => {
+          //           el.classList.remove('visibility');
+          //           el.classList.add('notvisible');
+          //   })
 
-        <div class="pure-u-1-1" id="time-section">
-          <div id="choose-your-time" class="wrapper wrapper__delta">
-            <h2 class="__alpha">Choose Date</h2>
-            <div class="date-wrapper">
-              <div class="date-container">
-                <div class="row">
-                    <div class='col-sm-12'>
-                        <div class="form-group">
-                            <div id='datetimepicker'></div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-            <!-- partial -->
+     }
 
-          </div>
-        </div>
-        <div class="pure-u-1-1" id="time-section">
-        	<div id="choose-your-time" class="wrapper wrapper__delta timePicker">
-        		<h2 class="__alpha">Choose Time</h2>
-        		<div class='some-page-wrapper'>
-        			<svg class="loader" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        				<circle class="internal-circle" cx="60" cy="60" r="30"></circle>
-        				<circle class="external-circle" cx="60" cy="60" r="50"></circle>
-        			</svg>
-        			<div class='row' style="margin-left:0;">
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="12:00 am" data-standardTime="00:00"
-        							data-availabilityValue="0">
-        						12:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="12:30 am" data-availabilityValue="0.5">
-        						12:30 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="1:00 am" data-availabilityValue="1">
-        						1:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="1:30 am" data-availabilityValue="1.5">
-        						1:30 am
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="2:00 am" data-availabilityValue="2">
-        						2:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="2:30 am" data-availabilityValue="2.5">
-        						2:30 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="3:00 am" data-availabilityValue="3">
-        						3:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="3:30 am" data-availabilityValue="3.5">
-        						3:30 am
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="4:00 am" data-availabilityValue="4">
-        						4:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="4:30 am" data-availabilityValue="4.5">
-        						4:30 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="5:00 am" data-availabilityValue="5">
-        						5:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="5:30 am" data-availabilityValue="5.5">
-        						5:30 am
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="6:00 am" data-availabilityValue="6">
-        						6:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="6:30 am" data-availabilityValue="6.5">
-        						6:30 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="7:00 am" data-availabilityValue="7">
-        						7:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="7:30 am" data-availabilityValue="7.5">
-        						7:30 am
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row'>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="8:00 am" data-availabilityValue="8">
-        						8:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="8:30 am" data-availabilityValue="8.5">
-        						8:30 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="9:00 am" data-availabilityValue="9">
-        						9:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="9:30 am" data-availabilityValue="9.5">
-        						9:30 am
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="10:00 am" data-availabilityValue="10">
-        						10:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="10:30 am" data-availabilityValue="10.5">
-        						10:30 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="11:00 am" data-availabilityValue="11">
-        						11:00 am
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="11:30 am" data-availabilityValue="11.5">
-        						11:30 am
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="12:00 pm" data-availabilityValue="12">
-        						12:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="12:30 pm" data-availabilityValue="12.5">
-        						12:30 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="1:00 pm" data-availabilityValue="13">
-        						1:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="1:30 pm" data-availabilityValue="13.5">
-        						1:30 pm
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="2:00 pm" data-availabilityValue="14">
-        						2:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="2:30 pm" data-availabilityValue="14.5">
-        						2:30 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="3:00 pm" data-availabilityValue="15">
-        						3:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="3:30 pm" data-availabilityValue="15.5">
-        						3:30 pm
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="4:00 pm" data-availabilityValue="16">
-        						4:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="4:30 pm" data-availabilityValue="16.5">
-        						4:30 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="5:00 pm" data-availabilityValue="17">
-        						5:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="5:30 pm" data-availabilityValue="17.5">
-        						5:30 pm
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="6:00 pm" data-availabilityValue="18">
-        						6:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="6:30 pm" data-availabilityValue="18.5">
-        						6:30 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="7:00 pm" data-availabilityValue="19">
-        						7:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="7:30 pm" data-availabilityValue="19.5">
-        						7:30 pm
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="8:00 pm" data-availabilityValue="20">
-        						8:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="8:30 pm" data-availabilityValue="20.5">
-        						8:30 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="9:00 pm" data-availabilityValue="21">
-        						9:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="9:30 pm" data-availabilityValue="21.5">
-        						9:30 pm
-        						</button>
-        					</div>
-        				</div>
-        				<div class='row' style="margin-left:0;">
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="10:00 pm" data-availabilityValue="22">
-        						10:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="10:30 pm" data-availabilityValue="22.5">
-        						10:30 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="11:00 pm" data-availabilityValue="23">
-        						11:00 pm
-        						</button>
-        					</div>
-        					<div class='column'>
-        						<button class='timeslot available-column' data-militaryTime="11:30 pm" data-availabilityValue="23.5">
-        						11:30 pm
-        						</button>
-        					</div>
-        				</div>
-        			</div>
-        		</div>
-        	</div>
-        </div>
-      <div id="centerdiv">
-        <button class="trigger_popup_fricc primary-green" id="button">Checkout</button>
-        <div class="box">
-          <!--<a class="button" href="#popup1">Pop up</a>-->
-        </div>
-      </div>
-      <div id="popup1" class="overlay" style="overflow:auto;">
-        <div class="popup">
-          <center>
+     id("checkprovider").onclick = function () {
+          const urlParams = new URLSearchParams(window.location.search)
+          id("errorlabel").classList.add("hidden")
+          id("providerSelected").classList.add("hidden")
+          if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
+               if (id("taskerinput").value !== "") {
+                    providerId = id("taskerinput").value;
+                    checkAvailability('false', updateTimePicker, true);
+               } else {
+                    id("errorlabel").classList.remove("hidden");
+                    id("errorlabel").innerText = "No provider ID entered.";
+               }
 
-            <table id="annoying" align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-              style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;text-align:left ;color:#191919 ;"
-              class="">
-              <tr>
-                <td align="center" valign="top" id="mainTable"
-                  style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:24px 24px 48px;">
-                  <table border="0" cellpadding="0" cellspacing="0"
-                    style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ; text-align:left ;color:#191919 ;"
-                    class="templateContainer">
+          } else {
+               id("errorlabel").classList.remove("hidden");
+               id("errorlabel").innerText = "Please enter your full address below first.";
+          }
+     }
 
-                    <tr>
+     id("removeprovider").onclick = function () {
+          toggleSelected();
+     }
 
-                      <td align="center" valign="top"
-                        style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;">
-                        <a class="close" id="close" href="#">&times;</a>
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                          style="border: hidden; border-radius: 15px; box-shadow:0 0 20px 0 rgba(0, 0, 0, 0.1), 0 5px 5px 0 rgba(0, 0, 0, 0.1); width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ; text-align:center ;color:#191919 ;background-color:#FFFFFF;border-top:none;"
-                          id="templateContent" class="text-align-center">
-                          <tr class="trtag notvisible">
-                            <td valign="top" id="templateHeaderCell"
-                              style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;padding-top:23px;padding-right:24px;padding-bottom:23px;padding-left:24px;">
-                              <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ; text-align:center ;color:#191919 ;"
-                                class="text-align-center">
-                                <tr>
-                                  <h5 style="font-size:2.2rem; margin-top: 27px;">Checkout</h5>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr class="trtag notvisible">
-                            <td align="left" valign="top" id="contentBody"
-                              style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0px 36px 0px;">
-                              <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;text-align:left ;color:#191919 ;">
-                                <tr>
-                                  <td id="special-td" align="left" valign="top" class="sans-14-regular color-gray-dark"
-                                    style="
-    align-self: center;
-    box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1), 0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
-    border-radius: 7px;
-    padding: 40px; padding-bottom: 25px; padding-top: 25px; -webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;font-size:14px;line-height:20px;font-weight:400;color:#666666 ;">
-                                    Order for: <span id="popupService"
-                                      style="font-weight: 600;"></span>
-                                    <br><br>Message:<span id="popupMessage" style="font-weight:600;"></span>
-                                    <br><br>Address:<span id="popupAddress" style="font-weight:600;"></span>
-                                    <br><br>Date/Time:<span id="popupDate" style="font-weight:600;"></span>
-                                    <span id="popupProvider1" style="font-weight:400;"></span><span
-                                      id="popupProvider" style="font-weight:600;"></span>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr class="trtag notvisible">
-                            <td valign="top" id="contentTable"
-                              style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;padding-top:26px;padding-right:36px;padding-bottom:26px;padding-left:36px;">
+     id('locationField').classList.add('hidden')
 
-                              <form id="payment-form">
-                                <table border="0" width="100%"
-                                  style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;text-align:left ;color:#191919 ;border-bottom:1px solid #CCCCCC;"
-                                  cellpadding="0" cellspacing="0" class="contentItemTable">
-                                  <tr>
-                                    <td id="date" width="100%"
-                                      style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0; font-size:14px;line-height:20px;font-weight:500;"
-                                      class="contentItemColumn sans-14-bold"></td>
-                                  </tr>
-                                  <tr>
-                                    <td width="80%" class="contentItemColumn sans-14-bold text-align-left"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px;text-align:left;font-size:14px;line-height:20px;font-weight:700; color: #black;">
-                                      Payment</td>
+     id('edit').addEventListener('click', editAddress)
+     id('addressDisplay').addEventListener('click', editAddress)
 
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      style="height:8px;line-height:8px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;">
-                                    </td>
-                                  </tr>
-                                </table>
-                                <table border="0" width="100%"
-                                  style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ; text-align:left ;color:#191919 ;border-bottom:1px solid #CCCCCC;"
-                                  cellpadding="0" cellspacing="0" class="contentItemTable">
-                                  <tr>
-                                    <td width="80%" class="contentItemColumn sans-14-bold text-align-left"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px;text-align:left;font-size:14px;line-height:20px;font-weight:500; color: #black;">
-                                      Providers</td>
-                                    <td width="20%" class="price contentItemColumn sans-14-bold text-align-right"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0; padding-top: 10px; text-align:right ; font-size:14px;line-height:20px;font-weight:500; color: #black;">
-                                      <span id="popupProviders"></span>
-                                    </td>
-                                  </tr>
-                                  <tr>
+     const urlParams = new URLSearchParams(window.location.search)
+
+     let today = new Date();
+     let now = today.getHours() + ":" + today.getMinutes()
+
+     id('arrow').addEventListener('click', navigateBack)
+
+     let dom = today.toUTCString().substring(4, 7)
+     let month = today.toUTCString().substring(8, 11)
+     let year = today.toUTCString().substring(12, 16)
+
+     let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    //  id('dow').value = today.toDateString().substring(0, 3)
+    //  id('date').value = today.toDateString().substring(4, 15)
+
+     let timeslots = qsa('.timeslot')
+     for (let i = 0; i < timeslots.length; i++) {
+          let slot = timeslots[i];
+          slot.onclick = updateTime;
+     }
+
+     initTextFields();
+
+     id('duration').onchange = function () {
+          checkAvailability('false', updateTimePicker, false);
+     }
+     id('numpeople').onchange = function () {
+          if (id('numpeople').value == 1) {
+               id('taskerinputField').classList.remove("hidden");
+               id('taskerlabel').classList.remove("hidden");
+               id('taskerinput').classList.remove("hidden");
+               id('errorlabel').classList.remove("hidden");
+               id('checkprovider').classList.remove("hidden");
+
+          }
+          else {
+               providerId = "none";
+               id('taskerlabel').classList.add("hidden");
+               id('removeprovider').classList.add("hidden");
+               id('taskerinput').classList.add("hidden");
+               id('errorlabel').classList.add("hidden");
+               id('providerSelected').classList.add("hidden");
+               id('checkprovider').classList.add("hidden");
+          }
+          checkAvailability('false', updateTimePicker, false);
+     }
+
+    //  checkAvailability('false', updateTimePicker, false);
+
+     id("submit-login").onclick = submitLogin;
+
+     id("guest").onclick = function () {
+          id("email-error").innerText = "";
+          id("password-error").innerText = "";
+
+          const inputElement = id('username');
+
+          inputElement.addEventListener('keydown', enforceFormat);
+          inputElement.addEventListener('keyup', formatToPhone);
+
+          id("username").value = "";
+          id("password").value = "";
+
+          id("username").placeholder = "Phone Number";
+          id("password").placeholder = "Email";
+          id("password").setAttribute("type", "text");
+          id("password").innerText = "";
+          id("password").innerText = "";
+          id("noaccount").classList.add("hidden");
+          id("submit-login").onclick = guestLogin;
+     };
+
+     id("login").onclick = function () {
+          id("email-error").innerText = "";
+          id("password-error").innerText = "";
+
+          const inputElement = id('username');
+
+          id("username").value = "";
+          id("password").value = "";
+
+          inputElement.removeEventListener('keydown', enforceFormat);
+          inputElement.removeEventListener('keyup', formatToPhone);
+
+          id("username").placeholder = "Email";
+          id("password").placeholder = "Password";
+          id("password").setAttribute("type", "password");
+          guest = false;
+          id("noaccount").classList.remove("hidden");
+          id("submit-login").onclick = submitLogin;
+     };
+
+     // ("guest").click();
+
+     let wage = urlParams.get('wage')
+
+     if (wage == "per") {
+          id("hourlabel").style.display = "none";
+          id("quantity2").style.display = "none";
+     }
+
+     id('button').addEventListener('click', validateInput);
 
 
-                                  </tr>
-                                  <tr>
-                                    <td colspan="2"
-                                      style="height:8px;line-height:8px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;">
-                                    </td>
-                                  </tr>
-                                </table>
-                                <table border="0" width="100%"
-                                  style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ; text-align:left ;color:#black ;border-bottom:1px solid #CCCCCC;"
-                                  cellpadding="0" cellspacing="0" class="contentItemTable color-gray-medium">
+     if (id('current-address').innerText == '' || id('current-city').innerText == '' || id('current-state').innerText == '' || id('current-zip').innerText == '') {
+          editAddress();
+     }
+     checkProviders();
 
-                                  <tr>
-                                    <td width="20%" class="contentItemColumn sans-14-bold text-align-left"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px;text-align:left; font-size:14px;line-height:20px;font-weight:500;">
-                                      Subtotal</td>
-                                    <td width="80%" class="price contentItemColumn sans-14-bold text-align-right"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;padding-top: 10px; text-align:right ;font-size:14px;line-height:20px;font-weight:500;">
-                                      <span id="popupSubtotal"></span>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                  </tr>
-                                  <tr>
-                                  </tr>
-                                  <tr>
-                                    <td colspan="2"
-                                      style="height:8px;line-height:8px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;">
-                                    </td>
-                                  </tr>
-                                </table>
-                                <table border="0" width="100%"
-                                  style="margin-bottom: -19px; width:100% !important;border-bottom:none;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;text-align:left ;color:#191919 ;"
-                                  cellpadding="0" cellspacing="0" class="contentItemTable">
-                                  <tr>
-                                    <td colspan="2"
-                                      style="height:12px;line-height:12px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;">
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td width="50%" class="contentItemColumn sans-14-bold text-align-left"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;text-align:left ;font-size: 20px;line-height:20px;font-weight:500; padding-bottom:60px;">
-                                      Estimated Cost*</td>
-                                    <td width="50%" class="contentItemColumn sans-14-bold text-align-right price"
-                                      style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:4px 0;text-align:right;font-size: 20px;;line-height:20px;font-weight:500; padding-bottom:60px;">
-                                      $<span id="popupTotal"></span><span id="taxRate"></span></td>
-                                  </tr>
-                                </table>
+//      var checkbox1 = qs("input[name=save-card]");
 
-                                <div id="saved-card" class="previous-card">
-                                    <span id="card-type">Visa</span><span id=change>change</span><span id="last-four"> ending in 3926</span>
-                                </div>
+// 		checkbox1.addEventListener('change', function () {
+// 			checkbox();
+// 	});
 
-                                <div id="card-element" class="new-card">
-                                  <!--Stripe.js injects the Card Element-->
-                                </div>
-                                <!--<div id="save-card" class="new-card">-->
-                                <!--    <input type="checkbox" id="card-check" name="save-card" value="save"><span id="checkbox-text">Save card for future purchases</span>-->
-                                <!--</div>-->
-                                <p id="card-error" style="min-height:17px;" role="alert"></p>
-                                <p class="result-message hidden">
-                                  Payment succeeded, see the result in your
-                                  <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
-                                </p>
+});
 
-                                <button id="submit" class="primary-green">
-                                  <div class="spinner hidden" id="spinner"></div>
-                                  <span id="button-text">Place Order</span>
-                                </button>
-                                <div id="agreement">
-                                  By clicking place order, you agree to our <a class="standard"
-                                    onclick="window.open('privacy')">privacy
-                                    policy</a> and <a class="standard" onclick="window.open('terms')">terms of use</a>.
-                                </div>
+function checkbox(){
+    var x = $("#email-notification").is(":checked");
+    if (!x){
+        savePayment = false;
+    }else{
+        savePayment = true;
+    }
+}
 
-                              </form>
-                              <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;table-spacing:0;padding:0;border-collapse:collapse ;text-align:center ;color:#191919 ;"
-                                class="text-align-center">
-                                <tr>
-                                  <h5 id="terms" style="font-size:0.8rem; margin-top: 27px; color: #999999">
-                                    *Estimated cost is calculated based on the amount of hours the tasks is expected to
-                                    take. If your task takes less time or more time, the charge will decrease or
-                                    increase respectively. You will not be charged until your order is completed. If you
-                                    cancel your task within 24 hours of the scheduled start time, you will be billed a
-                                    $15 cancellation fee. For automotive repair tasks, estimated cost does not include
-                                    costs of replacement parts/accessories.</h5>
-                                </tr>
-                              </table>
-                              <!--<button class="trigger_popup_fricc button" id="final-button">Place Order</button>-->
-                            </td>
+function editAddress() {
+     id('locationField').classList.remove('hidden')
+     id('addressDisplay').classList.add('hidden')
+     id('edit').classList.add('hidden')
+     id('autocomplete').classList.remove('hidden')
+}
 
-                          </tr>
-                        </table>
+function initTextFields() {
+     let service = qs(".service");
+     let description = qs(".description");
 
-                      </td>
-                    </tr>
+     let queryString = window.location.search
+     const urlParams = new URLSearchParams(queryString)
 
-                  </table>
-                </td>
-              </tr>
-              <tr>
-              </tr>
-            </table>
-          </center>
-        </div>
-      </div>
-      <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
-      <div class="hover_bkgr_fricc">
-        <span class="helper"></span>
-        <div>
-          <div class="login-modal">
-            <div class="popupCloseButton">
-              <img src="assets/images/x.png" id="x" />
-            </div>
-            <div class="modal-inner">
-              <div class="modal-top">
-                <i class="material-icons">exit_to_app</i><br />
-                <h4>How would you like to checkout?</h4>
-              </div>
-              <div class="modal-content" style="box-shadow: none;">
-                <fieldset class="form-group">
-                  <input id="username" class="form-control username" type="text" placeholder="Username"
-                    required="required" />
-                  <span id="email-error" class="error"></span>
-                </fieldset>
-                <fieldset class="form-group">
-                  <input id="password" class="form-control" type="text" placeholder="Password" required="required" />
-                  <span id="password-error" class="error"></span>
-                </fieldset>
-                <button id="submit-login" style="margin-bottom: 10px;" class="primary-green">Submit</button><span
-                  id="noaccount">
-                  <a href="form">Don't have an account?</a></span>
-                <div class="register-slide">
-                  <a class="close-register"><i class="lnr lnr-cross"></i></a>
-                  <p>Click the "Create Account" checkbox to create an account during checkout.</p>
-                  <a class="close-modal btn btn-primary">Begin Checkout</a>
-                </div>
-              </div>
-              <div class="modal-bottom">
-                <button class="primary-green" id="login">Login</button>
-                <button class="secondary" id="guest">Checkout as Guest</button>
-              </div>
-            </div>
-          </div>
-          <div class="overlay"></div>
-          <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>-->
-          <!-- <script  src="js/popup.js"></script> -->
-        </div>
-      </div>
-    </div>
-  </div>
+     service.innerText = service.innerText + "" + urlParams.get('service');
+     description.innerText = description.innerText + "" + urlParams.get('description');
 
-  <footer id="footer">
+     id('duration').value = 1
+     id('numpeople').value = 1
 
-       <ul class="copyright">
-            <li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
-            <li><a href="privacy">Privacy Policy</a></li>
-            <li><a href="terms">Terms of Use</a></li>
-            <li><a href="cookie">Cookie Policy</a></li>
-       </ul>
+     if (urlParams.get('address')) {
+          id('current-address').innerText = urlParams.get('address')
+     }
+
+     if (urlParams.get('city')) {
+          id('current-city').innerText = urlParams.get('city')
+     }
+
+     if (urlParams.get('state')) {
+          id('current-state').innerText = urlParams.get('state')
+     }
+
+     if (urlParams.get('zip')) {
+          id('current-zip').innerText = urlParams.get('zip')
+     }
+
+     if (urlParams.get('city') && urlParams.get('state')) {
+          id('city-state-comma').classList.remove('hidden')
+     }
+
+     if (urlParams.get('remote') == "y") {
+          id("location").classList.add('hidden')
+          id("current-address").value = "Online (remote)";
+          id("current-city").value = " ";
+          id("current-state").value = " ";
+          id("current-zip").value = " ";
+     }
+
+}
+
+function toggleSelected() {
+     if (selected) {
+          id("taskerinput").classList.remove("hidden")
+          id("checkprovider").classList.remove("hidden")
+          id("removeprovider").classList.add("hidden")
+          id("providerSelected").classList.add("hidden")
+          id("taskerinput").innerText = "";
+          providerId = 'none';
+          checkAvailability('false', updateTimePicker, false);
+          selected = false
+     } else {
+          id("taskerinput").classList.add("hidden")
+          id("checkprovider").classList.add("hidden")
+          id("removeprovider").classList.remove("hidden")
+          selected = true
+     }
+}
+
+function navigateBack() {
+
+     const urlParams = new URLSearchParams(window.location.search)
+
+     let back = urlParams.get('back')
+     let url = back + '?';
+     if (urlParams.get('zip')) {
+          url += 'zip=' + urlParams.get('zip');
+     }
+     if (back == 'details') {
+          url += '&service=' + urlParams.get('service')
+     }
+
+     if (urlParams.get('search')) {
+          url += '&search=' + urlParams.get('search')
+     } else if (urlParams.get('category')) {
+          url += '&category=' + urlParams.get('category')
+     }
+
+     if (urlParams.get('address')) {
+          url += '&address=' + urlParams.get('address')
+     }
+
+     if (urlParams.get('city')) {
+          url += '&city=' + urlParams.get('city')
+     }
+
+     if (urlParams.get('state')) {
+          url += '&state=' + urlParams.get('state')
+     }
+
+     url += '&origin=' + urlParams.get('origin')
+
+     window.location = url
+}
+
+async function checkAvailability(updatecontactlist, callback, updateprovider) {
+
+     id('button').disabled = true;
+
+     const urlParams = new URLSearchParams(window.location.search)
+
+     let service = urlParams.get('service')
+     let schedule = "";
+     if (updatecontactlist == 'true') {
+          schedule = id('date').value + ' ' + id('time').value;
+     } else {
+          schedule = id('date').value
+     }
+
+     let numpeople = id('numpeople').value
+     let duration = id('duration').value
+     let remote = urlParams.get('remote')
+
+     let tz = jstz.determine();
+     let timezone = tz.name();
+
+     let fullAddress = (id('current-address').innerText + '+' + id('current-city').innerText + '+' + id('current-state').innerText + '+' + id('current-zip').innerText).replace(/ /gi, '+')
+
+     let data = new FormData();
+     data.append('address', fullAddress)
+     data.append('tz', timezone);
+     data.append("service", service);
+     data.append("numpeople", numpeople);
+     data.append("schedule", schedule);
+     data.append("duration", duration);
+     data.append("remote", remote);
+     data.append('updatecontactlist', updatecontactlist);
+     data.append('id', providerId);
+     data.append('session', getSession())
+     let url = "php/checkavailability.php";
+     addLoader();
+     let response = await fetch(url, { method: "POST", body: data })
+     await checkStatus(response);
+     response = await response.json();
+     if (response.error == 'Provider with the inputted ID does not exist or does not provide this service' || response.error == 'The selected provider is unavailable for this order') {
+          id("errorlabel").classList.remove("hidden");
+          if (id('numpeople').value != 1) {
+               id("errorlabel").classList.add("hidden");
+          }
+          providerId = "none"
+          id("errorlabel").innerText = response.error;
+          removeLoader();
+     } else {
+          if (response.provider != '') {
+               id('provider').innerText = response.provider
+          } else {
+               id('provider').innerText = "Provider #" + providerId;
+          }
+          checkProviders();
+          callback(response.availability);
+          removeLoader();
+     }
+     return response;
+}
+
+function addLoader() {
+     qs(".loader").classList.remove("hidden");
+     qs(".timePicker").classList.add("darked");
+}
+
+function removeLoader() {
+     qs(".loader").classList.add("hidden");
+     qs(".timePicker").classList.remove("darked");
+}
+
+function updateTimePicker(response) {
+
+     let slots = qsa(".timeslot")
+
+     for (let i = 0; i < slots.length; i++) {
+
+          let slot = slots[i]
+          let slotVal = Math.floor(slot.getAttribute('data-availabilityValue'));
+
+          let upperBound = slotVal;
+          if (slot.getAttribute('data-availabilityValue') % 1 != 0) { // decimal number
+               upperBound = Math.ceil(slot.getAttribute('data-availabilityValue'))
+          }
+
+          if (response[slotVal] == '0' || response[upperBound] == '0') {
+               slot.classList.remove('available-column');
+               slot.classList.add('unavailable-column');
+               slot.classList.remove('time-selected')
+               // slot.setAttribute('title', 'Unavailable at this time')
+          } else {
+               slot.classList.remove('unavailable-column');
+               slot.classList.add('available-column');
+          }
+     }
+
+     let today = new Date();
+     let newdate = new Date(id('date').value)
+
+     if (newdate.getFullYear() == today.getFullYear() && newdate.getMonth() == today.getMonth() && newdate.getDate() == today.getDate()) {
+          let currentHour = today.getHours();
+          let slots = qsa(".timeslot")
+          for (let i = 0; i < slots.length; i++) {
+
+               let slot = slots[i]
+               let slotVal = Math.floor(slot.getAttribute('data-availabilityValue'));
+
+               if (slotVal <= currentHour) {
+                    slot.classList.remove('available-column');
+                    slot.classList.add('unavailable-column');
+                    slot.classList.remove('time-selected')
+
+               }
+          }
+     }
+
+     id('button').disabled = false;
+}
 
 
-  </footer>
-</body>
+function updateTime() {
+     const urlParams = new URLSearchParams(window.location.search)
 
-</html>
+     if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
+          if (this.classList.contains("available-column")) {
+
+               let timeslots = qsa('.timeslot')
+               for (let i = 0; i < timeslots.length; i++) {
+                    let slot = timeslots[i];
+                    slot.classList.remove("time-selected");
+               }
+
+               this.classList.add("time-selected")
+
+               id('time').value = this.getAttribute('data-militaryTime')
+          }
+     } else {
+          id('warning-message').innerText = "Please select a full address."
+          qs('.modal-wrapper').classList.remove('hidden')
+     }
+
+}
+
+async function validateInput() {
+
+     const urlParams = new URLSearchParams(window.location.search)
+
+     if ((id("current-address").innerText == "" || id("current-city").innerText == "" || id("current-state").innerText == "" || id("current-zip").innerText == "") && urlParams.get('remote') == 'n') {
+          id('warning-message').innerText = "Please select a full address."
+          qs('.modal-wrapper').classList.remove('hidden')
+          return;
+     }
+
+     let timeSelected = false;
+     let timeslots = qsa('.timeslot')
+     for (let i = 0; i < timeslots.length; i++) {
+          let slot = timeslots[i];
+          if (slot.classList.contains("time-selected")) {
+               timeSelected = true;
+          }
+     }
+     if (!timeSelected) {
+          id('warning-message').innerText = "Please select a time for your order."
+          qs('.modal-wrapper').classList.remove('hidden')
+          return
+     }
+
+     let data = new FormData();
+     data.append("session", getSession());
+     let url = "php/session.php";
+     let response = await fetch(url, { method: "POST", body: data })
+     await checkStatus(response)
+     response = await response.json();
+
+     if (response.validated == "false") {
+          signedIn = false;
+          $('.hover_bkgr_fricc').show();
+
+     } else {
+          signedIn = true;
+          initModal();
+
+     }
+
+}
+
+function submitLogin() {
+     let data = new FormData();
+     let email = id("username").value.toLowerCase();
+     let password = id("password").value;
+     data.append("email", email);
+     data.append("password", password);
+     let url = "php/signin.php";
+     fetch(url, { method: "POST", body: data })
+          .then(checkStatus)
+          .then(res => res.json())
+          .then(submitLoginHelper)
+          .catch(console.log);
+}
+
+function submitLoginHelper(response) {
+     if (response.emailerror == "true") {
+          id("email-error").innerText = "*Email not found.";
+     } else if (response.emailerror == "empty") {
+          id("email-error").innerText = "*Required field";
+     } else {
+          id("email-error").innerText = "";
+     }
+
+     if (response.passworderror == "true") {
+          id("password-error").innerText = "*Incorrect Password.";
+     } else if (response.passworderror == "empty") {
+          id("password-error").innerText = "*Required field";
+     } else {
+          id("password-error").innerText = "";
+     }
+
+     if (response.verified == "n") {
+          id('warning-message').innerText = "Your account has not yet been verified. Please check your email for a verification email."
+          qs('.modal-wrapper').classList.remove('hidden')
+     } else if (response.emailerror == "" && response.passworderror == "") {
+
+          $('.hover_bkgr_fricc').hide();
+
+          document.cookie = "session=" + response.session + ";";
+          initModal();
+          signedIn = true;
+     }
+}
+
+function checkProviders() {
+     let data = new FormData();
+     let service = qs(".service").innerText
+     data.append("service", service);
+     data.append("id", providerId);
+     let url = "php/providers.php";
+     fetch(url, { method: "POST", body: data })
+          .then(checkStatus)
+          .then(res => res.json())
+          .then(providersHelper)
+          .catch(console.log);
+}
+
+function providersHelper(response) {
+     if (response.providers != 0) {
+          qs("#quantity").classList.add("hidden");
+          qs("#quantity-label").classList.add("hidden");
+     }
+     if (providerId != "none") {
+          id("providerSelected").classList.remove("hidden");
+          id("errorlabel").classList.add("hidden");
+          id('taskerinput').classList.add("hidden");
+
+          if (selected == false) {
+               toggleSelected()
+          }
+     } else if (id('numpeople').value != 1) {
+          id('taskerlabel').classList.add("hidden");
+          id('removeprovider').classList.add("hidden");
+          id('taskerinput').classList.add("hidden");
+          id('errorlabel').classList.add("hidden");
+          id('providerSelected').classList.add("hidden");
+          id('checkprovider').classList.add("hidden");
+     }
+     for (i = response.available + 1; i <= 5; i++) {
+          $("#numpeople option[value=" + i + "]").attr('disabled', 'disabled')
+     }
+}
+
+function guestLogin() {
+
+     let data = new FormData();
+     data.append("email", id("password").value);
+     data.append("phone", id("username").value.replace(/\D/g, ''));
+     let url = "php/checkguest.php";
+     fetch(url, { method: "POST", body: data })
+          .then(checkStatus)
+          .then(res => res.json())
+          .then(guestLoginHelper)
+          .catch(console.log);
+
+}
+
+function guestLoginHelper(response) {
+     if (response.phoneerror != "") {
+          id("email-error").innerText = response.phoneerror;
+     }
+     if (response.emailerror != "") {
+          id("password-error").innerText = response.emailerror;
+     }
+
+     if (response.emailerror == "" && response.phoneerror == "") {
+          $('.hover_bkgr_fricc').hide();
+          id("email-error").innerText = "";
+          id("password-error").innerText = "";
+          signedIn = true;
+          initModal();
+     }
+
+}
+
+function generateOrderNumber() {
+     let dateString = Math.floor(Date.now() / 1000).toString();
+     let now = dateString + Math.floor(1000 + Math.random() * 9000);
+     return [now.slice(0, 4), now.slice(4, 10), now.slice(10, 14)].join('-');
+}
+
+function initModal() {
+
+     var tdtag = qsa('.trtag')
+     tdtag.forEach(el => {
+          el.classList.remove('visibility');
+          el.classList.add('notvisible');
+     })
+
+
+
+
+     id('order').value = generateOrderNumber()
+
+     document.documentElement.style.overflow = "hidden";
+     const urlParams = new URLSearchParams(window.location.search)
+
+     let cost = urlParams.get('price')
+     let estimate;
+     if (urlParams.get('wage') == 'per') {
+          estimate = id("numpeople").value * cost;
+     } else {
+          estimate = id("numpeople").value * cost * ((id("duration").value) - 1) + "-$" + id("numpeople").value * cost * id("duration").value;
+     }
+
+     let time = id('time').value
+
+     let message = "(No message)"
+     if (id("message").value != "") {
+          message = id("message").value;
+     }
+
+     let people = "provider"
+     if (id("numpeople").value > 1) {
+          people = "providers"
+     }
+
+     id("terms").innerText = "*You will not be charged until your order is completed, but your funds may be placed on hold. If you cancel your task within 24 hours of the scheduled start time, you will be billed a $15 cancellation fee. Estimated cost does not include costs of replacement parts/accessories."
+
+     id("popupService").innerText = qs(".service").innerText;
+     id("popupMessage").innerText = " " + message;
+     id("popupDate").innerText = " " + formatDate(id('date').value) + " " + time;
+     if (providerId != 'none') {
+          id("popupProvider1").innerText = "Selected Provider: #"
+          id("popupProvider").innerText = providerId;
+     }else{
+         id("popupProvider1").innerText = ""
+         id("popupProvider").innerText = "";
+     }
+     id("popupProviders").innerText = id("numpeople").value;
+     id("popupTotal").innerText = estimate;
+
+     if (urlParams.get('remote') == "y") {
+          id("popupAddress").innerText = " Remote (Online)"
+     } else {
+          id("popupAddress").innerText = " " + id("current-address").innerText + " " + id("current-city").innerText.charAt(0).toUpperCase() + id("current-city").innerText.slice(1) + ", " + id("current-state").innerText.toUpperCase() + " " + id("current-zip").innerText;
+     }
+
+     window.location = window.location.href.replace('#', '') + "#popup1";
+
+     if (urlParams.get('wage') == "per") {
+
+          id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost;
+
+          stripe(id("first").innerText, "Until Completion", id("numpeople").value, cost);
+     } else {
+
+          let durationText = id("duration").options[id("duration").selectedIndex].text;
+          let durationCalc = id("duration").value;
+
+          id("popupSubtotal").innerText = id("numpeople").value + " " + people + " at $" + cost + "/hr " + "(" + durationText + ")"
+
+          stripe(id("first").innerText, durationCalc, id("numpeople").value, cost);
+     }
+
+}
+
+async function stripe(service, duration, people, cost) {
+     let data = new FormData();
+     data.append("session", getSession())
+     let url = "php/session.php"
+     let response = await fetch(url, { method: "POST", body: data })
+     await checkStatus(response);
+     response = await response.json()
+
+     let email = "";
+     let phone = "";
+
+     if (response.validated == "true") {
+          email = response.account.email
+          phone = response.account.phone
+     } else {
+          email = id("password").value
+          phone = id("username").value.replace(/\D/g, '')
+     }
+
+     let message = "N/A"
+     if (id('message').value) {
+          message = id('message').value
+     }
+
+     await checkAvailability('true', console.log, false);
+
+     let tz = jstz.determine();
+     let timezone = tz.name();
+
+     var stripe = Stripe(STRIPE_API_KEY);
+     // The items the customer wants to buy
+     var purchase = {
+          items: [
+               {
+                    service: qs(".service").innerText,
+                    duration: id('duration').value,
+                    people: id('numpeople').value
+               }
+          ],
+          creds: [
+               {
+                    phone: phone,
+                    email: email
+               }
+          ],
+          checkout: {
+               tzoffset: timezone,
+               day: id('dow').value,
+               order: id('order').value,
+               service: qs(".service").innerText,
+               customeremail: email,
+               schedule: id('date').value + ' ' + id('time').value,
+               phone: phone,
+               message: message,
+               zip: id('current-zip').innerText,
+               address: id('current-address').innerText,
+               city: id('current-city').innerText,
+               state: id('current-state').innerText,
+               people: id('numpeople').value,
+               duration: id('duration').value,
+               cancelbuffer: id('cancelbuffer').value,
+               providerId: providerId
+          }
+     };
+     qs("button").disabled = true;
+     fetch("php/payment.php", {
+          method: "POST",
+          headers: {
+               "Content-Type": "application/json"
+          },
+          body: JSON.stringify(purchase)
+     })
+          .then(checkStatus)
+          .then(res => res.json())
+          .then(function (data) {
+
+               var elements = stripe.elements();
+               var style = {
+                    base: {
+                         color: "#32325d",
+                         fontFamily: 'Roboto, sans-serif',
+                         fontSmoothing: "antialiased",
+                         fontSize: "16px",
+                         "::placeholder": {
+                              color: "#32325d"
+                         }
+                    },
+                    invalid: {
+                         fontFamily: 'Roboto, sans-serif',
+                         color: "#fa755a",
+                         iconColor: "#fa755a"
+                    }
+               };
+               var card = elements.create("card", { style: style });
+               card.mount("#card-element");
+               card.on("change", function (event) {
+                    qs("button").disabled = event.empty;
+                    qs("#card-error").textContent = event.error ? event.error.message : "";
+               });
+               if (data.taxRate != '') {
+                    id("taxRate").innerText = " + tax (" + data.taxRate + ")";
+               }
+               if (data.prorated == 'n' && (id("numpeople").value * cost * ((id("duration").value) - 1)) == 0) {
+                    id("popupTotal").innerText = id("numpeople").value * cost * id("duration").value;
+               }
+               var form = id("payment-form");
+               var tdtag = qsa('.trtag')
+               tdtag.forEach(el => {
+                    el.classList.add('visibility');
+                    el.classList.remove('notvisible');
+
+               })
+
+               paymentMethod = {card: card} ;
+
+               $('#change').on('click', function () {
+                   for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'none';
+                   var z = document.getElementById("card-element");
+                   z.style.display = "block";
+                   useCard = true;
+                   paymentMethod = {card: card};
+                 });
+
+               if (data.payment_method != ''){
+                    for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'block';
+                    paymentMethod = data.payment_method;
+                    var z = document.getElementById("card-element");
+                    z.style.display = "none";
+                    id("card-type").innerText = data.card_brand.charAt(0).toUpperCase() + data.card_brand.slice(1);;
+                    id("last-four").innerText = "ending in " + data.last4;
+                   }
+               form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    payWithCard(stripe, card, data.clientSecret, paymentMethod);
+               });
+
+          });
+     var payWithCard = function (stripe, card, clientSecret, paymentMethod) {
+          loading(true);
+          stripe
+               .confirmCardPayment(clientSecret, {
+                    payment_method: paymentMethod
+               })
+               .then(function (result) {
+                    if (result.error) {
+                         showError(result.error.message);
+                    } else {
+                         orderComplete(result.paymentIntent.id);
+                         $('#hide').fadeOut(500);
+                         setTimeout(function () { window.location = "confirmation"; }, 500);
+                    }
+               });
+     };
+     /* ------- UI helpers ------- */
+     // Shows a success message when the payment is complete
+     var orderComplete = function (paymentIntentId) {
+          loading(false);
+          document
+               .querySelector(".result-message a")
+               .setAttribute(
+                    "href",
+                    "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+               );
+          qs(".result-message").classList.remove("hidden");
+          qs("button").disabled = true;
+     };
+     // Show the customer the error from Stripe if their card fails to charge
+     var showError = function (errorMsgText) {
+          loading(false);
+          var errorMsg = qs("#card-error");
+          errorMsg.textContent = errorMsgText;
+          setTimeout(function () {
+               errorMsg.textContent = "";
+          }, 4000);
+     };
+     // Show a spinner on payment submission
+     var loading = function (isLoading) {
+          if (isLoading) {
+               // Disable the button and show a spinner
+               qs("button").disabled = true;
+               qs("#spinner").classList.remove("hidden");
+               qs("#button-text").classList.add("hidden");
+          } else {
+               qs("button").disabled = false;
+               qs("#spinner").classList.add("hidden");
+               qs("#button-text").classList.remove("hidden");
+          }
+     };
+}
+
+function formatDate(date) {
+     var d = new Date(date);
+     var hh = d.getHours();
+     var m = d.getMinutes();
+     var s = d.getSeconds();
+     var dd = "AM";
+     var h = hh;
+     if (h >= 12) {
+          h = hh - 12;
+          dd = "PM";
+     }
+     if (h == 0) {
+          h = 12;
+     }
+     m = m < 10 ? "0" + m : m;
+
+     s = s < 10 ? "0" + s : s;
+
+     h = h < 10 ? "0" + h : h;
+
+     var pattern = new RegExp("0?" + hh + ":" + m + ":" + s);
+
+     var replacement = h + ":" + m;
+     replacement += " " + dd;
+
+     return date.replace(pattern, replacement);
+}
