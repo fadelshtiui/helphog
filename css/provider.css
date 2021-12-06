@@ -44,7 +44,8 @@ i{
 }
 
 #checkbox-container>div {
-  margin: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
   text-align: center;
   display: flex;
   align-items: center;
