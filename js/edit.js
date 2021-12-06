@@ -691,6 +691,9 @@ function initModal() {
      if (providerId != 'none') {
           id("popupProvider1").innerText = "Selected Provider: #"
           id("popupProvider").innerText = providerId;
+     }else{
+         id("popupProvider1").innerText = ""
+         id("popupProvider").innerText = "";
      }
      id("popupProviders").innerText = id("numpeople").value;
      id("popupTotal").innerText = estimate;
