@@ -35,6 +35,8 @@ let preloaded = false;
 
 		id('clear-availability').addEventListener('click', clearAvailability)
 
+		id('add-services').addEventListener('click', addServices)
+
 		id('addressDisplay').addEventListener('click', toggleAddressDisplay)
 
 		id('sliderUpdate').addEventListener("mouseup", updateDistance);
@@ -71,6 +73,29 @@ let preloaded = false;
 		const inputElement = id('work-phone');
 
 	});
+
+	function addServices(){
+	    resetModal();
+		id('warning-message').innerText =
+        resetModal()
+			id('first').innerText = "Edit Services"
+			id('warning-message').innerText = "If you would like to add/remove services please contact us. Our contact information can be found on the contact us page."
+			id('yes').innerText = "Take me there"
+			id('yes').classList.add('primary-green')
+			id('no').innerText = "Close"
+			id('no').classList.add('secondary')
+			id('no').onclick = function () {
+				qs('.modal-wrapper').classList.add('hidden')
+			}
+
+			qs(".modal-wrapper").classList.remove('hidden')
+
+			id('yes').onclick = function () {
+
+				window.location = "/contact"
+
+			}
+	}
 
 	function clearAvailability() {
 		let rows = qsa(".time-slot")
@@ -940,7 +965,24 @@ let preloaded = false;
     	    id('total-revenue').innerText = "$" + response.revenue
             id('dispute-percentage').innerText = response.dispute_percentage
     	    id('rating').innerText = response.rating
-    	    id('services-offered').innerText = response.services_offered
+
+
+    	    const servicesArr = response.services_offered.split(',')
+
+            var cont = document.getElementById('servicelist');
+
+            // create ul element and set the attributes.
+            var ul = document.createElement('ul');
+            ul.setAttribute('style', 'float: left; padding: -10px; padding-left: 26px; padding-bottom: 20px; text-align: left; line-height: 22px;');
+            ul.setAttribute('id', 'theList');
+
+            for (i = 0; i <= servicesArr.length - 1; i++) {
+                var li = document.createElement('li');     // create li element.
+                li.innerHTML = servicesArr[i];      // assigning text to li using array value.
+                ul.appendChild(li);     // append li to ul.
+            }
+            cont.appendChild(ul);       // add list to the container.
+
     	    id('cancels').innerText = response.cancels
 		}
 		qs(".container").classList.remove("hidden");
@@ -1283,7 +1325,6 @@ let preloaded = false;
 			id("price_display").innerText += "/hr";
 		}
 
-		id("customer_email_display").innerText = this.dataset.customer_email;
 		id("service_display").innerText = this.dataset.service;
 		id("address_display").innerText = this.dataset.address;
 		let others = qsa(".dashboard-list__item");
@@ -1296,7 +1337,7 @@ let preloaded = false;
 
 	function checkbox() {
 
-		let alerts;;
+		let alerts;
 
 		var x = $("#email-notification").is(":checked");
 		var y = $("#sms-notification").is(":checked");
