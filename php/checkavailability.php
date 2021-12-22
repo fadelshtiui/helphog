@@ -219,7 +219,6 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
             # print json_encode($available_providers);
         }
 
-
         // update total availability
         $j = $start_index;
         for ($index = 0; $index < 24; $index++) {
@@ -233,13 +232,23 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     }
 
+
     if ($updatecontactlist == 'true') {
+
+        session_write_close();
         session_start();
+
         $_SESSION = array();
+
         $_SESSION['available_providers'] = $available_providers;
+
         $json->availability = '';
+
         return $json;
     }
+
+    if($updatecontactlist == 'true'){
+}
 
     $final_result = "";
     for ($i = $start_index; $i < $start_index + 24; $i++) {
