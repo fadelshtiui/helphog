@@ -11,7 +11,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
     $session = trim($_POST['session']);
 
     if (validate_provider($order, $session)) {
-        
+
         $service = "";
         $customer_email = "";
         $intent = "";
@@ -43,6 +43,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         );
 
         send_email($customer_email, "no-reply@helphog.com", "Task Refunded", get_refund_email($name, $service, $order, $local_date->format('m\-d\-y \a\t g:ia')));
+        ios_customer_notification($customer_email, "Order Refunded", $service . " (" . $order . ")", $order, "#1ecd97");
 
         $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
