@@ -156,8 +156,10 @@ foreach ($result as $row) {
 
                 if ($provider_never_started) {
                     send_email($customer_email, "no-reply@helphog.com", "Task Cancelled", provider_never_started($service, $order_number, $utc->format('F j, Y, g:i a'), $name3));
+                    ios_customer_notification($customer_email, "Order Cancelled", "The provider for " .  $service . " (" . $order_number . ")" . " has not started working on your order.", $order_number, "#ff0000");
                 } else {
                     send_email($customer_email, "no-reply@helphog.com", "Task Cancelled", noProviderFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name3));
+                    ios_customer_notification($customer_email, "Order Cancelled", "The provider for " .  $service . " (" . $order_number . ")" . " was not located in time.", $order_number, "#ff0000");
                 }
 
                 $sql = "UPDATE {$DB_PREFIX}orders SET status = ? WHERE order_number = ?;";
