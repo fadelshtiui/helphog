@@ -25,7 +25,7 @@ if (isset($_POST["token"]) && isset($_POST["session"])) {
             $sql2 = "UPDATE {$DB_PREFIX}login SET iostokenprovider = ? WHERE session = ?";
             $stmt2 = $db->prepare($sql2);
             $params = array($tokens, $session);
-            $stmt->execute($params);
+            $stmt2->execute($params);
         }
 
         $errors->sessionerror = "false";
