@@ -75,11 +75,30 @@ let preloaded = false;
 	});
 
 	function addServices(){
-	    resetModal();
-		id('warning-message').innerText =
         resetModal()
 			id('first').innerText = "Edit Services"
 			id('warning-message').innerText = "If you would like to add/remove services please contact us. Our contact information can be found on the contact us page."
+			id('yes').innerText = "Take me there"
+			id('yes').classList.add('primary-green')
+			id('no').innerText = "Close"
+			id('no').classList.add('secondary')
+			id('no').onclick = function () {
+				qs('.modal-wrapper').classList.add('hidden')
+			}
+
+			qs(".modal-wrapper").classList.remove('hidden')
+
+			id('yes').onclick = function () {
+
+				window.location = "/contact"
+
+			}
+	}
+
+	function youAreBanned(){
+        resetModal()
+			id('first').innerText = "Your account has been disabled"
+			id('warning-message').innerText = "Since your account is disabled, you will not receive any new orders. To reinstate your account, please contact us. Our contact information can be found on the contact us page."
 			id('yes').innerText = "Take me there"
 			id('yes').classList.add('primary-green')
 			id('no').innerText = "Close"
@@ -397,6 +416,10 @@ let preloaded = false;
 					}
 				}
 			}
+		}
+
+		if (response.banned == "y"){
+		    youAreBanned();
 		}
 
 		if (response.alerts == "both") {

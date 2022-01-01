@@ -42,9 +42,9 @@ function banning($cancels, $client_email)
 		$note = "Our system has noticed several order cancellations on your behalf. We ask you not to claim orders if you are unable to fulfill them. Further cancellations will result in the suspension of your provider account.";
 	}
 	if ($cancels == '3') {
-		$sql = "UPDATE {$DB_PREFIX}login SET type = ?, banned = 'y' WHERE email = ?;";
+		$sql = "UPDATE {$DB_PREFIX}login SET banned = 'y' WHERE email = ?;";
 		$stmt = $db->prepare($sql);
-		$params = array("Personal", $client_email);
+		$params = array($client_email);
 		$stmt->execute($params);
 		$note = "Due to excessive number of canceled orders on your behalf, provider privileges have been temporarily removed from your account. If you have any questions please contact us.";
 	}

@@ -116,6 +116,7 @@ if ($validated) {
         $response->services_offered = $row["services"];
         $response->disputes = $row["disputes"];
         $response->cancels = $row["cancels"];
+        $response->banned = $row["banned"];
 
         $utc_time_zone = new DateTimeZone('UTC');
         $local_time_zone = new DateTimeZone($tz);
