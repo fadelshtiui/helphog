@@ -15,65 +15,80 @@ try {
     // retrieve JSON from POST body
     $json_str = file_get_contents('php://input');
     $json_obj = json_decode($json_str);
-    $cred_check = checkAcc($json_obj->creds);
-    $prorated = checkProrated($json_obj->items);
-    $taxCode = taxCode($json_obj->items);
+    $banned = is_banned($json_obj->creds);
+    $service = $json_obj->items[0]->service;
+    $prorated = is_prorated($service);
+    $tax_code = get_tax_code($service);
+    error_log("tax code: " . $tax_code);
     $order_info = $json_obj->checkout;
-    $order_amount = calculateOrderAmount($json_obj->items);
-    $taxParameters = calculateTax($order_amount / 100, $taxCode, $order_info);
-    $customerId = customerId($order_info);
+    $order_amount = calculate_order_amount($json_obj->items);
+    $tax_info = calculate_tax($order_amount / 100, $tax_code, $order_info);
+    $tax_to_collect = $tax_info[0];
+    $sales_tax_percent = $tax_info[1];
+    $session = $json_obj->creds[0]->session;
 
-    if ($cred_check) {
+    if (!$banned) {
+        
+        $logged_in = false;
 
-        if ($customerId[0] != '' && $customerId[1] != ''){
-            $paymentIntent = \Stripe\PaymentIntent::create([
-            'amount' => $order_amount + $taxParameters[0],
-            'currency' => 'usd',
-            'capture_method' => 'manual',
-            'customer' => $customerId[0],
-            'payment_method'=> $customerId[1],
-
-        ]);
-
-
-        }else if($customerId[0] != '' && $customerId[1] == ''){
-            $paymentIntent = \Stripe\PaymentIntent::create([
-            'amount' => $order_amount + $taxParameters[0],
-            'currency' => 'usd',
-            'capture_method' => 'manual',
-            'customer' => $customerId[0],
-            'setup_future_usage' => 'on_session',
-
-        ]);
-
-        }else{
-            $paymentIntent = \Stripe\PaymentIntent::create([
-            'amount' => $order_amount + $taxParameters[0],
-            'currency' => 'usd',
-            'capture_method' => 'manual',
-
-        ]);
-
+        $result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
+    	foreach ($result as $row) {
+    		if ($session === $row['session']) {
+    			$logged_in = true;
+    		}
+    	}
+    	
+    	if ($logged_in) {
+    	    $saved_payment_info = retrieve_stripe_info($order_info, $session);
+            $customer_id = $saved_payment_info[0];
+            $payment_method = $saved_payment_info[1];
+            $card_brand = $saved_payment_info[2];
+            $card_last4 = $saved_payment_info[3];
+    	}
+    	
+    	if ($customer_id != '' && $payment_method != '') { // returning stripe customer
+            $payment_intent = \Stripe\PaymentIntent::create([
+                'amount' => $order_amount + $tax_to_collect,
+                'currency' => 'usd',
+                'capture_method' => 'manual',
+                'customer' => $customer_id,
+                'payment_method'=> $payment_method,
+            ]);
+        } else if ($customer_id != '' && $payment_method == '') { // edge case where they don't have a payment method
+            
+            $payment_intent = \Stripe\PaymentIntent::create([
+                'amount' => $order_amount + $tax_to_collect,
+                'currency' => 'usd',
+                'capture_method' => 'manual',
+                'customer' => $customer_id,
+                'setup_future_usage' => 'on_session',
+            ]);
+        } else { // guest
+            $payment_intent = \Stripe\PaymentIntent::create([
+                'amount' => $order_amount + $tax_to_collect,
+                'currency' => 'usd',
+                'capture_method' => 'manual',
+            ]);
         }
-
-        if ($taxParameters[1] == 0) {
-            $taxRate = "";
+        
+        if ($sales_tax_percent == 0) {
+            $tax_rate = "";
         } else {
-            $taxRate = $taxParameters[1] * 100 . "%";
+            $tax_rate = $sales_tax_percent * 100 . "%";
         }
-        $order_number = createOrder($paymentIntent, $order_info, $json_obj->items, $taxRate);
-
+        $order_number = create_order($payment_intent, $order_info, $json_obj->items, $tax_rate);
+        
         $stripe->paymentIntents->update(
-             $paymentIntent->id,
+             $payment_intent->id,
             ['description' => $order_number]
         );
         $output = [
-            'clientSecret' => $paymentIntent->client_secret,
-            'payment_method'=> $customerId[1],
-            'taxRate' => $taxRate,
+            'clientSecret' => $payment_intent->client_secret,
+            'payment_method'=> $payment_method,
+            'taxRate' => $tax_rate,
             'prorated' => $prorated,
-            'card_brand'=> $customerId[2],
-            'last4' => $customerId[3],
+            'card_brand'=> $card_brand,
+            'last4' => $card_last4,
         ];
         echo json_encode($output);
     } else {
@@ -87,78 +102,65 @@ try {
 
 // checks for existing customerID
 // creates customer id if no payment information is stored on database
-function customerId($order_info): array
+function retrieve_stripe_info($order_info, $session): array
 {
-
+    
     include 'constants.php';
     $db = establish_database();
-
+    
     $customer_id = "";
     $payment_method = "";
     $card_brand = "";
     $card_last4 = "";
-    $latest_created = 0;
+    
+    $stmnt = $db->prepare("SELECT customer_id, email FROM {$DB_PREFIX}login WHERE session = ?;");
+    $stmnt->execute(array($session));
+    foreach ($stmnt->fetchAll() as $row) {
+        
+        if ($row["customer_id"] == "") {
+            $customer = \Stripe\Customer::create([
+                'email' => $row["email"],
+            ]);
+            $customer_id = $customer->id;
+    
+            $sql = "UPDATE {$DB_PREFIX}login SET customer_id = ? WHERE session = ?";
+			$stmt = $db->prepare($sql);
+			$params = array($customer_id, $session);
+			$stmt->execute($params);
+            
+        } else {
+            $customer_id = $row["customer_id"];
 
-
-    $customer_email = $order_info->customeremail;
-    $createAcc = true;
-    $acc_exists = false;
-
-    $result = $db->query("SELECT email FROM {$DB_PREFIX}login;");
-	foreach ($result as $row) {
-		if ($customer_email === $row['email']) {
-			$acc_exists = true;
-		}
-	}
-
-    if($acc_exists){
-        $stmnt = $db->prepare("SELECT customer_id FROM {$DB_PREFIX}login WHERE email = ?;");
-        $stmnt->execute(array($customer_email));
-        foreach ($stmnt->fetchAll() as $row) {
-
-            if ($row["customer_id"] == "") {
-                $customer = \Stripe\Customer::create([
-                    'email' => $customer_email,
-                    ]);
-                $customer_id = $customer->id;
-
-                $sql2 = "UPDATE {$DB_PREFIX}login SET customer_id = ? WHERE email = ?";
-				$stmt = $db->prepare($sql2);
-				$params = array($customer_id, $customer_email);
-				$stmt->execute($params);
-
-            }else{
-                $customer_id = $row["customer_id"];
-
-                $cards = \Stripe\PaymentMethod::all([
-                  "customer" => $customer_id, "type" => "card"
-                ]);
-
-                foreach ($cards as $card) {
-                    if ($card->created > $latest_created){
-                        $card_brand = $card->card->brand;
-                        $card_last4 = $card->card->last4;
-                        $payment_method = $card->id;
-                    }
+            $cards = \Stripe\PaymentMethod::all([
+              "customer" => $customer_id, "type" => "card"
+            ]);
+            
+            $latest_created = 0;
+            
+            foreach ($cards as $card) {
+                if ($card->created > $latest_created){
+                    $card_brand = $card->card->brand;
+                    $card_last4 = $card->card->last4;
+                    $payment_method = $card->id;
                     $latest_created = $card->created;
                 }
-
             }
+            
         }
     }
-    return array($customer_id, $payment_method, $card_brand , $card_last4 );
+    return array($customer_id, $payment_method, $card_brand , $card_last4);
 }
-
+    
 // returns an array [amount to collect, sales tax percentage]
 // return [0, 0] if no tax
-function calculateTax($price, $taxCode, $order_info): array
+function calculate_tax($price, $tax_code, $order_info): array
 {
 
-    if ($taxCode == '') {
+    if ($tax_code == '') {
         return array(0, 0);
     }
 
-    $client = TaxJar\Client::withApiKey('61f4780bb09769ae874011f646aad80a');
+    $client = TaxJar\Client::withApiKey('8052c7c79f531012b785b96371c225cb');
     $order_taxes = $client->taxForOrder([
         'to_zip' => $order_info->zip,
         'to_state' => $order_info->state,
@@ -170,20 +172,20 @@ function calculateTax($price, $taxCode, $order_info): array
             [
                 'id' => '1',
                 'quantity' => 1,
-                'product_tax_code' => $taxCode,
+                'product_tax_code' => $tax_code,
                 'unit_price' => $price,
                 'discount' => 0
             ]
         ]
     ]);
+    
+    return array(($order_taxes->amount_to_collect) * 100, $order_taxes->rate);
 
-    $taxParameters = array(($order_taxes->amount_to_collect) * 100, $order_taxes->rate);
-
-    return $taxParameters;
 }
 
-//Need to throw error if service not found
-function calculateOrderAmount(array $items): int
+// TODO: throw error if service not found
+// returns total order amount in pennies
+function calculate_order_amount(array $items): int
 {
     $entry = $items[0];
 
@@ -216,13 +218,9 @@ function calculateOrderAmount(array $items): int
     return $price * 100;
 }
 
-function checkProrated(array $items): string
-{
+// returns 'y' if service is prorated and 'n' otherwise
+function is_prorated($service): string {
     global $db;
-    $entry = $items[0];
-
-    $service = $entry->service;
-
     $prorated = "";
     $stmnt = $db->prepare("SELECT prorated FROM services WHERE service = ?;");
     $stmnt->execute(array($service));
@@ -232,23 +230,20 @@ function checkProrated(array $items): string
     return $prorated;
 }
 
-function taxCode(array $items): string
-{
+// returns tax code
+function get_tax_code($service): string {
     global $db;
-    $entry = $items[0];
 
-    $service = $entry->service;
-
-    $taxCode = "";
+    $tax_code = "";
     $stmnt = $db->prepare("SELECT taxcode FROM services WHERE service = ?;");
     $stmnt->execute(array($service));
     foreach ($stmnt->fetchAll() as $row) {
-        $taxCode = $row["taxcode"];
+        $tax_code = $row["taxcode"];
     }
-    return $taxCode;
+    return $tax_code;
 }
 
-function createOrder($paymentIntent, $order_info, array $items, $taxRate): string
+function create_order($payment_intent, $order_info, array $items, $tax_rate): string
 {
     include 'constants.php';
 
@@ -293,12 +288,12 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate): strin
         $order_info->message = substr($order_info->message, 0, 1000);
     }
     session_start();
-
+    
     if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']),"apple")) {
-        $cookieLifetime = 365 * 24 * 60 * 60; // A year in seconds
-        setcookie("ses_id",session_id(),time()+$cookieLifetime);
+        $cookie_lifetime = 365 * 24 * 60 * 60; // A year in seconds
+        setcookie("ses_id", session_id(), time() + $cookie_lifetime);
     }
-
+    
     $_SESSION['order'] = $order_info->order;
     $_SESSION['service'] = $order_info->service;
     $_SESSION['customeremail'] = $order_info->customeremail;
@@ -306,7 +301,7 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate): strin
     $_SESSION['order'] = $order_info->order;
     $_SESSION['phone'] = $order_info->phone;
     $_SESSION['message'] = $order_info->message;
-    $_SESSION['taxrate'] = $taxRate;
+    $_SESSION['taxrate'] = $tax_rate;
     if ($remote == "y") {
         $_SESSION['zip'] = "";
         $_SESSION['address'] = "Remote (online)";
@@ -333,14 +328,15 @@ function createOrder($paymentIntent, $order_info, array $items, $taxRate): strin
         $_SESSION['cancel_buffer'] = $order_info->cancelbuffer;
     }
     $_SESSION['ordernumber'] = $order_number;
-    $_SESSION['intent'] = $paymentIntent->id;
+    $_SESSION['intent'] = $payment_intent->id;
     $_SESSION['providerId'] = $order_info->providerId;
-
+    
     return $order_number;
 
 }
 
-function checkAcc(array $creds): bool
+// returns false if user is banned, true otherwise
+function is_banned(array $creds): bool
 {
     include 'constants.php';
 
@@ -348,22 +344,25 @@ function checkAcc(array $creds): bool
     $entry = $creds[0];
     $email = $entry->email;
     $phone = $entry->phone;
-
-    $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}guests WHERE phone = ?;");
-    $stmnt->execute(array($phone));
-    foreach ($stmnt->fetchAll() as $row) {
-        if ($row["banned"] == "y") {
-            return false;
+    $session = $entry->session;
+    
+    if ($session != '') {
+        $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}login WHERE session = ?;");
+        $stmnt->execute(array($session));
+    	foreach ($result as $row) {
+    		if ($row["banned"] == "y") {
+                return true;
+            }
+    	}
+    } else { // guest
+        $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}guests WHERE phone = ?;");
+        $stmnt->execute(array($phone));
+        foreach ($stmnt->fetchAll() as $row) {
+            if ($row["banned"] == "y") {
+                return true;
+            }
         }
     }
+    return false;
 
-    $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}login WHERE email = ?;");
-    $stmnt->execute(array($email));
-    foreach ($stmnt->fetchAll() as $row) {
-        if ($row["banned"] == "y") {
-            return false;
-        }
-    }
-
-    return true;
 }

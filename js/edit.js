@@ -734,12 +734,9 @@ async function stripe(service, duration, people, cost) {
      let email = "";
      let phone = "";
 
-     if (response.validated == "true") {
-          email = response.account.email
-          phone = response.account.phone
-     } else {
-          email = id("password").value
-          phone = id("username").value.replace(/\D/g, '')
+     if (response.validated == "false") {
+        email = id("password").value
+        phone = id("username").value.replace(/\D/g, '')
      }
 
      let message = "N/A"
@@ -765,7 +762,8 @@ async function stripe(service, duration, people, cost) {
           creds: [
                {
                     phone: phone,
-                    email: email
+                    email: email,
+                    session: getSession()
                }
           ],
           checkout: {
@@ -846,7 +844,9 @@ async function stripe(service, duration, people, cost) {
                    paymentMethod = {card: card};
                  });
 
+                console.log(data.payment_method)
                if (data.payment_method != ''){
+                   
                     for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'block';
                     paymentMethod = data.payment_method;
                     var z = document.getElementById("card-element");
