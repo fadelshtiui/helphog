@@ -502,3 +502,8 @@ button.secondary-orders:hover {
 .extra-button-margin {
   margin-top: 60px;
 }
+
+html, body, .header {
+  vertical-align: baseline !important;
+  line-height: inherit !important;
+}

@@ -13,7 +13,7 @@ h4 {
 
 .stats{
     margin:11.1328px;
-
+    
 }
 
 #add-services:hover{
@@ -1113,4 +1113,12 @@ th {
 
 .buttonloadicon {
   position: initial;
+}
+
+body {
+  line-height: inherit !important;
+}
+
+.stats {
+  line-height: 1 !important;
 }
