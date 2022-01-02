@@ -227,8 +227,6 @@ $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? O
             }
         }
 
-        error_log($entry->revenue);
-        error_log($entry->order_number);
 
         $total_orders++;
 
@@ -264,9 +262,6 @@ $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? O
 
     if($total_ratings != 0){
         $response->rating = money_format('%.2n', $total_ratings/$number_of_ratings) . " of 5";
-        error_log(money_format('%.2n', $total_ratings/$number_of_ratings));
-        error_log($total_ratings);
-        error_log($number_of_ratings);
     }else{
         $response->rating = "No reviews yet";
     }
