@@ -39,14 +39,14 @@
 					<li id="orders"><a href="orders">Orders</a></li>
 					<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
 					<li id="contact"><a href="contact">Contact Us</a></li>
-					<li id="about"><a href="about">About</a></li>
+					<li id="about"><a href="about">Who we are</a></li>
 				</div>
 				<div id="signed-out-nav" class="hidden">
 					<li id="sign-in-nav"><a href="signin">Login</a></li>
 					<li id="register-nav"><a href="registration">Register</a></li>
 					<li id="track-order"><a href="tracking">Track Order</a></li>
 					<li id="contact"><a href="contact">Contact Us</a></li>
-					<li id="about"><a href="about">About</a></li>
+					<li id="about"><a href="about">Who we are</a></li>
 				</div>
 			</ul>
 		</div>
@@ -72,49 +72,85 @@
 				</ul>
 			</nav>
 		</header>
-		<br>
-		<main id="home-page-main" style="width: fit-content; margin-right: auto; margin-left:auto;">
-			<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
-			<link rel="stylesheet"
-				href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
-			<h5 style="width: fit-content; margin-left: auto; margin-right: auto;"><a href="/" style="display:none;"
-					class="logo-font">He!pHog</a></h5>
-			<div id="slogan" type="text"
-				style="display:none; width: fit-content; margin-left:auto; margin-right: auto">Premium Services On
-				Demand</div>
-			<div class="search-container" style="display:none;">
-				<!--<div class="search-box">-->
-				<!--	<div id="form">-->
-				<!--		<img id="location" src="images/pin-map-icon.png">-->
-				<input id="zipcode" type="number" v-model="zip" min="10000" max="99999" placeholder="Zipcode"
-					class="hidden" />
-				<!--	</div>-->
-				<!--</div>-->
-				<div class="search-box">
-					<input class="search-input" id="search" type="text"
-						placeholder="What do you need help with today?" />
-					<ul class="search-results" id="results"></ul>
-					<!--<div class="search-icon"><button id="search-btn"><img id="search-image" src="images/search-icon.png"></button></div>-->
-					<div id="search-btn" style="background-color: transparent;"><img class="search-icon"
-							src="assets/images/search-icon.png"></div>
-					<ul class="search-results" id="results"></ul>
-				</div>
-			</div>
-			<div id="categories" class="toggles" style="display:none; width: 540px;">
-				<button class="secondary" id="automotive">Automotive</button>
-				<button class="secondary" id="creative">Creative</button>
-				<button class="secondary" id="education">Education</button>
-				<button class="secondary" id="household">Household</button>
-				<button class="secondary" id="labor">Labor</button>
-				<button class="secondary" id="tech">Tech</button>
-			</div>
-			<!--<video id="infovid" autoplay loop muted>-->
-			<!--           <source src="images/helphog4.mp4" type="video/mp4">-->
-			<!--         Your browser does not support the video tag.-->
-			<!--         </video>-->
-			<script src="js/index.js"></script>
-			<script src="js/loading.js"></script>
-		</main>
+		<div class="flex-container space-between">
+                <div class="item-two">
+        		    <img src="assets/images/tutoring.png" alt="tutoring" style="float:left; opacity: 40%;">
+        		</div>
+    		<main id="home-page-main" style="width: fit-content; margin-right: auto; margin-left:auto;">
+
+
+    			<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+    			<link rel="stylesheet"
+    				href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    			<h5 style="width: fit-content; margin-left: auto; margin-right: auto;"><a href="/" style="display:none;"
+    					class="logo-font">He!pHog</a></h5>
+    			<div id="slogan" type="text"
+    				style="display:none; width: fit-content; margin-left:auto; margin-right: auto">Premium Services On
+    				Demand</div>
+    			<div class="search-container" style="display:none;">
+    				<!--<div class="search-box">-->
+    				<!--	<div id="form">-->
+    				<!--		<img id="location" src="images/pin-map-icon.png">-->
+    				<input id="zipcode" type="number" v-model="zip" min="10000" max="99999" placeholder="Zipcode"
+    					class="hidden" />
+    				<!--	</div>-->
+    				<!--</div>-->
+    				<div class="search-box">
+    					<input class="search-input" id="search" type="text"
+    						placeholder="What do you need help with today?" />
+    					<ul class="search-results" id="results"></ul>
+    					<!--<div class="search-icon"><button id="search-btn"><img id="search-image" src="images/search-icon.png"></button></div>-->
+    					<div id="search-btn" style="background-color: transparent;"><img class="search-icon"
+    							src="assets/images/search-icon.png"></div>
+    					<ul class="search-results" id="results"></ul>
+    				</div>
+    			</div>
+    			<div id="categories" class="toggles" style="display:none; width: 540px;">
+    				<button class="secondary" id="automotive">Automotive</button>
+    				<button class="secondary" id="creative">Creative</button>
+    				<button class="secondary" id="education">Education</button>
+    				<button class="secondary" id="household">Household</button>
+    				<button class="secondary" id="labor">Labor</button>
+    				<button class="secondary" id="tech">Tech</button>
+    			</div>
+    			<!--<video id="infovid" autoplay loop muted>-->
+    			<!--           <source src="images/helphog4.mp4" type="video/mp4">-->
+    			<!--         Your browser does not support the video tag.-->
+    			<!--         </video>-->
+    			<script src="js/index.js"></script>
+    			<script src="js/loading.js"></script>
+    		</main>
+    		<div class="item-two">
+    		<img src="assets/images/painter.png" alt="Paint-Bucket" style="float:right; opacity: 40%;">
+    		</div>
+
+
+
+
+    	</div>
+
+		    <div class="flex-container center color1">
+              <div class="head">Simplify your day with HelpHog.<div class="description">Our platform helps companies like these connect with independent contractors hassle-free.</div></div>
+
+            </div>
+
+		    <div class="flex-container center brands color1">
+              <div class=trusted>
+                  <img src="assets/images/Capture.PNG" alt="Paint-Bucket">
+            </div>
+              <div class=trusted>
+                      		<img src="assets/images/tpc.png" alt="Paint-Bucket">
+
+              </div>
+              <div class=trusted>
+                    <img src="assets/images/strike.PNG" alt="Paint-Bucket" >
+                </div>
+            </div>
+
+    		    <video id="change" loop muted autoplay>
+              <source src="assets/videos/Homepagemap.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+              </video>
 	</div>
 	<footer id="footer">
 
