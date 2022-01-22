@@ -152,8 +152,20 @@ foreach ($stmnt->fetchAll() as $row) {
           $available = 0;
      } else {
           if ($remote == 'y') {
-               $available = 1;
-               $num_available++;
+
+               $available = 0;
+               foreach ($all_emails as $email) {
+                    $stmnt = $db->prepare("SELECT availability, phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
+                    $stmnt->execute(array($email));
+                    foreach ($stmnt->fetchAll() as $row) {
+                         $full_availability = $row['availability'];
+                         if (strpos($full_availability, '1') !== false) {
+                              $available = 1;
+                              $num_available++;
+                         }
+                    }
+               }
+
           } else if ($full_address != "") {
 
                $available = 0;
