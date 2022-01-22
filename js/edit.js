@@ -84,6 +84,9 @@ window.addEventListener('load', function () {
 
      id("checkprovider").onclick = function () {
           const urlParams = new URLSearchParams(window.location.search)
+          if (urlParams.get('remote') === 'y'){
+             document.getElementById('timezone').style.display = 'none';
+         }
           id("errorlabel").classList.add("hidden")
           id("providerSelected").classList.add("hidden")
           if (urlParams.get('remote') == 'y' || id('current-address').innerText != "" && id('current-city').innerText != "" && id('current-zip').innerText != "" && id('current-state').innerText != "") {
@@ -225,6 +228,9 @@ window.addEventListener('load', function () {
 // 		checkbox1.addEventListener('change', function () {
 // 			checkbox();
 // 	});
+     if (urlParams.get('remote') === 'n'){
+         document.getElementById('timezone').style.display = 'none';
+     }
 
 });
 
@@ -364,6 +370,27 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
 
      let fullAddress = (id('current-address').innerText + '+' + id('current-city').innerText + '+' + id('current-state').innerText + '+' + id('current-zip').innerText).replace(/ /gi, '+')
 
+    if (id('current-address').innerText != '') {
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + fullAddress + "&key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw")
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(jsonResponse) {
+            console.log(jsonResponse)
+            latitude = jsonResponse.results[0].geometry.location.lat
+            longitude = jsonResponse.results[0].geometry.location.lng
+
+            fetch("https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "%2C" + longitude + "&timestamp=1331161200&key=AIzaSyBLOFTNoq2ypQGRX_CgCMSUkBhFlmPYWCg")
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonResponse) {
+                    //fadel use this timezone for non-remote orders
+                    console.log(jsonResponse.timeZoneId)
+                });
+        });
+    }
+
      let data = new FormData();
      data.append('address', fullAddress)
      data.append('tz', timezone);
@@ -457,6 +484,10 @@ function updateTimePicker(response) {
      }
 
      id('button').disabled = false;
+}
+
+function addressToTimezone (){
+
 }
 
 
@@ -846,7 +877,7 @@ async function stripe(service, duration, people, cost) {
 
                 console.log(data.payment_method)
                if (data.payment_method != ''){
-                   
+
                     for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'block';
                     paymentMethod = data.payment_method;
                     var z = document.getElementById("card-element");
