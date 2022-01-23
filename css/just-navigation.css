@@ -16,12 +16,11 @@
   float: right;
   padding-left: 2em;
   padding-right: 2em;
-  opacity: 0.5;
 }
 
 #navigation li a {
-  color: black;
-  font-weight: bold;
+  /*color: black;*/
+  /*font-weight: bold;*/
 }
 
 #registration, #sign-in, #about {
