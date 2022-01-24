@@ -31,13 +31,22 @@ try {
         
         $logged_in = false;
 
-        $result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
-    	foreach ($result as $row) {
-    		if ($session === $row['session']) {
-    			$logged_in = true;
-    		}
-    	}
+        if ($session == '') {
+            $logged_in = false;
+        } else {
+            $result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
+        	foreach ($result as $row) {
+        		if ($session === $row['session']) {
+        			$logged_in = true;
+        		}
+        	}
+        }
+        
     	
+    	$customer_id = "";
+    	$payment_method = "";
+    	$card_brand = "";
+    	$card_last4 = "";
     	if ($logged_in) {
     	    $saved_payment_info = retrieve_stripe_info($order_info, $session);
             $customer_id = $saved_payment_info[0];
@@ -76,7 +85,7 @@ try {
         } else {
             $tax_rate = $sales_tax_percent * 100 . "%";
         }
-        $order_number = create_order($payment_intent, $order_info, $json_obj->items, $tax_rate);
+        $order_number = create_order($payment_intent, $order_info, $json_obj->items, $tax_rate, $session);
         
         $stripe->paymentIntents->update(
              $payment_intent->id,
@@ -243,7 +252,7 @@ function get_tax_code($service): string {
     return $tax_code;
 }
 
-function create_order($payment_intent, $order_info, array $items, $tax_rate): string
+function create_order($payment_intent, $order_info, array $items, $tax_rate, $session): string
 {
     include 'constants.php';
 
@@ -296,10 +305,30 @@ function create_order($payment_intent, $order_info, array $items, $tax_rate): st
     
     $_SESSION['order'] = $order_info->order;
     $_SESSION['service'] = $order_info->service;
-    $_SESSION['customeremail'] = $order_info->customeremail;
+    
+    if ($order_info->customeremail != '') {
+        $_SESSION['customeremail'] = $order_info->customeremail;
+    } else {
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
+        $stmnt->execute(array($session));
+        foreach ($stmnt->fetchAll() as $row) {
+            $_SESSION['customeremail'] = $row["email"];
+        }
+    }
+    
     $_SESSION['schedule'] = $order_info->schedule;
     $_SESSION['order'] = $order_info->order;
-    $_SESSION['phone'] = $order_info->phone;
+    
+    if ($order_info->phone != '') {
+        $_SESSION['phone'] = $order_info->phone;
+    } else {
+        $stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}login WHERE session = ?;");
+        $stmnt->execute(array($session));
+        foreach ($stmnt->fetchAll() as $row) {
+            $_SESSION['phone'] = $row["phone"];
+        }
+    }
+    
     $_SESSION['message'] = $order_info->message;
     $_SESSION['taxrate'] = $tax_rate;
     if ($remote == "y") {

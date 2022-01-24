@@ -366,10 +366,10 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
      let remote = urlParams.get('remote')
 
      let tz = jstz.determine();
-     let timezone = tz.name();
+     let timezone = tz.name(); 
 
      let fullAddress = (id('current-address').innerText + '+' + id('current-city').innerText + '+' + id('current-state').innerText + '+' + id('current-zip').innerText).replace(/ /gi, '+')
-
+    
     if (id('current-address').innerText != '') {
     fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + fullAddress + "&key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw")
         .then(function(response) {
@@ -487,7 +487,7 @@ function updateTimePicker(response) {
 }
 
 function addressToTimezone (){
-
+    
 }
 
 
@@ -764,12 +764,17 @@ async function stripe(service, duration, people, cost) {
 
      let email = "";
      let phone = "";
+     let session = "";
 
      if (response.validated == "false") {
         email = id("password").value
         phone = id("username").value.replace(/\D/g, '')
      }
-
+     
+     if (getSession() != "") {
+         session = getSession();
+     }
+     
      let message = "N/A"
      if (id('message').value) {
           message = id('message').value
@@ -794,7 +799,7 @@ async function stripe(service, duration, people, cost) {
                {
                     phone: phone,
                     email: email,
-                    session: getSession()
+                    session: session
                }
           ],
           checkout: {
@@ -816,6 +821,7 @@ async function stripe(service, duration, people, cost) {
                providerId: providerId
           }
      };
+     
      qs("button").disabled = true;
      fetch("php/payment.php", {
           method: "POST",
@@ -877,7 +883,7 @@ async function stripe(service, duration, people, cost) {
 
                 console.log(data.payment_method)
                if (data.payment_method != ''){
-
+                   
                     for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'block';
                     paymentMethod = data.payment_method;
                     var z = document.getElementById("card-element");
