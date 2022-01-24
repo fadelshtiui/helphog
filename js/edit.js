@@ -8,6 +8,7 @@ let useCard = true;
 let paymentMethod;
 
 window.addEventListener('load', function () {
+     
     for (let el of document.querySelectorAll('.previous-card')) el.style.display = 'none';
 
      $('.modal-content').slideToggle();
@@ -136,6 +137,10 @@ window.addEventListener('load', function () {
      }
 
      initTextFields();
+     
+     id('timezone').onchange = function() {
+         checkAvailability('false', updateTimePicker, false);
+     }
 
      id('duration').onchange = function () {
           checkAvailability('false', updateTimePicker, false);
@@ -365,35 +370,24 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
      let duration = id('duration').value
      let remote = urlParams.get('remote')
 
-     let tz = jstz.determine();
-     let timezone = tz.name(); 
-
      let fullAddress = (id('current-address').innerText + '+' + id('current-city').innerText + '+' + id('current-state').innerText + '+' + id('current-zip').innerText).replace(/ /gi, '+')
     
     if (id('current-address').innerText != '') {
-    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + fullAddress + "&key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw")
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(jsonResponse) {
-            console.log(jsonResponse)
-            latitude = jsonResponse.results[0].geometry.location.lat
-            longitude = jsonResponse.results[0].geometry.location.lng
-
-            fetch("https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "%2C" + longitude + "&timestamp=1331161200&key=AIzaSyBLOFTNoq2ypQGRX_CgCMSUkBhFlmPYWCg")
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonResponse) {
-                    //fadel use this timezone for non-remote orders
-                    console.log(jsonResponse.timeZoneId)
-                });
-        });
+        let res = await fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + fullAddress + "&key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw");
+        res = await res.json();
+        let latitude = jsonResponse.results[0].geometry.location.lat
+        let longitude = jsonResponse.results[0].geometry.location.lng
+    
+        res = await fetch("https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "%2C" + longitude + "&timestamp=1331161200&key=AIzaSyBLOFTNoq2ypQGRX_CgCMSUkBhFlmPYWCg")
+        res = await res.json();
+        let timeZoneId = res.timeZoneId;
+        
+        console.log(timeZoneId)
     }
 
      let data = new FormData();
      data.append('address', fullAddress)
-     data.append('tz', timezone);
+     data.append('tz', id('timezone').value);
      data.append("service", service);
      data.append("numpeople", numpeople);
      data.append("schedule", schedule);
@@ -782,9 +776,6 @@ async function stripe(service, duration, people, cost) {
 
      await checkAvailability('true', console.log, false);
 
-     let tz = jstz.determine();
-     let timezone = tz.name();
-
      var stripe = Stripe(STRIPE_API_KEY);
      // The items the customer wants to buy
      var purchase = {
@@ -803,7 +794,7 @@ async function stripe(service, duration, people, cost) {
                }
           ],
           checkout: {
-               tzoffset: timezone,
+               tzoffset: id('timezone').value,
                day: id('dow').value,
                order: id('order').value,
                service: qs(".service").innerText,

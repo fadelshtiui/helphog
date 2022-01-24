@@ -1,6 +1,12 @@
 window.addEventListener('load', init);
 
 async function init() {
+    
+    let tz = jstz.determine();
+     let timezone = tz.name(); 
+     
+     id('timezone').value = timezone;
+     
   const MAX_DAYS_IN_FUTURE = 5;
   const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
