@@ -17,11 +17,15 @@ $db = establish_database();
 
 $email = "";
 $type = "Personal";
-$stmnt = $db->prepare("SELECT email, type FROM {$DB_PREFIX}login WHERE phone = ?;");
+$alerts = "";
+$stmnt = $db->prepare("SELECT email, type, alerts FROM {$DB_PREFIX}login WHERE phone = ?;");
 $stmnt->execute(array($formatted_phone));
 foreach ($stmnt->fetchAll() as $row) {
     $email = $row['email'];
-    $type = $row["type"];
+    $type = $row['type'];
+    $alerts = $row['alerts'];
+    error_log($email);
+    error_log($alerts);
 }
 
 if ($email == "") {
@@ -41,26 +45,59 @@ if ($email == "") {
     return;
 }
 
+error_log($alerts);
+
+$alert = '';
+
 //add to blacklist
 if(strtolower($body) == "stop" ){
 
-    $sql = "INSERT INTO {$DB_PREFIX}blacklisted (phone) VALUES ?;";
+    $sql = "INSERT INTO {$DB_PREFIX}blacklisted (number) VALUES (?);";
     $stmt = $db->prepare($sql);
     $params = array($number);
     $stmt->execute($params);
+
+    if ($alerts == "both"){
+        $alert = "email";
+    }else if ($alerts == "sms"){
+        $alert = "none";
+    }else{
+        $alert = $alerts;
+    }
+
+    $sql = "UPDATE {$DB_PREFIX}login SET alerts = ? WHERE email = ?";
+    $stmt = $db->prepare($sql);
+    $params = array($alert, $email);
+    $stmt->execute($params);
+
     return;
 }
 
 //remove from blacklist
 if(strtolower($body) == "start" || strtolower($body) == "unstop"){
 
-    $sql = "DELETE FROM {$DB_PREFIX}blacklisted WHERE phone = ?";
+    $sql = "DELETE FROM {$DB_PREFIX}blacklisted WHERE number = ?";
     $stmt = $db->prepare($sql);
     $params = array($number);
     $stmt->execute($params);
 
+    if ($alerts == "email"){
+        $alert = "both";
+    }else if ($alerts == "none"){
+        $alert = "sms";
+    }else{
+        $alert = $alerts;
+    }
+
+    $sql = "UPDATE {$DB_PREFIX}login SET alerts = ? WHERE email = ?";
+    $stmt = $db->prepare($sql);
+    $params = array($alert, $email);
+    $stmt->execute($params);
+
     return;
 }
+
+
 
 $pieces = explode(' ', trim(strtolower($body)));
 $command = $pieces[0];
