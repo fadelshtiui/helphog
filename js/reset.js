@@ -99,14 +99,14 @@
           }
 
           if (response.emailerror == "" && response.passworderror == "" && response.confirmerror == "" && response.numbererror == "") {
-               id('warning-message').innerText = "Error occured. Please retry clicking on the reset link you received."
+               id('warning-message').innerText = "Password Successfully changed"
                let warningIcon = ce('i')
-               warningIcon.classList.add('fas', 'fa-exclamation-circle', 'warning')
+               warningIcon.classList.add('fas', 'fa-check-circle', 'success');
                id('first').innerHTML = ''
                id('first').appendChild(warningIcon)
                qs('.modal-wrapper').classList.remove('hidden')
 
-               qs('.modal button').innerText = "OK, Login"
+               qs('.modal button').innerText = "Login"
                qs('.modal button').onclick = function () {
                     window.location = "signin";
                }
