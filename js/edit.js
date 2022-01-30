@@ -375,14 +375,14 @@ async function checkAvailability(updatecontactlist, callback, updateprovider) {
     if (id('current-address').innerText != '') {
         let res = await fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + fullAddress + "&key=AIzaSyCRB6jyjFafJqD_6ZYCP7J0J0aP7JuUUMw");
         res = await res.json();
-        let latitude = jsonResponse.results[0].geometry.location.lat
-        let longitude = jsonResponse.results[0].geometry.location.lng
+        let latitude = res.results[0].geometry.location.lat
+        let longitude = res.results[0].geometry.location.lng
     
         res = await fetch("https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "%2C" + longitude + "&timestamp=1331161200&key=AIzaSyBLOFTNoq2ypQGRX_CgCMSUkBhFlmPYWCg")
         res = await res.json();
         let timeZoneId = res.timeZoneId;
         
-        console.log(timeZoneId)
+        id('timezone').value = timeZoneId;
     }
 
      let data = new FormData();
@@ -672,7 +672,7 @@ function generateOrderNumber() {
      return [now.slice(0, 4), now.slice(4, 10), now.slice(10, 14)].join('-');
 }
 
-function initModal() {
+async function initModal() {
 
      var tdtag = qsa('.trtag')
      tdtag.forEach(el => {
@@ -712,7 +712,11 @@ function initModal() {
 
      id("popupService").innerText = qs(".service").innerText;
      id("popupMessage").innerText = " " + message;
-     id("popupDate").innerText = " " + formatDate(id('date').value) + " " + time;
+     
+     let res = await fetch('/php/timezoneshort.php?timezone=' + id('timezone').value)
+     let shortTimezone = await res.text();
+     id("popupDate").innerText = " " + formatDate(id('date').value) + " " + time + " " + shortTimezone
+     
      if (providerId != 'none') {
           id("popupProvider1").innerText = "Selected Provider: #"
           id("popupProvider").innerText = providerId;
