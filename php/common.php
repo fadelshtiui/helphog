@@ -21,6 +21,14 @@ ini_set('display_errors', 'On');
 # error_reporting(E_ALL);
 error_reporting(E_ERROR | E_PARSE);
 
+function get_user_info($session) {
+    include 'constants.php';
+    $db = establish_database();
+    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ? OR ios_session = ? OR ios_provider_session = ?;");
+    $stmnt->execute(array($session, $session, $session));
+    return $stmnt->fetch();
+}
+
 function isMobileRequest() {
     return (strpos($_SERVER['HTTP_USER_AGENT'], 'HelpHog/') !== false);
 }
@@ -55,7 +63,7 @@ function banning($cancels, $client_email)
 function ios_customer_notification($email, $title, $body, $thread_id, $color){
     include 'constants.php';
 	$db = establish_database();
-
+	
 	$tokens = "";
 
 	$stmnt = $db->prepare("SELECT iostokens FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -63,7 +71,7 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
 	foreach ($stmnt->fetchAll() as $row) {
 		$tokens = $row['iostokens'];
 	}
-
+	
 	error_log($tokens);
 	if ($tokens != ''){
 	    $keyfile = 'AuthKey_MR5L97ZV2R.p8';               # <- Your AuthKey file
@@ -73,26 +81,26 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
         $url = 'https://api.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
 
         $message = '{"aps":{"alert":{"title": "' . $title . '", "body": "' . $body . '"},"sound":"default", "thread-id": "' . $thread_id . '", "color": "' . $color . '"}}';
-
+        
         $key = openssl_pkey_get_private('file://'.$keyfile);
-
+        
         $header = ['alg'=>'ES256','kid'=>$keyid];
         $claims = ['iss'=>$teamid,'iat'=>time()];
-
+        
         $header_encoded = base64($header);
         $claims_encoded = base64($claims);
-
+        
         $signature = '';
         openssl_sign($header_encoded . '.' . $claims_encoded, $signature, $key, 'sha256');
         $jwt = $header_encoded . '.' . $claims_encoded . '.' . base64_encode($signature);
-
+        
         // only needed for PHP prior to 5.5.24
         if (!defined('CURL_HTTP_VERSION_2_0')) {
               define('CURL_HTTP_VERSION_2_0', 3);
         }
 	    $seperated_tokens = explode(',', $tokens);
 	    foreach ($seperated_tokens as $token){
-
+                
                 $http2ch = curl_init();
                 curl_setopt_array($http2ch, array(
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
@@ -108,15 +116,15 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
                     CURLOPT_TIMEOUT => 30,
                     CURLOPT_HEADER => 1
                 ));
-
+                
                  $result = curl_exec($http2ch);
             if ($result === FALSE) {
                 throw new Exception("Curl failed: ".curl_error($http2ch));
             }
-
+        
           $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
         //   echo $status;
-
+        
 
         // header('Content-type: application/json');
         // print json_encode($errors);
@@ -127,7 +135,7 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
 function ios_provider_notification($email, $title, $body, $thread_id, $color){
     include 'constants.php';
 	$db = establish_database();
-
+	
 	$tokens = "";
 
 	$stmnt = $db->prepare("SELECT iostokenprovider FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -135,7 +143,7 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
 	foreach ($stmnt->fetchAll() as $row) {
 		$tokens = $row['iostokenprovider'];
 	}
-
+	
 	if ($tokens != ''){
 	    $keyfile = 'AuthKey_MR5L97ZV2R.p8';               # <- Your AuthKey file
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
@@ -144,26 +152,26 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
         $url = 'https://api.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
 
         $message = '{"aps":{"alert":{"title": "' . $title . '", "body": "' . $body . '"},"sound":"default", "thread-id": "' . $thread_id . '", "color": "' . $color . '"}}';
-
+        
         $key = openssl_pkey_get_private('file://'.$keyfile);
-
+        
         $header = ['alg'=>'ES256','kid'=>$keyid];
         $claims = ['iss'=>$teamid,'iat'=>time()];
-
+        
         $header_encoded = base64($header);
         $claims_encoded = base64($claims);
-
+        
         $signature = '';
         openssl_sign($header_encoded . '.' . $claims_encoded, $signature, $key, 'sha256');
         $jwt = $header_encoded . '.' . $claims_encoded . '.' . base64_encode($signature);
-
+        
         // only needed for PHP prior to 5.5.24
         if (!defined('CURL_HTTP_VERSION_2_0')) {
               define('CURL_HTTP_VERSION_2_0', 3);
         }
 	    $seperated_tokens = explode(',', $tokens);
 	    foreach ($seperated_tokens as $token){
-
+                
                 $http2ch = curl_init();
                 curl_setopt_array($http2ch, array(
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
@@ -179,15 +187,15 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
                     CURLOPT_TIMEOUT => 30,
                     CURLOPT_HEADER => 1
                 ));
-
+                
                  $result = curl_exec($http2ch);
             if ($result === FALSE) {
                 throw new Exception("Curl failed: ".curl_error($http2ch));
             }
-
+        
           $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
         //   echo $status;
-
+        
 
         // header('Content-type: application/json');
         // print json_encode($errors);
@@ -823,11 +831,11 @@ function start_stop_order($order)
 		if ($status == "st") {
 			$sql = "UPDATE {$DB_PREFIX}orders SET end = ?, status = 'en' WHERE order_number = ?";
 			ios_customer_notification($customer_email, "Work Ended", $service . " (" . $order . ")", $order, "#1ecd97");
-
+			
 		} else if ($status == "cl") {
 			$sql = "UPDATE {$DB_PREFIX}orders SET start = ?, status = 'st' WHERE order_number = ?";
 			ios_customer_notification($customer_email, "Work Started", $service . " (" . $order . ")", $order, "#1ecd97");
-
+			
 		}
 
 		if ($sql != "") {
@@ -1157,8 +1165,8 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$client = new Client($sid, $token);
 						$client_phone = '+1' . $client_phone;
 						$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
-
-
+						
+						                
                         ios_customer_notification($customer_email, "Order Claimed By Provider", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
 					}
 
@@ -1216,7 +1224,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 			$stmt = $db->prepare($sql);
 			$params = array($email, $order_number);
 			$stmt->execute($params);
-
+			
             ios_customer_notification($customer_email, "Provider Designated", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
 			send_claimed_notification($order_number, $email, "primary", $db, $duration);
 
