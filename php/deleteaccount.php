@@ -17,14 +17,9 @@ if (isset($_POST["session"])) {
         
         $errors->sessionerror = "false";
         
-        $email = "";
-        $type = "";
-        $stmnt = $db->prepare("SELECT type, email FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-        foreach($stmnt->fetchAll() as $row) {
-            $type = $row["type"];
-            $email = $row["email"];
-        }
+        $user = get_user_info($session);
+        $type = $user["type"];
+        $email = $user["email"];
         
         $has_active_orders = false;
         
@@ -44,12 +39,7 @@ if (isset($_POST["session"])) {
                 
             } else {
                 
-                $stripe_acc = "";
-                $stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE session = ?;");
-                $stmnt->execute(array($session));
-                foreach($stmnt->fetchAll() as $row) {
-                    $stripe_acc = $row["stripe_acc"];
-                }
+                $stripe_acc = $user['stripe_acc'];
                             
                 $stripe = new \Stripe\StripeClient($STRIPE_API_KEY);
                 $response = $stripe->accounts->delete(
@@ -102,7 +92,7 @@ if (isset($_POST["session"])) {
                     // clear login table of provider info
                     $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                     $stmt = $db->prepare($sql);
-                    $params = array($session);
+                    $params = array($user['session']);
                     $stmt->execute($params);
                     
                 } else {
@@ -145,7 +135,7 @@ if (isset($_POST["session"])) {
                 // clear login table
                 $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($session);
+                $params = array($user['session']);
                 $stmt->execute($params);
                 
             }

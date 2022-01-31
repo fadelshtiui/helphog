@@ -13,12 +13,8 @@ if (isset($_POST["distance"]) && isset($_POST["city"]) && isset($_POST["state"])
     $city = trim($_POST['city']);
     $address = trim($_POST['address']);
     
-    $email = "";
-    $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
-    $stmnt->execute(array($session));
-    foreach($stmnt->fetchAll() as $row) {
-        $email = $row['email'];
-    }
+    $user = get_user_info($session);
+    $email = $user['email'];
     
     if ($email !== '') {
         
@@ -34,7 +30,7 @@ if (isset($_POST["distance"]) && isset($_POST["city"]) && isset($_POST["state"])
         } else if ($zip_error == "") {
             $sql = "UPDATE {$DB_PREFIX}login SET radius = ?, work_address = ?, work_city = ?, work_state = ?, work_zip = ? WHERE session = ?";
             $stmt = $db->prepare($sql);
-            $params = array($distance, $address, $city, $state, $zip, $session);
+            $params = array($distance, $address, $city, $state, $zip, $user['session']);
             $stmt->execute($params); 
         }
         

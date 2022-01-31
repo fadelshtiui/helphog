@@ -1,6 +1,6 @@
 <?php
 include 'common.php';
-if (isset($_POST["email"]) && isset($_POST["password"])) {
+if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST['request_source'])) {
     
     $db = establish_database();
     $response = new \stdClass();
@@ -45,25 +45,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                 $response->verified = $row["verified"];
             }
             
-            $session;
-            
-            $unique = false;
-            while (!$unique) {
-                $session = "" . bin2hex(openssl_random_pseudo_bytes(256));
-                $unique = true;
-                $result = $db->query("SELECT session FROM {$DB_PREFIX}login");
-                foreach ($result as $row) {
-                    if ($session == $row["session"]) {
-                        $unique = false;
-                    }
-                }
-            }
-            
-            $response->session = $session;
-            $sql = "UPDATE {$DB_PREFIX}login SET session = ? WHERE email = ?";
-            $stmt = $db->prepare($sql);
-            $params = array($session, $email);
-            $stmt->execute($params);
+            $response->session = update_session($request_source);
         }
         
     }

@@ -9,13 +9,9 @@ if (isset($_POST["session"]) && isset($_POST['tz'])) {
 
     if (check_session($post_session)) {
 
-        $email = "";
-
-        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($post_session));
-        foreach($stmnt->fetchAll() as $row) {
-            $email = $row['email'];
-        }
+        
+        $user = get_user_info($post_session);
+        $email = $user['email'];
 
         $response = new \stdClass();
         $orders_array = array();

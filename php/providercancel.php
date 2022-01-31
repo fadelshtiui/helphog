@@ -70,12 +70,8 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tz
                 $duration = "No time limit";
             }
 
-            $cancelling_provider = "";
-            $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
-            $stmnt->execute(array($session));
-            foreach ($stmnt->fetchAll() as $row) {
-                $cancelling_provider = $row['email'];
-            }
+            $user = get_user_info($session);
+            $cancelling_provider = $user['email'];
 
             $cancels = 0;
             $stmnt = $db->prepare("SELECT cancels FROM {$DB_PREFIX}login WHERE email = ?;");

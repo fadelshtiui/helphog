@@ -29,19 +29,7 @@ try {
 
     if (!$banned) {
         
-        $logged_in = false;
-
-        if ($session == '') {
-            $logged_in = false;
-        } else {
-            $result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
-        	foreach ($result as $row) {
-        		if ($session === $row['session']) {
-        			$logged_in = true;
-        		}
-        	}
-        }
-        
+        $logged_in = check_session($session);
     	
     	$customer_id = "";
     	$payment_method = "";
@@ -122,41 +110,39 @@ function retrieve_stripe_info($order_info, $session): array
     $card_brand = "";
     $card_last4 = "";
     
-    $stmnt = $db->prepare("SELECT customer_id, email FROM {$DB_PREFIX}login WHERE session = ?;");
-    $stmnt->execute(array($session));
-    foreach ($stmnt->fetchAll() as $row) {
+    $user = get_user_info($session);
         
-        if ($row["customer_id"] == "") {
-            $customer = \Stripe\Customer::create([
-                'email' => $row["email"],
-            ]);
-            $customer_id = $customer->id;
-    
-            $sql = "UPDATE {$DB_PREFIX}login SET customer_id = ? WHERE session = ?";
-			$stmt = $db->prepare($sql);
-			$params = array($customer_id, $session);
-			$stmt->execute($params);
-            
-        } else {
-            $customer_id = $row["customer_id"];
+    if ($user["customer_id"] == "") {
+        $customer = \Stripe\Customer::create([
+            'email' => $user["email"],
+        ]);
+        $customer_id = $customer->id;
 
-            $cards = \Stripe\PaymentMethod::all([
-              "customer" => $customer_id, "type" => "card"
-            ]);
-            
-            $latest_created = 0;
-            
-            foreach ($cards as $card) {
-                if ($card->created > $latest_created){
-                    $card_brand = $card->card->brand;
-                    $card_last4 = $card->card->last4;
-                    $payment_method = $card->id;
-                    $latest_created = $card->created;
-                }
+        $sql = "UPDATE {$DB_PREFIX}login SET customer_id = ? WHERE session = ?";
+        $stmt = $db->prepare($sql);
+        $params = array($customer_id, $user['session']);
+        $stmt->execute($params);
+        
+    } else {
+        $customer_id = $user["customer_id"];
+
+        $cards = \Stripe\PaymentMethod::all([
+            "customer" => $customer_id, "type" => "card"
+        ]);
+        
+        $latest_created = 0;
+        
+        foreach ($cards as $card) {
+            if ($card->created > $latest_created){
+                $card_brand = $card->card->brand;
+                $card_last4 = $card->card->last4;
+                $payment_method = $card->id;
+                $latest_created = $card->created;
             }
-            
         }
+        
     }
+    
     return array($customer_id, $payment_method, $card_brand , $card_last4);
 }
     
@@ -306,14 +292,11 @@ function create_order($payment_intent, $order_info, array $items, $tax_rate, $se
     $_SESSION['order'] = $order_info->order;
     $_SESSION['service'] = $order_info->service;
     
+    $user = get_user_info($session);
     if ($order_info->customeremail != '') {
         $_SESSION['customeremail'] = $order_info->customeremail;
     } else {
-        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-        foreach ($stmnt->fetchAll() as $row) {
-            $_SESSION['customeremail'] = $row["email"];
-        }
+        $_SESSION['customeremail'] = $user["email"];
     }
     
     $_SESSION['schedule'] = $order_info->schedule;
@@ -322,11 +305,7 @@ function create_order($payment_intent, $order_info, array $items, $tax_rate, $se
     if ($order_info->phone != '') {
         $_SESSION['phone'] = $order_info->phone;
     } else {
-        $stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-        foreach ($stmnt->fetchAll() as $row) {
-            $_SESSION['phone'] = $row["phone"];
-        }
+        $_SESSION['phone'] = $user["phone"];
     }
     
     $_SESSION['message'] = $order_info->message;
@@ -376,13 +355,10 @@ function is_banned(array $creds): bool
     $session = $entry->session;
     
     if ($session != '') {
-        $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-    	foreach ($result as $row) {
-    		if ($row["banned"] == "y") {
-                return true;
-            }
-    	}
+        $user = get_user_info($session);
+        if ($user["banned"] == "y") {
+            return true;
+        }
     } else { // guest
         $stmnt = $db->prepare("SELECT banned FROM {$DB_PREFIX}guests WHERE phone = ?;");
         $stmnt->execute(array($phone));

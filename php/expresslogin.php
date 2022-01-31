@@ -8,12 +8,8 @@ $stripe = new \Stripe\StripeClient(
 if (isset($_POST["session"])) {
     $db = establish_database();
     $session = trim($_POST["session"]);
-    $stripe_acc = "";
-    $stmnt = $db->prepare("SELECT stripe_acc FROM {$DB_PREFIX}login WHERE session = ?;");
-    $stmnt->execute(array($session));
-    foreach($stmnt->fetchAll() as $row) {
-        $stripe_acc = $row['stripe_acc'];
-    }
+    $user = get_user_info($session);
+    $stripe_acc = $user['stripe_acc'];
     
     $loginlink = $stripe->accounts->createloginLink(
         $stripe_acc,

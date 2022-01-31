@@ -13,18 +13,14 @@ if (isset($_POST["token"]) && isset($_POST["session"])) {
 
     if (check_session($session)) {
 
-        $stmnt = $db->prepare("SELECT iostokenprovider FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-        foreach($stmnt->fetchAll() as $row) {
-            $tokens = $row['iostokens'];
-
-        }
+        $user = get_user_info($session);
+        $tokens = $user['iostokens'];
 
         if (strpos($tokens, $token) == false) {
             $tokens = $tokens . "," . $token;
             $sql2 = "UPDATE {$DB_PREFIX}login SET iostokenprovider = ? WHERE session = ?";
             $stmt2 = $db->prepare($sql2);
-            $params = array($tokens, $session);
+            $params = array($tokens, $user['session']);
             $stmt2->execute($params);
         }
 

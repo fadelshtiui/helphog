@@ -21,12 +21,44 @@ ini_set('display_errors', 'On');
 # error_reporting(E_ALL);
 error_reporting(E_ERROR | E_PARSE);
 
+function update_session($request_source) {
+	include 'constants.php';
+	$unique = false;
+	while (!$unique) {
+		$session = "" . bin2hex(openssl_random_pseudo_bytes(256));
+		$unique = true;
+		$result = $db->query("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login");
+		foreach ($result as $row) {
+			if (hash_equals($row['session'], $session) ||
+				hash_equals($row['ios_session'], $session) ||
+				hash_equals($row['ios_provider_session'], $session)) {
+				$unique = false;
+			}
+		}
+	}
+	if ($request_source == 'providerapp') {
+		$sql = "UPDATE {$DB_PREFIX}login SET ios_provider_session = ? WHERE email = ?";
+	} else if ($request_source == 'desktop') {
+		$sql = "UPDATE {$DB_PREFIX}login SET session = ? WHERE email = ?";
+	} // request_source == 'customerapp'
+		$sql = "UPDATE {$DB_PREFIX}login SET ios_session = ? WHERE email = ?";
+	}
+	
+	$stmt = $db->prepare($sql);
+	$params = array($session, $email);
+	$stmt->execute($params);
+
+	return $session;
+}
+
 function get_user_info($session) {
-    include 'constants.php';
-    $db = establish_database();
-    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ? OR ios_session = ? OR ios_provider_session = ?;");
-    $stmnt->execute(array($session, $session, $session));
-    return $stmnt->fetch();
+	if ($session != '') {
+		include 'constants.php';
+		$db = establish_database();
+		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ? OR ios_session = ? OR ios_provider_session = ?;");
+		$stmnt->execute(array($session, $session, $session));
+		return $stmnt->fetch();
+	}
 }
 
 function isMobileRequest() {
@@ -491,14 +523,17 @@ function user_exists($session)
 	include 'constants.php';
 
 	$db = establish_database();
-
-	$result = $db->query("SELECT session FROM {$DB_PREFIX}login;");
-	foreach ($result as $row) {
-		if (hash_equals($row['session'], $session)) {
-			return true;
+	if ($session != '') {
+		$result = $db->query("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login;");
+		foreach ($result as $row) {
+			if (hash_equals($row['session'], $session) ||
+				hash_equals($row['ios_session'], $session) ||
+				hash_equals($row['ios_provider_session'], $session)) {
+				return true;
+			}
 		}
 	}
-
+	
 	return false;
 }
 
@@ -516,10 +551,13 @@ function validate_customer($order, $session)
 		$customer_email = $row['customer_email'];
 	}
 
-	$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
-	$stmnt->execute(array($customer_email));
-	foreach ($stmnt->fetchAll() as $row) {
-		if (hash_equals($row['session'], $session)) {
+	if ($session != '') {
+		$stmnt = $db->prepare("SELECT session. ios_session, ios_provider_session FROM {$DB_PREFIX}login WHERE email = ?;");
+		$stmnt->execute(array($customer_email));
+		$result = $stmnt->fetch();
+		if (hash_equals($result['session'], $session) ||
+			hash_equals($result['ios_session'], $session) ||
+			hash_equals($result['ios_provider_session'], $session)) {
 			return true;
 		}
 	}
@@ -633,10 +671,13 @@ function validate_provider($order, $session)
 	}
 
 	foreach ($all_providers as $provider) {
-		$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
-		$stmnt->execute(array($provider));
-		foreach ($stmnt->fetchAll() as $row) {
-			if (hash_equals($row['session'], $session)) {
+		if ($session != '') {
+			$stmnt = $db->prepare("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login WHERE email = ?;");
+			$stmnt->execute(array($provider));
+			$result = $stmnt->fetch();
+			if (hash_equals($result['session'], $session) ||
+				hash_equals($result['ios_session'], $session) ||
+				hash_equals($result['ios_provider_session'], $session)) {
 				return true;
 			}
 		}
@@ -650,15 +691,18 @@ function validate_user($email, $session)
 	include 'constants.php';
 
 	$db = establish_database();
-	$customer_email = "";
-	$stmnt = $db->prepare("SELECT session FROM {$DB_PREFIX}login WHERE email = ?;");
-	$stmnt->execute(array($email));
-	foreach ($stmnt->fetchAll() as $row) {
-		if (hash_equals($row['session'], $session)) {
+	if ($session != '') {
+		$customer_email = "";
+		$stmnt = $db->prepare("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login WHERE email = ?;");
+		$stmnt->execute(array($email));
+		$result = $stmnt->fetch();
+		if (hash_equals($result['session'], $session) ||
+			hash_equals($result['ios_session'], $session) ||
+			hash_equals($result['ios_provider_session'], $session)) {
 			return true;
 		}
 	}
-
+	
 	return false;
 }
 
@@ -1428,16 +1472,18 @@ function &establish_database()
 	return $db;
 }
 
-function check_session($post_session)
+function check_session($session)
 {
 	include 'constants.php';
 
 	$db = establish_database();
 	$found = false;
-	if ($post_session != "") {
-		$sessions = $db->query("SELECT session FROM {$DB_PREFIX}login;");
-		foreach ($sessions as $session) {
-			if (hash_equals($post_session, $session[0])) {
+	if ($session != "") {
+		$result = $db->query("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login;");
+		foreach ($result as $row) {
+			if (hash_equals($session, $row['session']) ||
+				hash_equals($session, $row['ios_session']) ||
+				hash_equals($session, $row['ios_provider_session'])) {
 				$found = true;
 			}
 		}

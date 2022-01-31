@@ -23,11 +23,8 @@ if (isset($_POST["availability"]) && isset($_POST["session"]) && isset($_POST['t
         
         $db = establish_database();
         
-        $stmnt = $db->prepare("SELECT alerts FROM {$DB_PREFIX}login WHERE email = ?;");
-        $stmnt->execute(array($email));
-        foreach($stmnt->fetchAll() as $row) {
-            $alerts = $row['alerts']; 
-        }
+        $user = get_user_info($session);
+        $alerts = $user['alerts']; 
         if ($alerts == "none"){
             $availability = "";
             for ($x = 0; $x <= 168; $x++) {
@@ -37,7 +34,7 @@ if (isset($_POST["availability"]) && isset($_POST["session"]) && isset($_POST['t
         
         $sql = "UPDATE {$DB_PREFIX}login SET availability = ? WHERE session = ?";
         $stmt = $db->prepare($sql);
-        $params = array($availability, $session);
+        $params = array($availability, $user['session']);
         $stmt->execute($params);
 
     }

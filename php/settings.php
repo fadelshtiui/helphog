@@ -29,57 +29,53 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
             
             $name = "";
             $to_send = "";
-            $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ?;");
-            $stmnt->execute(array($session));
-            foreach($stmnt->fetchAll() as $row) {
+            $user = get_user_info($session);            
                 
-                if (strlen($row["work_address"]) < 1) {
-                    $no_address = true;
-                }
-                if (strlen($row["work_city"]) < 1) {
-                    $no_city = true;
-                }
-                if (strlen($row["work_state"]) < 1) {
-                    $no_state = true;
-                }
-                if (strlen($row["work_zip"]) < 1) {
-                    $no_zip = true;
-                }
-                
-                $name = $row["firstname"];
-                $errors->zip = $row["zip"];
-                $to_send = $row["email"];
-                
+            if (strlen($user["work_address"]) < 1) {
+                $no_address = true;
+            }
+            if (strlen($user["work_city"]) < 1) {
+                $no_city = true;
+            }
+            if (strlen($user["work_state"]) < 1) {
+                $no_state = true;
+            }
+            if (strlen($user["work_zip"]) < 1) {
+                $no_zip = true;
             }
             
+            $name = $user["firstname"];
+            $errors->zip = $user["zip"];
+            $to_send = $user["email"];
+                
             $sql = "UPDATE {$DB_PREFIX}login SET address = :address, city = :city, zip = :zip, state = :state  WHERE session = :session";
             if ($no_zip) {
                 $sql = "UPDATE {$DB_PREFIX}login SET address = :address, city = :city, zip = :zip, state = :state, work_zip = :work_zip  WHERE session = :session";
             }
             $stmt = $db->prepare($sql);
             
-            $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $session);
+            $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $user['session']);
             if ($no_zip) {
-                $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $session, "work_zip" => $zip);
+                $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $user['session'], "work_zip" => $zip);
             }
             $stmt->execute($params);
             
             if ($no_address) {
                 $sql = "UPDATE {$DB_PREFIX}login SET work_address = ? WHERE session = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($address, $session);
+                $params = array($address, $user['session']);
                 $stmt->execute($params);
             }
             if ($no_city) {
                 $sql = "UPDATE {$DB_PREFIX}login SET work_city = ? WHERE session = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($city, $session);
+                $params = array($city, $user['session']);
                 $stmt->execute($params);
             }
             if ($no_state) {
                 $sql = "UPDATE {$DB_PREFIX}login SET work_state = ? WHERE session = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($state, $session);
+                $params = array($state, $user['session']);
                 $stmt->execute($params);
             }
         }

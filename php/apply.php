@@ -17,14 +17,9 @@ if (isset($_POST["session"]) && isset($_POST["workfield"]) && isset($_POST["expe
         
         $db = establish_database();
         
-        $email = "";
-        $zip = "";
-        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-        foreach($stmnt->fetchAll() as $row) {
-            $email = $row["email"];
-            $zip = $row['zip'];
-        }
+        $user = get_user_info($session);
+        $email = $user["email"];
+        $zip = $user['zip'];
         
         if (isset($_FILES['resume'])) {
             

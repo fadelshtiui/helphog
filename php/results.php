@@ -109,34 +109,26 @@ foreach ($stmnt->fetchAll() as $row) {
 
           $session = $_POST['session'];
 
-          $stmnt = $db->prepare("SELECT address, state, city, zip, radius FROM {$DB_PREFIX}login WHERE session = ?;");
-          $stmnt->execute(array($session));
-          $radius = 0;
-          $address = "";
-          $state = "";
-          $city = "";
-          $zip = "";
-          foreach ($stmnt->fetchAll() as $row) {
-               $radius = intval($row["radius"]);
+          $user = get_user_info($session);
+          $radius = intval($user["radius"]);
 
-               $address = $row["address"];
-               if ($address != "") {
-                    $response->address = $address;
-               }
-
-               $state = $row["state"];
-               if ($state != "") {
-                    $response->state = $state;
-               }
-
-               $city = $row["city"];
-               if ($city != "") {
-                    $response->city = $city;
-               }
-
-               $zip = $row["zip"];
-               $response->zip = $zip;
+          $address = $user["address"];
+          if ($address != "") {
+               $response->address = $address;
           }
+
+          $state = $user["state"];
+          if ($state != "") {
+               $response->state = $state;
+          }
+
+          $city = $user["city"];
+          if ($city != "") {
+               $response->city = $city;
+          }
+
+          $zip = $user["zip"];
+          $response->zip = $zip;
 
           $full_address = str_replace(' ', '+', $address . '+' . $city . '+' . $state . '+' . $zip);
      } else if (isset($_POST['zip'])) { // guest

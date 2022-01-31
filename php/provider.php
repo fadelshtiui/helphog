@@ -7,135 +7,60 @@ $response = new \stdClass();
 $session = "";
 $validated = false;
 $params = array();
+$response->sessionerror = "";
 
-if (isset($_POST['tz'])) {
+if (check_session($session)) {
 
     $tz = trim($_POST['tz']);
-
-    if (isset($_POST["email"]) && isset($_POST["password"])) {
-
-        $email_error = "";
-        $password_error = "";
-
-
-        $email = trim($_POST["email"]);
-        $found = false;
-        $result = $db->query("SELECT email FROM {$DB_PREFIX}login WHERE type='Business';");
-        foreach ($result as $row) {
-            if ($email === $row['email']) {
-                $found = true;
-            }
-        }
-
-        if ($email == "") {
-            $email_error = "empty";
-        } else if (!$found) {
-            $email_error = "true";
-        } else {
-
-            $password = trim($_POST["password"]);
-
-            $found = false;
-            $stmnt = $db->prepare("SELECT password FROM {$DB_PREFIX}login WHERE email = ?;");
-            $stmnt->execute(array($email));
-            foreach($stmnt->fetchAll() as $row) {
-                if (password_verify($password, $row['password'])) {
-                    $found = true;
-                }
-            }
-
-            if ($password == "") {
-                $password_error = "empty";
-            } else if (!$found) {
-                $password_error = "true";
-            } else {
-                $session = "" . bin2hex(openssl_random_pseudo_bytes(256));
-                $sql = "UPDATE {$DB_PREFIX}login SET session = ? WHERE email = ?";
-                $stmt = $db->prepare($sql);
-                $params = array($session, $_POST["email"]);
-                $stmt->execute($params);
-
-                $account_sql = "SELECT * FROM {$DB_PREFIX}login WHERE email = ?;";
-                $params = array($email);
-                $validated = true;
-            }
-        }
-
-        $response->emailerror = $email_error;
-        $response->passworderror = $password_error;
-    }
-
-    if (isset($_POST['session'])) {
-        $session = trim($_POST["session"]);
-        $session_error = "";
-        if (check_session($session)) {
-
-            $account_sql = "SELECT * FROM {$DB_PREFIX}login WHERE session = ?;";
-            $validated = true;
-            $params = array($session);
-
-        } else {
-            $session_error = "true";
-        }
-
-        $response->sessionerror = $session_error;
-    }
-
-}
-
-if ($validated) {
 
     $orders_array = array();
     $email = "";
 
-    $stmnt = $db->prepare($account_sql);
-    $stmnt->execute($params);
-    foreach($stmnt->fetchAll() as $row) {
+    $user = get_user_info($session);
 
-        $response->firstname = $row["firstname"];
-        $response->lastname = $row["lastname"];
-        $response->type = $row["type"];
-        $response->email = $row["email"];
-        $response->phone = $row["phone"];
-        $response->zip = $row["zip"];
-        $response->workfield = $row["workfield"];
-        $response->address = $row["address"];
-        $response->city = $row["city"];
-        $response->state = $row["state"];
-        $response->verified = $row["verified"];
-        $response->radius = $row["radius"];
-        $response->workaddress = $row["work_address"];
-        $response->workcity = $row["work_city"];
-        $response->workstate = $row["work_state"];
-        $response->workzip = $row["work_zip"];
-        $response->workphone = $row["work_phone"];
-        $response->workemail = $row["work_email"];
-        $response->alerts = $row["alerts"];
-        $response->client_email = $row["client_email"];
-        $response->providerId = $row["id"];
-        $response->services_offered = $row["services"];
-        $response->disputes = $row["disputes"];
-        $response->cancels = $row["cancels"];
-        $response->banned = $row["banned"];
+    $response->firstname = $user["firstname"];
+    $response->lastname = $user["lastname"];
+    $response->type = $user["type"];
+    $response->email = $user["email"];
+    $response->phone = $user["phone"];
+    $response->zip = $user["zip"];
+    $response->workfield = $user["workfield"];
+    $response->address = $user["address"];
+    $response->city = $user["city"];
+    $response->state = $user["state"];
+    $response->verified = $user["verified"];
+    $response->radius = $user["radius"];
+    $response->workaddress = $user["work_address"];
+    $response->workcity = $user["work_city"];
+    $response->workstate = $user["work_state"];
+    $response->workzip = $user["work_zip"];
+    $response->workphone = $user["work_phone"];
+    $response->workemail = $user["work_email"];
+    $response->alerts = $user["alerts"];
+    $response->client_email = $user["client_email"];
+    $response->providerId = $user["id"];
+    $response->services_offered = $user["services"];
+    $response->disputes = $user["disputes"];
+    $response->cancels = $user["cancels"];
+    $response->banned = $user["banned"];
 
-        $utc_time_zone = new DateTimeZone('UTC');
-        $local_time_zone = new DateTimeZone($tz);
-        $utc = new DateTime("now", $utc_time_zone);
-        $local = new DateTime("now", $local_time_zone);
-        $offset = $local_time_zone->getOffset($utc) / 3600;
-        $offset = $offset * -1;
-        $response->availability = substr($row['availability'], $offset) . substr($row['availability'], 0, $offset);
+    $utc_time_zone = new DateTimeZone('UTC');
+    $local_time_zone = new DateTimeZone($tz);
+    $utc = new DateTime("now", $utc_time_zone);
+    $local = new DateTime("now", $local_time_zone);
+    $offset = $local_time_zone->getOffset($utc) / 3600;
+    $offset = $offset * -1;
+    $response->availability = substr($row['availability'], $offset) . substr($row['availability'], 0, $offset);
 
-        $time = new DateTimeZone($row['timezone']);
-        $response->offset = $time->getOffset($utc) / 3600;
-        $response->tz = $row['timezone'];
+    $time = new DateTimeZone($row['timezone']);
+    $response->offset = $time->getOffset($utc) / 3600;
+    $response->tz = $row['timezone'];
 
-        $response->session = $session;
+    $response->session = $session;
 
-        $email = $row["email"];
-    }
+    $email = $user["email"];
 
-$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? ORDER BY start DESC;");
+    $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? OR secondary_providers LIKE ? ORDER BY start DESC;");
 
     $total_revenue = 0.0;
     $active_disputes = 0;
@@ -281,6 +206,8 @@ $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}orders WHERE client_email = ? O
 
     $response->orders = $orders_array;
 
+} else {
+    $response->sessionerror = "";
 }
 
 header('Content-type: application/json');

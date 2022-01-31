@@ -13,12 +13,8 @@ if (isset($_POST["token"]) && isset($_POST["session"])) {
 
     if (check_session($session)) {
 
-        $stmnt = $db->prepare("SELECT iostokens FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($session));
-        foreach($stmnt->fetchAll() as $row) {
-            $tokens = $row['iostokens'];
-
-        }
+        $user = get_user_info($session);
+        $tokens = $user['iostokens'];
 
         if (strpos($tokens, $token) == false) {
             $tokens = $tokens . "," . $token;
