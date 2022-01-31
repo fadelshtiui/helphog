@@ -14,32 +14,29 @@ if (isset($_POST["session"])) {
     if ($found) {
         $response->validated = "true";
         
-        $stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ?;");
-        $stmnt->execute(array($post_session));
-        foreach($stmnt->fetchAll() as $row) {
+        $user = get_user_info($post_session);
             
-            $account->firstname = $row['firstname'];
-            $account->email = $row['email'];
-            $account->phone = $row['phone'];
-            $account->address = $row['address'];
-            $account->city = $row['city'];
-            $account->state = $row['state'];
-            $account->zip = $row['zip'];
-            $account->type = $row['type'];
-            
-            if ($row['type'] == 'Business') {
-                $account->work_address = $row['work_address'];
-                $account->work_city = $row['work_city'];
-                $account->work_state = $row['work_state'];
-                $account->work_zip = $row['work_zip'];
-                $account->work_phone = $row['work_phone'];
-                $account->work_email = $row['work_email'];
-                $account->radius = $row['radius'];
-                $account->availability = $row['availability'];
-                $account->workfield = $row['workfield'];
-            }
-            
+        $account->firstname = $user['firstname'];
+        $account->email = $user['email'];
+        $account->phone = $user['phone'];
+        $account->address = $user['address'];
+        $account->city = $user['city'];
+        $account->state = $user['state'];
+        $account->zip = $user['zip'];
+        $account->type = $user['type'];
+        
+        if ($user['type'] == 'Business') {
+            $account->work_address = $user['work_address'];
+            $account->work_city = $user['work_city'];
+            $account->work_state = $user['work_state'];
+            $account->work_zip = $user['work_zip'];
+            $account->work_phone = $user['work_phone'];
+            $account->work_email = $user['work_email'];
+            $account->radius = $user['radius'];
+            $account->availability = $user['availability'];
+            $account->workfield = $user['workfield'];
         }
+            
     }
     
     $response->account = $account;

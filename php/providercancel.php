@@ -7,8 +7,6 @@ $stripe = new \Stripe\StripeClient(
 
 if (isset($_POST["ordernumber"]) && isset($_POST['session']) && isset($_POST['tzoffset']) && isset($_POST['role'])) {
 
-    sleep(3);
-
     $order_number = trim($_POST["ordernumber"]);
     $session = trim($_POST['session']);
     $tzoffset = trim($_POST['tzoffset']);

@@ -18,11 +18,12 @@ require 'PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer-master/src/SMTP.php';
 
 ini_set('display_errors', 'On');
-# error_reporting(E_ALL);
+error_reporting(E_ALL);
 error_reporting(E_ERROR | E_PARSE);
 
-function update_session($request_source) {
+function &update_session($request_source, $email) {
 	include 'constants.php';
+	$db = establish_database();
 	$unique = false;
 	while (!$unique) {
 		$session = "" . bin2hex(openssl_random_pseudo_bytes(256));
@@ -40,7 +41,7 @@ function update_session($request_source) {
 		$sql = "UPDATE {$DB_PREFIX}login SET ios_provider_session = ? WHERE email = ?";
 	} else if ($request_source == 'desktop') {
 		$sql = "UPDATE {$DB_PREFIX}login SET session = ? WHERE email = ?";
-	} // request_source == 'customerapp'
+	} else { // request_source == 'customerapp'
 		$sql = "UPDATE {$DB_PREFIX}login SET ios_session = ? WHERE email = ?";
 	}
 	
@@ -1477,18 +1478,18 @@ function check_session($session)
 	include 'constants.php';
 
 	$db = establish_database();
-	$found = false;
 	if ($session != "") {
 		$result = $db->query("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login;");
 		foreach ($result as $row) {
+		    error_log($row['session']);
 			if (hash_equals($session, $row['session']) ||
 				hash_equals($session, $row['ios_session']) ||
 				hash_equals($session, $row['ios_provider_session'])) {
-				$found = true;
+				return true;
 			}
 		}
 	}
-	return $found;
+	return false;
 }
 
 function get_order_status($order)

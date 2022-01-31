@@ -4,14 +4,11 @@ include 'common.php';
 
 $db = establish_database();
 $response = new \stdClass();
-$session = "";
-$validated = false;
-$params = array();
+$tz = trim($_POST['tz']);
+$session = trim($_POST['session']);
 $response->sessionerror = "";
 
 if (check_session($session)) {
-
-    $tz = trim($_POST['tz']);
 
     $orders_array = array();
     $email = "";
@@ -37,24 +34,24 @@ if (check_session($session)) {
     $response->workphone = $user["work_phone"];
     $response->workemail = $user["work_email"];
     $response->alerts = $user["alerts"];
-    $response->client_email = $user["client_email"];
+    // $response->client_email = $user["client_email"];
     $response->providerId = $user["id"];
     $response->services_offered = $user["services"];
     $response->disputes = $user["disputes"];
     $response->cancels = $user["cancels"];
     $response->banned = $user["banned"];
-
+    
     $utc_time_zone = new DateTimeZone('UTC');
     $local_time_zone = new DateTimeZone($tz);
     $utc = new DateTime("now", $utc_time_zone);
     $local = new DateTime("now", $local_time_zone);
     $offset = $local_time_zone->getOffset($utc) / 3600;
     $offset = $offset * -1;
-    $response->availability = substr($row['availability'], $offset) . substr($row['availability'], 0, $offset);
+    $response->availability = substr($user['availability'], $offset) . substr($user['availability'], 0, $offset);
 
-    $time = new DateTimeZone($row['timezone']);
+    $time = new DateTimeZone($user['timezone']);
     $response->offset = $time->getOffset($utc) / 3600;
-    $response->tz = $row['timezone'];
+    $response->tz = $user['timezone'];
 
     $response->session = $session;
 
@@ -109,7 +106,7 @@ if (check_session($session)) {
                 }
             }
 
-        $entry ->secondary_providers_string = $secondary_providers_string;
+            $entry ->secondary_providers_string = $secondary_providers_string;
         }
 
         $entry->order_number = $row["order_number"];
@@ -184,6 +181,7 @@ if (check_session($session)) {
 
         array_push($orders_array, $entry);
     }
+    
 
     if($total_ratings != 0){
         $response->rating = money_format('%.2n', $total_ratings/$number_of_ratings) . " of 5";
@@ -191,12 +189,13 @@ if (check_session($session)) {
         $response->rating = "No reviews yet";
     }
 
-    if($response->cancels != 0){
+
+    if($response->cancels != 0 && $total_orders != 0){
         $response->cancel_percentage = $response->cancels/$total_orders;
     }else{
         $response->cancel_percentage = 0;
     }
-
+    
     $response->revenue = money_format('%.2n', $total_revenue);
     $response->active_disputes = $active_disputes;
     $response->dispute_percentage = money_format('%.2n', $dispute_percentage);
@@ -205,10 +204,14 @@ if (check_session($session)) {
     $response->completed_orders = $completed_orders;
 
     $response->orders = $orders_array;
+    
+    
 
 } else {
-    $response->sessionerror = "";
+    $response->sessionerror = "true";
+    
 }
 
 header('Content-type: application/json');
 print json_encode($response);
+

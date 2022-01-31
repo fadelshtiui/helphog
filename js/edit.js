@@ -557,6 +557,7 @@ function submitLogin() {
      let password = id("password").value;
      data.append("email", email);
      data.append("password", password);
+     data.append("request_source", "desktop");
      let url = "php/signin.php";
      fetch(url, { method: "POST", body: data })
           .then(checkStatus)

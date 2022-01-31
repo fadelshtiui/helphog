@@ -9,6 +9,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST['request
     
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
+    $request_source = trim($_POST['request_source']);
     
     $found = false;
     $result = $db->query("SELECT email FROM {$DB_PREFIX}login;");
