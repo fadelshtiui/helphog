@@ -6,6 +6,8 @@ var uploading = false;
 
 let preloaded = false;
 
+var blacklisted = false;
+
 (function () {
 
 	window.addEventListener('beforeunload', (event) => {
@@ -35,6 +37,8 @@ let preloaded = false;
 
 		id('clear-availability').addEventListener('click', clearAvailability)
 
+		id('add-services').addEventListener('click', addServices)
+
 		id('addressDisplay').addEventListener('click', toggleAddressDisplay)
 
 		id('sliderUpdate').addEventListener("mouseup", updateDistance);
@@ -61,8 +65,7 @@ let preloaded = false;
 		data.append('tz', timezone);
 		let url = "php/provider.php";
 		fetch(url, { method: "POST", body: data })
-			.then(checkStatus)
-			.then(res => res.json())
+		    .then(res => res.json())
 			.then(checkSignedIn)
 			.catch(console.log);
 		let input = id("pass");
@@ -71,6 +74,48 @@ let preloaded = false;
 		const inputElement = id('work-phone');
 
 	});
+
+	function addServices(){
+        resetModal()
+		id('first').innerText = "Edit Services"
+		id('warning-message').innerText = "If you would like to add/remove services please contact us. Our contact information can be found on the contact us page."
+		id('yes').innerText = "Take me there"
+		id('yes').classList.add('primary-green')
+		id('no').innerText = "Close"
+		id('no').classList.add('secondary')
+		id('no').onclick = function () {
+			qs('.modal-wrapper').classList.add('hidden')
+		}
+
+		qs(".modal-wrapper").classList.remove('hidden')
+
+		id('yes').onclick = function () {
+
+			window.location = "/contact"
+
+		}
+	}
+
+	function youAreBanned(){
+        resetModal()
+			id('first').innerText = "Your account has been disabled"
+			id('warning-message').innerText = "Since your account is disabled, you will not receive any new orders. To reinstate your account, please contact us. Our contact information can be found on the contact us page."
+			id('yes').innerText = "Take me there"
+			id('yes').classList.add('primary-green')
+			id('no').innerText = "Close"
+			id('no').classList.add('secondary')
+			id('no').onclick = function () {
+				qs('.modal-wrapper').classList.add('hidden')
+			}
+
+			qs(".modal-wrapper").classList.remove('hidden')
+
+			id('yes').onclick = function () {
+
+				window.location = "/contact"
+
+			}
+	}
 
 	function clearAvailability() {
 		let rows = qsa(".time-slot")
@@ -173,7 +218,7 @@ let preloaded = false;
 
 	}
 
-	function checkSignedIn(response) {
+	async function checkSignedIn(response) {
 		if (response.sessionerror == "") {
 			$(".submit").addClass("hide-loading");
 			$(".done").addClass("finish");
@@ -259,26 +304,10 @@ let preloaded = false;
 			id('no').classList.add('hidden')
 			id('yes').innerText = "OK"
 			qs(".modal-wrapper").classList.remove('hidden')
+			id('yes').onclick = function () {
+				qs('.modal-wrapper').classList.add('hidden')
+			}
 		}
-	}
-
-	function reset() {
-		let data = new FormData();
-		let email = document.getElementById("first").value.toLowerCase();
-		let password = document.getElementById("pass").value;
-		data.append("email", email);
-		data.append("password", password);
-
-		let tz = jstz.determine();
-		let timezone = tz.name();
-
-		data.append('tz', timezone)
-		let url = "php/provider.php";
-		fetch(url, { method: "POST", body: data })
-			.then(checkStatus)
-			.then(res => res.json())
-			.then(handleResponse)
-			.catch(console.log);
 	}
 
 	function handleResponse(response) {
@@ -335,6 +364,7 @@ let preloaded = false;
 	}
 
 	function displayResults(response) {
+
 		var timezones = document.getElementById('timezone');
 		for (var i = 0; i < timezones.length; i++) {
 			if (timezones.options[i].value == response.tz) {
@@ -373,6 +403,10 @@ let preloaded = false;
 			}
 		}
 
+		if (response.banned == "y"){
+		    youAreBanned();
+		}
+
 		if (response.alerts == "both") {
 			document.getElementById("sms-notification").checked = true;
 			document.getElementById("email-notification").checked = true;
@@ -391,7 +425,6 @@ let preloaded = false;
 		if (percentage < 0) {
 			percentage = 0;
 		}
-		console.log(percentage)
 		percentage += 'px'
 		qs('.rangeslider-fill-lower').style.width = percentage;
 		qs('.rangeslider-thumb').style.left = percentage;
@@ -416,9 +449,14 @@ let preloaded = false;
 		}
 
 		if (!preloaded) {
-			preloaded = true;
+		    preloaded = true;
 			let orders = response.orders;
 			let counter = 0;
+			let currentYear = new Date().getFullYear()
+			const currentYearEarnings = new Array(12).fill(0.00);
+			const previousYearEarnings = new Array(12).fill(0.00);
+			let transcribedStatus = "";
+
 			if (orders && orders.length > 0) {
 
 				for (let i = 0; i < orders.length; i++) {
@@ -427,6 +465,7 @@ let preloaded = false;
 					let order = orders[i];
 
 					if (order.status == 'mc' || order.status == 're' || order.status == 'ac' || order.status == 'pc' || order.status == 'cc' || order.status == 'pd') {
+
 						counter++;
 						id("no-order-history").classList.add("hidden");
 						$('.dashboard-preview').show();
@@ -439,16 +478,41 @@ let preloaded = false;
 						service.innerText = "#" + order.order_number + ": " + order.service;
 
 						let customer = ce("h2");
-						customer.innerText = order.customer_email;
+						customer.innerText = order.schedule;
 						let span = ce("span");
-						span.innerText = "Date: " + order.schedule;
+
+						if (order.status == 'mc'){
+                            transcribedStatus = "Completed, awaiting validation"
+                            span.style.color = 'purple';
+                        }
+                        if (order.status == 're'){
+                            transcribedStatus = "Refunded"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'ac'){
+                            transcribedStatus = "Auto-canceled"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'pc'){
+                            transcribedStatus = "Canceled"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'cc'){
+                            transcribedStatus = "Customer canceled"
+                            span.style.color = 'red';
+                        }
+                        if (order.status == 'pd'){
+                            transcribedStatus = "Paid"
+                            span.style.color = 'green';
+                        }
+						span.innerText = transcribedStatus;
 						element.appendChild(service);
 						element.appendChild(customer);
 						element.appendChild(span);
 						block.addEventListener("click", update);
 
 						block.dataset.order_number = order.order_number;
-						block.dataset.customer_email = "Phone Contact: " + order.customer_phone;
+						block.dataset.customer_email = "Customer Contact: " + formatPhoneNumber(order.customer_phone);
 						block.dataset.message = order.message;
 						block.dataset.timestamp = "Date: " + order.timestamp;
 						block.dataset.schedule = order.schedule;
@@ -476,6 +540,10 @@ let preloaded = false;
 						}
 					} else {
 						id("no-ongoing-orders").classList.add("hidden");
+						var active= document.getElementsByClassName('active');
+            			for (var j = 0; j < active.length; j++) {
+            				active[j].style.color = '#1ecd97';
+            			}
 						let container = ce("div");
 						container.classList.add("slider-card");
 
@@ -509,7 +577,7 @@ let preloaded = false;
 						let h52 = ce("h5");
 						h52.style.color = 'black';
 						h52.style.fontWeight = "400";
-						h52.textContent = order.customer_phone;
+						h52.textContent = formatPhoneNumber(order.customer_phone);
 
 						let h53 = ce("h5");
 						h53.style.color = 'black';
@@ -666,13 +734,7 @@ let preloaded = false;
 								section3.appendChild(coworkersContact);
 							}
 
-
-
-
-
 						}
-
-
 
 						let message = ce("div");
 						message.classList.add("message");
@@ -778,8 +840,158 @@ let preloaded = false;
 						let outer = qs(".content-card");
 						outer.appendChild(container);
 					}
+					let orderDate = new Date(order.schedule);
+					if (order.status == "pd"){
+					    if (orderDate.getFullYear() == currentYear){
+					        currentYearEarnings[orderDate.getMonth()] = currentYearEarnings[orderDate.getMonth()] + order.revenue_raw;
+					    } else if (orderDate.getFullYear() == currentYear -1){
+					        previousYearEarnings[orderDate.getMonth()] = previousYearEarnings[orderDate.getMonth()] + order.revenue_raw;
+					    }
+					}
 				}
 			}
+
+
+    	    //rendering graph
+    	    const ctx = document.getElementById('myChart');
+    	    const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    datasets: [{
+                        label: currentYear + ' Earnings ($)',
+                        data: currentYearEarnings,
+                        backgroundColor: [
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)',
+                            'rgba(30, 205, 151, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)',
+                            'rgba(30, 205, 151, 1)'
+
+                        ],
+                        borderWidth: 1
+                    }, {
+                        label: (currentYear - 1) + ' Earnings ($)',
+                        data: previousYearEarnings,
+                        backgroundColor: [
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)',
+                            'rgba(244, 67, 54, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)',
+                            'rgba(244, 67, 54, 1)'
+
+                        ],
+                        borderWidth: 1
+                    }],
+                },
+                defaults:{
+                    font: {
+                                    size: 17,
+                                    family:"'Poppins', sans-serif"
+                                }
+                },
+                options: {
+                    tooltips: {
+                        callback: function(value, index, values) {
+                                    return '$' + value;
+                                }
+                      },
+                    tension: 0.3,
+                    scales: {
+                         x: {
+                          grid: {
+                            display: false
+                          }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                // Include a dollar sign in the ticks
+                                callback: function(value, index, values) {
+                                    return '$' + value;
+                                }
+                            },
+                            grid: {
+                            display: false
+                          }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                // This more specific font property overrides the global property
+                                font: {
+                                    size: 17,
+                                    family:"'Poppins', sans-serif"
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+    	    id('total-revenue').innerText = "$" + response.revenue
+            id('dispute-percentage').innerText = response.dispute_percentage
+    	    id('rating').innerText = response.rating
+
+
+    	    const servicesArr = response.services_offered.split(',')
+
+            var cont = document.getElementById('servicelist');
+
+            // create ul element and set the attributes.
+            var ul = document.createElement('ul');
+            ul.setAttribute('style', 'float: left; padding: -10px; padding-left: 26px; padding-bottom: 20px; text-align: left; line-height: 22px;');
+            ul.setAttribute('id', 'theList');
+
+            for (i = 0; i <= servicesArr.length - 1; i++) {
+                var li = document.createElement('li');     // create li element.
+                li.innerHTML = servicesArr[i];      // assigning text to li using array value.
+                ul.appendChild(li);     // append li to ul.
+            }
+            cont.appendChild(ul);       // add list to the container.
+
+    	    id('cancels').innerText = response.cancels
 		}
 		qs(".container").classList.remove("hidden");
 
@@ -1121,7 +1333,6 @@ let preloaded = false;
 			id("price_display").innerText += "/hr";
 		}
 
-		id("customer_email_display").innerText = this.dataset.customer_email;
 		id("service_display").innerText = this.dataset.service;
 		id("address_display").innerText = this.dataset.address;
 		let others = qsa(".dashboard-list__item");
@@ -1134,7 +1345,7 @@ let preloaded = false;
 
 	function checkbox() {
 
-		let alerts;;
+		let alerts;
 
 		var x = $("#email-notification").is(":checked");
 		var y = $("#sms-notification").is(":checked");
@@ -1168,9 +1379,42 @@ let preloaded = false;
 		let url = "php/alerts.php";
 		fetch(url, { method: "POST", body: data })
 			.then(checkStatus)
-			.then(reload)
+			.then(res => res.json())
+            .then(handle2)
 			.catch(console.log);
 		;
+	}
+
+	function handle2(response){
+	    if(response.status == "blacklisted"){
+    	    resetModal()
+
+    	    if (blacklisted){
+    	        id('first').innerText = "You're Still Blacklisted"
+    	    }else{
+    	        id('first').innerText = "You're Blacklisted"
+    	    }
+
+
+    		id('warning-message').innerText = "You're still blacklisted. If you would like to re-enable sms notifications, please text START to (253) 259-3451";
+    		id('yes').innerText = "I did it!"
+    		id('yes').classList.add('primary-green')
+    		id('no').innerText = "Go back"
+    		id('no').classList.add('secondary')
+    		id('no').onclick = function () {
+    			qs('.modal-wrapper').classList.add('hidden')
+    		}
+
+    		qs(".modal-wrapper").classList.remove('hidden')
+
+    		id('yes').onclick = function () {
+
+    			checkbox();
+    			blacklisted = true;
+    		}
+	    }else{
+	       reload();
+	    }
 	}
 
 	function updateTimezone() {
@@ -1219,9 +1463,18 @@ let preloaded = false;
 		id('no').classList.remove('primary-green')
 		id('no').classList.remove('primary-red')
 		id('no').classList.remove('secondary')
-		id('no').classList.remove('hidden')
+		id('yes').classList.remove('hidden')
 		id('no').onclick = null
 		id('no').innerText = ""
 	}
+
+	function formatPhoneNumber(phoneNumberString) {
+      var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+      var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+      if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+      }
+      return null;
+    }
 
 })();
