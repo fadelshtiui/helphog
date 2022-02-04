@@ -14,17 +14,20 @@ foreach($result as $row) {
     $service = $row["service"];
     $email = $row["customer_email"];
     $schedule = $row['schedule'];
+    $provider_email = $row["client_email"];
 
     $minutes_until = minutes_until($row["schedule"]);
     if ($minutes_until < 45.0 && $row["reminded"] == "n" && $row["status"] == "cl") {
 
         $phone = "";
         $tz = "";
-        $stmnt = $db->prepare("SELECT phone, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
+        $alerts = "";
+        $stmnt = $db->prepare("SELECT phone, timezone, alerts FROM {$DB_PREFIX}login WHERE email = ?;");
         $stmnt->execute(array($row["client_email"]));
         foreach($stmnt->fetchAll() as $row) {
             $phone = $row['phone'];
             $tz = $row['timezone'];
+            $alerts = $row['alerts'];
         }
 
         $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
@@ -35,8 +38,12 @@ foreach($result as $row) {
         $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
         $token = '18a458337ffdfd10617571e495314311';
         $client = new Client($sid, $token);
-        $client->messages->create('+1' . $phone, array('from' => '+12532593451', 'body' => 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));
-
+        if ($alerts == 'sms' || 'both'){
+            $client->messages->create('+1' . $phone, array('from' => '+12532593451', 'body' => 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));
+        }
+        if ($alerts == 'email' || 'both'){
+            send_email($provider_email, "no-reply@helphog.com", "Order Update",  get_partners_email('Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));
+        }
         $sql = "UPDATE {$DB_PREFIX}orders SET reminded = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array('y', $order_number);
