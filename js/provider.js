@@ -1403,6 +1403,7 @@ var blacklisted = false;
     		id('no').classList.add('secondary')
     		id('no').onclick = function () {
     			qs('.modal-wrapper').classList.add('hidden')
+    			document.getElementById("sms-notification").checked = false;
     		}
 
     		qs(".modal-wrapper").classList.remove('hidden')
