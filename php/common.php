@@ -44,7 +44,7 @@ function &update_session($request_source, $email) {
 	} else { // request_source == 'customerapp'
 		$sql = "UPDATE {$DB_PREFIX}login SET ios_session = ? WHERE email = ?";
 	}
-	
+
 	$stmt = $db->prepare($sql);
 	$params = array($session, $email);
 	$stmt->execute($params);
@@ -96,7 +96,7 @@ function banning($cancels, $client_email)
 function ios_customer_notification($email, $title, $body, $thread_id, $color){
     include 'constants.php';
 	$db = establish_database();
-	
+
 	$tokens = "";
 
 	$stmnt = $db->prepare("SELECT iostokens FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -104,7 +104,7 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
 	foreach ($stmnt->fetchAll() as $row) {
 		$tokens = $row['iostokens'];
 	}
-	
+
 	error_log($tokens);
 	if ($tokens != ''){
 	    $keyfile = 'AuthKey_MR5L97ZV2R.p8';               # <- Your AuthKey file
@@ -114,26 +114,26 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
         $url = 'https://api.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
 
         $message = '{"aps":{"alert":{"title": "' . $title . '", "body": "' . $body . '"},"sound":"default", "thread-id": "' . $thread_id . '", "color": "' . $color . '"}}';
-        
+
         $key = openssl_pkey_get_private('file://'.$keyfile);
-        
+
         $header = ['alg'=>'ES256','kid'=>$keyid];
         $claims = ['iss'=>$teamid,'iat'=>time()];
-        
+
         $header_encoded = base64($header);
         $claims_encoded = base64($claims);
-        
+
         $signature = '';
         openssl_sign($header_encoded . '.' . $claims_encoded, $signature, $key, 'sha256');
         $jwt = $header_encoded . '.' . $claims_encoded . '.' . base64_encode($signature);
-        
+
         // only needed for PHP prior to 5.5.24
         if (!defined('CURL_HTTP_VERSION_2_0')) {
               define('CURL_HTTP_VERSION_2_0', 3);
         }
 	    $seperated_tokens = explode(',', $tokens);
 	    foreach ($seperated_tokens as $token){
-                
+
                 $http2ch = curl_init();
                 curl_setopt_array($http2ch, array(
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
@@ -149,15 +149,15 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
                     CURLOPT_TIMEOUT => 30,
                     CURLOPT_HEADER => 1
                 ));
-                
+
                  $result = curl_exec($http2ch);
             if ($result === FALSE) {
                 throw new Exception("Curl failed: ".curl_error($http2ch));
             }
-        
+
           $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
         //   echo $status;
-        
+
 
         // header('Content-type: application/json');
         // print json_encode($errors);
@@ -168,7 +168,7 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
 function ios_provider_notification($email, $title, $body, $thread_id, $color){
     include 'constants.php';
 	$db = establish_database();
-	
+
 	$tokens = "";
 
 	$stmnt = $db->prepare("SELECT iostokenprovider FROM {$DB_PREFIX}login WHERE email = ?;");
@@ -176,7 +176,7 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
 	foreach ($stmnt->fetchAll() as $row) {
 		$tokens = $row['iostokenprovider'];
 	}
-	
+
 	if ($tokens != ''){
 	    $keyfile = 'AuthKey_MR5L97ZV2R.p8';               # <- Your AuthKey file
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
@@ -185,26 +185,26 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
         $url = 'https://api.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
 
         $message = '{"aps":{"alert":{"title": "' . $title . '", "body": "' . $body . '"},"sound":"default", "thread-id": "' . $thread_id . '", "color": "' . $color . '"}}';
-        
+
         $key = openssl_pkey_get_private('file://'.$keyfile);
-        
+
         $header = ['alg'=>'ES256','kid'=>$keyid];
         $claims = ['iss'=>$teamid,'iat'=>time()];
-        
+
         $header_encoded = base64($header);
         $claims_encoded = base64($claims);
-        
+
         $signature = '';
         openssl_sign($header_encoded . '.' . $claims_encoded, $signature, $key, 'sha256');
         $jwt = $header_encoded . '.' . $claims_encoded . '.' . base64_encode($signature);
-        
+
         // only needed for PHP prior to 5.5.24
         if (!defined('CURL_HTTP_VERSION_2_0')) {
               define('CURL_HTTP_VERSION_2_0', 3);
         }
 	    $seperated_tokens = explode(',', $tokens);
 	    foreach ($seperated_tokens as $token){
-                
+
                 $http2ch = curl_init();
                 curl_setopt_array($http2ch, array(
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
@@ -220,15 +220,15 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
                     CURLOPT_TIMEOUT => 30,
                     CURLOPT_HEADER => 1
                 ));
-                
+
                  $result = curl_exec($http2ch);
             if ($result === FALSE) {
                 throw new Exception("Curl failed: ".curl_error($http2ch));
             }
-        
+
           $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
         //   echo $status;
-        
+
 
         // header('Content-type: application/json');
         // print json_encode($errors);
@@ -268,10 +268,27 @@ function send_email($to, $from, $subject, $message)
 
 function send_text($phonenumber, $message)
 {
-	$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-	$token = '18a458337ffdfd10617571e495314311';
-	$client = new Client($sid, $token);
-	$client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => $message));
+    if (!blacklisted($phonenumber)){
+        $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
+    	$token = '18a458337ffdfd10617571e495314311';
+    	$client = new Client($sid, $token);
+    	$client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => $message));
+    }
+}
+
+function blacklisted($phone): bool
+{
+    $db = establish_database();
+    $result = $db->query("SELECT number FROM {$DB_PREFIX}blacklisted;");
+	foreach ($result as $row) {
+		if (strpos($row['number'], $phone)) {
+		    error_log("found");
+		    return true;
+		}else{
+		    error_log("not found");
+		    return false;
+		}
+	}
 }
 
 function &payment($order)
@@ -534,7 +551,7 @@ function user_exists($session)
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -703,7 +720,7 @@ function validate_user($email, $session)
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -876,11 +893,11 @@ function start_stop_order($order)
 		if ($status == "st") {
 			$sql = "UPDATE {$DB_PREFIX}orders SET end = ?, status = 'en' WHERE order_number = ?";
 			ios_customer_notification($customer_email, "Work Ended", $service . " (" . $order . ")", $order, "#1ecd97");
-			
+
 		} else if ($status == "cl") {
 			$sql = "UPDATE {$DB_PREFIX}orders SET start = ?, status = 'st' WHERE order_number = ?";
 			ios_customer_notification($customer_email, "Work Started", $service . " (" . $order . ")", $order, "#1ecd97");
-			
+
 		}
 
 		if ($sql != "") {
@@ -1108,10 +1125,12 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 		}
 
 		$client_phone = "";
+		$alerts = "";
 		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($client_email));
 		foreach ($stmnt->fetchAll() as $row) {
 			$client_phone = $row['phone'];
+			$alerts = $row['alerts'];
 		}
 
 		$tz = "";
@@ -1209,9 +1228,15 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						$token = '18a458337ffdfd10617571e495314311';
 						$client = new Client($sid, $token);
 						$client_phone = '+1' . $client_phone;
-						$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
-						
-						                
+
+						if ($alerts == "sms" || $alerts == "both"){
+						    $client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+						}
+
+						if ($alerts == "email" || $alerts == "both"){
+						   send_email($client_email, "no-reply@helphog.com", "Order Update",  get_partners_email($message));
+						}
+
                         ios_customer_notification($customer_email, "Order Claimed By Provider", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
 					}
 
@@ -1252,24 +1277,33 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 					$message .= $name . " (" . $phone . ")\n";
 				}
 
-				$stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}login WHERE email = ?;");
+                $alerts2 = "";
+				$stmnt = $db->prepare("SELECT phone, alerts FROM {$DB_PREFIX}login WHERE email = ?;");
 				$stmnt->execute(array($email));
 				foreach ($stmnt->fetchAll() as $row) {
 					$client_phone = $row['phone'];
+					$alerts2 = $row['alerts'];
 				}
 
 				$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
 				$token = '18a458337ffdfd10617571e495314311';
 				$client = new Client($sid, $token);
 				$client_phone = '+1' . $client_phone;
-				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+
+				if ($alerts2 == "sms" || $alerts2 == "both") {
+    				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+				}
+
+				if ($alerts2 == "email" || $alerts2 == "both"){
+				    send_email($email, "no-reply@helphog.com", "Order Update",  get_partners_email($message));
+				}
 			}
 
 			$sql = "UPDATE {$DB_PREFIX}orders SET client_email = ? WHERE order_number = ?";
 			$stmt = $db->prepare($sql);
 			$params = array($email, $order_number);
 			$stmt->execute($params);
-			
+
             ios_customer_notification($customer_email, "Provider Designated", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
 			send_claimed_notification($order_number, $email, "primary", $db, $duration);
 
@@ -1481,7 +1515,6 @@ function check_session($session)
 	if ($session != "") {
 		$result = $db->query("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login;");
 		foreach ($result as $row) {
-		    error_log($row['session']);
 			if (hash_equals($session, $row['session']) ||
 				hash_equals($session, $row['ios_session']) ||
 				hash_equals($session, $row['ios_provider_session'])) {
@@ -1562,13 +1595,16 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	$local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
 	$local_date->setTimezone(new DateTimeZone($tz));
 
-	send_email($email, "no-reply@helphog.com", "Claimed Task", get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration));
+    if ($alerts == "email" || $alerts == "both") {
+	    send_email($email, "no-reply@helphog.com", "Claimed Task", get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration));
+    }
 
 	$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
 	$token = '18a458337ffdfd10617571e495314311';
 	$client = new Client($sid, $token);
 	$client_phone = '+1' . $client_phone;
-	$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => 'Please contact the customer immediately to follow up on their order. Here are the order details:
+	if ($alerts == "sms" || $alerts == "both") {
+    	$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => 'Please contact the customer immediately to follow up on their order. Here are the order details:
 
 Customer Contact:
 Email: ' . $customer_email . '
@@ -1582,6 +1618,7 @@ Location: ' . $address . '
 Pay: ' . $price . '
 
 Message from Customer: ' . $customer_message));
+    }
 }
 
 function get_confirmation_email($order_number, $cost, $service, $name, $schedule, $customer_message, $address, $providers, $subtotal, $cancel_key, $provider)
@@ -2321,6 +2358,218 @@ function get_cancel_email($name, $service, $order_number, $schedule)
         			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
         			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
         			<p>Unfortunately, your order of ' . $service . ' (' . $order_number . ') on ' . $schedule . ' has been cancelled. Your provider has encountered extenuating circumstances, and will not be able to complete the service. You will be notified shortly if another provider picks up your order.</p>
+        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--></div><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;"><div style="font-size:1px;line-height:12px;">&nbsp;</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0 auto;max-width:640px;background:#ffffff;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden;"><table cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;font-size:0px;padding:0px;"><!--[if mso | IE]>
+        			<table border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:30px 70px 0px 70px;" align="center"><div style="cursor:auto;color: #1ecd97;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:18px;line-height:16px;text-align:center;">If you have any other questions/concerns, please contact us:</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:14px 70px 30px 70px;" align="center"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:22px;text-align:center;">
+        			(425) 640-3926 or support@helphog.com
+        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
+        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        	</div>
+        </body>
+';
+}
+
+function get_partners_email($message)
+{
+	include 'constants.php';
+
+	return '<body style="background: #F9F9F9;">
+        	<div style="background-color:#F9F9F9;">
+        	<div style="margin:0px auto;max-width:640px;background:transparent;">
+        		<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0">
+        		<tbody>
+        			<tr>
+        				<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 0px;">
+        					<!--[if mso | IE]>
+        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        						<tr>
+        							<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        								<![endif]-->
+        								<div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
+        									<div style="margin:0px auto;max-width:640px;background:#7289DA url(https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) top center / cover no-repeat;">
+        										<!--[if mso | IE]>
+        										<v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+        											<![endif]-->
+        											<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#7289DA url(../images/emaillogo.png) top center / cover no-repeat;" align="center" border="0" background="https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+        												<tbody>
+        													<tr>
+        														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
+        															<!--[if mso | IE]>
+        															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        																<tr style="background-color: white;">
+        																	<td style="vertical-align:undefined;width:640px;">
+        																		<![endif]-->
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Order Update</div>
+        																		<!--[if mso | IE]>
+        																	</td>
+        																</tr>
+        															</table>
+        															<![endif]-->
+        														</td>
+        													</tr>
+        												</tbody>
+        											</table>
+        											<!--[if mso | IE]>
+        										</v:textbox>
+        										</v:rect>
+        										<![endif]-->
+        									</div>
+        									<!--[if mso | IE]>
+        							</td>
+        						</tr>
+        					</table>
+        					<![endif]-->
+        					<!--[if mso | IE]>
+        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0px auto;max-width:640px;background:#ffffff;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 70px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
+        			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
+        			<p>' . $message . '</p>
+        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--></div><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;"><div style="font-size:1px;line-height:12px;">&nbsp;</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0 auto;max-width:640px;background:#ffffff;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden;"><table cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;font-size:0px;padding:0px;"><!--[if mso | IE]>
+        			<table border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:30px 70px 0px 70px;" align="center"><div style="cursor:auto;color: #1ecd97;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:18px;line-height:16px;text-align:center;">If you have any other questions/concerns, please contact us:</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:14px 70px 30px 70px;" align="center"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:22px;text-align:center;">
+        			(425) 640-3926 or support@helphog.com
+        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        			<!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0px auto;max-width:640px;background:transparent;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
+        			<a href="https://www.' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank">Website </a>HelpHog LLC<a href="https://' . $SUBDOMAIN . 'helphog.com/" style="color:#1EB0F4;text-decoration:none;" target="_blank"></a>
+        			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
+        			</div></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+        			</td></tr></table>
+        			<![endif]-->
+        	</div>
+        </body>
+';
+}
+
+function get_reminder_email($message)
+{
+	include 'constants.php';
+
+	return '<body style="background: #F9F9F9;">
+        	<div style="background-color:#F9F9F9;">
+        	<div style="margin:0px auto;max-width:640px;background:transparent;">
+        		<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:transparent;" align="center" border="0">
+        		<tbody>
+        			<tr>
+        				<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 0px;">
+        					<!--[if mso | IE]>
+        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        						<tr>
+        							<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        								<![endif]-->
+        								<div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
+        									<div style="margin:0px auto;max-width:640px;background:#7289DA url(https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) top center / cover no-repeat;">
+        										<!--[if mso | IE]>
+        										<v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+        											<![endif]-->
+        											<table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#7289DA url(../images/emaillogo.png) top center / cover no-repeat;" align="center" border="0" background="https://images.pexels.com/photos/688336/green-door-wood-entrance-688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+        												<tbody>
+        													<tr>
+        														<td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
+        															<!--[if mso | IE]>
+        															<table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        																<tr style="background-color: white;">
+        																	<td style="vertical-align:undefined;width:640px;">
+        																		<![endif]-->
+        																		<div style="cursor:auto;color:black;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Reminder</div>
+        																		<!--[if mso | IE]>
+        																	</td>
+        																</tr>
+        															</table>
+        															<![endif]-->
+        														</td>
+        													</tr>
+        												</tbody>
+        											</table>
+        											<!--[if mso | IE]>
+        										</v:textbox>
+        										</v:rect>
+        										<![endif]-->
+        									</div>
+        									<!--[if mso | IE]>
+        							</td>
+        						</tr>
+        					</table>
+        					<![endif]-->
+        					<!--[if mso | IE]>
+        					<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="640" align="center" style="width:640px;">
+        			<tr>
+        			<td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+        			<![endif]--><div style="margin:0px auto;max-width:640px;background:#ffffff;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 70px;"><!--[if mso | IE]>
+        			<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
+        			<![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
+        			<!--             <p><img src="" alt="" title="None" width="500" style="height: auto;"></p> -->
+        			<h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hello' . $name . ', </h2>
+        			<p>' . $message . '</p>
         			</div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div><!--[if mso | IE]>
         			</td></tr></table>
         			<![endif]-->
