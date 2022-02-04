@@ -17,7 +17,7 @@ if (isset($_POST["alerts"]) && isset($_POST["session"])) {
 
             $user = get_user_info($session);
             $work_phone = $user['work_phone'];
-    		$phone = $user['phone'];
+    		  $phone = $user['phone'];
 
             if ($alerts == "both" || $alerts == "sms"){
 

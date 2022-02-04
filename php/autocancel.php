@@ -86,24 +86,32 @@ foreach ($result as $row) {
                     $primary_work_phone = "";
                     $name = "";
                     $timezone = "";
-                    $stmnt = $db->prepare("SELECT work_phone, firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
+                    $alerts3 = "";
+                    $stmnt = $db->prepare("SELECT work_phone, firstname, timezone, alerts FROM {$DB_PREFIX}login WHERE email = ?;");
                     $stmnt->execute(array($client_email));
                     foreach ($stmnt->fetchAll() as $row) {
                         $primary_work_phone = $row['work_phone'];
                         $name = ' ' . $row['firstname'];
                         $timezone = $row['timezone'];
+                        $alerts3 = $row['alerts'];
                     }
 
                     $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
                     $utc->setTimezone(new DateTimeZone($timezone));
 
-                    if ($provider_never_started) {
-                        send_email($client_email, "no-reply@helphog.com", "Task Cancelled", partner_never_started($service, $order_number, $utc->format('F j, Y, g:i a'), $name));
-                    } else {
-                        send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name));
+                    if($alerts3 == 'sms' || $alerts3 == 'both'){
+                        if ($provider_never_started) {
+                            send_email($client_email, "no-reply@helphog.com", "Task Cancelled", partner_never_started($service, $order_number, $utc->format('F j, Y, g:i a'), $name));
+                        } else {
+                            send_email($client_email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name));
+                        }
+
                     }
 
-                    sendTextProvider($service, $order_number, $primary_work_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
+                    if($alerts3 == 'sms' || $alerts3 == 'both'){
+                        sendTextProvider($service, $order_number, $primary_work_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
+                    }
+
                 }
 
 
@@ -113,6 +121,7 @@ foreach ($result as $row) {
                         $phone = "";
                         $name2 = "";
                         $timezone = "";
+                        $alerts = "";
                         $stmnt = $db->prepare("SELECT work_phone, phone, firstname, timezone FROM {$DB_PREFIX}login WHERE email = ?;");
                         $stmnt->execute(array($email));
                         foreach ($stmnt->fetchAll() as $row) {
@@ -122,17 +131,23 @@ foreach ($result as $row) {
                             }
                             $name2 = ' ' . $row['firstname'];
                             $timezone = $row['timezone'];
+                            $alerts = $row['alerts'];
                         }
 
                         $utc = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
                         $utc->setTimezone(new DateTimeZone($timezone));
 
-                        sendTextProvider($service, $order_number, $work_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
+                        if($alerts == 'sms' || $alerts == 'both'){
+                            sendTextProvider($service, $order_number, $work_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
+                        }
 
-                        if ($provider_never_started) {
-                            send_email($email, "no-reply@helphog.com", "Task Cancelled", partner_never_started($service, $order_number, $utc->format('F j, Y, g:i a'), $name2));
-                        } else {
-                            send_email($email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name2));
+                        if($alerts == 'email' || $alerts == 'both'){
+
+                            if ($provider_never_started) {
+                                send_email($email, "no-reply@helphog.com", "Task Cancelled", partner_never_started($service, $order_number, $utc->format('F j, Y, g:i a'), $name2));
+                            } else {
+                                send_email($email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name2));
+                            }
                         }
                     }
                 }
@@ -152,7 +167,9 @@ foreach ($result as $row) {
                     []
                 );
 
-                sendTextCustomer($service, $order_number, $customer_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
+                if (!blacklisted($customer_phone)){
+                    sendTextCustomer($service, $order_number, $customer_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
+                }
 
                 if ($provider_never_started) {
                     send_email($customer_email, "no-reply@helphog.com", "Task Cancelled", provider_never_started($service, $order_number, $utc->format('F j, Y, g:i a'), $name3));
@@ -172,8 +189,8 @@ foreach ($result as $row) {
 
         error_log($e->getMessage());
 
-        send_email('maksim_maxim@live.com', "no-reply@helphog.com", "FATAL ERROR - autocancel.php (" . $row["order_number"] . ")", $e->getMessage());
-        send_email('fadelshtiui@gmail.com', "no-reply@helphog.com", "FATAL ERROR - autocancel.php (" . $row["order_number"] . ")", $e->getMessage());
+        // send_email('maksim_maxim@live.com', "no-reply@helphog.com", "FATAL ERROR - autocancel.php (" . $row["order_number"] . ")", $e->getMessage());
+        // send_email('fadelshtiui@gmail.com', "no-reply@helphog.com", "FATAL ERROR - autocancel.php (" . $row["order_number"] . ")", $e->getMessage());
     }
 }
 
