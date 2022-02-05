@@ -1,9 +1,12 @@
 <?php
 
 include 'common.php';
-if (isset($_POST["token"]) && isset($_POST["session"])) {
+
+if (isset($_POST["token"]) && isset($_POST["session"]) && isset($POST["action"])) {
+
 
     $token = $_POST["token"];
+    $action = $_POST["action"];
 
     $errors = new \stdClass();
 
@@ -13,18 +16,21 @@ if (isset($_POST["token"]) && isset($_POST["session"])) {
 
     if (check_session($session)) {
 
-        $user = get_user_info($session);
-        $tokens = $user['iostokens'];
+        $tokens = "";
 
-        if (strpos($tokens, $token) == false) {
-            $tokens = $tokens . "," . $token;
-            $sql2 = "UPDATE {$DB_PREFIX}login SET iostokens = ? WHERE session = ?";
-            $stmt2 = $db->prepare($sql2);
-            $params = array($tokens, $session);
-            $stmt2->execute($params);
+        if ($action == 'in'){
+
+            $tokens = $token;
+
         }
 
+        $sql = "UPDATE {$DB_PREFIX}login SET iostokens = ? WHERE ios_session = ?";
+        $stmt = $db->prepare($sql);
+        $params = array($tokens, $session);
+        $stmt->execute($params);
+
         $errors->sessionerror = "false";
+
 
     } else {
 
