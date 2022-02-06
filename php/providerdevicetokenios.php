@@ -2,7 +2,7 @@
 
 include 'common.php';
 
-if (isset($_POST["token"]) && isset($_POST["session"]) && isset($POST["action"])) {
+if (isset($_POST["token"]) && isset($_POST["session"]) && isset($_POST["action"])) {
 
 
     $token = $_POST["token"];
