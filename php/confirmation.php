@@ -215,6 +215,10 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
                 send_new_task_text($provider->phone, $provider->email, $order_number, $providerWage, $_SESSION["message"], $duration, $accept_key, $provider->tz, $people, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION['address'], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service']);
             }
             $response->ordernumber = $order_number;
+
+            discord_webhook("https://discord.com/api/webhooks/935703668735479868/h9qjc2TKEKVfXI45IPNlTaeLr51YL92iWEXdoy2SQlBWqXyjH7QPlF00O88yj0u9irX_",
+                            "There's a new order", $service, "Address:", $address, "Requested:", $subtotal, "Date:", $schedule);
+
         }
     } else {
 
