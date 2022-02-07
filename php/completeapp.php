@@ -64,7 +64,7 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
 
 function update_radius($radius, $email, $workfield, $db) {
     include 'constants.php';
-    
+
     if ($radius + 0 > 100) {
         $radius = "100";
     }
@@ -77,7 +77,7 @@ function update_radius($radius, $email, $workfield, $db) {
 
 function generate_provider_id($db) {
     include 'constants.php';
-    
+
     $id;
     $unique = false;
     while (!$unique) {
