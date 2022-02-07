@@ -570,7 +570,7 @@ function validate_customer($order, $session)
 	}
 
 	if ($session != '') {
-		$stmnt = $db->prepare("SELECT session. ios_session, ios_provider_session FROM {$DB_PREFIX}login WHERE email = ?;");
+		$stmnt = $db->prepare("SELECT session, ios_session, ios_provider_session FROM {$DB_PREFIX}login WHERE email = ?;");
 		$stmnt->execute(array($customer_email));
 		$result = $stmnt->fetch();
 		if (hash_equals($result['session'], $session) ||
@@ -1452,7 +1452,7 @@ function dispute_order($order_number)
 		$stmt->execute($params);
 
 		if ($order_disputes == 3) {
-			send_email("admin@helphog.com", "admin@helphog.com", "Mediation Required", 'Order Number: ' . $order_number);
+			discord_webhook("https://discord.com/api/webhooks/939999679360401509/AC_ireOCmMno86eDRHfb8-Z-MjiN1wO5UbR6fho2heMI_28AlRs6RW1-TDY2XTohxYmk", "Mediation Required", $service, "Customer Email:", $customer_email, "Customer Phone", $customer_phone, "Order #", $order_number);
 		}
 
 		$all_emails = array();
@@ -4116,4 +4116,91 @@ function get_receipt($name, $service, $order_number, $schedule, $description, $c
   </body>
 </html>
 ';
+}
+
+function discord_webhook($url, $message, $type, $data_a, $value_a, $data_b, $value_b, $data_c, $value_c){
+
+    $hookObject = json_encode([
+    /*
+     * The general "message" shown above your embeds
+     */
+    "content" => $message,
+    /*
+     * The username shown in the message
+     */
+    "username" => "HelpHog",
+    /*
+     * The image location for the senders image
+     */
+    "avatar_url" => "https://pbs.twimg.com/profile_images/972154872261853184/RnOg6UyU_400x400.jpg",
+    /*
+     * Whether or not to read the message in Text-to-speech
+     */
+    "tts" => false,
+    /*
+     * File contents to send to upload a file
+     */
+    // "file" => "",
+    /*
+     * An array of Embeds
+     */
+    "embeds" => [
+        /*
+         * Our first embed
+         */
+        [
+
+            // The type of your embed, will ALWAYS be "rich"
+            "type" => "rich",
+
+            // A description for your embed
+            "description" => $description,
+
+            // The integer color to be used on the left side of the embed
+            "color" => hexdec( "FFFFFF" ),
+
+            // Author object
+            "author" => [
+                "name" => $type,
+            ],
+
+            // Field array of objects
+            "fields" => [
+                // Field 1
+                [
+                    "name" => $data_a,
+                    "value" => $value_a,
+                    "inline" => false
+                ],
+                // Field 2
+                [
+                    "name" => $data_b,
+                    "value" => $value_b,
+                    "inline" => true
+                ],
+                // Field 3
+                [
+                    "name" => $data_c,
+                    "value" => $value_c,
+                    "inline" => true
+                ]
+            ]
+        ]
+    ]
+
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+$ch = curl_init();
+
+curl_setopt_array( $ch, [
+    CURLOPT_URL => $url,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $hookObject,
+    CURLOPT_HTTPHEADER => [
+        "Content-Type: application/json"
+    ]
+]);
+
+$response = curl_exec( $ch );
+curl_close( $ch );
 }
