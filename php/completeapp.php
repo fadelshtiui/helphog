@@ -28,7 +28,9 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
 
     update_radius($radius, $email, $workfield, $db);
 
-    send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
+    // send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
+    discord_webhook("https://discord.com/api/webhooks/940026168655089704/VN7EEcMLlVMH77WmCvp1SKODzoQF9hFrloFDkgHd5Abkz4HcGsEeh4fKXqF2WRLMZcP_", "New Applicant", $firstname, "Email:", $email, "Phone;", $phone, "Experience:", $experience);
+
 
     send_email($email, "no-reply@helphog.com", "Account Verification", get_signup_email($email, $firstname, $secret_key));
 
@@ -51,7 +53,8 @@ if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SES
 
     update_radius($radius, $email, $workfield, $db);
 
-    send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
+    // send_email("admin@helphog.com", "admin@helphog.com", "HelpHog - New Applicant", $firstname . "\n\n" . $email . "\n\n" . $workfield . "\n\n" . $experience . "\n\n" . $phone);
+    discord_webhook("https://discord.com/api/webhooks/940026168655089704/VN7EEcMLlVMH77WmCvp1SKODzoQF9hFrloFDkgHd5Abkz4HcGsEeh4fKXqF2WRLMZcP_", "New Applicant", $firstname, "Email:", $email, "Phone;", $phone, "Experience:", $experience);
 
 
     echo '<script>window.location.href = "https://www.' . $SUBDOMAIN . 'helphog.com/verify?message=Your+application+has+been+submitted.+Please+be+on+the+lookout+for+an+email+from+our+hiring+team.+Check+your+junk+folder+if+you+don%27t+see+our+email+within+24+hours.";</script>';
