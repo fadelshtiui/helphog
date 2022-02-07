@@ -46,7 +46,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST['request
                 $response->verified = $row["verified"];
             }
             
-            $response->session = update_session($request_source);
+            $response->session = update_session($request_source, $email);
         }
         
     }
