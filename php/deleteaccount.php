@@ -92,7 +92,7 @@ if (isset($_POST["session"])) {
                     // clear login table of provider info
                     $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
                     $stmt = $db->prepare($sql);
-                    $params = array($user['session']);
+                    $params = array($user['match_session']);
                     $stmt->execute($params);
                     
                 } else {
@@ -133,9 +133,10 @@ if (isset($_POST["session"])) {
                 $stmt->execute($params);
                 
                 // clear login table
-                $sql = "DELETE FROM {$DB_PREFIX}login WHERE session = ?";
+                $session_name = $user['session_name'];
+                $sql = "DELETE FROM {$DB_PREFIX}login WHERE {$session_name} = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($user['session']);
+                $params = array($user['match_session']);
                 $stmt->execute($params);
                 
             }

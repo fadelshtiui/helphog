@@ -118,9 +118,10 @@ function retrieve_stripe_info($order_info, $session): array
         ]);
         $customer_id = $customer->id;
 
-        $sql = "UPDATE {$DB_PREFIX}login SET customer_id = ? WHERE session = ?";
+        $session_name = $user['session_name'];
+        $sql = "UPDATE {$DB_PREFIX}login SET customer_id = ? WHERE {$session_name} = ?";
         $stmt = $db->prepare($sql);
-        $params = array($customer_id, $user['session']);
+        $params = array($customer_id, $user['match_session']);
         $stmt->execute($params);
         
     } else {

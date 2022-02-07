@@ -28,9 +28,10 @@ if (isset($_POST["distance"]) && isset($_POST["city"]) && isset($_POST["state"])
             echo "Full address required";
             return;
         } else if ($zip_error == "") {
-            $sql = "UPDATE {$DB_PREFIX}login SET radius = ?, work_address = ?, work_city = ?, work_state = ?, work_zip = ? WHERE session = ?";
+            $session_name = $user['session_name'];
+            $sql = "UPDATE {$DB_PREFIX}login SET radius = ?, work_address = ?, work_city = ?, work_state = ?, work_zip = ? WHERE {$session_name} = ?";
             $stmt = $db->prepare($sql);
-            $params = array($distance, $address, $city, $state, $zip, $user['session']);
+            $params = array($distance, $address, $city, $state, $zip, $user['match_session']);
             $stmt->execute($params);
         }
 

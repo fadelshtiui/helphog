@@ -58,8 +58,20 @@ function get_user_info($session) {
 		$db = establish_database();
 		$stmnt = $db->prepare("SELECT * FROM {$DB_PREFIX}login WHERE session = ? OR ios_session = ? OR ios_provider_session = ?;");
 		$stmnt->execute(array($session, $session, $session));
-		return $stmnt->fetch();
+		$result = $stmnt->fetch();
+		if (hash_equals($result['session'], $session)) {
+			$result['match_session'] = $result['session'];
+			$result['session_name'] = 'session';
+		} else if (hash_equals($row['ios_session'], $session)) {
+			$result['match_session'] = $row['ios_session'];
+			$result['session_name'] = 'ios_session';
+		} else { // hash_equals($row['ios_provider_session'], $session))
+			$result['match_session'] = $row['ios_provider_session'];
+			$result['session_name'] = 'ios_provider_session';
+		}
+		return $result;
 	}
+	return null;
 }
 
 function isMobileRequest() {

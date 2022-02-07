@@ -31,10 +31,10 @@ if (isset($_POST["availability"]) && isset($_POST["session"]) && isset($_POST['t
                 $availability = $availability . '0';
             }
         }
-        
-        $sql = "UPDATE {$DB_PREFIX}login SET availability = ? WHERE session = ?";
+        $session_name = $user['session_name'];
+        $sql = "UPDATE {$DB_PREFIX}login SET availability = ? WHERE {$session_name} = ?";
         $stmt = $db->prepare($sql);
-        $params = array($availability, $user['session']);
+        $params = array($availability, $user['match_session']);
         $stmt->execute($params);
 
     }

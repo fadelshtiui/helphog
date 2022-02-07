@@ -54,28 +54,29 @@ if (isset($_POST["address"]) && isset($_POST["city"]) && isset($_POST["zip"]) &&
             }
             $stmt = $db->prepare($sql);
             
-            $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $user['session']);
+            $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $user['match_session']);
             if ($no_zip) {
-                $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $user['session'], "work_zip" => $zip);
+                $params = array("address" => $address, "city" => $city, "zip" => $zip, "state" => $state, "session" => $user['match_session'], "work_zip" => $zip);
             }
             $stmt->execute($params);
             
+            $session_name = $user['session_name'];
             if ($no_address) {
-                $sql = "UPDATE {$DB_PREFIX}login SET work_address = ? WHERE session = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET work_address = ? WHERE {$session_name} = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($address, $user['session']);
+                $params = array($address, $user['match_session']);
                 $stmt->execute($params);
             }
             if ($no_city) {
-                $sql = "UPDATE {$DB_PREFIX}login SET work_city = ? WHERE session = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET work_city = ? WHERE {$session_name} = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($city, $user['session']);
+                $params = array($city, $user['match_session']);
                 $stmt->execute($params);
             }
             if ($no_state) {
-                $sql = "UPDATE {$DB_PREFIX}login SET work_state = ? WHERE session = ?";
+                $sql = "UPDATE {$DB_PREFIX}login SET work_state = ? WHERE {$session_name} = ?";
                 $stmt = $db->prepare($sql);
-                $params = array($state, $user['session']);
+                $params = array($state, $user['match_session']);
                 $stmt->execute($params);
             }
         }
