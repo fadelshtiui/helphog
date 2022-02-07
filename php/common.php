@@ -271,8 +271,12 @@ function send_text($phonenumber, $message)
     if (!blacklisted($phonenumber)){
         $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
     	$token = '18a458337ffdfd10617571e495314311';
-    	$client = new Client($sid, $token);
-    	$client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => $message));
+		try {
+			$client = new Client($sid, $token);
+			$client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => $message));
+		} catch (Exception $e) {
+			// figure out what to do here
+		}
     }
 }
 
@@ -495,24 +499,7 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 
 	if ($alerts == "sms" || $alerts == "both") {
 
-		$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-		$token = '18a458337ffdfd10617571e495314311';
-		$client = new Client($sid, $token);
-		$client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'There\'s a new service request in your area!
-
-Service: ' . $service . '
-Date: ' . $local_time->format("F j, Y, g:i a") . '
-Max duration: ' . $duration . '
-' . $commute . '
-Location: ' . $location . '
-Pay: ' . $price . '
-' . $partners . '
-
-Message: ' . $message . '
-
-Tap on the following link to obtain this job:
-
-https://' . $SUBDOMAIN . 'helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key));
+		send_text($phonenumber, get_new_task_text($service, $local_time, $duration, $commute, $location, $price, $partners, $message, $email, $ordernumber, $secret_key));
 	}
 }
 
@@ -1224,13 +1211,8 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 							$message .= $name . " (" . $phone . ")\n";
 						}
 
-						$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-						$token = '18a458337ffdfd10617571e495314311';
-						$client = new Client($sid, $token);
-						$client_phone = '+1' . $client_phone;
-
 						if ($alerts == "sms" || $alerts == "both"){
-						    $client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+							send_text($client_phone, $message);
 						}
 
 						if ($alerts == "email" || $alerts == "both"){
@@ -1285,13 +1267,8 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 					$alerts2 = $row['alerts'];
 				}
 
-				$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-				$token = '18a458337ffdfd10617571e495314311';
-				$client = new Client($sid, $token);
-				$client_phone = '+1' . $client_phone;
-
 				if ($alerts2 == "sms" || $alerts2 == "both") {
-    				$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => $message));
+					send_text($client_phone, $message);
 				}
 
 				if ($alerts2 == "email" || $alerts2 == "both"){
@@ -1599,26 +1576,45 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	    send_email($email, "no-reply@helphog.com", "Claimed Task", get_claimed_email($customer_message, $service, $local_date->format("F j, Y, g:i a"), $address, $price, $customer_email, $customer_phone, $name, $duration));
     }
 
-	$sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-	$token = '18a458337ffdfd10617571e495314311';
-	$client = new Client($sid, $token);
-	$client_phone = '+1' . $client_phone;
 	if ($alerts == "sms" || $alerts == "both") {
-    	$client->messages->create($client_phone, array('from' => '+12532593451', 'body' => 'Please contact the customer immediately to follow up on their order. Here are the order details:
-
-Customer Contact:
-Email: ' . $customer_email . '
-Phone: ' . $customer_phone . '
-
-Order: ' . $order_number . '
-Service: ' . $service . '
-Date: ' . $local_date->format("F j, Y, g:i a") . '
-Max duration: ' . $duration . '
-Location: ' . $address . '
-Pay: ' . $price . '
-
-Message from Customer: ' . $customer_message));
+		send_text($client_phone, get_claimed_text($customer_email, $customer_phone, $order_number, $service, $local_date, $duration, $address, $price));
     }
+}
+
+function get_claimed_text($customer_email, $customer_phone, $order_number, $service, $local_date, $duration, $address, $price) {
+	return 'Please contact the customer immediately to follow up on their order. Here are the order details:
+
+	Customer Contact:
+	Email: ' . $customer_email . '
+	Phone: ' . $customer_phone . '
+
+	Order: ' . $order_number . '
+	Service: ' . $service . '
+	Date: ' . $local_date->format("F j, Y, g:i a") . '
+	Max duration: ' . $duration . '
+	Location: ' . $address . '
+	Pay: ' . $price . '
+
+	Message from Customer: ' . $customer_message;
+}
+
+function get_new_task_text($service, $local_time, $duration, $commute, $location, $price, $partners, $message, $email, $ordernumber, $secret_key) {
+	include 'constants.php';
+	return 'There\'s a new service request in your area!
+
+	Service: ' . $service . '
+	Date: ' . $local_time->format("F j, Y, g:i a") . '
+	Max duration: ' . $duration . '
+	' . $commute . '
+	Location: ' . $location . '
+	Pay: ' . $price . '
+	' . $partners . '
+	
+	Message: ' . $message . '
+	
+	Tap on the following link to obtain this job:
+	
+	https://' . $SUBDOMAIN . 'helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key;
 }
 
 function get_confirmation_email($order_number, $cost, $service, $name, $schedule, $customer_message, $address, $providers, $subtotal, $cancel_key, $provider)

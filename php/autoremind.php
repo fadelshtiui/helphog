@@ -35,11 +35,8 @@ foreach($result as $row) {
 
         $time = $local_date->format('g:i a');
 
-        $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-        $token = '18a458337ffdfd10617571e495314311';
-        $client = new Client($sid, $token);
         if ($alerts == 'sms' || 'both'){
-            $client->messages->create('+1' . $phone, array('from' => '+12532593451', 'body' => 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));
+            send_text($phone, 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.');
         }
         if ($alerts == 'email' || 'both'){
             send_email($provider_email, "no-reply@helphog.com", "Order Update",  get_partners_email('Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));

@@ -206,8 +206,5 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
 
 function sendTextProvider($service, $order, $phonenumber, $schedule)
 {
-    $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-    $token = '18a458337ffdfd10617571e495314311';
-    $client = new Client($sid, $token);
-    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . ' was canceled by the customer.'));
+    send_text($phonenumber, 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . ' was canceled by the customer.');
 }

@@ -203,10 +203,7 @@ function sendTextCustomer($service, $order, $phonenumber, $schedule, $provider_n
         $message = ' was canceled because the service provider was not located in time. We apologize for the inconvenience.';
     }
 
-    $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-    $token = '18a458337ffdfd10617571e495314311';
-    $client = new Client($sid, $token);
-    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your order for ' . $service . ' (' . $order . ') on ' . $schedule . $message));
+    send_text($phonenumber, 'Your order for ' . $service . ' (' . $order . ') on ' . $schedule . $message);
 }
 
 function sendTextProvider($service, $order, $phonenumber, $schedule, $provider_never_started)
@@ -218,8 +215,5 @@ function sendTextProvider($service, $order, $phonenumber, $schedule, $provider_n
         $message = ' was canceled because one or more of the secondary providers were not located for this task.';
     }
 
-    $sid = 'ACc66538a897dd4c177a17f4e9439854b5';
-    $token = '18a458337ffdfd10617571e495314311';
-    $client = new Client($sid, $token);
-    $client->messages->create('+1' . $phonenumber, array('from' => '+12532593451', 'body' => 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . $message));
+    send_text($phonenumber, 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . $message);
 }
