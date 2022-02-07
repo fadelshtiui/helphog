@@ -39,8 +39,10 @@ foreach($result as $row) {
             send_text($phone, 'Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.');
         }
         if ($alerts == 'email' || 'both'){
-            send_email($provider_email, "no-reply@helphog.com", "Order Update",  get_partners_email('Reminder: You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));
+            send_email($provider_email, "no-reply@helphog.com", "Reminder",  get_partners_email('You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.'));
         }
+        ios_provider_notification($provider_email, "Reminder", 'You have ' . $service  . ' in ' . round($minutes_until) . ' minutes.', $order_number, '#1ecd97');
+
         $sql = "UPDATE {$DB_PREFIX}orders SET reminded = ? WHERE order_number = ?";
         $stmt = $db->prepare($sql);
         $params = array('y', $order_number);

@@ -149,6 +149,15 @@ foreach ($result as $row) {
                                 send_email($email, "no-reply@helphog.com", "Task Cancelled", noPartnersFound($service, $order_number, $utc->format('F j, Y, g:i a'), $name2));
                             }
                         }
+
+                        $message = '';
+                        if ($provider_never_started) {
+                            $message = ' was canceled because the primary provider has not started working on the order.';
+                        } else {
+                            $message = ' was canceled because one or more of the secondary providers were not located for this task.';
+                        }
+
+                        ios_provider_notification($email, $title, 'Your task for ' . $service . ' (' . $order . ') on ' . $schedule . $message, $order, '#1ecd97');
                     }
                 }
 
@@ -183,6 +192,7 @@ foreach ($result as $row) {
                 $stmt = $db->prepare($sql);
                 $params = array("ac", $order_number);
                 $stmt->execute($params);
+
             }
         }
     } catch (\Throwable $e) {
