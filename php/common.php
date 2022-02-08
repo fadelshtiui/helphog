@@ -247,7 +247,7 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
 	    }
 	}
 }
-function send_new_task_ios($email, $title, $body, $color, $service, $service, $local_time, $duration, $commute, $location, $price, $partners, $message, $ordernumber, $secret_key){
+function send_new_task_ios($email, $title, $body, $color, $service, $local_time, $duration, $commute, $location, $price, $partners, $message, $ordernumber, $secret_key){
     include 'constants.php';
 	$db = establish_database();
 
