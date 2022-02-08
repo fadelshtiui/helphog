@@ -151,6 +151,7 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                 if ($alerts == "email" || $alerts == "both"){
                     send_email($providerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($providerMessage, $providerName));
                 }
+                ios_provider_notification($providerEmail, 'Task canceled', 'Your task for ' . $service . ' (' . $order . ') on ' . $provider_local_date->format("F j, Y, g:i a") . ' was canceled by the customer.', $order, '#1ecd97');
 
             }
             if ($secondary_providers != "") {
@@ -180,11 +181,14 @@ if (isset($_GET["ordernumber"]) && isset($_GET['secret']) || isset($_POST['order
                         if ($alerts_secondary == "sms" || $alerts_secondary == "both"){
                             sendTextProvider($service, $order, $phonenumber, $provider_local_date->format("F j, Y, g:i a"));
                         }
+                        ios_provider_notification($provider, 'Task canceled', 'Your task for ' . $service . ' (' . $order . ') on ' . $provider_local_date->format("F j, Y, g:i a") . ' was canceled by the customer.', $order, '#1ecd97');
                     }
                 }
             }
 
             send_email($customerEmail, "no-reply@helphog.com", $service . " Canceled", customer_cancel($customerMessage, $customerName));
+
+            ios_customer_notification($customerEmail, $service . " Canceled", $customerMessage, $order, "#1ecd97");
 
             $sql = "UPDATE {$DB_PREFIX}orders SET status = 'cc' WHERE order_number = ?;";
             $stmt = $db->prepare($sql);
