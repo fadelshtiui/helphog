@@ -1230,6 +1230,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 						if ($alerts == "email" || $alerts == "both"){
 						   send_email($client_email, "no-reply@helphog.com", "Order Update",  get_partners_email($message));
 						}
+						ios_provider_notification($client_email, "Order Update", $message, "#1ecd97");
 
                         ios_customer_notification($customer_email, "Order Claimed By Provider", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
 					}
@@ -1286,6 +1287,7 @@ function claim_order($email, $order_number, $accept_key, $mobile)
 				if ($alerts2 == "email" || $alerts2 == "both"){
 				    send_email($email, "no-reply@helphog.com", "Order Update",  get_partners_email($message));
 				}
+				ios_provider_notification($email, "Order Update", $message, "#1ecd97");
 			}
 
 			$sql = "UPDATE {$DB_PREFIX}orders SET client_email = ? WHERE order_number = ?";
@@ -1621,11 +1623,11 @@ function get_new_task_text($service, $local_time, $duration, $commute, $location
 	Location: ' . $location . '
 	Pay: ' . $price . '
 	' . $partners . '
-	
+
 	Message: ' . $message . '
-	
+
 	Tap on the following link to obtain this job:
-	
+
 	https://' . $SUBDOMAIN . 'helphog.com/php/accept.php?email=' . $email . '&ordernumber=' . $ordernumber . '&secret=' . $secret_key;
 }
 
