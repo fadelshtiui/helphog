@@ -37,10 +37,7 @@ if (isset($_POST["ordernumber"]) && isset($_POST['session'])) {
         $local_date = new DateTime(date('Y-m-d H:i:s', strtotime($schedule)), new DateTimeZone('UTC'));
         $local_date->setTimezone(new DateTimeZone($tz));
 
-        $stripe->paymentIntents->cancel(
-          $intent,
-          []
-        );
+        $stripe->refunds->create(['payment_intent' => $intent]);
 
         send_email($customer_email, "no-reply@helphog.com", "Task Refunded", get_refund_email($name, $service, $order, $local_date->format('m\-d\-y \a\t g:ia')));
         ios_customer_notification($customer_email, "Order Refunded", $service . " (" . $order . ")", $order, "#1ecd97");
