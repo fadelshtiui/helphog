@@ -415,6 +415,8 @@ function pay_provider($order_number)
 			"transfer_group" => '{' . $order_number . '}',
 		]);
 
+		ios_provider_notification($provider_email, "You've been paid!", "$". $payment_info->provider_payout . " are being transfered to your bank for " . $service . " (" . $order_number . "). Funds will be available in your bank account within 1-2 days.", $thread_id, "#1ecd97");
+
 		$providers = explode(",", $secondary_providers);
 		foreach ($providers as $provider) {
 			if ($provider != "") {
@@ -430,6 +432,7 @@ function pay_provider($order_number)
 						"description" => $service . " (" . $order_number . ")",
 						"transfer_group" => '{' . $order_number . '}',
 					]);
+					ios_provider_notification($provider, "You've been paid!", "$". $payment_info->provider_payout . " are being transfered to your bank for " . $service . " (" . $order_number . "). Funds will be available in your bank account within 1-2 days.", $thread_id, "#1ecd97");
 				}
 			}
 		}
