@@ -177,7 +177,8 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
 	}
 }
 
-function ios_provider_notification($email, $title, $body, $thread_id, $color){
+function ios_provider_notification($email, $title, $body, $thread_id, $color)
+{
     include 'constants.php';
 	$db = establish_database();
 
@@ -247,7 +248,8 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color){
 	    }
 	}
 }
-function send_new_task_ios($email, $title, $body, $color, $service, $local_time, $duration, $commute, $location, $price, $partners, $message, $ordernumber, $secret_key){
+function send_new_task_ios($email, $title, $body, $color, $service, $local_time, $duration, $commute, $location, $price, $partners, $message, $ordernumber, $secret_key)
+{
     include 'constants.php';
 	$db = establish_database();
 
@@ -344,7 +346,8 @@ function send_new_task_ios($email, $title, $body, $color, $service, $local_time,
 	}
 }
 
-function send_claimed_task_ios($email, $title, $body, $color, $service, $local_time, $duration, $location, $price, $message, $ordernumber, $customer_email, $customer_phone){
+function send_claimed_task_ios($email, $title, $body, $color, $service, $local_time, $duration, $location, $price, $message, $ordernumber, $customer_email, $customer_phone)
+{
     include 'constants.php';
 	$db = establish_database();
 
@@ -1380,7 +1383,6 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
     		        return $claim;
                 }else if ($mobile){
                     return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobiledecline";</script>';
-                }
     		    }else{
 				    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
     		    }
@@ -1551,9 +1553,10 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
     }
 	if ($mobile) {
 		return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobiledecline";</script>';
+	}
 	if ($cancelled) {
 	    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+this+order+has+been+cancelled";</script>';
-	} else {
+	}else {
 	    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
 	}
 
