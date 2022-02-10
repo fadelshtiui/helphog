@@ -62,8 +62,8 @@ function get_user_info($session) {
 		if (hash_equals($result['session'], $session)) {
 			$result['match_session'] = $result['session'];
 			$result['session_name'] = 'session';
-		} else if (hash_equals($row['ios_session'], $session)) {
-			$result['match_session'] = $row['ios_session'];
+		} else if (hash_equals($result['ios_session'], $session)) {
+			$result['match_session'] = $result['ios_session'];
 			$result['session_name'] = 'ios_session';
 		} else { // hash_equals($row['ios_provider_session'], $session))
 			$result['match_session'] = $row['ios_provider_session'];
@@ -260,7 +260,7 @@ function send_new_task_ios($email, $title, $body, $color, $service, $local_time,
 	foreach ($stmnt->fetchAll() as $row) {
 		$tokens = $row['iostokenprovider'];
 	}
-
+	
 	if ($commute != ''){
 	    $commute = substr($commute,19);
 	}
@@ -280,21 +280,21 @@ function send_new_task_ios($email, $title, $body, $color, $service, $local_time,
                     "sound": "default",
                     "mutable-content" : true
                   },
-                  "color" : "' . $color . '",
-                  "type" : "new_service",
-                  "service" : "' . $service . '",
-                  "date" : "' . $local_time . '",
-                  "maxDuration" : "' . $duration . '",
-                  "pay" : "' . $price . '",
-                  "estimatedCommute" : "' . $commute . '",
-                  "location" : "' . $location . '",
-                  "message" : "' . $message . '",
+                  "color" : "' . $color . '",                            
+                  "type" : "new_service",                         
+                  "service" : "' . $service . '", 
+                  "date" : "' . $local_time . '",  
+                  "maxDuration" : "' . $duration . '", 
+                  "pay" : "' . $price . '", 
+                  "estimatedCommute" : "' . $commute . '", 
+                  "location" : "' . $location . '", 
+                  "message" : "' . $message . '", 
                   "secretKey" : "' . $secret_key . '",
                   "partners" : "' . $partners . '",
                   "order" : "' . $ordernumber . '"
                 }';
 
-
+        
 
         $key = openssl_pkey_get_private('file://'.$keyfile);
 
@@ -374,20 +374,20 @@ function send_claimed_task_ios($email, $title, $body, $color, $service, $local_t
                     "sound": "default",
                     "mutable-content" : true
                   },
-                  "color" : "' . $color . '",
-                  "type" : "claimed_service",
-                  "service" : "' . $service . '",
-                  "date" : "' . $local_time . '",
-                  "maxDuration" : "' . $duration . '",
-                  "pay" : "' . $price . '",
+                  "color" : "' . $color . '",                            
+                  "type" : "claimed_service",                         
+                  "service" : "' . $service . '", 
+                  "date" : "' . $local_time . '",  
+                  "maxDuration" : "' . $duration . '", 
+                  "pay" : "' . $price . '", 
                   "customer_phone" : "' . $customer_phone . '",
                   "customer_email" : "' . $customer_email . '",
-                  "location" : "' . $location . '",
-                  "message" : "' . $message . '",
+                  "location" : "' . $location . '", 
+                  "message" : "' . $message . '", 
                   "order" : "' . $ordernumber . '"
                 }';
 
-
+        
 
         $key = openssl_pkey_get_private('file://'.$keyfile);
 
@@ -706,9 +706,9 @@ function send_new_task_text($phonenumber, $email, $ordernumber, $price, $message
 	if ($alerts == "sms" || $alerts == "both") {
 
 		send_text($phonenumber, get_new_task_text($service, $local_time, $duration, $commute, $location, $price, $partners, $message, $email, $ordernumber, $secret_key));
-
+		
 	}
-
+	
 	send_new_task_ios($email, "New Service Request in your area!", $service, '#ffdd00', $service, $local_time, $duration, $commute, $location, $price, $partners, $message, $ordernumber, $secret_key);
 }
 
@@ -1286,7 +1286,7 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
 	include 'constants.php';
 
 	$db = establish_database();
-
+	
 	$claim = new \stdClass();
 
 	$clicked = '';
@@ -1386,7 +1386,7 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
     		    }else{
 				    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
     		    }
-
+    		    
 			} else {
 
 				if (strpos($secondary_providers, $email) !== false) {
@@ -1408,7 +1408,7 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
 
 				if ($num_secondary + 1 >= $people) {
 					update_clicked_list($clicked, $email, $order_number);
-
+            
 					if ($apple){
         		        $claim->status = "fail";
         		        $claim->message = "Sorry! Looks like someone already claimed this order first.";
@@ -1418,7 +1418,7 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
 				    }else{
     				    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/error?message=Sorry!+Looks+like+someone+has+already+claimed+this+order";</script>';
         		    }
-
+    		    
 				} else {
 
 					$new_secondary = "";
@@ -1542,7 +1542,7 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
         		return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/mobileclaimed";</script>';
             }else{
 			    return '<script>window.location.href = "https://' . $SUBDOMAIN . 'helphog.com/success?message=You+have+successfully+claimed+the+task!&link=provider&content=manage+and+monitor+your+order";</script>';
-            }
+            }   
         }
 	}
 	update_clicked_list($clicked, $email, $order_number);
@@ -1840,7 +1840,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 		send_text($client_phone, get_claimed_text($customer_email, $customer_phone, $order_number, $service, $local_date, $duration, $address, $price));
     }
     send_claimed_task_ios($email, "Task Claimed!", 'Please contact the customer immediately to follow up on their order.', "#1ecd97", $service, $local_time, $duration, $address, $price, $message, $ordernumber,$customer_email, $customer_phone);
-
+    
 }
 
 function get_claimed_text($customer_email, $customer_phone, $order_number, $service, $local_date, $duration, $address, $price) {
