@@ -24,8 +24,6 @@ foreach ($stmnt->fetchAll() as $row) {
     $email = $row['email'];
     $type = $row['type'];
     $alerts = $row['alerts'];
-    error_log($email);
-    error_log($alerts);
 }
 
 if ($email == "") {

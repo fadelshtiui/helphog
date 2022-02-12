@@ -44,7 +44,6 @@ if (isset($_POST["alerts"]) && isset($_POST["session"])) {
                     $stmt = $db->prepare($sql);
                     $params = array($availability, $session);
                     $stmt->execute($params);
-                    error_log("here2");
                 }
             }
         }

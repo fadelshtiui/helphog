@@ -117,7 +117,6 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
 		$tokens = $row['iostokens'];
 	}
 
-	error_log($tokens);
 	if ($tokens != ''){
 	    $keyfile = 'AuthKey_MR5L97ZV2R.p8';               # <- Your AuthKey file
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
@@ -489,10 +488,8 @@ function blacklisted($phone): bool
     $result = $db->query("SELECT number FROM {$DB_PREFIX}blacklisted;");
 	foreach ($result as $row) {
 		if (strpos($row['number'], $phone)) {
-		    error_log("found");
 		    return true;
 		}else{
-		    error_log("not found");
 		    return false;
 		}
 	}
