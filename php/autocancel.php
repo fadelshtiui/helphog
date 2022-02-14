@@ -176,7 +176,7 @@ foreach ($result as $row) {
                     []
                 );
 
-                if (!blacklisted($customer_phone)){
+                if (!blacklisted($customer_phone) && send_sms_or_not($customer_email)){
                     sendTextCustomer($service, $order_number, $customer_phone, $utc->format('F j, Y, g:i a'), $provider_never_started);
                 }
 
