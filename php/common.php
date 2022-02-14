@@ -105,6 +105,24 @@ function banning($cancels, $client_email)
 	send_email($client_email, "no-reply@helphog.com", "Account Notice", get_notice_email($name, $note));
 }
 
+function send_sms_or_not($email){
+    include 'constants.php';
+	$db = establish_database();
+
+	$tokens = "";
+
+	$stmnt = $db->prepare("SELECT iostokens FROM {$DB_PREFIX}login WHERE email = ?;");
+	$stmnt->execute(array($email));
+	foreach ($stmnt->fetchAll() as $row) {
+		$tokens = $row['iostokens'];
+	}
+	if ($tokens != ''){
+	    return false;
+	}else{
+	    return true;
+	}
+}
+
 function ios_customer_notification($email, $title, $body, $thread_id, $color){
     include 'constants.php';
 	$db = establish_database();
@@ -1253,7 +1271,10 @@ If there\'s an issue with the quality of service provided, you may dispute this 
 
 For future orders with the same provider use #' . $providerId . ' at checkout.';
 
-			send_text($customer_phone, $message);
+
+            if(send_sms_or_not($customer_email)){
+                send_text($customer_phone, $message);
+            }
 			ios_customer_notification($customer_email, "Order Complete", $service . " (" . $order . ")", $order, "#1ecd97");
 
 			$current_timestamp = gmdate("Y-m-d H:i:s");
