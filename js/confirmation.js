@@ -24,6 +24,8 @@ function handle(response) {
         window.location = '/error?message=Oops.+Something+went+wrong.+Please+try+again.'
     } else if (response.error == "waited very long before clicking place order") {
         window.location = '/error?message="Request+timed+out.+Please+try+placing+your+order+again.'
+    } else if (response.url == 'redirect'){
+        window.location = '/orders';
     }
 
     id("order-number").innerText = response.ordernumber;

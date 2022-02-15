@@ -1550,7 +1550,7 @@ function claim_order($email, $order_number, $accept_key, $mobile, $apple)
 			$params = array($email, $order_number);
 			$stmt->execute($params);
 
-            ios_customer_notification($customer_email, "Provider Designated", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
+               ios_customer_notification($customer_email, "Provider Designated", $service . " (" . $order_number . ")", $order_number, "#1ecd97");
 			send_claimed_notification($order_number, $email, "primary", $db, $duration);
 
 			if ($apple) {

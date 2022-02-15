@@ -6,6 +6,8 @@ $response = new stdClass();
 $response->ordernumber = "";
 $response->error = "none";
 
+error_log(print_r($_SESSION, true));
+
 if($_COOKIE['ses_id']){ // ios
     session_id($_COOKIE['ses_id']);
 }
@@ -89,6 +91,7 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             foreach ($result as $row) {
                 if ($customer_email === $row['email']) {
                     $found = true;
+                    $response->url = 'redirect';
                 }
             }
 
@@ -209,6 +212,8 @@ if (isset($_SESSION["intent"]) && isset($_SESSION["customeremail"]) && isset($_S
             $available_providers = $_SESSION['available_providers'];
 
             foreach ($available_providers as $provider) {
+
+                error_log($provider->email);
 
                 send_new_task_email($provider->email, $providerWage, $order_number, $duration, $accept_key, $provider->tz, $_SESSION['schedule'], $_SESSION['tzoffset'], $_SESSION["address"], $_SESSION['city'], $_SESSION['state'], $_SESSION['zip'], $_SESSION['service'], $_SESSION['message']);
 
