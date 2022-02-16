@@ -48,7 +48,7 @@ foreach ($stmnt->fetchAll() as $row) {
      $service = $row["service"];
      $remote = $row['remote'];
 
-     $entry->src = '../assets/images/service-placeholder.jpg';
+     $entry->src = '../assets/images/service-placeholder.jpg.png';
      $image_name = '../assets/images/' . $row['metaphonetext'] . '.jpg';
      if (is_file($image_name)) {
           $entry->src = $image_name;
