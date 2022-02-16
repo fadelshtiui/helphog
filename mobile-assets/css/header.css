@@ -386,7 +386,7 @@ header.special .icon:before {
 	display: none;
 }
 
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 735px) {
 	header.major {
 		padding-bottom: 0.25em;
 	}
