@@ -2,79 +2,104 @@
 <html lang="en">
 
 <head>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-FY94MC4TFD"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
+     <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FY94MC4TFD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-	  gtag('config', 'G-FY94MC4TFD');
-	</script>
-	<meta charset="utf-8">
-	<title>Registration</title>
+  gtag('config', 'G-FY94MC4TFD');
+</script>
+  <meta charset="utf-8">
+  <title>Registration</title>
 
-	<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-	<link rel="stylesheet" href="css/registration.css" type="text/css">
-	<link rel="stylesheet" href="css/style.css" type="text/css">
-	<link rel="stylesheet" href="css/submit.css" type="text/css">
-	<link rel="stylesheet" href="mobile-assets/css/footer.css" type="text/css">
-	<link rel="stylesheet" href="css/global.css">
-	<link href="css/all.css" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 
+  <link rel="stylesheet" href="css/contact.css" type="text/css">
+  <link rel="stylesheet" href="mobile-assets/css/header.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <link rel="stylesheet" href="css/submitemail.css" type="text/css">
+  <link rel="stylesheet" href="mobile-assets/css/footer.css" type="text/css">
+  <link rel="stylesheet" href="mobile-assets/css/contact.css" type="text/css">
+  <link rel="stylesheet" href="css/global.css">
+  <link href="css/all.css" rel="stylesheet">
 
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-	<script src="js/common.js"></script>
-	<script src="js/loading.js"></script>
-	<script src="js/registration.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src="js/common.js"></script>
+  <script src="js/loading.js"></script>
 
+  <script src="mobile-assets/js/common.js"></script>
+  <script src="js/contact.js"></script>
 </head>
 
 <body>
-	<div class="content">
-		<div class="header">
-			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
-			<ul id="navigation">
-				<div id="signed-in-nav" class="hidden">
-					<li id="sign-out"><a href="/">Sign Out</a></li>
-					<li id="settings"><a href="settings">Settings</a></li>
-					<li id="apply"><a href="quickapply">Apply</a></li>
-					<li id="orders"><a href="orders">Orders</a></li>
-					<li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
-					<li id="contact"><a href="contact">Contact Us</a></li>
-					<li id="about"><a href="about">About</a></li>
-				</div>
-				<div id="signed-out-nav" class="hidden">
-					<li id="sign-in-nav"><a href="signin">Login</a></li>
-					<li id="register-nav"><a href="registration">Register</a></li>
-					<li id="track-order"><a href="tracking">Track Order</a></li>
-					<li id="contact"><a href="contact">Contact Us</a></li>
-					<li id="about"><a href="about">About</a></li>
-				</div>
-			</ul>
-		</div>
-		<br>
-		<script src="js/registration.js"></script>
-		<main style="display:none;">
-			<div id="center">
-				<!--<div id="head">Which type of account would you like to create?</div>-->
-				<div id="left">
-					<p class="heading">
+  <div class="content">
+    <div class="header">
+      <div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
+      <ul id="navigation">
+        <div id="signed-in-nav" class="hidden">
+          <li id="sign-out"><a href="/">Sign Out</a></li>
+          <li id="settings"><a href="settings">Settings</a></li>
+          <li id="apply"><a href="quickapply">Apply</a></li>
+          <li id="orders"><a href="orders">Orders</a></li>
+          <li id="provider" class="hidden"><a href="provider">Provider Portal</a></li>
+          <li id="contact"><a href="contact">Contact Us</a></li>
+          <li id="about"><a href="about">About</a></li>
+        </div>
+        <div id="signed-out-nav" class="hidden">
+          <li id="sign-in-nav"><a href="signin">Login</a></li>
+          <li id="register-nav"><a href="registration">Register</a></li>
+          <li id="track-order"><a href="tracking">Track Order</a></li>
+          <li id="contact"><a href="contact">Contact Us</a></li>
+          <li id="about"><a href="about">About</a></li>
+        </div>
+      </ul>
+    </div>
+
+    	<header id="header" class="alt">
+			<nav id="nav">
+				<ul>
+					<li class="current"><a href="/">home</a></li>
+					<li><a href="contact">contact</a></li>
+					<li class="submenu">
+						<a>actions</a>
+						<ul id="actions">
+							<li><a data-path="settings" href="settings">settings</a></li>
+							<li><a data-path="provider" href="provider">provider portal</a></li>
+							<li><a data-path="orders" href="orders">orders</a></li>
+							<li><a data-path="signout">sign out</a></li>
+
+							<li><a data-path="tracking" href="tracking">track orders</a></li>
+							<li><a data-path="registration" href="registration">sign up</a></li>
+							<li><a data-path="signin" href="signin">login</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+    <br>
+    <main>
+      <div id="center">
+        <div id="head">Select Option</div>
+        <div id="flex-container">
+            <div id="left">
+              <p class="heading">
 						Personal
 					</p>
 					<i class="fas fa-user" style="font-size: 80px; color: #1ecd97; padding: 30px;"></i>
 					<div class="description">
 						<p>
 							Create a free account and gain access to all HelpHog services.
-							<br />
-							<br />
 						</p>
 					</div>
 					<button id="register" class="primary-green" >Register</button>
-				</div>
-				<div id="right">
-					<p class="heading">
+            </div>
+            <div id="right">
+              <p class="heading">
 						Provider
 					</p>
 					<i class="fas fa-people-arrows" style="font-size: 80px; color: #1ecd97; padding: 30px;"></i>
@@ -84,21 +109,31 @@
 						</p>
 					</div>
 					<button id="apply2" class="primary-green">Apply</button>
-				</div>
-			</div>
-		</main>
-	</div>
-	<footer id="footer">
+            </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer id="footer">
 
-		<ul class="copyright">
-			<li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
-			<li><a href="privacy">Privacy Policy</a></li>
-			<li><a href="terms">Terms of Use</a></li>
-			<li><a href="cookie">Cookie Policy</a></li>
-		</ul>
+       <ul class="copyright">
+            <li>&copy; 2021 HelpHog LLC. All rights reserved.</li>
+            <li><a href="privacy">Privacy Policy</a></li>
+            <li><a href="terms">Terms of Use</a></li>
+            <li><a href="cookie">Cookie Policy</a></li>
+       </ul>
 
 
-	</footer>
+  </footer>
+
+  <script src="mobile-assets/js/jquery.min.js"></script>
+	<script src="mobile-assets/js/jquery.dropotron.min.js"></script>
+	<script src="mobile-assets/js/jquery.scrolly.min.js"></script>
+	<script src="mobile-assets/js/jquery.scrollex.min.js"></script>
+	<script src="mobile-assets/js/browser.min.js"></script>
+	<script src="mobile-assets/js/breakpoints.min.js"></script>
+	<script src="mobile-assets/js/util.js"></script>
+	<script src="mobile-assets/js/main.js"></script>
 </body>
 
 </html>
