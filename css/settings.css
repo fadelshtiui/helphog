@@ -12,6 +12,7 @@ html {
   -o-animation: fadein 2s;
   /* Opera < 12.1 */
   animation: fadein 2s;
+  min-width:485px;
 }
 
 @keyframes fadein {
@@ -76,7 +77,7 @@ body {
 }
 
 #addressDisplay {
-  font-size: 32px;
+  font-size: 1.2rem;
 }
 
 .error {
@@ -86,13 +87,15 @@ body {
 
 .container {
   background: #FFFFFF;
-  width: 1000px;
+  width: 95%;
+  max-width: 1000px;
   height: 40rem;
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
   position: relative;
-  box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);
+  border-radius:0.4375rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 30%), 0px 0px 1px 0px rgb(0 0 0 / 28%);
 }
 
 /*.logo {*/
@@ -116,7 +119,7 @@ body {
 .leftbox {
   float: left;
   position: absolute;
-  width: 15%;
+  width: 100px;;
   height: 100%;
   border-right: 0.08rem solid #F2F2F2;
 }
@@ -127,9 +130,9 @@ body {
 
 nav a {
   list-style: none;
-  padding: 55px;
+  padding: 39px;
   color: #bfc7cd;
-  font-size: 3.1em;
+  font-size: 30px;
   display: block;
   transition: all .3s ease-in-out;
 }
@@ -145,18 +148,17 @@ nav a:hover {
 
 .rightbox {
   float: right;
-  width: 78%;
+  position: absolute;
   height: 100%;
+  left: 132px;
 }
 
 .profile, .payment, .subscription, .privacy, .settings {
   transition: opacity .5s ease-in;
-  position: absolute;
-  width: 70%;
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 1.5rem;
   margin-top: 40px;
   margin-bottom: 35px;
 }
@@ -165,7 +167,7 @@ h2 {
   color: #777777;
   width: 80%;
   text-transform: uppercase;
-  font-size: 24px;
+  font-size: 1.2rem;
   letter-spacing: 1px;
   margin-left: 2px;
 }
@@ -173,7 +175,7 @@ h2 {
 p {
   border-top: 0;
   width: 80%;
-  font-size: 2em;
+  font-size: 1.2em;
   padding: 7px 0;
   color: #070707;
 }
@@ -188,14 +190,14 @@ input {
   border-top: none;
   padding: 2px;
   margin: 0;
-  width: 620px;
+  width: 400px;
   color: black;
-  font-size: 2em;
+  font-size: 1.2em;
 }
 
 select {
   border: none;
-  font-size: 2em;
+  font-size: 1.2em;
 }
 
 input:focus {
