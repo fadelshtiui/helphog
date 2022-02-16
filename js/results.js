@@ -33,7 +33,7 @@
                     id('update').click();
                }
           });
-          
+
           populateNavigationBar();
 
 
@@ -484,7 +484,7 @@
                               qs(".modal-wrapper").classList.remove('hidden')
                          }
                     } else { // service.available == 0.5
-                         link.innerText = 'Click to check availability'
+                         link.innerText = 'Enter zipcode for availability'
 
                          buttonContainer.onclick = function () {
                               id('scroll-to-zip').click();
@@ -499,6 +499,7 @@
                               checkBoxes.forEach(checkbox => {
                                    checkbox.disabled = 'true';
                               })
+                              $(window).scrollTop(0);
                               // var catFilters = id("category-filters");
                               // catFilters.classList.add("dim");
                               // var avaFilters = id("availability-filters");
