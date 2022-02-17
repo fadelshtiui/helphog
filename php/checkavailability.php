@@ -84,29 +84,27 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     }
 
-    $available_emails = $all_emails;
+    $available_emails = array();
 
     // only consider providers who are available in the address and can travel within order timeframe
 
-    // if ($remote == 'y') {
+    if ($remote == 'y') {
 
-    //     $available_emails = $all_emails;
-    // } else {
+        $available_emails = $all_emails;
+        
+    } else {
+        
+        // $durations = array();
 
+        foreach ($all_emails as $email) {
 
-
-    //     $available_emails = array();
-    //     $durations = array();
-
-    //     foreach ($all_emails as $email) {
-
-    //         $distanceMatrix = address_works_for_provider($address, $email, $t);
-    //         if ($distanceMatrix->within) {
-    //             array_push($available_emails, $email);
-    //             array_push($durations, $distanceMatrix->traffic);
-    //         }
-    //     }
-    // }
+            $distanceMatrix = address_works_for_provider($address, $email, $t);
+            if ($distanceMatrix->within) {
+                array_push($available_emails, $email);
+                // array_push($durations, $distanceMatrix->traffic);
+            }
+        }
+    }
 
     $combined_availability = array();
     for ($i = 0; $i < 168; $i++) {
@@ -241,6 +239,7 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         $_SESSION = array();
 
         $_SESSION['available_providers'] = $available_providers;
+        error_log(print_r($available_providers, true));
 
         $json->availability = '';
 

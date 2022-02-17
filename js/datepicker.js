@@ -12,7 +12,8 @@ async function init() {
 
   let disabledDays = [];
 
-  for (let i = 5; i >= 0; i--) {
+  // change initital value to number of desired pre-computed days
+  for (let i = 0; i >= 0; i--) {
       let date = new Date();
       let temp = new Date();
       temp.setDate(date.getDate() + i)
