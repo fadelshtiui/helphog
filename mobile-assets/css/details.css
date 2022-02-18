@@ -2,9 +2,9 @@
   #navPanel {
     text-align: left;
   }
-  .header {
-    display: none;
-  }
+  #navigation {
+        display: none;
+    }
   main {
     width: 100% !important;
   }
@@ -28,5 +28,9 @@
   #zip-input {
       margin-top: 0px;
       margin-bottom: 0px;
+  }
+  #logo{
+        padding-left:0;
+        position:static;
   }
 }
