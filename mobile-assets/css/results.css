@@ -12,11 +12,10 @@
     #navPanel {
         text-align: left;
     }
-    .header {
+    #navigation {
         display:none;
     }
-}
-
-#header {
-   display: none;
+    #logo {
+        position: static;
+    }
 }

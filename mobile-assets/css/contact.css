@@ -8,7 +8,7 @@
         opacity: 0.3;
         width: 100%;
     }
-    .header {
+    #navigation {
         display: none;
     }
     #navPanel {
@@ -30,4 +30,12 @@
     .content {
         height: fit-content;
     }
+    #logo{
+        padding-left:0;
+        position:static;
+    }
+    #center{
+        box-shadow: none;
+    }
+
 }

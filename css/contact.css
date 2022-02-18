@@ -10,7 +10,7 @@ html {
      margin: 0 auto;
      margin-bottom: 10px;
      max-width: 550px;
-     font-size: 35px;
+     font-size: 26px;
      color: #000000;
      padding: 25px;
 }
@@ -65,7 +65,7 @@ hr {
 }
 
 .heading {
-     font-size: 36px;
+     font-size: 26px;
      margin-bottom: 0px;
      margin-top: 0px;
 }
