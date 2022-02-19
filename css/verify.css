@@ -8,7 +8,7 @@ html {
 }
 
 #message {
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 }
 
 .wrapper-2 a {
@@ -49,17 +49,16 @@ body {
 h1 {
   font-size: 35px;
   /*letter-spacing:3px;*/
-  color: #1ecd97;
   margin: 0;
   /*margin-bottom:20px;*/
   font-weight: 200;
   /*letter-spacing: 1px; */
-  padding-bottom: 50px;
+  padding-bottom: 25px;
 }
 
 .wrapper-2 p {
   margin: 0;
-  font-size: 1.3em;
+  font-size: 14px;
   color: black;
   /*letter-spacing:1px;*/
 }
@@ -101,7 +100,6 @@ h1 {
 }
 
 .wrapper-3 {
-  width: 70%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -132,6 +130,48 @@ h1 {
   height: initial;
   max-width: 620px;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 39px;
   box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.2)
+}
+
+@media screen and (max-width: 736px) {
+    #flex-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    hr {
+        display: block;
+        opacity: 0.3;
+        width: 100%;
+    }
+    #navigation {
+        display: none;
+    }
+    #navPanel {
+        padding: 0;
+        text-align: left;
+    }
+    #navPanel nav {
+        padding-left: 1em;
+    }
+    #head {
+        display: none;
+    }
+    #left, #right {
+        margin-top: 2em;
+    }
+    #footer {
+        margin-top: 10em;
+    }
+    .content {
+        height: fit-content;
+    }
+    #logo{
+        padding-left:0;
+        position:static;
+    }
+    #center{
+        box-shadow: none;
+    }
+
 }
