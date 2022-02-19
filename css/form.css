@@ -230,7 +230,7 @@ select option {
 
 .row {
   zoom: 1;
-  display: inline-table;
+  display: inline-block;
 }
 
 .row:before, .row:after {
@@ -329,10 +329,13 @@ select option {
         min-width:300px;
     }
     #sign-up{
-        width:300px;
+        width:300px
     }
     p{
         width:300px;
         margin:auto;
+    }
+    .container2{
+        padding:0;
     }
 }
