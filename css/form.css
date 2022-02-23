@@ -265,12 +265,13 @@ select option {
 #email-bar{
     flex-grow: 2;
 }
-
 .g-recaptcha {
-  padding-left: 91px;
-  padding-top: 5px;
-  padding-bottom: 15px;
-}
+    display: flex;
+    justify-content: center;
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 15px;
+    }
 
 @media screen and (max-width: 736px) {
     .g-recaptcha {
@@ -320,7 +321,7 @@ select option {
     }
     .inline{
         flex-direction: column;
-            width: fit-content;
+        align-items: center;
     }
     #email-bar{
         flex-grow: 1;
