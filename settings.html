@@ -13,6 +13,7 @@
 	</script>
 	<meta charset="UTF-8">
 	<title>Settings</title>
+	<meta name="viewport" content="width=device-width">
 
 	<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 
@@ -73,11 +74,6 @@
 			</ul>
 		</div>
 		<div class="container">
-			<div id="logo">
-				<a href="/">
-					<h1 class="logo"> </h1>
-				</a>
-			</div>
 			<div class="leftbox">
 				<nav>
 					<a id="profile"><i class="fa fa-user"></i></a>
@@ -120,7 +116,7 @@
 							<br class="address-spacing">
 							<span id="current-zip"></span>
 							<br>
-							<button style="width: 100px; margin-top: 20px; font-size: 1.3rem;" class="secondary"
+							<button style="width: 150px; margin-top: 20px;" class="secondary"
 								id="edit">Edit</button>
 						</div>
 
@@ -169,11 +165,15 @@
 					<h1>Account Settings</h1>
 					<!-- <h2>Notifications</h2> -->
 					<div id="policies" style="width: 252px;">
-						<h2>Account Deletion</h2>
-						<button style="font-size: 1.3rem;" class="primary-red" id="delete"><i
+					    <h2>Logout</h2>
+						<button style="width: 150px;" class="secondary"
+								id="logout">Logout</button>
+						<h2>Delete Account</h2>
+						<button class="primary-red" id="delete" style="width: 150px"><i
 								class="fa fa-circle-o-notch fa-spin buttonloadicon hidden"></i>Delete
 							Account</button>
 					</div>
+
 				</div>
 			</div>
 		</div>
