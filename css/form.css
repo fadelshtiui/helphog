@@ -339,4 +339,7 @@ select option {
     .container2{
         padding:0;
     }
+    #part-two{
+        width: 90%;
+    }
 }
