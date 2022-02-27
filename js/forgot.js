@@ -54,14 +54,19 @@
         } else {
             id("email-error").innerText = "";
             id("reset-password").innerText = "Re-send Email";
-            id('warning-message').innerText = "Thank you! Please check your email for a reset link."
+            id('warning-message').innerText = "Please check your email for a reset link."
+
+            id('redirect').onclick = function () {
+
+    			window.location = "/signin"
+
+    		}
 
 
             id('first').innerHTML = ''
             let warningIcon = ce('i')
             warningIcon.classList.add('fas', 'fa-check-circle', 'success');
             id('first').appendChild(warningIcon)
-
 
             qs('.modal-wrapper').classList.remove('hidden')
 

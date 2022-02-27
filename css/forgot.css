@@ -5,3 +5,51 @@
 .login-page {
     width: 393px;
 }
+
+@media screen and (max-width: 736px) {
+    .g-recaptcha {
+      padding-left: 0;
+      padding-top: 0;
+      padding-bottom: 15px;
+    }
+    .container2 {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        box-shadow:none;
+    }
+    hr {
+        display: block;
+        opacity: 0.3;
+        width: 100%;
+    }
+    #navigation {
+        display: none;
+    }
+    #navPanel {
+        /*padding: 0;*/
+        text-align: left;
+    }
+    #navPanel nav {
+        padding-left: 1em;
+    }
+    #head {
+        display: none;
+    }
+    #left, #right {
+        margin-top: 2em;
+    }
+    #footer {
+        margin-top: 10em;
+    }
+    .content {
+        height: fit-content;
+    }
+    #logo{
+        position:static;
+    }
+    .modal {
+        width: 75%;
+    }
+
+}
