@@ -1858,7 +1858,7 @@ function send_claimed_notification($order_number, $email, $type, $db, $duration)
 	if ($alerts == "sms" || $alerts == "both") {
 		send_text($client_phone, get_claimed_text($customer_email, $customer_phone, $order_number, $service, $local_date, $duration, $address, $price));
     }
-    send_claimed_task_ios($email, "Task Claimed!", 'Please contact the customer immediately to follow up on their order.', "#1ecd97", $service, $local_date, $duration, $address, $price, $message, $ordernumber,$customer_email, $customer_phone);
+    send_claimed_task_ios($email, "Task Claimed!", 'Please contact the customer immediately to follow up on their order.', "#1ecd97", $service, $local_date, $duration, $address, $price, $message, $order_number,$customer_email, $customer_phone);
 
 }
 
