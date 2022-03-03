@@ -140,7 +140,7 @@ function ios_customer_notification($email, $title, $body, $thread_id, $color){
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
         $teamid = '9R7PSB424V';                           # <- Your Team ID (see Developer Portal)
         $bundleid = 'org.regionalhelp.help';                # <- Your Bundle ID
-        $url = 'https://api.development.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
+        $url = 'https://api.development.push.apple.com';  # <- development url, or use https://api.push.apple.com for production environment
 
         $message = '{"aps":{"alert":{"title": "' . $title . '", "body": "' . $body . '"},"sound":"default", "thread-id": "' . $thread_id . '", "color": "' . $color . '"}}';
 
@@ -212,7 +212,7 @@ function ios_provider_notification($email, $title, $body, $thread_id, $color)
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
         $teamid = '9R7PSB424V';                           # <- Your Team ID (see Developer Portal)
         $bundleid = 'HelpHog-LLC.HelpHog-Provider';                # <- Your Bundle ID
-        $url = 'https://api.development.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
+        $url = 'https://api.development.push.apple.com';  # <- development url, or use https://api.push.apple.com for production environment
 
         $message = '{"aps":{"alert":{"title": "' . $title . '", "body": "' . $body . '"},"sound":"default", "thread-id": "' . $thread_id . '", "color": "' . $color . '"}}';
 
@@ -287,7 +287,7 @@ function send_new_task_ios($email, $title, $body, $color, $service, $local_time,
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
         $teamid = '9R7PSB424V';                           # <- Your Team ID (see Developer Portal)
         $bundleid = 'HelpHog-LLC.HelpHog-Provider';                # <- Your Bundle ID
-        $url = 'https://api.development.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
+        $url = 'https://api.development.push.apple.com';  # <- development url, or use https://api.push.apple.com for production environment
 
         $message = '{"aps": {
                     "alert": {
@@ -381,7 +381,7 @@ function send_claimed_task_ios($email, $title, $body, $color, $service, $local_t
         $keyid = 'MR5L97ZV2R';                            # <- Your Key ID
         $teamid = '9R7PSB424V';                           # <- Your Team ID (see Developer Portal)
         $bundleid = 'HelpHog-LLC.HelpHog-Provider';                # <- Your Bundle ID
-        $url = 'https://api.development.push.apple.com';  # <- development url, or use http://api.push.apple.com for production environment
+        $url = 'https://api.development.push.apple.com';  # <- development url, or use https://api.push.apple.com for production environment
 
         $message = '{"aps": {
                     "alert": {
