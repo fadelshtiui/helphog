@@ -8,9 +8,9 @@ async function populateNavigationBar() {
 
      let actions = []
      if (res.validated == "true") {
-          actions = ['home', 'contact', 'signout']
+          actions = ['home', 'about', 'contact', 'provider', 'orders', 'settings']
      } else {
-          actions = ['home', 'contact', 'signin']
+          actions = ['home', 'contact', 'tracking', 'registration' , 'signin']
      }
 
      for (let i = 0; i < actions.length; i++) {
@@ -18,27 +18,13 @@ async function populateNavigationBar() {
      }
 
      let mobileLinks = qsa('#navPanel a')
-     
+
      mobileLinks.forEach(link => {
-         
-         if (link.innerText != "ACTIONS") {
-             if (link.href == "") { // sign out link doesn't have href
-                  if (res.validated == "true") {
-                      link.addEventListener('click', function (e) {
-                           e.stopPropagation();
-                           e.preventDefault();
-                           signOut();
-                           console.log('signed out')
-                      })
-                  } else {
-                      link.classList.add('hidden')
-                  }
-             } else if (!actions.includes(link.href) && link.href != window.location.origin + '/') {
-                  link.classList.add('hidden')
-             }
+
+         if (!actions.includes(link.href) && link.href != window.location.origin + '/') {
+              link.classList.add('hidden')
          }
 
-          
      })
 
 }
