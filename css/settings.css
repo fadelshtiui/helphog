@@ -128,7 +128,7 @@ body {
   cursor: pointer;
 }
 
-nav a {
+.leftbox nav a {
   list-style: none;
   padding: 39px;
   color: #bfc7cd;
@@ -137,7 +137,7 @@ nav a {
   transition: all .3s ease-in-out;
 }
 
-nav a:hover {
+.leftbox nav a:hover {
   /*transform: scale(1.2);*/
   cursor: pointer;
 }
@@ -490,8 +490,11 @@ h3 {
         display: none;
     }
     #navPanel {
-        padding: 0;
+        padding: 0 !important;
         text-align: left;
+    }
+    #navPanel nav {
+        padding-left: 2em;
     }
     #footer {
         margin-top: 10em;

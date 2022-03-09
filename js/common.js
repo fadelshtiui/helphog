@@ -63,12 +63,12 @@ function checkLoggedIn() {
 function updateNav(response) {
 
     if (response.validated == "true") {
-        id("sign-out").onclick = signOut;
+        // id("sign-out").onclick = signOut;
         if (response.account.type == "Business") {
             id("provider").classList.remove("hidden");
             id("apply").classList.add('hidden')
         }
-        
+
         id('signed-in-nav').classList.remove('hidden')
     } else {
         id('signed-out-nav').classList.remove('hidden')
@@ -78,7 +78,7 @@ function updateNav(response) {
 
 /**
  * returns the DOM element associated with the given id
- * 
+ *
  * @param {string} id - id of html element
  * @returns {Object} DOM element associated with the given id
  */
@@ -166,4 +166,3 @@ async function populateFooter() {
     }
 
 }
-
