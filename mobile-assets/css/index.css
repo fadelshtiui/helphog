@@ -7,9 +7,9 @@
     .header {
         display: none;
     }
-    #navPanel nav a {
-        padding-left: 1em;
-    }
+    /*#navPanel nav a {*/
+    /*    padding-left: 1em;*/
+    /*}*/
     #home-page-main {
         width: fit-content !important;
     }
