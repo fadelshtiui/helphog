@@ -510,7 +510,7 @@ header.special .icon:before {
 		text-decoration: none;
 	}
 	#navPanel .link.depth-0 {
-		font-weight: 700;
+		font-weight: 500;
 	}
 	#navPanel .link:first-child {
 		border-top: 0;
@@ -553,6 +553,10 @@ header.special .icon:before {
 		-ms-transform: translateX(0);
 		transform: translateX(0);
 	}
+}
+
+nav a{
+    padding-left:2em;
 }
 
 /* Mobile */
