@@ -12,7 +12,7 @@
   gtag('config', 'G-FY94MC4TFD');
 </script>
   <meta charset="utf-8">
-  <title>Contact Us</title>
+  <title>Registration</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
@@ -32,7 +32,7 @@
   <script src="js/loading.js"></script>
 
   <script src="mobile-assets/js/common.js"></script>
-  <script src="js/contact.js"></script>
+  <script src="js/registration.js"></script>
 </head>
 
 <body>
@@ -63,58 +63,47 @@
 			<nav id="nav">
 				<ul>
 					<li class="current"><a href="/">home</a></li>
-					<li><a href="contact">contact</a></li>
-					<li class="submenu">
-						<a>actions</a>
-						<ul id="actions">
-							<li><a data-path="settings" href="settings">settings</a></li>
-							<li><a data-path="provider" href="provider">provider portal</a></li>
-							<li><a data-path="orders" href="orders">orders</a></li>
-							<li><a data-path="signout">sign out</a></li>
+					<li><a data-path="about" href="about">about</a></li>
+					<li><a data-path="contact" href="contact">contact us</a></li>
+					<li><a data-path="provider" href="provider">provider portal</a></li>
+					<li><a data-path="orders" href="orders">orders</a></li>
+					<li><a data-path="tracking" href="tracking">track orders</a></li>
+					<li><a data-path="registration" href="registration">register</a></li>
+					<li><a data-path="settings" href="settings">settings</a></li>
+					<li><a data-path="signin" href="signin">login</a></li>
 
-							<li><a data-path="tracking" href="tracking">track orders</a></li>
-							<li><a data-path="registration" href="registration">sign up</a></li>
-							<li><a data-path="signin" href="signin">login</a></li>
-						</ul>
-					</li>
 				</ul>
 			</nav>
 		</header>
 
+
     <main>
       <div id="center">
-        <div id="head">Contact Us</div>
+        <div id="head">Select Option</div>
         <div id="flex-container">
             <div id="left">
               <p class="heading">
-                Phone
-              </p>
-              <i class="fas fa-phone-alt" style="font-size: 80px;color: #1ecd97; padding: 20px;"></i>
-
-              <div class="description">
-                <p>
-                  Speak with helphog agent about anything. Literally.
-                  <br />
-                  9am - 5pm PST
-                </p>
-              </div>
-              <p class="important">
-                (253) 259-3451
-              </p>
+						Personal
+					</p>
+					<i class="fas fa-user" style="font-size: 80px; color: #1ecd97; padding: 30px;"></i>
+					<div class="description">
+						<p>
+							Create a free account and gain access to all HelpHog services and features.
+						</p>
+					</div>
+					<button id="register" class="primary-green" >Register</button>
             </div>
             <div id="right">
               <p class="heading">
-                Email
-              </p>
-              <i onclick="window.open('mailto:support@helphog.com')" class="far fa-envelope pointer" style="font-size: 80px; color: #1ecd97; padding: 20px;"></i>
-              <div class="description">
-                <p>
-                  If inquiring about orders, please state your order number in the subject header.
-                </p>
-              </div>
-              <a onclick="window.open('mailto:support@helphog.com')" class="important standard pointer">
-                support@helphog.com
-              </a>
+						Provider
+					</p>
+					<i class="fas fa-people-arrows" style="font-size: 80px; color: #1ecd97; padding: 30px;"></i>
+					<div class="description">
+						<p>
+							Join us and thousands of other experienced freelancers to start earning today.
+						</p>
+					</div>
+					<button id="apply2" class="primary-green">Apply</button>
             </div>
         </div>
       </div>
