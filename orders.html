@@ -12,6 +12,7 @@
 	  gtag('config', 'G-FY94MC4TFD');
 	</script>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<title>Your Orders</title>
 
 	<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
@@ -21,6 +22,9 @@
 	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/vuetify@1.5.14/dist/vuetify.min.css'>
 
 	<link rel="stylesheet" href="mobile-assets/css/footer.css" type="text/css">
+	<link rel="stylesheet" href="mobile-assets/css/header.css">
+
+
 	<link rel="stylesheet" href="css/loading.css" type="text/css">
 	<link rel="stylesheet" href="css/global.css">
 	<link rel="stylesheet" href="css/all.css">
@@ -39,6 +43,7 @@
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
 
 	<script src="js/common.js"></script>
+	<script src="mobile-assets/js/common.js"></script>
 
 
 	<link rel="stylesheet" href="css/style.css" type="text/css">
@@ -77,7 +82,7 @@
 		</div>
 	</div>
 	<div class="content" style="min-height: 100vh; height: auto;">
-		<div class="header" style="padding-bottom: 51px">
+	<div class="header" style="height: 51px;">
 			<div id="logo"><a href="/" style="display:none" class="logo-font">He!pHog</a></div>
 			<ul id="navigation" style="line-height: 1.5;">
 				<div id="signed-in-nav" class="hidden">
@@ -98,18 +103,34 @@
 				</div>
 			</ul>
 		</div>
+		<header id="header" class="alt">
+			<nav id="nav">
+				<ul>
+					<li class="current"><a href="/">home</a></li>
+					<li><a data-path="about" href="about">about</a></li>
+					<li><a data-path="contact" href="contact">contact us</a></li>
+					<li><a data-path="provider" href="provider">provider portal</a></li>
+					<li><a data-path="orders" href="orders">orders</a></li>
+					<li><a data-path="tracking" href="tracking">track orders</a></li>
+					<li><a data-path="registration" href="registration">register</a></li>
+					<li><a data-path="settings" href="settings">settings</a></li>
+					<li><a data-path="signin" href="signin">login</a></li>
+
+				</ul>
+			</nav>
+		</header>
 		<!--<div class="title" style="display:none;">-->
 		<!--	<h1>Orders</h1>-->
 		<!--	<h2>If you have any other questions or concerns about your order, please <a href="contact">contact us</a></h2>-->
 		<!--</div>-->
 		<div id="app">
 			<v-app id="inspire">
-				<div id="wrapper" style="box-shadow:0 1px 3px 0 rgb(0 0 0 / 30%), 0px 0px 1px 0px rgb(0 0 0 / 28%)">
+				<div id="wrapper" style="width: 97%; box-shadow:0 1px 3px 0 rgb(0 0 0 / 30%), 0px 0px 1px 0px rgb(0 0 0 / 28%)">
 					<v-toolbar flat color="white">
 						<v-toolbar-title>Order History</v-toolbar-title>
 						<v-spacer></v-spacer>
-						<d style="margin-right:20px;color:#a7a7a7;">click on the row
-							for more information</d>
+						<d style="color:#a7a7a7;">click on row
+							for details</d>
 					</v-toolbar>
 					<v-data-table :headers="headers" :items="orders" :expand="expand" item-key="number">
 
@@ -317,6 +338,14 @@
 			</v-app>
 		</div>
 		<script src="js/orders.js"></script>
+		<script src="mobile-assets/js/jquery.min.js"></script>
+    	<script src="mobile-assets/js/jquery.dropotron.min.js"></script>
+    	<script src="mobile-assets/js/jquery.scrolly.min.js"></script>
+    	<script src="mobile-assets/js/jquery.scrollex.min.js"></script>
+    	<script src="mobile-assets/js/browser.min.js"></script>
+    	<script src="mobile-assets/js/breakpoints.min.js"></script>
+    	<script src="mobile-assets/js/util.js"></script>
+    	<script src="mobile-assets/js/main.js"></script>
 	</div>
 	<footer id="footer">
 
