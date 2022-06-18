@@ -123,6 +123,7 @@ if (check_session($session)) {
         $entry->customer_phone = $row["customer_phone"];
         $entry->satisfied = $row["satisfied"];
         $entry->rating = $row["rating"];
+        $entry->duration = $row["duration"];
 
         $local_start = new DateTime(date('Y-m-d H:i:s', strtotime($row["start"])), new DateTimeZone('UTC'));
         $local_start->setTimezone(new DateTimeZone($tz));
