@@ -28,6 +28,7 @@ function getZip() {
 }
 
 function signOut() {
+    console.log('signing out...')
     let cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
         let cookie = cookies[i];
@@ -63,7 +64,7 @@ function checkLoggedIn() {
 function updateNav(response) {
 
     if (response.validated == "true") {
-        // id("sign-out").onclick = signOut;
+        id("sign-out").onclick = signOut;
         if (response.account.type == "Business") {
             id("provider").classList.remove("hidden");
             id("apply").classList.add('hidden')
