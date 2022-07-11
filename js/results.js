@@ -10,7 +10,7 @@
           id('footer').classList.remove('hidden');
           let availabilityFilters = qsa('#availability-filters input')
           for (let i = 0; i < availabilityFilters.length; i++) {
-               availabilityFilters[i].onchange = filterAvailability;
+               availabilityFilters[i].onchange = filter;
           }
 
           id('address-updater').classList.add('hidden')
@@ -149,67 +149,121 @@
 
           let categoryFilters = qsa('#category-filters input')
           for (let i = 0; i < categoryFilters.length; i++) {
-               categoryFilters[i].onchange = filterCategory;
+               categoryFilters[i].onchange = filter;
           }
 
      }
 
-     function filterCategory() {
-          let filters = qsa('#category-filters input')
-          for (let i = 0; i < filters.length; i++) {
-               if (filters[i] != this) {
-                    filters[i].checked = false;
-               }
+     function filter() {
+          let availFilt = qsa('#availability-filters input')
+          let catFilt = qsa('#category-filters input')
+          /*
+          available is checked
+          */
+          if (availFilt[0] == this) {
+              if (this.checked) {
+                  availFilt[0].checked = true;
+                  availFilt[1].checked = false;
+              }
+              else {
+                  availFilt[0].checked = false;
+                  availFilt[1].checked = true;
+              }
+          }
+          /*
+          show all is checked
+          */
+          if (availFilt[1] == this) {
+              if (this.checked) {
+                  availFilt[1].checked = true;
+                  availFilt[0].checked = false;
+              }
+              else {
+                  availFilt[1].checked = false;
+                  availFilt[0].checked = true;
+              }
+          }
+          /*
+          makes updates to categories checked/unchecked
+          */
+          for (let j = 1; j < catFilt.length; j++) {
+              if (catFilt[j] == this) {
+                  if (this.checked) {
+                      catFilt[j].checked = true;
+                  }
+                  else {
+                      catFilt[j].checked = false;
+                  }
+              }
+          }
+          /*
+          checks if atleast one category is checked
+          */
+          let cf = id('category-filters').className // either 'filters' or 'filters hidden'
+          let hasCatCheck = false;
+          if (cf == 'filters') {
+              for (let i = 1; i < catFilt.length; i++) {
+                  if (catFilt[i].checked) {
+                      hasCatCheck = true;
+                  }
+              }
           }
 
-          if (this.checked) {
-               let currAvailability
-               filters = qsa('#availability-filters input')
-               for (let i = 0; i < filters.length; i++) {
-                    if (filters[i].checked) {
-                         currAvailability = filters[i].dataset.availability
-                    }
-               }
-
-               filter(this.dataset.category, currAvailability)
-          }
-     }
-
-     function filterAvailability() {
-          let filters = qsa('#availability-filters input')
-          for (let i = 0; i < filters.length; i++) {
-               if (filters[i] != this) {
-                    filters[i].checked = false;
-               }
-          }
-
-          if (this.checked) {
-               let currCategory
-               filters = qsa('#category-filters input')
-               for (let i = 0; i < filters.length; i++) {
-                    if (filters[i].checked) {
-                         currCategory = filters[i].dataset.category
-                    }
-               }
-
-               filter(currCategory, this.dataset.availability)
-          }
-
-
-     }
-
-     function filter(category, availability) {
           let results = qsa('.profile')
           for (let i = 0; i < results.length; i++) {
-               let categoryMatch = (category == 'all' || results[i].dataset.category == category)
-               let availabilityMatch = (availability == 'all' || results[i].dataset.available == 1)
-
-               if (categoryMatch && availabilityMatch) {
-                    results[i].classList.remove('hidden')
-               } else {
-                    results[i].classList.add('hidden')
-
-               }
+              let categoryType = results[i].dataset.category
+              let availType = results[i].dataset.available
+              /*
+              multiple categories and atleast one is checked
+              */
+              if (hasCatCheck) {
+                  for (let j = 1; j < catFilt.length; j++) {
+                      let currCat = catFilt[j].dataset.category
+                      if (catFilt[j].checked) {
+                          /*
+                          available is checked and atleast one category box is checked
+                          */
+                          if (availFilt[0].checked && currCat == categoryType && availType != 0) {
+                              results[i].classList.remove('hidden')
+                          }
+                          /*
+                          show all and atleast one category box is checked
+                          */
+                          else if (currCat == categoryType) {
+                              results[i].classList.remove('hidden')
+                          }
+                          /*
+                          check to see if available is checked and if profile is not available
+                          */
+                          if (availFilt[0].checked && availType == 0) {
+                              results[i].classList.add('hidden')
+                          }
+                      }
+                      /*
+                      if current category isn't checked, then if current profile has same category then become hidden
+                      */
+                      else if (!catFilt[j].checked && currCat == categoryType) {
+                          results[i].classList.add('hidden')
+                      }
+                  }
+              }
+              /*
+              only show available
+              */
+              else if (availFilt[0].checked){
+                  if (availType != 0) {
+                      results[i].classList.remove('hidden')
+                  }
+                  else {
+                      results[i].classList.add('hidden')
+                  }
+              }
+              /*
+              show all
+              */
+              else {
+                  results[i].classList.remove('hidden')
+              }
           }
 
      }
