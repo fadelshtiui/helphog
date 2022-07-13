@@ -61,8 +61,8 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
 
     if ($providerId != 'none') {
         $providerexists = false;
-        $stmnt = $db->prepare("SELECT firstname, email FROM {$DB_PREFIX}login WHERE type = 'Business' AND services LIKE ? AND id = ?;");
-        $stmnt->execute(array('%' . $service . '%', $providerId));
+        $stmnt = $db->prepare("SELECT firstname, email FROM {$DB_PREFIX}login WHERE type = 'Business' AND services LIKE ? AND id = ? AND session != ?;");
+        $stmnt->execute(array('%' . $service . '%', $providerId, $session));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
             $providerexists = true;
@@ -77,8 +77,8 @@ function &check_availability($service, $schedule, $address, $post_duration, $num
         }
     } else {
 
-        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ? AND banned = 'n';");
-        $stmnt->execute(array('%' . $service . '%'));
+        $stmnt = $db->prepare("SELECT email FROM {$DB_PREFIX}login WHERE type='Business' AND services LIKE ? AND banned = 'n' AND session != ?;");
+        $stmnt->execute(array('%' . $service . '%', $session));
         foreach ($stmnt->fetchAll() as $row) {
             array_push($all_emails, $row['email']);
         }
