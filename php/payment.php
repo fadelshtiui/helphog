@@ -343,7 +343,7 @@ function create_order($payment_intent, $order_info, array $items, $tax_rate, $se
 
 }
 
-// returns false if user is banned, true otherwise
+// returns true if user is banned, false otherwise
 function is_banned(array $creds): bool
 {
     include 'constants.php';
@@ -364,6 +364,13 @@ function is_banned(array $creds): bool
         $stmnt->execute(array($phone));
         foreach ($stmnt->fetchAll() as $row) {
             if ($row["banned"] == "y") {
+                return true;
+            }
+        }
+        $stmnt = $db->prepare("SELECT phone FROM {$DB_PREFIX}guestbanned;");
+        $stmnt->execute();
+        foreach($stmnt->fetchAll() as $row){
+            if (password_verify($creds, $row["phone"])){
                 return true;
             }
         }
